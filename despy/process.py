@@ -51,7 +51,7 @@ class ProcessTimeOutEvent(Event):
 
     def do_event(self):
         """Executes the callback functions that are on the event's
-        callback list. _do_event() is called by the environment's step
+        callback list. _do_event() is called by the experiment's step
         method.
         
         """

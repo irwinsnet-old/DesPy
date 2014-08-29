@@ -6,50 +6,50 @@ test_despy.py tests the methods in the despy.py module.
 
 import unittest
 
-from despy.environment import Environment
+from despy.experiment import Experiment, FelItem
 from despy.model import Model
 from despy.event import Event
 from despy.process import Process
 
 class testDespyb(unittest.TestCase):
        
-    ### Environment Class Tests
+    ### Experiment Class Tests
     def test_now(self):
-        # Verify that Environment.now is set to 0 by default.
-        env1 = Environment()
-        self.assertEqual(env1.now, 0)
-        self.assertTrue(env1.console_output)
+        # Verify that Experiment.now is set to 0 by default.
+        exp1 = Experiment()
+        self.assertEqual(exp1.now, 0)
+        self.assertTrue(exp1.console_output)
         
         # Test console_output property.
-        env1.console_output = False
-        self.assertFalse(env1.console_output)
-        env1.console_output = True
-        self.assertTrue(env1.console_output)
+        exp1.console_output = False
+        self.assertFalse(exp1.console_output)
+        exp1.console_output = True
+        self.assertTrue(exp1.console_output)
         
-        # Verify that Environment.now can be set by the class constructor.
-        env2 = Environment(42)
-        self.assertEqual(env2.now, 42)
+        # Verify that Experiment.now can be set by the class constructor.
+        exp2 = Experiment(42)
+        self.assertEqual(exp2.now, 42)
         
-        # Verify that a name can be assigned to the environment.
-        env2.name = "Environment Name!"
-        self.assertEqual(env2.name, "Environment Name!")
+        # Verify that a name can be assigned to the experiment.
+        exp2.name = "Experiment Name!"
+        self.assertEqual(exp2.name, "Experiment Name!")
         
     ### Model Class Tests
     def test_name(self):
-        #Create model with default environment.
+        #Create model with default experiment.
         testModel = Model("Test Model")
         self.assertEqual(testModel.name, "Test Model")
-        self.assertEqual(testModel.environment.name, "Default Environment")
-        self.assertEqual(len(testModel.environment.models), 1)
-        self.assertEqual(testModel.environment.models[0].name, "Test Model")
+        self.assertEqual(testModel.experiment.name, "Default Experiment")
+        self.assertEqual(len(testModel.experiment.models), 1)
+        self.assertEqual(testModel.experiment.models[0].name, "Test Model")
         
-        #Replace environment.
-        env = Environment()
-        env.name = "New Environment"
-        self.assertIsInstance(testModel.environment, Environment)
-        self.assertIsNot(testModel.environment, env)
-        testModel.environment = env
-        self.assertIs(testModel.environment, env)
+        #Replace experiment.
+        exp = Experiment()
+        exp.name = "New Experiment"
+        self.assertIsInstance(testModel.experiment, Experiment)
+        self.assertIsNot(testModel.experiment, exp)
+        testModel.experiment = exp
+        self.assertIs(testModel.experiment, exp)
         
         # Test description.
         modelDescription = \
@@ -62,50 +62,47 @@ class testDespyb(unittest.TestCase):
     def test_peek(self):
         model = Model("Test Model #1")
         
-        self.assertEqual(model.environment.peek(), float('Infinity'))
+        self.assertEqual(model.experiment.peek(), float('Infinity'))
         
         model.schedule(Event(model, "Event #1",
                 Event.PRIORITY_EARLY), 20)
-        self.assertEqual(model.environment.peek(), 20)
+        self.assertEqual(model.experiment.peek(), 20)
         
         model.schedule(Event(model, "Event #2"), 5)
-        self.assertEqual(model.environment.peek(), 5)
+        self.assertEqual(model.experiment.peek(), 5)
         
     def test_step(self):
         #Create model and events.
         model = Model("Test Model #2")
-        ev_early = Event(model, "Early Event",
-                Event.PRIORITY_EARLY)
-        ev_standard = Event(model, "Standard Event",
-                Event.PRIORITY_STANDARD)
-        ev_late = Event(model, "Late Event",
-                Event.PRIORITY_LATE)
+        ev_early = Event(model, "Early Event")
+        ev_standard = Event(model, "Standard Event")
+        ev_late = Event(model, "Late Event")
         
         #Schedule Events
-        model.schedule(ev_late, 5)
-        model.schedule(ev_early, 5)
-        model.schedule(ev_standard, 5)
+        model.schedule(ev_late, 5, FelItem.PRIORITY_LATE)
+        model.schedule(ev_early, 5, FelItem.PRIORITY_EARLY)
+        model.schedule(ev_standard, 5, FelItem.PRIORITY_STANDARD)
         
         #Verify events run in correct order.
         print()
-        felItem = model.environment.step()
-        self.assertEqual(felItem.evt.name, "Early Event")
-        felItem = model.environment.step()
-        self.assertEqual(felItem.evt.name, "Standard Event")
-        felItem = model.environment.step()
-        self.assertEqual(felItem.evt.name, "Late Event")
-        env = model.environment
-        self.assertEqual(env.now, 5)
+        felItem = model.experiment.step()
+        self.assertEqual(felItem.fel_event.name, "Early Event")
+        felItem = model.experiment.step()
+        self.assertEqual(felItem.fel_event.name, "Standard Event")
+        felItem = model.experiment.step()
+        self.assertEqual(felItem.fel_event.name, "Late Event")
+        exp = model.experiment
+        self.assertEqual(exp.now, 5)
 
     def test_run(self):
         model = Model("RunTest Model")
         model.schedule(Event(model, "First Event"), 0)
         model.schedule(Event(model, "Second Event"), 4)
         model.schedule(Event(model, "Third Event"), 8)
-        model.environment.run()
+        model.experiment.run()
         
-        self.assertEqual(len(model.environment.event_trace), 3)
-        evtTrace = model.environment.event_trace
+        self.assertEqual(len(model.experiment.event_trace), 3)
+        evtTrace = model.experiment.event_trace
         self.assertEqual(evtTrace[0].evt_name, "First Event")
         self.assertEqual(evtTrace[1].evt_name, "Second Event")
         self.assertEqual(evtTrace[1].time, 4)
@@ -126,9 +123,9 @@ class testDespyb(unittest.TestCase):
             self.schedule(evt1, 5)
         
         model.set_initialize_method(initializeModel)
-        model.environment.run()
+        model.experiment.run()
         
-        evtTrace = model.environment.event_trace
+        evtTrace = model.experiment.event_trace
         self.assertEqual(len(evtTrace), 2)
         self.assertEqual(evtTrace[0].evt_name, "First Event")
         self.assertEqual(evtTrace[0].time, 5)
@@ -136,14 +133,14 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(evtTrace[1].time, 15)
         
         #Test reset method and until parameter
-        model.environment.reset()
+        model.experiment.reset()
         #model.schedule(evt1, 5)
-        model.environment.run(10)
-        evtTrace = model.environment.event_trace
+        model.experiment.run(10)
+        evtTrace = model.experiment.event_trace
         #self.assertEqual(len(evtTrace), 1)
         
         #Verify that simulation can be restarted from current point.
-        model.environment.run()
+        model.experiment.run()
         #self.assertEqual(len(evtTrace), 2)
         
     def test_process(self):
@@ -155,7 +152,7 @@ class testDespyb(unittest.TestCase):
         
         process = Process(model, "Test Process", generator)
         process.start()
-        model.environment.run(20)
+        model.experiment.run(20)
 
 if __name__ == '__main__':
     unittest.main()

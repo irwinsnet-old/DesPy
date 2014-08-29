@@ -3,12 +3,18 @@ from heapq import heappush, heappop
 from itertools import count
 from collections import namedtuple
 
-#TODO: Rename as experiment
 #TODO: Make ID an event attribute
 #TODO: Remove delay as an event attribute.
 #TODO: Move priority to felTuple from event attribute
+#TODO: Subclass experiment to named item.
 
-class Environment(object):
+class FelItem(namedtuple('FelItem', ['fel_time', 'fel_event', 'fel_priority'])):
+    
+    PRIORITY_EARLY = -1
+    PRIORITY_STANDARD = 0
+    PRIORITY_LATE = 1
+
+class Experiment(object):
 
     """ Schedule events and manage the future event list (FEL).
 
@@ -21,7 +27,6 @@ class Environment(object):
         """Initialize the event object.
         """
         self.console_output = True
-        self.felTuple = namedtuple('felTuple', ['time', 'id', 'evt'])
         self.traceTuple = namedtuple('traceTuple',
                                      ['time', 'evt_name'])
         self._models = []
@@ -30,7 +35,7 @@ class Environment(object):
 
     @property
     def now(self):
-        """The current time of the environment. The time is a unit-less
+        """The current time of the experiment. The time is a unit-less
         integer."""
         return int(self._now / 10)
     
@@ -40,7 +45,7 @@ class Environment(object):
 
     @property
     def name(self):
-        """Gets the name of the environment.
+        """Gets the name of the experiment.
         
         *Returns:* A short string.
         
@@ -48,15 +53,15 @@ class Environment(object):
         return self._name
 
     @name.setter
-    def name(self, environmentName):
-        """Sets the name of the environment.
+    def name(self, experimentName):
+        """Sets the name of the experiment.
         
         *Arguments*
             modelName (string):
-                A short string that describes the environment.
+                A short string that describes the experiment.
 
         """
-        self._name = environmentName
+        self._name = experimentName
 
     @property
     def console_output(self):
@@ -68,14 +73,14 @@ class Environment(object):
         
     @property
     def models(self):
-        """Get a list of all models attached to the environment.
+        """Get a list of all models attached to the experiment.
         
         *Returns:* A list of despy.model.Model objects.
         """
         return self._models
     
     def append_model(self, model):
-        """ Append a model object to the environment.
+        """ Append a model object to the experiment.
         
         *Arguments*
             model:
@@ -83,7 +88,7 @@ class Environment(object):
         """
         self._models.append(model)
 
-    def schedule(self, event, delay = 0):
+    def schedule(self, event, delay = 0, priority = FelItem.PRIORITY_STANDARD):
         """ Add an event to the FEL.
 
         *Arguments*
@@ -99,19 +104,19 @@ class Environment(object):
         
         # Places a tuple onto the FEL, consisting of the event time, ID,
         # and event object.
-        scheduleTime = self._now + (delay * 10) + event.priority
+        scheduleTime = self._now + (delay * 10) + priority
         
         heappush(self._futureEventList,
-                 self.felTuple(time = scheduleTime, id = next(self._eventId),
-                          evt = event))
+                 FelItem(fel_time = scheduleTime, fel_event = event,
+                         fel_priority = priority))
 
     def peek(self):
         """Return the time of the next scheduled event, or infinity if there
         is no remaining events.
         """
         try:
-            return int((self._futureEventList[0].time - \
-                    self._futureEventList[0].evt.priority) / 10)
+            return int((self._futureEventList[0].fel_time - \
+                    self._futureEventList[0].fel_priority) / 10)
         except IndexError:
             return float('Infinity')
         
@@ -136,14 +141,14 @@ class Environment(object):
         except IndexError:
             raise NoEventsRemainingError
         else:
-            self.now = int((current_FEL_item.time - \
-                    current_FEL_item.evt.priority) / 10)
+            self.now = int((current_FEL_item.fel_time - \
+                    current_FEL_item.fel_priority) / 10)
 
         #Run event
-        current_FEL_item.evt.do_event()
+        current_FEL_item.fel_event.do_event()
         
         #Record event in trace report
-        eventRecord = current_FEL_item.evt.get_event_record()
+        eventRecord = current_FEL_item.fel_event.get_event_record()
         self.event_trace.append(eventRecord)
         if self.console_output:
             consoleOutput = str(eventRecord.time).rjust(8) + \

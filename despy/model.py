@@ -1,37 +1,10 @@
 #!/usr/bin/env python3
-"""
-Contains the core classes for the despy framework.
-
-Classes:
---------
-
-    * **Model**
-        Represents the system that will be simulated.
-        Contains entities, servers, proceses, queues and other
-        components of the system.
-    * **Environoment**
-        The environment schedules events and
-        maintains the future event list (FEL).
-    * **Entity**
-        An entity represents any component of the system,
-        such as a customer, or vehicle.
-    * **Process**
-        A process represents a component of a system over
-        it's entire lifecycle and periodically schedules events.
-    * **Event**
-        An event is an entity that can be placed on the FEL
-        and represents some change that occurs in the system.
-    * **NoEventsRemaining**
-        An exception that is raised by the
-        Environment object when no events remain on the FEL.
-
-"""
 
 #TODO: Make event ID an event attribute (removed from named tuple)
 #TODO: Get Process to work
 
 from collections import namedtuple
-from despy.environment import Environment
+from despy.experiment import Experiment, FelItem
 from despy.root import _NamedObject, _ModelMember
 
 class Model(_NamedObject):
@@ -46,32 +19,32 @@ class Model(_NamedObject):
         modelName (string):
             A short name for the model. The model name is displayed
             in output reports.
-        environment (despy.Environment) (Optional):
-            The model object must be attached to an environment
+        experiment (despy.Experiment) (Optional):
+            The model object must be attached to an experiment
             object, which will run the model's events on the FEL.
-            If the environment argument is omitted, the constructor
+            If the experiment argument is omitted, the constructor
             will create and assign a default enviroment object to
-            the model. A different environment can be assigned later
-            using the model object's environment property.
+            the model. A different experiment can be assigned later
+            using the model object's experiment property.
 
     """
 
-    def __init__(self, modelName, environment = None):
+    def __init__(self, modelName, experiment = None):
         """Create a model object."""
         self._name = modelName
         self.initial_events_scheduled = False
         
-        # Create a default environment if no environment is provided
+        # Create a default experiment if no experiment is provided
         # to the constructor.
-        if environment == None:
-            env = Environment()
-            env.name = "Default Environment"
-            self._environment = env
+        if experiment == None:
+            env = Experiment()
+            env.name = "Default Experiment"
+            self._experiment = env
         else:
-            self._environment = environment
+            self._experiment = experiment
             
-        #Create link to model in environment object
-        self._environment.append_model(self)
+        #Create link to model in experiment object
+        self._experiment.append_model(self)
         self._initialize = None
 
     @property
@@ -96,24 +69,24 @@ class Model(_NamedObject):
         self._initial_events_scheduled = scheduled
     
     @property
-    def environment(self):
-        """Gets the environment object.
+    def experiment(self):
+        """Gets the experiment object.
         
-        *Returns:* (despby.Environment)
+        *Returns:* (despby.Experiment)
         """
-        return self._environment
+        return self._experiment
     
-    @environment.setter
-    def environment(self, environment):
-        """Assigns the model to a new environment.
+    @experiment.setter
+    def experiment(self, experiment):
+        """Assigns the model to a new experiment.
         
         *Arguments*
-            environment (despy.Environment):
-                An environment object that will run the simulation
+            experiment (despy.Experiment):
+                An experiment object that will run the simulation
                 and execute the model's events.
         
         """
-        self._environment = environment
+        self._experiment = experiment
         
     def set_initialize_method(self, initialize_method):
         self._initialize = initialize_method
@@ -129,8 +102,9 @@ class Model(_NamedObject):
         except:
             return
 
-    def schedule(self, event, delay = None):
-        """A convenience method that calls the Environment object's
+    def schedule(self, event, delay = None,
+                 priority = FelItem.PRIORITY_STANDARD):
+        """A convenience method that calls the Experiment object's
         schedule() method to schedule an event on the FEL.
 
         *Arguments*
@@ -143,7 +117,7 @@ class Model(_NamedObject):
                 that the event will occur.
 
         """
-        self.environment.schedule(event, delay)
+        self.experiment.schedule(event, delay, priority)
 
 class Entity(_ModelMember):
     """Represents an item that is part of the model.

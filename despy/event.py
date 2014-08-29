@@ -6,7 +6,7 @@ class Event(_ModelMember):
 
     Create an event by inheriting from the Event class. Subclasses of Event
     must instantiate one or more of the doPriorEvent(), do_event(), or
-    doPostEvent() methods. The Environment will execute these methods when the
+    doPostEvent() methods. The Experiment will execute these methods when the
     Event time occurs and the Event object is removed from the FEL.
     
     *Arguments*
@@ -17,7 +17,7 @@ class Event(_ModelMember):
             printed in simulation reports.
         priority (integer):
             When there are events scheduled to occurr at the same
-            time, the priority determines if the environment
+            time, the priority determines if the experiment
             executes some events before other events.
             PRIORITY_EARLY events are executed before all other events
             with that are PRIORITY STANDARD or PRIORITY_LATE.
@@ -82,7 +82,7 @@ class Event(_ModelMember):
 
     def do_event(self):
         """Executes the callback functions that are on the event's
-        callback list. _do_event() is called by the environment's step
+        callback list. _do_event() is called by the experiment's step
         method.
         
         """
@@ -94,7 +94,7 @@ class Event(_ModelMember):
             return True
 
     def get_event_record(self, printToConsole = True):
-        """ Append an environment traceTuple object to the traceEvent
+        """ Append an experiment traceTuple object to the traceEvent
         List. Prints the contents if the traceTuple to the console
         output if printToConsole is set to True.
         
@@ -105,6 +105,6 @@ class Event(_ModelMember):
                 output (i.e., console). Defaults to True.
         
         """
-        env = self.model.environment
+        env = self.model.experiment
         eventRecord = env.traceTuple(time = env.now, evt_name = self.name)
         return eventRecord
