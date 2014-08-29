@@ -5,7 +5,7 @@ class Event(_ModelMember):
     list (FEL).
 
     Create an event by inheriting from the Event class. Subclasses of Event
-    must instantiate one or more of the doPriorEvent(), doEvent(), or
+    must instantiate one or more of the doPriorEvent(), do_event(), or
     doPostEvent() methods. The Environment will execute these methods when the
     Event time occurs and the Event object is removed from the FEL.
     
@@ -30,7 +30,7 @@ class Event(_ModelMember):
     PRIORITY_STANDARD = 0
     PRIORITY_LATE = 1
     
-    def __init__(self, model, name, priority = PRIORITY_STANDARD):
+    def __init__(self, model, name, priority = PRIORITY_STANDARD, delay = None):
         """Initialize the Event object.
 
         *Arguments*
@@ -46,6 +46,7 @@ class Event(_ModelMember):
         self._priority = priority
         self._description = "Event"
         self._callbacks = []
+        self._delay = delay
 
     @property
     def priority(self):
@@ -57,8 +58,16 @@ class Event(_ModelMember):
             * PRIORITY_LATE = 1
         """
         return self._priority
+    
+    @property
+    def delay(self):
+        return self._delay
+    
+    @delay.setter
+    def delay(self, delay):
+        self._delay = delay
 
-    def appendcallback(self, callback):
+    def append_callback(self, callback):
         """Appends a function to the event's callback list.
         
         The function will be called when the event is removed from the
@@ -71,9 +80,9 @@ class Event(_ModelMember):
         """
         self._callbacks.append(callback)
 
-    def doEvent(self):
+    def do_event(self):
         """Executes the callback functions that are on the event's
-        callback list. _doEvent() is called by the environment's step
+        callback list. _do_event() is called by the environment's step
         method.
         
         """
@@ -81,10 +90,10 @@ class Event(_ModelMember):
             return None
         else:
             for callback in self._callbacks:
-                callback()
+                callback(self)
             return True
 
-    def getEventRecord(self, printToConsole = True):
+    def get_event_record(self, printToConsole = True):
         """ Append an environment traceTuple object to the traceEvent
         List. Prints the contents if the traceTuple to the console
         output if printToConsole is set to True.

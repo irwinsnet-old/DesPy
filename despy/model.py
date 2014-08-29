@@ -27,12 +27,8 @@ Classes:
 
 """
 
-#TODO: Test run() with 'until' set.
-#TODO: Fully implement event trace. Use tuple instead of string as output.
-#TODO: Figure out callback self issue.
 #TODO: Make event ID an event attribute (removed from named tuple)
-#TODO: Decide how DoInitialEvents method will be used.
-#TODO: Move Environment class to separate module.
+#TODO: Get Process to work
 
 from collections import namedtuple
 from despy.environment import Environment
@@ -63,6 +59,7 @@ class Model(_NamedObject):
     def __init__(self, modelName, environment = None):
         """Create a model object."""
         self._name = modelName
+        self.initial_events_scheduled = False
         
         # Create a default environment if no environment is provided
         # to the constructor.
@@ -72,13 +69,37 @@ class Model(_NamedObject):
             self._environment = env
         else:
             self._environment = environment
+            
+        #Create link to model in environment object
+        self._environment.append_model(self)
+        self._initialize = None
 
+    @property
+    def initial_events_scheduled(self):
+        """Return True of the model's initialize method has
+        been executed.
+        
+        *Returns:* (Boolean)
+        """
+        return self._initial_events_scheduled
+    
+    @initial_events_scheduled.setter
+    def initial_events_scheduled(self, scheduled):
+        """Set to True if the model's initialize method has been
+        run.
+        
+        *Arguments*
+            schedule (Boolean):
+                Set to True if the model's initialize method has
+                been run.
+        """
+        self._initial_events_scheduled = scheduled
+    
     @property
     def environment(self):
         """Gets the environment object.
         
         *Returns:* (despby.Environment)
-        
         """
         return self._environment
     
@@ -93,16 +114,22 @@ class Model(_NamedObject):
         
         """
         self._environment = environment
+        
+    def set_initialize_method(self, initialize_method):
+        self._initialize = initialize_method
 
-    def do_initial_events(self):
+    def initialize(self):
         """Place initial events on the FEL and initiate processes.
 
         Model subclasses must implement this method, or the Model
         class will raise a NotImplementedError.
         """
-        raise NotImplementedError()
+        try:
+            self._initialize(self)
+        except:
+            return
 
-    def schedule(self, event, delay = 0):
+    def schedule(self, event, delay = None):
         """A convenience method that calls the Environment object's
         schedule() method to schedule an event on the FEL.
 
@@ -145,44 +172,3 @@ class Entity(_ModelMember):
         *Returns:* Integer
         """
         return self._number
-
-class Process:
-    """Represents a simulation process that periodically schedules events and
-    maintains state (i.e., retains variable values) between events.
-    """
-
-    def __init__(self, processName = None, model = None):
-        """Creates a process object.
-
-        @param processName  A short string that will be displayed in trace
-                            reports and other outputs. Default = None.
-        @param model        A despy.Model object that contains the process
-                            object.
-        """
-        self._name = processName
-        self._model = model
-        self.generator = self._generator()
-
-    @property
-    def name(self):
-        """The name of the process."""
-        return self._name
-
-    @property
-    def model(self):
-        return self._model
-
-    def scheduleProcessEvent(self, event, delay = 0):
-        event.appendEventCallback(self.getNextEvent)
-        self.model.schedule(event, delay)
-        return True
-
-    def getNextEvent(self):
-        return next(self.generator)
-
-    def resetProcess(self):
-        self.generator = self._generator()
-
-    def _generator(self):
-        """Conduct the simulation and periodically yield events."""
-        yield

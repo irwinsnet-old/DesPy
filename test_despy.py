@@ -9,6 +9,7 @@ import unittest
 from despy.environment import Environment
 from despy.model import Model
 from despy.event import Event
+from despy.process import Process
 
 class testDespyb(unittest.TestCase):
        
@@ -39,6 +40,8 @@ class testDespyb(unittest.TestCase):
         testModel = Model("Test Model")
         self.assertEqual(testModel.name, "Test Model")
         self.assertEqual(testModel.environment.name, "Default Environment")
+        self.assertEqual(len(testModel.environment.models), 1)
+        self.assertEqual(testModel.environment.models[0].name, "Test Model")
         
         #Replace environment.
         env = Environment()
@@ -47,7 +50,6 @@ class testDespyb(unittest.TestCase):
         self.assertIsNot(testModel.environment, env)
         testModel.environment = env
         self.assertIs(testModel.environment, env)
-        self.assertRaises(NotImplementedError, testModel.do_initial_events)
         
         # Test description.
         modelDescription = \
@@ -102,8 +104,8 @@ class testDespyb(unittest.TestCase):
         model.schedule(Event(model, "Third Event"), 8)
         model.environment.run()
         
-        self.assertEqual(len(model.environment.eventTrace), 3)
-        evtTrace = model.environment.eventTrace
+        self.assertEqual(len(model.environment.event_trace), 3)
+        evtTrace = model.environment.event_trace
         self.assertEqual(evtTrace[0].evt_name, "First Event")
         self.assertEqual(evtTrace[1].evt_name, "Second Event")
         self.assertEqual(evtTrace[1].time, 4)
@@ -114,7 +116,46 @@ class testDespyb(unittest.TestCase):
         model = Model("AppendCallback Model")
         evt1 = Event(model, "First Event")
         
+        def evt1_callback(self):
+            evt2 = Event(self.model, "Callback Event")
+            self.model.schedule(evt2, 10)        
+
+        evt1.append_callback(evt1_callback)
         
+        def initializeModel(self):
+            self.schedule(evt1, 5)
+        
+        model.set_initialize_method(initializeModel)
+        model.environment.run()
+        
+        evtTrace = model.environment.event_trace
+        self.assertEqual(len(evtTrace), 2)
+        self.assertEqual(evtTrace[0].evt_name, "First Event")
+        self.assertEqual(evtTrace[0].time, 5)
+        self.assertEqual(evtTrace[1].evt_name, "Callback Event")
+        self.assertEqual(evtTrace[1].time, 15)
+        
+        #Test reset method and until parameter
+        model.environment.reset()
+        #model.schedule(evt1, 5)
+        model.environment.run(10)
+        evtTrace = model.environment.event_trace
+        #self.assertEqual(len(evtTrace), 1)
+        
+        #Verify that simulation can be restarted from current point.
+        model.environment.run()
+        #self.assertEqual(len(evtTrace), 2)
+        
+    def test_process(self):
+        model = Model("Process Model")
+        
+        def generator(self):
+            while True:
+                yield self.schedule_timeout("Repeated Event", 3)
+        
+        process = Process(model, "Test Process", generator)
+        process.start()
+        model.environment.run(20)
 
 if __name__ == '__main__':
     unittest.main()

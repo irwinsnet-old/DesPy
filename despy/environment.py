@@ -3,6 +3,11 @@ from heapq import heappush, heappop
 from itertools import count
 from collections import namedtuple
 
+#TODO: Rename as experiment
+#TODO: Make ID an event attribute
+#TODO: Remove delay as an event attribute.
+#TODO: Move priority to felTuple from event attribute
+
 class Environment(object):
 
     """ Schedule events and manage the future event list (FEL).
@@ -15,16 +20,13 @@ class Environment(object):
     def __init__(self, initial_time = 0):
         """Initialize the event object.
         """
-        self._now = initial_time * 10
-        self._futureEventList = []
-        #  Each event gets a unique integer ID, starting with 0 for the first
-        #event.
-        self._eventId = count()
         self.console_output = True
         self.felTuple = namedtuple('felTuple', ['time', 'id', 'evt'])
-        self.eventTrace = []
         self.traceTuple = namedtuple('traceTuple',
                                      ['time', 'evt_name'])
+        self._models = []
+        self.event_trace = []
+        self.reset(initial_time)
 
     @property
     def now(self):
@@ -63,6 +65,23 @@ class Environment(object):
     @console_output.setter
     def console_output(self, output):
         self._console_output = output
+        
+    @property
+    def models(self):
+        """Get a list of all models attached to the environment.
+        
+        *Returns:* A list of despy.model.Model objects.
+        """
+        return self._models
+    
+    def append_model(self, model):
+        """ Append a model object to the environment.
+        
+        *Arguments*
+            model:
+                A despy.model.Model object.
+        """
+        self._models.append(model)
 
     def schedule(self, event, delay = 0):
         """ Add an event to the FEL.
@@ -75,10 +94,12 @@ class Environment(object):
                 the event will be scheduled to occur mmediately.
 
         """
+        if event.delay != None:
+            delay = event.delay
+        
         # Places a tuple onto the FEL, consisting of the event time, ID,
         # and event object.
         scheduleTime = self._now + (delay * 10) + event.priority
-        
         
         heappush(self._futureEventList,
                  self.felTuple(time = scheduleTime, id = next(self._eventId),
@@ -93,6 +114,12 @@ class Environment(object):
                     self._futureEventList[0].evt.priority) / 10)
         except IndexError:
             return float('Infinity')
+        
+    def initialize_models(self):
+        for model in self._models:
+            if not model.initial_events_scheduled:
+                model.initialize()
+                model.initial_events_scheduled = True
 
     def step(self):
         """Advance simulation time to the next time on the FEL and
@@ -103,21 +130,21 @@ class Environment(object):
                 Occurs if no more events are scheduled on the FEL.
         """
 
-        # FEL items are tuples in format (eventTime, event ID, event)
+        # Get next event from FEL and advance current simulation time.
         try:
             current_FEL_item = heappop(self._futureEventList)
         except IndexError:
-            raise NoEventsRemaining
+            raise NoEventsRemainingError
         else:
             self.now = int((current_FEL_item.time - \
                     current_FEL_item.evt.priority) / 10)
 
         #Run event
-        current_FEL_item.evt.doEvent()
+        current_FEL_item.evt.do_event()
         
         #Record event in trace report
-        eventRecord = current_FEL_item.evt.getEventRecord()
-        self.eventTrace.append(eventRecord)
+        eventRecord = current_FEL_item.evt.get_event_record()
+        self.event_trace.append(eventRecord)
         if self.console_output:
             consoleOutput = str(eventRecord.time).rjust(8) + \
                 ':   ' + eventRecord.evt_name
@@ -143,20 +170,36 @@ class Environment(object):
                 
         """
 
+        self.initialize_models()
+        
         if isinstance(until, int):
             stopTime = until
-            while self.now <= stopTime:
+            while self.peek() <= stopTime:
                 try:
                     self.step()
-                except NoEventsRemaining:
+                except NoEventsRemainingError:
                     break
 
         else:
             while True:
                 try:
                     self.step()
-                except NoEventsRemaining:
+                except NoEventsRemainingError:
                     break
 
-class NoEventsRemaining(Exception):
+    def reset(self, initial_time = 0):
+        """Reset the simulation time to zero so the simulation can be
+        rerun.
+        """
+        self._now = initial_time * 10
+        self._futureEventList = []
+        #  Each event gets a unique integer ID, starting with 0 for the first
+        #event.
+        self._eventId = count()
+        self.event_trace = []
+        for model in self.models:
+            model.initial_events_scheduled = False
+
+
+class NoEventsRemainingError(Exception):
     pass

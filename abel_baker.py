@@ -39,7 +39,7 @@ def main():
     
     abModel = AbelBakerModel(env)
     cg = CustomerGenerator("Customer Generator", abModel)
-    arrivalEvent = cg.getNextEvent()
+    arrivalEvent = cg.get_next_event()
     print(arrivalEvent.name)
     
 if __name__ == '__main__':
