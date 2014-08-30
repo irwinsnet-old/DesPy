@@ -1,3 +1,8 @@
+
+PRIORITY_EARLY = -1
+PRIORITY_STANDARD = 0
+PRIORITY_LATE = 1
+
 class _NamedObject(object):
     """Provides name and description properties to multiple despy
     classes.
@@ -11,6 +16,10 @@ class _NamedObject(object):
         """
         return self._name
     
+    @name.setter
+    def name(self, name):
+        self._name = name
+    
     @property
     def description(self):
         """Gets a description of the model.
@@ -23,7 +32,7 @@ class _NamedObject(object):
         return self._description
 
     @description.setter
-    def description(self, modelDescription):
+    def description(self, description):
         """Sets the description of the model.
         
         *Arguments*
@@ -31,7 +40,7 @@ class _NamedObject(object):
                 One or more paragraphs that describe the purpose and
                 components of the model.
         """
-        self._description = modelDescription
+        self._description = description
 
 class _ModelMember(_NamedObject):
     

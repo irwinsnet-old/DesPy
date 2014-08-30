@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 #TODO: Make event ID an event attribute (removed from named tuple)
-#TODO: Get Process to work
 
 from collections import namedtuple
-from despy.experiment import Experiment, FelItem
-from despy.root import _NamedObject, _ModelMember
+from despy.core.experiment import Experiment, FelItem
+from despy.core._root import _NamedObject, _ModelMember,\
+    PRIORITY_EARLY, PRIORITY_STANDARD, PRIORITY_LATE
 
 class Model(_NamedObject):
 
@@ -37,9 +37,9 @@ class Model(_NamedObject):
         # Create a default experiment if no experiment is provided
         # to the constructor.
         if experiment == None:
-            env = Experiment()
-            env.name = "Default Experiment"
-            self._experiment = env
+            exp = Experiment()
+            exp.name = "Default Experiment"
+            self._experiment = exp
         else:
             self._experiment = experiment
             
@@ -103,7 +103,7 @@ class Model(_NamedObject):
             return
 
     def schedule(self, event, delay = None,
-                 priority = FelItem.PRIORITY_STANDARD):
+                 priority = PRIORITY_STANDARD):
         """A convenience method that calls the Experiment object's
         schedule() method to schedule an event on the FEL.
 

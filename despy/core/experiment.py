@@ -2,19 +2,16 @@
 from heapq import heappush, heappop
 from itertools import count
 from collections import namedtuple
+from despy.core._root import _NamedObject, PRIORITY_EARLY, PRIORITY_STANDARD,\
+    PRIORITY_LATE
 
 #TODO: Make ID an event attribute
 #TODO: Remove delay as an event attribute.
-#TODO: Move priority to felTuple from event attribute
-#TODO: Subclass experiment to named item.
 
 class FelItem(namedtuple('FelItem', ['fel_time', 'fel_event', 'fel_priority'])):
-    
-    PRIORITY_EARLY = -1
-    PRIORITY_STANDARD = 0
-    PRIORITY_LATE = 1
+    pass
 
-class Experiment(object):
+class Experiment(_NamedObject):
 
     """ Schedule events and manage the future event list (FEL).
 
@@ -44,26 +41,6 @@ class Experiment(object):
         self._now = time * 10
 
     @property
-    def name(self):
-        """Gets the name of the experiment.
-        
-        *Returns:* A short string.
-        
-        """
-        return self._name
-
-    @name.setter
-    def name(self, experimentName):
-        """Sets the name of the experiment.
-        
-        *Arguments*
-            modelName (string):
-                A short string that describes the experiment.
-
-        """
-        self._name = experimentName
-
-    @property
     def console_output(self):
         return self._console_output
     
@@ -88,7 +65,7 @@ class Experiment(object):
         """
         self._models.append(model)
 
-    def schedule(self, event, delay = 0, priority = FelItem.PRIORITY_STANDARD):
+    def schedule(self, event, delay = 0, priority = PRIORITY_STANDARD):
         """ Add an event to the FEL.
 
         *Arguments*

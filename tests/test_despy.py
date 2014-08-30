@@ -6,10 +6,13 @@ test_despy.py tests the methods in the despy.py module.
 
 import unittest
 
-from despy.experiment import Experiment, FelItem
-from despy.model import Model
-from despy.event import Event
-from despy.process import Process
+import despy.core as dp
+
+Experiment = dp.Experiment
+FelItem = dp.FelItem
+Model = dp.Model
+Event = dp.Event
+Process = dp.Process
 
 class testDespyb(unittest.TestCase):
        
@@ -65,7 +68,7 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(model.experiment.peek(), float('Infinity'))
         
         model.schedule(Event(model, "Event #1",
-                Event.PRIORITY_EARLY), 20)
+                dp.PRIORITY_EARLY), 20)
         self.assertEqual(model.experiment.peek(), 20)
         
         model.schedule(Event(model, "Event #2"), 5)
@@ -79,9 +82,9 @@ class testDespyb(unittest.TestCase):
         ev_late = Event(model, "Late Event")
         
         #Schedule Events
-        model.schedule(ev_late, 5, FelItem.PRIORITY_LATE)
-        model.schedule(ev_early, 5, FelItem.PRIORITY_EARLY)
-        model.schedule(ev_standard, 5, FelItem.PRIORITY_STANDARD)
+        model.schedule(ev_late, 5, dp.PRIORITY_LATE)
+        model.schedule(ev_early, 5, dp.PRIORITY_EARLY)
+        model.schedule(ev_standard, 5, dp.PRIORITY_STANDARD)
         
         #Verify events run in correct order.
         print()

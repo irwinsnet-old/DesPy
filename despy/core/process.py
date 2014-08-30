@@ -1,8 +1,6 @@
-from despy.root import _ModelMember
-from despy.event import Event
+from despy.core._root import _ModelMember
+from despy.core.event import Event
 from collections import namedtuple
-
-#TODO: Create method for process to initially schedule itself.
 
 class Process(_ModelMember):
     """Represents a simulation process that periodically schedules events and

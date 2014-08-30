@@ -1,4 +1,4 @@
-from despy.root import _ModelMember
+from despy.core._root import _ModelMember
 
 class Event(_ModelMember):
     """ An base class for all events that can be scheduled on the future event
