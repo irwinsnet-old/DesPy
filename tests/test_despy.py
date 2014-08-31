@@ -149,6 +149,7 @@ class testDespyb(unittest.TestCase):
         
     def test_process(self):
         model = Model("Process Model")
+        model.experiment.seed = 42
         
         def generator(self):
             while True:

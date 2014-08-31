@@ -1,6 +1,7 @@
 
 from heapq import heappush, heappop
 from itertools import count
+import numpy as np
 from collections import namedtuple
 from despy.core._root import _NamedObject, PRIORITY_EARLY, PRIORITY_STANDARD,\
     PRIORITY_LATE
@@ -38,6 +39,15 @@ class Experiment(_NamedObject):
     @now.setter
     def now(self, time):
         self._now = time * 10
+        
+    @property
+    def seed(self):
+        return self._seed
+    
+    @seed.setter
+    def seed(self, seed):
+        self._seed = seed
+        np.random.seed(seed)
 
     @property
     def console_output(self):
