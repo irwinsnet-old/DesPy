@@ -7,6 +7,7 @@ test_despy.py tests the methods in the despy.py module.
 import unittest
 
 import despy.core as dp
+import scipy.stats as stats
 
 Experiment = dp.Experiment
 FelItem = dp.FelItem
@@ -151,7 +152,8 @@ class testDespyb(unittest.TestCase):
         
         def generator(self):
             while True:
-                yield self.schedule_timeout("Repeated Event", 3)
+                delay = round(stats.expon.rvs(scale = 3))
+                yield self.schedule_timeout("Repeated Event", delay)
         
         process = Process(model, "Test Process", generator)
         process.start()

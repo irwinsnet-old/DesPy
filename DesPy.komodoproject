@@ -3,6 +3,8 @@
 <project id="8daf31f8-a1c7-41c2-bd5c-dc59f4c55c59" kpf_version="5" name="DesPyB.komodoproject">
 <preference-set idref="8daf31f8-a1c7-41c2-bd5c-dc59f4c55c59" id="project" preftype="project">
   <boolean id="editRestoreFoldPoints">1</boolean>
+  <string relative="path" id="import_dirname"></string>
+  <string id="python3DefaultInterpreter">C:\pyzo2014a\python.exe</string>
   <boolean id="showWhitespace">1</boolean>
 </preference-set>
 </project>
