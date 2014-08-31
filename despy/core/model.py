@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-#TODO: Make event ID an event attribute (removed from named tuple)
-
 from collections import namedtuple
 from despy.core.experiment import Experiment, FelItem
 from despy.core._root import _NamedObject, _ModelMember,\

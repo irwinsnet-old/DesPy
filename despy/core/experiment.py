@@ -6,7 +6,6 @@ from despy.core._root import _NamedObject, PRIORITY_EARLY, PRIORITY_STANDARD,\
     PRIORITY_LATE
 
 #TODO: Make ID an event attribute
-#TODO: Remove delay as an event attribute.
 
 class FelItem(namedtuple('FelItem', ['fel_time', 'fel_event', 'fel_priority'])):
     pass
@@ -76,9 +75,7 @@ class Experiment(_NamedObject):
                 the event will be scheduled to occur mmediately.
 
         """
-        if event.delay != None:
-            delay = event.delay
-        
+
         # Places a tuple onto the FEL, consisting of the event time, ID,
         # and event object.
         scheduleTime = self._now + (delay * 10) + priority

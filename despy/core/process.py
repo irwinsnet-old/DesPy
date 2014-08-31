@@ -2,6 +2,9 @@ from despy.core._root import _ModelMember
 from despy.core.event import Event
 from collections import namedtuple
 
+#TODO: Refactor processTuple. Make attribute names consistent with
+#felItem class.
+
 class Process(_ModelMember):
     """Represents a simulation process that periodically schedules events and
     maintains state (i.e., retains variable values) between events.
@@ -23,7 +26,7 @@ class Process(_ModelMember):
         self.processTuple = namedtuple('processTuple', ['event_', 'delay_'])
         
     def schedule_timeout(self, name, delay, priority = Event.PRIORITY_STANDARD):
-        event = ProcessTimeOutEvent(self, name, priority, delay)
+        event = ProcessTimeOutEvent(self, name, priority)
         return self.processTuple(event_ = event, delay_ = delay)
 
     def call_process(self):
@@ -42,23 +45,7 @@ class ProcessTimeOutEvent(Event):
         self._process.call_process()
     
     def __init__(self, process, name, 
-                 priority = Event.PRIORITY_STANDARD, delay = None):
+                 priority = Event.PRIORITY_STANDARD):
         self._process = process
-        super().__init__(process.model, name, priority, delay)
+        super().__init__(process.model, name, priority)
         self.append_callback(self.process_callback)
-
-    def do_event(self):
-        """Executes the callback functions that are on the event's
-        callback list. _do_event() is called by the experiment's step
-        method.
-        
-        """
-        if len(self._callbacks)==0:
-            return None
-        else:
-            for callback in self._callbacks:
-                callback()
-            return True
-        
-
-        

@@ -1,3 +1,4 @@
+import types
 from despy.core._root import _ModelMember
 
 class Event(_ModelMember):
@@ -30,7 +31,7 @@ class Event(_ModelMember):
     PRIORITY_STANDARD = 0
     PRIORITY_LATE = 1
     
-    def __init__(self, model, name, priority = PRIORITY_STANDARD, delay = None):
+    def __init__(self, model, name, priority = PRIORITY_STANDARD):
         """Initialize the Event object.
 
         *Arguments*
@@ -46,7 +47,6 @@ class Event(_ModelMember):
         self._priority = priority
         self._description = "Event"
         self._callbacks = []
-        self._delay = delay
 
     @property
     def priority(self):
@@ -58,14 +58,6 @@ class Event(_ModelMember):
             * PRIORITY_LATE = 1
         """
         return self._priority
-    
-    @property
-    def delay(self):
-        return self._delay
-    
-    @delay.setter
-    def delay(self, delay):
-        self._delay = delay
 
     def append_callback(self, callback):
         """Appends a function to the event's callback list.
@@ -90,7 +82,11 @@ class Event(_ModelMember):
             return None
         else:
             for callback in self._callbacks:
-                callback(self)
+                if isinstance(callback, types.FunctionType):
+                    callback(self)
+                elif isinstance(callback, types.MethodType):
+                    callback()
+
             return True
 
     def get_event_record(self, printToConsole = True):
