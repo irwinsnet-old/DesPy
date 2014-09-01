@@ -1,4 +1,3 @@
-
 from heapq import heappush, heappop
 from itertools import count
 import numpy as np
@@ -6,7 +5,8 @@ from collections import namedtuple
 from despy.core._root import _NamedObject, PRIORITY_EARLY, PRIORITY_STANDARD,\
     PRIORITY_LATE
 
-#TODO: Make ID an event attribute
+#TODO: Finish Process class so it handles console output and will write
+# a CSV file.
 
 class FelItem(namedtuple('FelItem', ['fel_time', 'fel_event', 'fel_priority'])):
     pass
@@ -27,7 +27,7 @@ class Experiment(_NamedObject):
         self.traceTuple = namedtuple('traceTuple',
                                      ['time', 'evt_name'])
         self._models = []
-        self.event_trace = []
+        self.trace = Trace(self)
         self.reset(initial_time)
 
     @property
@@ -109,6 +109,9 @@ class Experiment(_NamedObject):
             if not model.initial_events_scheduled:
                 model.initialize()
                 model.initial_events_scheduled = True
+    
+    def get_unique_id(self):
+        return self._counter.__next__()
 
     def step(self):
         """Advance simulation time to the next time on the FEL and
@@ -133,7 +136,7 @@ class Experiment(_NamedObject):
         
         #Record event in trace report
         eventRecord = current_FEL_item.fel_event.get_event_record()
-        self.event_trace.append(eventRecord)
+        self.trace.append(eventRecord)
         if self.console_output:
             consoleOutput = str(eventRecord.time).rjust(8) + \
                 ':   ' + eventRecord.evt_name
@@ -184,11 +187,29 @@ class Experiment(_NamedObject):
         self._futureEventList = []
         #  Each event gets a unique integer ID, starting with 0 for the first
         #event.
-        self._eventId = count()
-        self.event_trace = []
+        self._counter=count()
+        self.trace.clear()
         for model in self.models:
             model.initial_events_scheduled = False
 
-
 class NoEventsRemainingError(Exception):
     pass
+
+class Trace(object):
+    
+    def __init__(self, experiment):
+        self._experiment = experiment
+        self.event_list = []
+    
+    def append(self, item):
+        self.event_list.append(item)
+        
+    def clear(self):
+        self.event_list = []
+    
+    def get(self, index):
+        return self.event_list[index]
+    
+    def length(self):
+        return len(self.event_list)
+        

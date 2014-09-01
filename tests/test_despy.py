@@ -105,13 +105,13 @@ class testDespyb(unittest.TestCase):
         model.schedule(Event(model, "Third Event"), 8)
         model.experiment.run()
         
-        self.assertEqual(len(model.experiment.event_trace), 3)
-        evtTrace = model.experiment.event_trace
-        self.assertEqual(evtTrace[0].evt_name, "First Event")
-        self.assertEqual(evtTrace[1].evt_name, "Second Event")
-        self.assertEqual(evtTrace[1].time, 4)
-        self.assertEqual(evtTrace[2].evt_name, "Third Event")
-        self.assertEqual(evtTrace[2].time, 8)
+        self.assertEqual(model.experiment.trace.length(), 3)
+        evtTrace = model.experiment.trace
+        self.assertEqual(evtTrace.get(0).evt_name, "First Event")
+        self.assertEqual(evtTrace.get(1).evt_name, "Second Event")
+        self.assertEqual(evtTrace.get(1).time, 4)
+        self.assertEqual(evtTrace.get(2).evt_name, "Third Event")
+        self.assertEqual(evtTrace.get(2).time, 8)
 
     def test_appendCallback(self):
         model = Model("AppendCallback Model")
@@ -129,23 +129,22 @@ class testDespyb(unittest.TestCase):
         model.set_initialize_method(initializeModel)
         model.experiment.run()
         
-        evtTrace = model.experiment.event_trace
-        self.assertEqual(len(evtTrace), 2)
-        self.assertEqual(evtTrace[0].evt_name, "First Event")
-        self.assertEqual(evtTrace[0].time, 5)
-        self.assertEqual(evtTrace[1].evt_name, "Callback Event")
-        self.assertEqual(evtTrace[1].time, 15)
+        evtTrace = model.experiment.trace
+        self.assertEqual(evtTrace.length(), 2)
+        self.assertEqual(evtTrace.get(0).evt_name, "First Event")
+        self.assertEqual(evtTrace.get(0).time, 5)
+        self.assertEqual(evtTrace.get(1).evt_name, "Callback Event")
+        self.assertEqual(evtTrace.get(1).time, 15)
         
         #Test reset method and until parameter
         model.experiment.reset()
-        #model.schedule(evt1, 5)
         model.experiment.run(10)
-        evtTrace = model.experiment.event_trace
-        #self.assertEqual(len(evtTrace), 1)
+        evtTrace = model.experiment.trace
+        self.assertEqual(evtTrace.length(), 1)
         
         #Verify that simulation can be restarted from current point.
         model.experiment.run()
-        #self.assertEqual(len(evtTrace), 2)
+        self.assertEqual(evtTrace.length(), 2)
         
     def test_process(self):
         model = Model("Process Model")
@@ -159,6 +158,12 @@ class testDespyb(unittest.TestCase):
         process = Process(model, "Test Process", generator)
         process.start()
         model.experiment.run(20)
+        
+    def test_simultaneous_events(self):
+        model = Model("Simuleaneous Events Model")
+        model.schedule(Event(model, "Event #1"), 3)
+        model.schedule(Event(model, "Event #2"), 3)
+        model.experiment.run()
 
 if __name__ == '__main__':
     unittest.main()

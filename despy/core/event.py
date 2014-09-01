@@ -47,6 +47,7 @@ class Event(_ModelMember):
         self._priority = priority
         self._description = "Event"
         self._callbacks = []
+        self._id = model.experiment.get_unique_id()
 
     @property
     def priority(self):
@@ -58,6 +59,19 @@ class Event(_ModelMember):
             * PRIORITY_LATE = 1
         """
         return self._priority
+    
+    @property
+    def id(self):
+        """Get the unique integer that is appended to every event in the
+        experiment.
+        
+        Every event must have a unique id value, or else the FEL will
+        cause an error whenever two or more events are schedueled to
+        occur at the same time.
+        
+        *Returns:* A unique integer.
+        """
+        return self._id
 
     def append_callback(self, callback):
         """Appends a function to the event's callback list.
@@ -104,3 +118,10 @@ class Event(_ModelMember):
         env = self.model.experiment
         eventRecord = env.traceTuple(time = env.now, evt_name = self.name)
         return eventRecord
+    
+    def __lt__(self, y):
+        return self.id < y.id
+    
+    def __gt__(self, y):
+        return self.id > y.id
+        
