@@ -160,10 +160,20 @@ class testDespyb(unittest.TestCase):
         model.experiment.run(20)
         
     def test_simultaneous_events(self):
+        #Test simultaneous, different events.
         model = Model("Simuleaneous Events Model")
         model.schedule(Event(model, "Event #1"), 3)
         model.schedule(Event(model, "Event #2"), 3)
         model.experiment.run()
+        self.assertEqual(model.experiment.trace.length(), 2)
+        
+        #Test simultaneous, identical events.
+        model2 = Model("Simultaneous Identical Events Model")
+        event = Event(model2, "The Event")
+        model2.schedule(event, 1)
+        model2.schedule(event, 1)
+        model2.experiment.run()
+        self.assertEqual(model2.experiment.trace.length(), 2)
 
 if __name__ == '__main__':
     unittest.main()
