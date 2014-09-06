@@ -2,11 +2,12 @@ from heapq import heappush, heappop
 from itertools import count
 import numpy as np
 from collections import namedtuple
-from despy.core._root import _NamedObject, PRIORITY_EARLY, PRIORITY_STANDARD,\
+from despy.core.root import _NamedObject, PRIORITY_EARLY, PRIORITY_STANDARD,\
     PRIORITY_LATE
 
 #TODO: Finish Process class so it handles console output and will write
 # a CSV file.
+#TODO: Add time metric to queue object.
 
 class FelItem(namedtuple('FelItem', ['fel_time', 'fel_event', 'fel_priority'])):
     pass

@@ -2,7 +2,7 @@
 
 from collections import namedtuple
 from despy.core.experiment import Experiment, FelItem
-from despy.core._root import _NamedObject, _ModelMember,\
+from despy.core.root import _NamedObject, _ModelMember,\
     PRIORITY_EARLY, PRIORITY_STANDARD, PRIORITY_LATE
 
 class Model(_NamedObject):

@@ -1,5 +1,6 @@
 import types
-from despy.core._root import _ModelMember
+from despy.core.root import _ModelMember, PRIORITY_EARLY, PRIORITY_STANDARD, \
+    PRIORITY_LATE
 
 class Event(_ModelMember):
     """ An base class for all events that can be scheduled on the future event
@@ -27,10 +28,6 @@ class Event(_ModelMember):
             PRIORITY_STANDARD.
     """
 
-    PRIORITY_EARLY = -1
-    PRIORITY_STANDARD = 0
-    PRIORITY_LATE = 1
-    
     def __init__(self, model, name, priority = PRIORITY_STANDARD):
         """Initialize the Event object.
 
