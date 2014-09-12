@@ -68,8 +68,9 @@ class testDespyb(unittest.TestCase):
         
         self.assertEqual(model.experiment.peek(), float('Infinity'))
         
-        model.schedule(Event(model, "Event #1",
-                dp.PRIORITY_EARLY), 20)
+        model.schedule(Event(model, "Event #1"),
+                       20,
+                       dp.PRIORITY_EARLY)
         self.assertEqual(model.experiment.peek(), 20)
         
         model.schedule(Event(model, "Event #2"), 5)

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from collections import namedtuple
+from itertools import count
 from despy.core.experiment import Experiment, FelItem
 from despy.core.root import _NamedObject, _ModelMember,\
     PRIORITY_EARLY, PRIORITY_STANDARD, PRIORITY_LATE
@@ -90,17 +91,15 @@ class Model(_NamedObject):
         self._initialize = initialize_method
 
     def initialize(self):
-        """Place initial events on the FEL and initiate processes.
-
-        Model subclasses must implement this method, or the Model
-        class will raise a NotImplementedError.
-        """
         try:
             self._initialize(self)
         except:
             return
+    
+    def getCounter(self, start = 1):
+        return count(start)
 
-    def schedule(self, event, delay = None,
+    def schedule(self, event, delay = 0,
                  priority = PRIORITY_STANDARD):
         """A convenience method that calls the Experiment object's
         schedule() method to schedule an event on the FEL.
@@ -116,31 +115,3 @@ class Model(_NamedObject):
 
         """
         self.experiment.schedule(event, delay, priority)
-
-class Entity(_ModelMember):
-    """Represents an item that is part of the model.
-    """
-    def __init__(self, model, entityName, entityNumber = None):
-        """Creates an Entity object.
-        
-        *Arguments*
-            model (despy.Model):
-                The model object that contains the entity.
-            entityName (string):
-                The name of the entity.
-            entityNumber (integer):
-                An integer that distinguishes the entity from other
-                entities. Defaults to None.
-            model
-        """
-        self._name = entityName
-        self._number = entityNumber
-        self._model = model
-
-    @property
-    def number(self):
-        """ Get the number of the entity.
-        
-        *Returns:* Integer
-        """
-        return self._number

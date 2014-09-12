@@ -28,7 +28,7 @@ class Event(_ModelMember):
             PRIORITY_STANDARD.
     """
 
-    def __init__(self, model, name, priority = PRIORITY_STANDARD):
+    def __init__(self, model, name):
         """Initialize the Event object.
 
         *Arguments*
@@ -41,7 +41,6 @@ class Event(_ModelMember):
 
         self._name = name
         self._model = model
-        self._priority = priority
         self._description = "Event"
         self._callbacks = []
         self._id = model.experiment.get_unique_id()

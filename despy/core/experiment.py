@@ -2,12 +2,12 @@ from heapq import heappush, heappop
 from itertools import count
 import numpy as np
 from collections import namedtuple
+import os
 from despy.core.root import _NamedObject, PRIORITY_EARLY, PRIORITY_STANDARD,\
     PRIORITY_LATE
 
 #TODO: Finish Process class so it handles console output and will write
 # a CSV file.
-#TODO: Add time metric to queue object.
 
 class FelItem(namedtuple('FelItem', ['fel_time', 'fel_event', 'fel_priority'])):
     pass
@@ -30,6 +30,7 @@ class Experiment(_NamedObject):
         self._models = []
         self.trace = Trace(self)
         self.reset(initial_time)
+        self.trace_file = None
 
     @property
     def now(self):
@@ -57,6 +58,14 @@ class Experiment(_NamedObject):
     @console_output.setter
     def console_output(self, output):
         self._console_output = output
+    
+    @property
+    def trace_file(self):
+        return self._trace_file
+    
+    @trace_file.setter
+    def trace_file(self, file):
+        self._trace_file = file
         
     @property
     def models(self):
@@ -95,13 +104,16 @@ class Experiment(_NamedObject):
                  FelItem(fel_time = scheduleTime, fel_event = event,
                          fel_priority = priority))
 
-    def peek(self):
+    def peek(self, prioritized = True):
         """Return the time of the next scheduled event, or infinity if there
         is no remaining events.
         """
         try:
-            return int((self._futureEventList[0].fel_time - \
-                    self._futureEventList[0].fel_priority) / 10)
+            if prioritized:
+                return int((self._futureEventList[0].fel_time - \
+                        self._futureEventList[0].fel_priority) / 10)
+            else:
+                return self._futureEventList[0].fel_time / 10
         except IndexError:
             return float('Infinity')
         
@@ -179,6 +191,9 @@ class Experiment(_NamedObject):
                     self.step()
                 except NoEventsRemainingError:
                     break
+        
+        if self.trace_file is not None:
+            self.trace.write_trace()
 
     def reset(self, initial_time = 0):
         """Reset the simulation time to zero so the simulation can be
@@ -199,7 +214,7 @@ class NoEventsRemainingError(Exception):
 class Trace(object):
     
     def __init__(self, experiment):
-        self._experiment = experiment
+        self.experiment = experiment
         self.event_list = []
     
     def append(self, item):
@@ -213,4 +228,14 @@ class Trace(object):
     
     def length(self):
         return len(self.event_list)
+    
+    def write_trace(self):
+        file_path, file_name = os.path.split(self.experiment.trace_file)
+        if not os.path.exists(file_path):
+            print("makeing directory")
+            os.makedirs(file_path)
+        file = open(self.experiment.trace_file, 'w')
+        file.write("This is a test.")
+        file.close()
+    
         
