@@ -4,6 +4,8 @@ test_core_queue.py tests queue performance.
 ===============================================================================
 """
 
+#TODO: Figure out why custmer #1 isn't getting served.
+
 import unittest
 import itertools
 
@@ -119,11 +121,10 @@ class testQueue(unittest.TestCase):
         self.QuModel.Customer.set_counter()
         model = self.QuModel("Queue Model")
         experiment = model.experiment
-        experiment.trace_file = "trace/test_queue_in_experiment.csv"
+        experiment.trace_file = "_trace/test_queue_in_experiment.csv"
         
         experiment.run(100)
 
-        
 if __name__ == '__main__':
     unittest.main()
 

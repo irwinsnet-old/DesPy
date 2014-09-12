@@ -91,11 +91,11 @@ class testDespyb(unittest.TestCase):
         #Verify events run in correct order.
         print()
         felItem = model.experiment.step()
-        self.assertEqual(felItem.fel_event.name, "Early Event")
+        self.assertEqual(felItem.event_fld.name, "Early Event")
         felItem = model.experiment.step()
-        self.assertEqual(felItem.fel_event.name, "Standard Event")
+        self.assertEqual(felItem.event_fld.name, "Standard Event")
         felItem = model.experiment.step()
-        self.assertEqual(felItem.fel_event.name, "Late Event")
+        self.assertEqual(felItem.event_fld.name, "Late Event")
         exp = model.experiment
         self.assertEqual(exp.now, 5)
 
@@ -108,11 +108,11 @@ class testDespyb(unittest.TestCase):
         
         self.assertEqual(model.experiment.trace.length(), 3)
         evtTrace = model.experiment.trace
-        self.assertEqual(evtTrace.get(0).evt_name, "First Event")
-        self.assertEqual(evtTrace.get(1).evt_name, "Second Event")
-        self.assertEqual(evtTrace.get(1).time, 4)
-        self.assertEqual(evtTrace.get(2).evt_name, "Third Event")
-        self.assertEqual(evtTrace.get(2).time, 8)
+        self.assertEqual(evtTrace.get(0).event_name_fld, "First Event")
+        self.assertEqual(evtTrace.get(1).event_name_fld, "Second Event")
+        self.assertEqual(evtTrace.get(1).time_fld, 4)
+        self.assertEqual(evtTrace.get(2).event_name_fld, "Third Event")
+        self.assertEqual(evtTrace.get(2).time_fld, 8)
 
     def test_appendCallback(self):
         model = Model("AppendCallback Model")
@@ -132,10 +132,10 @@ class testDespyb(unittest.TestCase):
         
         evtTrace = model.experiment.trace
         self.assertEqual(evtTrace.length(), 2)
-        self.assertEqual(evtTrace.get(0).evt_name, "First Event")
-        self.assertEqual(evtTrace.get(0).time, 5)
-        self.assertEqual(evtTrace.get(1).evt_name, "Callback Event")
-        self.assertEqual(evtTrace.get(1).time, 15)
+        self.assertEqual(evtTrace.get(0).event_name_fld, "First Event")
+        self.assertEqual(evtTrace.get(0).time_fld, 5)
+        self.assertEqual(evtTrace.get(1).event_name_fld, "Callback Event")
+        self.assertEqual(evtTrace.get(1).time_fld, 15)
         
         #Test reset method and until parameter
         model.experiment.reset()

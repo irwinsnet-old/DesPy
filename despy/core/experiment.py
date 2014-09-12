@@ -3,14 +3,17 @@ from itertools import count
 import numpy as np
 from collections import namedtuple
 import os
+import csv
 from despy.core.root import _NamedObject, PRIORITY_EARLY, PRIORITY_STANDARD,\
     PRIORITY_LATE
 
 #TODO: Finish Process class so it handles console output and will write
 # a CSV file.
 
-class FelItem(namedtuple('FelItem', ['fel_time', 'fel_event', 'fel_priority'])):
-    pass
+FelItem = namedtuple('FelItem', ['time_fld', 'event_fld', 'priority_fld'])
+
+TraceRecord = namedtuple('TraceRecord', ['event_number_fld', 'time_fld',
+                         'priority_fld', 'event_name_fld'])
 
 class Experiment(_NamedObject):
 
@@ -25,8 +28,6 @@ class Experiment(_NamedObject):
         """Initialize the event object.
         """
         self.console_output = True
-        self.traceTuple = namedtuple('traceTuple',
-                                     ['time', 'evt_name'])
         self._models = []
         self.trace = Trace(self)
         self.reset(initial_time)
@@ -101,8 +102,8 @@ class Experiment(_NamedObject):
         scheduleTime = self._now + (delay * 10) + priority
         
         heappush(self._futureEventList,
-                 FelItem(fel_time = scheduleTime, fel_event = event,
-                         fel_priority = priority))
+                 FelItem(time_fld = scheduleTime, event_fld = event,
+                         priority_fld = priority))
 
     def peek(self, prioritized = True):
         """Return the time of the next scheduled event, or infinity if there
@@ -110,10 +111,10 @@ class Experiment(_NamedObject):
         """
         try:
             if prioritized:
-                return int((self._futureEventList[0].fel_time - \
-                        self._futureEventList[0].fel_priority) / 10)
+                return int((self._futureEventList[0].time_fld - \
+                        self._futureEventList[0].priority_fld) / 10)
             else:
-                return self._futureEventList[0].fel_time / 10
+                return self._futureEventList[0].time_fld / 10
         except IndexError:
             return float('Infinity')
         
@@ -137,25 +138,22 @@ class Experiment(_NamedObject):
 
         # Get next event from FEL and advance current simulation time.
         try:
-            current_FEL_item = heappop(self._futureEventList)
+            fel_item = heappop(self._futureEventList)
         except IndexError:
             raise NoEventsRemainingError
         else:
-            self.now = int((current_FEL_item.fel_time - \
-                    current_FEL_item.fel_priority) / 10)
+            self.now = int((fel_item.time_fld - \
+                    fel_item.priority_fld) / 10)
 
         #Run event
-        current_FEL_item.fel_event.do_event()
+        fel_item.event_fld.do_event()
         
         #Record event in trace report
-        eventRecord = current_FEL_item.fel_event.get_event_record()
-        self.trace.append(eventRecord)
-        if self.console_output:
-            consoleOutput = str(eventRecord.time).rjust(8) + \
-                ':   ' + eventRecord.evt_name
-            print(consoleOutput)
-        
-        return current_FEL_item
+        traceRecord = self.trace.add_trace_record(self.now,
+                                                  fel_item.priority_fld,
+                                                  fel_item.event_fld.name)
+
+        return fel_item
 
     def run(self, until=None):
         """ Continue to advance simulation time and execute events on the FEL
@@ -211,31 +209,47 @@ class Experiment(_NamedObject):
 class NoEventsRemainingError(Exception):
     pass
 
+
 class Trace(object):
     
     def __init__(self, experiment):
         self.experiment = experiment
-        self.event_list = []
+        self._list = []
+        self.event_number = 0
     
     def append(self, item):
-        self.event_list.append(item)
+        self._list.append(item)
+        
+    def add_trace_record(self, time, priority, event_name):
+        trace_record = TraceRecord(event_number_fld = self.event_number,
+                                   time_fld = time, priority_fld = priority,
+                                   event_name_fld = event_name)
+        self.append(trace_record)
+        self.event_number = self.event_number + 1
+        
+        if self.experiment.console_output:
+            console_output = str(trace_record.time_fld).rjust(8) + \
+                ':   ' + trace_record.event_name_fld
+            print(console_output)
         
     def clear(self):
-        self.event_list = []
+        self._list = []
     
     def get(self, index):
-        return self.event_list[index]
+        return self._list[index]
     
     def length(self):
-        return len(self.event_list)
+        return len(self._list)
     
     def write_trace(self):
         file_path, file_name = os.path.split(self.experiment.trace_file)
         if not os.path.exists(file_path):
             print("makeing directory")
             os.makedirs(file_path)
-        file = open(self.experiment.trace_file, 'w')
-        file.write("This is a test.")
-        file.close()
-    
-        
+        with open(self.experiment.trace_file, 'w', newline = '') as file:
+            trace_writer = csv.writer(file)
+            trace_writer.writerow(['Event #', 'Time', 'Priority', 'Event Name'])
+            for row in self._list:
+                trace_writer.writerow([row.event_number_fld, row.time_fld,
+                                      row.priority_fld, row.event_name_fld])
+            file.close()

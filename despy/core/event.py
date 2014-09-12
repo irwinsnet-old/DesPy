@@ -98,22 +98,6 @@ class Event(_ModelMember):
                     callback()
 
             return True
-
-    def get_event_record(self, printToConsole = True):
-        """ Append an experiment traceTuple object to the traceEvent
-        List. Prints the contents if the traceTuple to the console
-        output if printToConsole is set to True.
-        
-        *Arguments*
-            printToConsole (Boolean):
-                If set to true, in addition to returning a string,
-                recordEvent() will send the string to the standard
-                output (i.e., console). Defaults to True.
-        
-        """
-        env = self.model.experiment
-        eventRecord = env.traceTuple(time = env.now, evt_name = self.name)
-        return eventRecord
     
     def __lt__(self, y):
         return self.id < y.id

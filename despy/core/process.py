@@ -5,8 +5,6 @@ import types
 
 #TODO: Refactor processTuple. Make attribute names consistent with
 #felItem class.
-#TODO: write test for queue.
-#TODO: finish CSV trace.
 
 class Process(_ModelMember):
     """Represents a simulation process that periodically schedules events and
