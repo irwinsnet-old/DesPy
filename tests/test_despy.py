@@ -108,10 +108,10 @@ class testDespyb(unittest.TestCase):
         
         self.assertEqual(model.experiment.trace.length(), 3)
         evtTrace = model.experiment.trace
-        self.assertEqual(evtTrace.get(0).event_name_fld, "First Event")
-        self.assertEqual(evtTrace.get(1).event_name_fld, "Second Event")
+        self.assertEqual(evtTrace.get(0).name_fld, "First Event")
+        self.assertEqual(evtTrace.get(1).name_fld, "Second Event")
         self.assertEqual(evtTrace.get(1).time_fld, 4)
-        self.assertEqual(evtTrace.get(2).event_name_fld, "Third Event")
+        self.assertEqual(evtTrace.get(2).name_fld, "Third Event")
         self.assertEqual(evtTrace.get(2).time_fld, 8)
 
     def test_appendCallback(self):
@@ -132,9 +132,9 @@ class testDespyb(unittest.TestCase):
         
         evtTrace = model.experiment.trace
         self.assertEqual(evtTrace.length(), 2)
-        self.assertEqual(evtTrace.get(0).event_name_fld, "First Event")
+        self.assertEqual(evtTrace.get(0).name_fld, "First Event")
         self.assertEqual(evtTrace.get(0).time_fld, 5)
-        self.assertEqual(evtTrace.get(1).event_name_fld, "Callback Event")
+        self.assertEqual(evtTrace.get(1).name_fld, "Callback Event")
         self.assertEqual(evtTrace.get(1).time_fld, 15)
         
         #Test reset method and until parameter

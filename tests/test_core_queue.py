@@ -84,15 +84,16 @@ class testQueue(unittest.TestCase):
 
             def generator(self):
                 first_customer = self.model.Customer(self.model)
+                self.model.c_qu.add(first_customer)                
                 yield self.schedule_timeout(\
                         "Customer #{0} arrives.".format(first_customer.number))
                 while True:
-                    customer = self.model.Customer(self.model)
-                    self.model.c_qu.add(customer)
                     delay = round(stats.expon.rvs(scale = 3))
+                    customer = self.model.Customer(self.model)                    
                     yield self.schedule_timeout(\
                             "Customer #{0} arrives.".format(customer.number),
                             delay)
+                    self.model.c_qu.add(customer)
                     self.model.service_process.wake()
         
         class CustServiceProcess(dp.Process):

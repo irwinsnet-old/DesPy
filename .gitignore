@@ -4,3 +4,7 @@ _build
 _static
 _templates
 _trace
+ez_setup.py
+setuptools-5.8.zip
+Despy.komodoproject
+*.bat

@@ -7,13 +7,13 @@ import csv
 from despy.core.root import _NamedObject, PRIORITY_EARLY, PRIORITY_STANDARD,\
     PRIORITY_LATE
 
-#TODO: Finish Process class so it handles console output and will write
-# a CSV file.
+#TODO: Modify CSV file creation in Trace class to add a timestamp to each file
+#   name, so old trace files will not be rewritten.
 
 FelItem = namedtuple('FelItem', ['time_fld', 'event_fld', 'priority_fld'])
 
-TraceRecord = namedtuple('TraceRecord', ['event_number_fld', 'time_fld',
-                         'priority_fld', 'event_name_fld'])
+TraceRecord = namedtuple('TraceRecord', ['record_number_fld', 'time_fld',
+                         'priority_fld', 'record_type_fld', 'name_fld'])
 
 class Experiment(_NamedObject):
 
@@ -149,9 +149,9 @@ class Experiment(_NamedObject):
         fel_item.event_fld.do_event()
         
         #Record event in trace report
-        traceRecord = self.trace.add_trace_record(self.now,
-                                                  fel_item.priority_fld,
-                                                  fel_item.event_fld.name)
+        traceRecord = self.trace.add_event(self.now,
+                                           fel_item.priority_fld,
+                                           fel_item.event_fld.name)
 
         return fel_item
 
@@ -220,17 +220,24 @@ class Trace(object):
     def append(self, item):
         self._list.append(item)
         
-    def add_trace_record(self, time, priority, event_name):
-        trace_record = TraceRecord(event_number_fld = self.event_number,
+    def add_trace_record(self, time, priority, record_type, name):
+        trace_record = TraceRecord(record_number_fld = self.event_number,
                                    time_fld = time, priority_fld = priority,
-                                   event_name_fld = event_name)
+                                   name_fld = name,
+                                   record_type_fld = record_type)
         self.append(trace_record)
         self.event_number = self.event_number + 1
         
         if self.experiment.console_output:
             console_output = str(trace_record.time_fld).rjust(8) + \
-                ':   ' + trace_record.event_name_fld
+                ':   ' + trace_record.name_fld
             print(console_output)
+            
+    def add_output(self, output):
+        self.add_trace_record(self.experiment.now, "N/A", "Std. Ouput", output)
+    
+    def add_event(self, time, priority, name):
+        self.add_trace_record(time, priority, "Event", name)
         
     def clear(self):
         self._list = []
@@ -248,8 +255,10 @@ class Trace(object):
             os.makedirs(file_path)
         with open(self.experiment.trace_file, 'w', newline = '') as file:
             trace_writer = csv.writer(file)
-            trace_writer.writerow(['Event #', 'Time', 'Priority', 'Event Name'])
+            trace_writer.writerow(['Record #', 'Time', 'Priority',
+                                   'Record Type', 'Name'])
             for row in self._list:
-                trace_writer.writerow([row.event_number_fld, row.time_fld,
-                                      row.priority_fld, row.event_name_fld])
+                trace_writer.writerow([row.record_number_fld, row.time_fld,
+                                      row.priority_fld, row.record_type_fld,
+                                      row.name_fld])
             file.close()
