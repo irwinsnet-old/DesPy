@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# TODO: Default experiment name should have name of model.
+
 from collections import namedtuple
 from itertools import count
 from despy.core.experiment import Experiment, FelItem

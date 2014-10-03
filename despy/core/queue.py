@@ -1,8 +1,6 @@
 from despy.core.root import _ModelMember
 from collections import deque, namedtuple
 
-#TODO: Add capability to add list to queue.
-
 Queue_item = namedtuple('Queue_item', ['q_item', 'q_time_in'])
 
 class Queue(_ModelMember):

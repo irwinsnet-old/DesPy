@@ -162,7 +162,7 @@ class testDespyb(unittest.TestCase):
         
     def test_simultaneous_events(self):
         #Test simultaneous, different events.
-        model = Model("Simuleaneous Events Model")
+        model = Model("Simultaneous Events Model")
         model.schedule(Event(model, "Event #1"), 3)
         model.schedule(Event(model, "Event #2"), 3)
         model.experiment.run()

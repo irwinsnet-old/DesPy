@@ -3,7 +3,7 @@ from despy.core.event import Event
 from collections import namedtuple
 import types
 
-#TODO: Refactor processTuple. Make attribute names consistent with
+#TODO : Refactor processTuple. Make attribute names consistent with
 #felItem class.
 
 class Process(_ModelMember):
@@ -58,7 +58,7 @@ class Process(_ModelMember):
         
     def start(self, delay = 0, priority = PRIORITY_STANDARD):
         self.model.schedule(ProcessTimeOutEvent(self, "Start " + self.name),
-                            delay)
+                            delay, priority)
         self.awake = True
         
     def sleep(self):

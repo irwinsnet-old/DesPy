@@ -7,8 +7,11 @@ import csv
 from despy.core.root import _NamedObject, PRIORITY_EARLY, PRIORITY_STANDARD,\
     PRIORITY_LATE
 
-#TODO: Modify CSV file creation in Trace class to add a timestamp to each file
+# TODO: Modify CSV file creation in Trace class to add a timestamp to each file
 #   name, so old trace files will not be rewritten.
+# TODO: Trace reports print immediately, but event records don't print until
+#   the very end of the event, which makes the trace report look out of order.
+#   Consider having trace stuff print at end of event.
 
 FelItem = namedtuple('FelItem', ['time_fld', 'event_fld', 'priority_fld'])
 
@@ -144,14 +147,14 @@ class Experiment(_NamedObject):
         else:
             self.now = int((fel_item.time_fld - \
                     fel_item.priority_fld) / 10)
+            
+        #Record event in trace report
+        self.trace.add_event(self.now, fel_item.priority_fld, 
+                             fel_item.event_fld.name)
 
         #Run event
         fel_item.event_fld.do_event()
         
-        #Record event in trace report
-        traceRecord = self.trace.add_event(self.now,
-                                           fel_item.priority_fld,
-                                           fel_item.event_fld.name)
 
         return fel_item
 
