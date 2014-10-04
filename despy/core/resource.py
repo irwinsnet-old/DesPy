@@ -1,9 +1,8 @@
-from despy.core.root import _ModelMember
+#!/usr/bin/env python3
+
+from despy.core.base import _ModelMember
 from despy.core import Event
 from collections import namedtuple
-
-# TODO: Fix check_queue method. It should set the resource to None and pass the
-#   resource index to start_activity().
 
 # TODO: Add different options for selection of empty resources, either
 # prioritization by number, random selection, or equal loading.

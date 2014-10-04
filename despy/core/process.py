@@ -1,4 +1,6 @@
-from despy.core.root import _ModelMember, PRIORITY_STANDARD
+#!/usr/bin/env python3
+
+from despy.core.base import _ModelMember, PRIORITY_STANDARD
 from despy.core.event import Event
 from collections import namedtuple
 import types

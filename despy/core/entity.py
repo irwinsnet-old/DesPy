@@ -1,11 +1,12 @@
-from despy.core.root import _ModelMember
+#!/usr/bin/env python3
+
+from despy.core.base import _ModelMember
 from itertools import count
 
 class Entity(_ModelMember):
     
     def __init__(self, model, name):
-        self._model = model
-        self._name = name
+        super().__init__(model, name)
         
         if not hasattr(self, "count"):
             self.set_counter()
@@ -18,4 +19,3 @@ class Entity(_ModelMember):
     @classmethod
     def get_id(cls):
         return next(cls.count)
-    

@@ -1,9 +1,13 @@
+#!/usr/bin/env python3
 
 PRIORITY_EARLY = -1
 PRIORITY_STANDARD = 0
 PRIORITY_LATE = 1
 
 class _NamedObject(object):
+    def __init__(self, name):
+        self._name = name
+    
     """Provides name and description properties to multiple despy
     classes.
     """
@@ -43,6 +47,9 @@ class _NamedObject(object):
         self._description = description
 
 class _ModelMember(_NamedObject):
+    def __init__(self, model, name):
+        super().__init__(name)
+        self._model = model
     
     @property
     def model(self):

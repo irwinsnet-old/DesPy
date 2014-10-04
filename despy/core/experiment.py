@@ -1,17 +1,12 @@
+#!/usr/bin/env python3
+
 from heapq import heappush, heappop
 from itertools import count
 import numpy as np
 from collections import namedtuple
 import os, csv, datetime
 
-from despy.core.root import _NamedObject, PRIORITY_EARLY, PRIORITY_STANDARD,\
-    PRIORITY_LATE
-
-# TODO: Modify CSV file creation in Trace class to add a timestamp to each file
-#   name, so old trace files will not be rewritten.
-# TODO: Trace reports print immediately, but event records don't print until
-#   the very end of the event, which makes the trace report look out of order.
-#   Consider having trace stuff print at end of event.
+from despy.core.base import _NamedObject, PRIORITY_STANDARD
 
 FelItem = namedtuple('FelItem', ['time_fld', 'event_fld', 'priority_fld'])
 
@@ -259,13 +254,16 @@ class Trace(object):
     def write_trace(self):
         file_path, file_name = os.path.split(self.experiment.trace_file)
         trace_file = self.experiment.trace_file + \
-                self.experiment.run_stop_time.strftime('%y_%j_%H_%M_%S') +\
+                self.experiment.run_stop_time.strftime('_%y_%j_%H_%M_%S') +\
                 '.csv'
         if not os.path.exists(file_path):
             print("makeing directory")
             os.makedirs(file_path)
         with open(trace_file, 'w', newline = '') as file:
             trace_writer = csv.writer(file)
+            
+            row = [file_name]
+            trace_writer.writerow(row)
             
             row = ['Start Time', '' , '' , 'Stop Time']
             row.extend(['', '', 'Elapsed time (usec)'])
@@ -278,9 +276,7 @@ class Trace(object):
             row.extend(['', '', self.experiment.run_stop_time.ctime()])
             row.extend(['', '', elapsed_time.microseconds])
             trace_writer.writerow(row)
-#             row = [self.experiment.run_start_time.microsecond, '', ''] DEBUG:
-#             row.extend([self.experiment.run_stop_time.microsecond])
-#             trace_writer.writerow(row)
+
             trace_writer.writerow([])
             
             trace_writer.writerow(['Record #', 'Time', 'Priority',

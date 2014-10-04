@@ -1,4 +1,6 @@
-from despy.core.root import _ModelMember
+#!/usr/bin/env python3
+
+from despy.core.base import _ModelMember
 from collections import deque, namedtuple
 
 Queue_item = namedtuple('Queue_item', ['q_item', 'q_time_in'])

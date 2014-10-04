@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 
-# TODO: Default experiment name should have name of model.
-
-from collections import namedtuple
 from itertools import count
-from despy.core.experiment import Experiment, FelItem
-from despy.core.root import _NamedObject, _ModelMember,\
-    PRIORITY_EARLY, PRIORITY_STANDARD, PRIORITY_LATE
+from despy.core.experiment import Experiment
+from despy.core.base import _NamedObject, PRIORITY_STANDARD
 
 class Model(_NamedObject):
 
@@ -39,7 +35,7 @@ class Model(_NamedObject):
         # to the constructor.
         if experiment == None:
             exp = Experiment()
-            exp.name = "Default Experiment"
+            exp.name = "{0} Default Experiment".format(modelName)
             self._experiment = exp
         else:
             self._experiment = experiment

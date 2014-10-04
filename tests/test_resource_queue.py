@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
 import unittest
-import itertools
-
-# TODO: Fix generator error with first customer.
 
 import despy.core as dp
 import scipy.stats as stats

@@ -43,7 +43,7 @@ class testDespyb(unittest.TestCase):
         #Create model with default experiment.
         testModel = Model("Test Model")
         self.assertEqual(testModel.name, "Test Model")
-        self.assertEqual(testModel.experiment.name, "Default Experiment")
+        self.assertEqual(testModel.experiment.name, "Test Model Default Experiment")
         self.assertEqual(len(testModel.experiment.models), 1)
         self.assertEqual(testModel.experiment.models[0].name, "Test Model")
         

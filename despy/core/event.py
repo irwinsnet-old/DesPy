@@ -1,6 +1,7 @@
+#!/usr/bin/env python3
+
 import types
-from despy.core.root import _ModelMember, PRIORITY_EARLY, PRIORITY_STANDARD, \
-    PRIORITY_LATE
+from despy.core.base import _ModelMember
 
 class Event(_ModelMember):
     """ An base class for all events that can be scheduled on the future event
@@ -39,8 +40,7 @@ class Event(_ModelMember):
                 printed in the event trace report.
         """
 
-        self._name = name
-        self._model = model
+        super().__init__(model, name)
         self._description = "Event"
         self._callbacks = []
         self._id = model.experiment.get_unique_id()
