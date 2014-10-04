@@ -98,7 +98,7 @@ class testResource(unittest.TestCase):
         self.ResModel.Customer.set_counter()
         model = self.ResModel("Resource Model")
         experiment = model.experiment
-        experiment.trace_file = "_trace/test_resource.csv"
+        experiment.trace_file = "_trace/test_resource"
 #         experiment.initialize_models() # DEBUG:
 #         experiment.step()   # DEBUG:
         experiment.run(100)

@@ -2,8 +2,8 @@ from heapq import heappush, heappop
 from itertools import count
 import numpy as np
 from collections import namedtuple
-import os
-import csv
+import os, csv, datetime
+
 from despy.core.root import _NamedObject, PRIORITY_EARLY, PRIORITY_STANDARD,\
     PRIORITY_LATE
 
@@ -35,6 +35,8 @@ class Experiment(_NamedObject):
         self.trace = Trace(self)
         self.reset(initial_time)
         self.trace_file = None
+        self.run_start_time = None
+        self.run_stop_time = None
 
     @property
     def now(self):
@@ -176,6 +178,7 @@ class Experiment(_NamedObject):
                 
         """
 
+        self.run_start_time = datetime.datetime.today()
         self.initialize_models()
         
         if isinstance(until, int):
@@ -192,6 +195,8 @@ class Experiment(_NamedObject):
                     self.step()
                 except NoEventsRemainingError:
                     break
+        
+        self.run_stop_time = datetime.datetime.today()
         
         if self.trace_file is not None:
             self.trace.write_trace()
@@ -253,11 +258,31 @@ class Trace(object):
     
     def write_trace(self):
         file_path, file_name = os.path.split(self.experiment.trace_file)
+        trace_file = self.experiment.trace_file + \
+                self.experiment.run_stop_time.strftime('%y_%j_%H_%M_%S') +\
+                '.csv'
         if not os.path.exists(file_path):
             print("makeing directory")
             os.makedirs(file_path)
-        with open(self.experiment.trace_file, 'w', newline = '') as file:
+        with open(trace_file, 'w', newline = '') as file:
             trace_writer = csv.writer(file)
+            
+            row = ['Start Time', '' , '' , 'Stop Time']
+            row.extend(['', '', 'Elapsed time (usec)'])
+            trace_writer.writerow(row)
+            
+            row = []
+            elapsed_time = self.experiment.run_stop_time - \
+                            self.experiment.run_start_time
+            row.append(self.experiment.run_start_time.ctime())
+            row.extend(['', '', self.experiment.run_stop_time.ctime()])
+            row.extend(['', '', elapsed_time.microseconds])
+            trace_writer.writerow(row)
+#             row = [self.experiment.run_start_time.microsecond, '', ''] DEBUG:
+#             row.extend([self.experiment.run_stop_time.microsecond])
+#             trace_writer.writerow(row)
+            trace_writer.writerow([])
+            
             trace_writer.writerow(['Record #', 'Time', 'Priority',
                                    'Record Type', 'Name'])
             for row in self._list:
