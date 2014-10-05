@@ -28,48 +28,48 @@ class testResource(unittest.TestCase):
         self.assertTrue(2 in server._positions)
         self.assertFalse(0 in server._positions)
         self.assertFalse(3 in server._positions)
-        
-        self.assertTrue(server[1]['user'] is None)
-        self.assertTrue(server[2]['user'] is None)
-        self.assertEqual(server[1]['name'], "#1")
-        self.assertEqual(server[2]['name'], "#2")
-        
+         
+        self.assertTrue(server[1].user is None)
+        self.assertTrue(server[2].user is None)
+        self.assertEqual(server[1].name, "#1")
+        self.assertEqual(server[2].name, "#2")
+         
         #   Check that entities were created.
         self.assertEqual(ents[0].name, "Entity #0")
         self.assertEqual(ents[1].name, "Entity #1")
-        
+         
         #   Check get_empty_position()
         position = server.get_empty_position()
         self.assertEqual(position, 1)
-        
+         
         #   Check request(user)
         position = server.request(ents[0])
         self.assertEqual(position, 1)
-        self.assertTrue(server[position]['user'] is not None)
-        self.assertEqual(server[position]['user'].name, "Entity #0")
-        self.assertTrue(server[2]['user'] is None)
-        
+        self.assertTrue(server[position].user is not None)
+        self.assertEqual(server[position].user.name, "Entity #0")
+        self.assertTrue(server[2].user is None)
+         
     class ResModel(dp.Model):
         class Customer(dp.Entity):
             def __init__(self, model):
                 super().__init__(model, "Customer")
-            
+             
         def initialize(self):
             self.customer_process.start(0, dp.PRIORITY_EARLY)
-            
+             
         class CustServiceResource(dp.Resource):
             def __init__(self, model, capacity):
                 super().__init__(model, "Server", capacity)
                 self.queue = dp.Queue(model, "Server Queue")
-            
+             
             def get_activity_time(self):
                 return round(stats.expon.rvs(scale = 4))
-        
+         
         class CustArrProcess(dp.Process):
             def __init__(self, model, server_resource):
                 super().__init__(model, "Customer Generator", self.generator)
                 self.server_resource = server_resource
-            
+             
             def generator(self):
                 customer = self.model.Customer(self.model)
                 yield self.schedule_timeout(\
@@ -82,13 +82,13 @@ class testResource(unittest.TestCase):
                     yield self.schedule_timeout(\
                             "Customer #{0} arrives.".format(customer.number),
                             delay)
-                    
+                     
         def __init__(self, name):
             super().__init__(name)
             self.server_resource = self.CustServiceResource(self, 2)
             self.customer_process = self.CustArrProcess(self,
                                                         self.server_resource)
-    
+     
     def test_resource_in_simulation(self):
         print()
         print("TEST RESOURCE IN EXPERIMENT OUTPUT")
@@ -96,8 +96,6 @@ class testResource(unittest.TestCase):
         model = self.ResModel("Resource Model")
         simulation = model.sim
         simulation.trace_file = "_trace/test_resource"
-#         simulation.initialize_models() # DEBUG:
-#         simulation.step()   # DEBUG:
         simulation.run(100)
 
 if __name__ == '__main__':

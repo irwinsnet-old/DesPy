@@ -5,6 +5,8 @@ PRIORITY_EARLY = -1
 PRIORITY_STANDARD = 0
 PRIORITY_LATE = 1
 
+# TODO: Do something with the descriptions."
+
 class _NamedObject(object):
     def __init__(self, name):
         self._name = name
@@ -46,6 +48,9 @@ class _NamedObject(object):
                 components of the model.
         """
         self._description = description
+    
+    def __str__(self):
+        return self.name
 
 class _ModelMember(_NamedObject):
     def __init__(self, model, name):
@@ -75,3 +80,6 @@ class _ModelMember(_NamedObject):
     @classmethod
     def get_id(cls):
         return next(cls.count)
+    
+    def __str__(self):
+        return "{0}:{1} # {2}".format(self.model, self.name, self.get_id())
