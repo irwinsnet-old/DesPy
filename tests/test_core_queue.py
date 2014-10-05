@@ -9,7 +9,7 @@ import unittest
 import despy.core as dp
 import scipy.stats as stats
 
-Experiment = dp.Experiment
+Simulation = dp.Simulation
 FelItem = dp.FelItem
 Event = dp.Event
 Process = dp.Process
@@ -25,9 +25,9 @@ class testQueue(unittest.TestCase):
                        priority = dp.PRIORITY_LATE)        
         model.schedule(dp.Event(model, "Negative Time"),
                        priority = dp.PRIORITY_EARLY)
-        self.assertEqual(model.experiment.peek(False), -0.1)
+        self.assertEqual(model.sim.peek(False), -0.1)
 
-        model.experiment.run()
+        model.sim.run()
         
     def test_entity_counter(self):
         print()
@@ -114,14 +114,14 @@ class testQueue(unittest.TestCase):
             self.customer_process = self.CustArrProcess(self)
             self.service_process = self.CustServiceProcess(self)
 
-    def test_queue_in_experiment(self):
+    def test_queue_in_simulation(self):
         print()
         self.QuModel.Customer.set_counter()
         model = self.QuModel("Queue Model")
-        experiment = model.experiment
-        experiment.trace_file = "_trace/test_queue_in_experiment"
+        simulation = model.sim
+        simulation.trace_file = "_trace/test_queue_in_simulation"
         
-        experiment.run(100)
+        simulation.run(100)
 
 if __name__ == '__main__':
     unittest.main()

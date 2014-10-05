@@ -16,7 +16,7 @@ class Queue(_ModelMember):
 
     def add(self, item):
         self._queue.append(Queue_item(q_item = item, \
-                                      q_time_in = self.model.experiment.now))
+                                      q_time_in = self.model.sim.now))
     
     def remove(self):
         return self._queue.popleft().q_item

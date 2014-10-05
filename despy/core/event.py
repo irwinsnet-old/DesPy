@@ -9,7 +9,7 @@ class Event(_ModelMember):
 
     Create an event by inheriting from the Event class. Subclasses of Event
     must instantiate one or more of the doPriorEvent(), do_event(), or
-    doPostEvent() methods. The Experiment will execute these methods when the
+    doPostEvent() methods. The Simulation will execute these methods when the
     Event time occurs and the Event object is removed from the FEL.
     
     *Arguments*
@@ -20,7 +20,7 @@ class Event(_ModelMember):
             printed in simulation reports.
         priority (integer):
             When there are events scheduled to occurr at the same
-            time, the priority determines if the experiment
+            time, the priority determines if the simulation
             executes some events before other events.
             PRIORITY_EARLY events are executed before all other events
             with that are PRIORITY STANDARD or PRIORITY_LATE.
@@ -43,7 +43,7 @@ class Event(_ModelMember):
         super().__init__(model, name)
         self._description = "Event"
         self._callbacks = []
-        self._id = model.experiment.get_unique_id()
+        self._id = model.sim.get_unique_id()
 
     @property
     def priority(self):
@@ -59,7 +59,7 @@ class Event(_ModelMember):
     @property
     def id(self):
         """Get the unique integer that is appended to every event in the
-        experiment.
+        simulation.
         
         Every event must have a unique id value, or else the FEL will
         cause an error whenever two or more events are schedueled to
@@ -84,7 +84,7 @@ class Event(_ModelMember):
 
     def do_event(self):
         """Executes the callback functions that are on the event's
-        callback list. _do_event() is called by the experiment's step
+        callback list. _do_event() is called by the simulation's step
         method.
         
         """

@@ -9,7 +9,7 @@ import unittest
 import despy.core as dp
 import scipy.stats as stats
 
-Experiment = dp.Experiment
+Simulation = dp.Simulation
 FelItem = dp.FelItem
 Model = dp.Model
 Event = dp.Event
@@ -17,10 +17,10 @@ Process = dp.Process
 
 class testDespyb(unittest.TestCase):
        
-    ### Experiment Class Tests
+    ### Simulation Class Tests
     def test_now(self):
-        # Verify that Experiment.now is set to 0 by default.
-        exp1 = Experiment()
+        # Verify that Simulation.now is set to 0 by default.
+        exp1 = Simulation()
         self.assertEqual(exp1.now, 0)
         self.assertTrue(exp1.console_output)
         
@@ -30,30 +30,30 @@ class testDespyb(unittest.TestCase):
         exp1.console_output = True
         self.assertTrue(exp1.console_output)
         
-        # Verify that Experiment.now can be set by the class constructor.
-        exp2 = Experiment(42)
+        # Verify that Simulation.now can be set by the class constructor.
+        exp2 = Simulation(42)
         self.assertEqual(exp2.now, 42)
         
-        # Verify that a name can be assigned to the experiment.
-        exp2.name = "Experiment Name!"
-        self.assertEqual(exp2.name, "Experiment Name!")
+        # Verify that a name can be assigned to the simulation.
+        exp2.name = "Simulation Name!"
+        self.assertEqual(exp2.name, "Simulation Name!")
         
     ### Model Class Tests
     def test_name(self):
-        #Create model with default experiment.
+        #Create model with default simulation.
         testModel = Model("Test Model")
         self.assertEqual(testModel.name, "Test Model")
-        self.assertEqual(testModel.experiment.name, "Test Model Default Experiment")
-        self.assertEqual(len(testModel.experiment.models), 1)
-        self.assertEqual(testModel.experiment.models[0].name, "Test Model")
+        self.assertEqual(testModel.sim.name, "Test Model Default Simulation")
+        self.assertEqual(len(testModel.sim.models), 1)
+        self.assertEqual(testModel.sim.models[0].name, "Test Model")
         
-        #Replace experiment.
-        exp = Experiment()
-        exp.name = "New Experiment"
-        self.assertIsInstance(testModel.experiment, Experiment)
-        self.assertIsNot(testModel.experiment, exp)
-        testModel.experiment = exp
-        self.assertIs(testModel.experiment, exp)
+        #Replace simulation.
+        exp = Simulation()
+        exp.name = "New Simulation"
+        self.assertIsInstance(testModel.sim, Simulation)
+        self.assertIsNot(testModel.sim, exp)
+        testModel.sim = exp
+        self.assertIs(testModel.sim, exp)
         
         # Test description.
         modelDescription = \
@@ -66,15 +66,15 @@ class testDespyb(unittest.TestCase):
     def test_peek(self):
         model = Model("Test Model #1")
         
-        self.assertEqual(model.experiment.peek(), float('Infinity'))
+        self.assertEqual(model.sim.peek(), float('Infinity'))
         
         model.schedule(Event(model, "Event #1"),
                        20,
                        dp.PRIORITY_EARLY)
-        self.assertEqual(model.experiment.peek(), 20)
+        self.assertEqual(model.sim.peek(), 20)
         
         model.schedule(Event(model, "Event #2"), 5)
-        self.assertEqual(model.experiment.peek(), 5)
+        self.assertEqual(model.sim.peek(), 5)
         
     def test_step(self):
         #Create model and events.
@@ -90,13 +90,13 @@ class testDespyb(unittest.TestCase):
         
         #Verify events run in correct order.
         print()
-        felItem = model.experiment.step()
+        felItem = model.sim.step()
         self.assertEqual(felItem.event_fld.name, "Early Event")
-        felItem = model.experiment.step()
+        felItem = model.sim.step()
         self.assertEqual(felItem.event_fld.name, "Standard Event")
-        felItem = model.experiment.step()
+        felItem = model.sim.step()
         self.assertEqual(felItem.event_fld.name, "Late Event")
-        exp = model.experiment
+        exp = model.sim
         self.assertEqual(exp.now, 5)
 
     def test_run(self):
@@ -104,10 +104,10 @@ class testDespyb(unittest.TestCase):
         model.schedule(Event(model, "First Event"), 0)
         model.schedule(Event(model, "Second Event"), 4)
         model.schedule(Event(model, "Third Event"), 8)
-        model.experiment.run()
+        model.sim.run()
         
-        self.assertEqual(model.experiment.trace.length(), 3)
-        evtTrace = model.experiment.trace
+        self.assertEqual(model.sim.trace.length(), 3)
+        evtTrace = model.sim.trace
         self.assertEqual(evtTrace.get(0).name_fld, "First Event")
         self.assertEqual(evtTrace.get(1).name_fld, "Second Event")
         self.assertEqual(evtTrace.get(1).time_fld, 4)
@@ -128,9 +128,9 @@ class testDespyb(unittest.TestCase):
             self.schedule(evt1, 5)
         
         model.set_initialize_method(initializeModel)
-        model.experiment.run()
+        model.sim.run()
         
-        evtTrace = model.experiment.trace
+        evtTrace = model.sim.trace
         self.assertEqual(evtTrace.length(), 2)
         self.assertEqual(evtTrace.get(0).name_fld, "First Event")
         self.assertEqual(evtTrace.get(0).time_fld, 5)
@@ -138,18 +138,18 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(evtTrace.get(1).time_fld, 15)
         
         #Test reset method and until parameter
-        model.experiment.reset()
-        model.experiment.run(10)
-        evtTrace = model.experiment.trace
+        model.sim.reset()
+        model.sim.run(10)
+        evtTrace = model.sim.trace
         self.assertEqual(evtTrace.length(), 1)
         
         #Verify that simulation can be restarted from current point.
-        model.experiment.run()
+        model.sim.run()
         self.assertEqual(evtTrace.length(), 2)
         
     def test_process(self):
         model = Model("Process Model")
-        model.experiment.seed = 42
+        model.sim.seed = 42
         
         def generator(self):
             while True:
@@ -158,23 +158,23 @@ class testDespyb(unittest.TestCase):
         
         process = Process(model, "Test Process", generator)
         process.start()
-        model.experiment.run(20)
+        model.sim.run(20)
         
     def test_simultaneous_events(self):
         #Test simultaneous, different events.
         model = Model("Simultaneous Events Model")
         model.schedule(Event(model, "Event #1"), 3)
         model.schedule(Event(model, "Event #2"), 3)
-        model.experiment.run()
-        self.assertEqual(model.experiment.trace.length(), 2)
+        model.sim.run()
+        self.assertEqual(model.sim.trace.length(), 2)
         
         #Test simultaneous, identical events.
         model2 = Model("Simultaneous Identical Events Model")
         event = Event(model2, "The Event")
         model2.schedule(event, 1)
         model2.schedule(event, 1)
-        model2.experiment.run()
-        self.assertEqual(model2.experiment.trace.length(), 2)
+        model2.sim.run()
+        self.assertEqual(model2.sim.trace.length(), 2)
 
 if __name__ == '__main__':
     unittest.main()

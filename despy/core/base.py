@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from itertools import count
 
 PRIORITY_EARLY = -1
 PRIORITY_STANDARD = 0
@@ -50,6 +51,10 @@ class _ModelMember(_NamedObject):
     def __init__(self, model, name):
         super().__init__(name)
         self._model = model
+        
+        if not hasattr(self, "count"):
+            self.set_counter()
+        self.number = self.get_id()
     
     @property
     def model(self):
@@ -62,3 +67,11 @@ class _ModelMember(_NamedObject):
     @model.setter
     def model(self, model):
         self._model = model
+    
+    @classmethod
+    def set_counter(cls):
+        cls.count = count(1)
+    
+    @classmethod
+    def get_id(cls):
+        return next(cls.count)

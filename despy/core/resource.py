@@ -2,15 +2,13 @@
 
 from despy.core.base import _ModelMember
 from despy.core import Event
-from collections import namedtuple
 
 # TODO: Add different options for selection of empty resources, either
 # prioritization by number, random selection, or equal loading.
 
 class Resource(_ModelMember):
     def __init__(self, model, name, capacity):
-        self._model = model
-        self._name = name
+        super().__init__(model, name)
         self.capacity = capacity
         # Each position is represented by a list with item [0] being the
         #   item being served by the resource and item[1] being the name of
@@ -61,7 +59,7 @@ class Resource(_ModelMember):
         index = self.get_empty_position()
         if index:
             self[index]['user'] = user
-            self[index]['start_time'] = self.model.experiment.now
+            self[index]['start_time'] = self.model.sim.now
             self.start_activity(index)
             return index
         else:
@@ -74,7 +72,7 @@ class Resource(_ModelMember):
         trace_output += \
                 "starting activity on {0} ".format(self[index]['user'].name)
         trace_output += "# {0}".format(self[index]['user'].number)
-        self.model.experiment.trace.add_output(trace_output)
+        self.model.sim.trace.add_output(trace_output)
         
         service_time = self.get_activity_time()
         event_name = "Position {0} Finished Activity "\

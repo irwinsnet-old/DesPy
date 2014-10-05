@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from itertools import count
-from despy.core.experiment import Experiment
+from despy.core.simulation import Simulation
 from despy.core.base import _NamedObject, PRIORITY_STANDARD
 
 class Model(_NamedObject):
@@ -10,38 +10,38 @@ class Model(_NamedObject):
     servers, entities, processes, and queues.
 
     *Constructor Arguments*
-        modelName (string):
+        name (string):
             A short string that will be displayed in trace reports
             and other outputs.
-        modelName (string):
+        name (string):
             A short name for the model. The model name is displayed
             in output reports.
-        experiment (despy.Experiment) (Optional):
-            The model object must be attached to an experiment
+        simulation (despy.Simulation) (Optional):
+            The model object must be attached to an simulation
             object, which will run the model's events on the FEL.
-            If the experiment argument is omitted, the constructor
+            If the simulation argument is omitted, the constructor
             will create and assign a default enviroment object to
-            the model. A different experiment can be assigned later
-            using the model object's experiment property.
+            the model. A different simulation can be assigned later
+            using the model object's simulation property.
 
     """
 
-    def __init__(self, modelName, experiment = None):
+    def __init__(self, name, sim = None):
         """Create a model object."""
-        self._name = modelName
+        self._name = name
         self.initial_events_scheduled = False
         
-        # Create a default experiment if no experiment is provided
+        # Create a default simulation if no simulation is provided
         # to the constructor.
-        if experiment == None:
-            exp = Experiment()
-            exp.name = "{0} Default Experiment".format(modelName)
-            self._experiment = exp
+        if sim == None:
+            exp = Simulation()
+            exp.name = "{0} Default Simulation".format(name)
+            self._sim = exp
         else:
-            self._experiment = experiment
+            self._sim = sim
             
-        #Create link to model in experiment object
-        self._experiment.append_model(self)
+        #Create link to model in simulation object
+        self._sim.append_model(self)
         self._initialize = None
 
     @property
@@ -66,24 +66,24 @@ class Model(_NamedObject):
         self._initial_events_scheduled = scheduled
     
     @property
-    def experiment(self):
-        """Gets the experiment object.
+    def sim(self):
+        """Gets the simulation object.
         
-        *Returns:* (despby.Experiment)
+        *Returns:* (despby.Simulation)
         """
-        return self._experiment
+        return self._sim
     
-    @experiment.setter
-    def experiment(self, experiment):
-        """Assigns the model to a new experiment.
+    @sim.setter
+    def sim(self, sim):
+        """Assigns the model to a new simulation.
         
         *Arguments*
-            experiment (despy.Experiment):
-                An experiment object that will run the simulation
+            simulation (despy.Simulation):
+                An simulation object that will run the simulation
                 and execute the model's events.
         
         """
-        self._experiment = experiment
+        self._sim = sim
         
     def set_initialize_method(self, initialize_method):
         self._initialize = initialize_method
@@ -99,7 +99,7 @@ class Model(_NamedObject):
 
     def schedule(self, event, delay = 0,
                  priority = PRIORITY_STANDARD):
-        """A convenience method that calls the Experiment object's
+        """A convenience method that calls the Simulation object's
         schedule() method to schedule an event on the FEL.
 
         *Arguments*
@@ -112,4 +112,4 @@ class Model(_NamedObject):
                 that the event will occur.
 
         """
-        self.experiment.schedule(event, delay, priority)
+        self.sim.schedule(event, delay, priority)

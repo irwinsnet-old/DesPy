@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from despy.core.experiment import Experiment
-from despy.core.experiment import FelItem
+from despy.core.simulation import Simulation
+from despy.core.simulation import FelItem
 from despy.core.model import Model
 from despy.core.event import Event
 from despy.core.process import Process

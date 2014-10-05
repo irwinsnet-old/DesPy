@@ -13,7 +13,7 @@ FelItem = namedtuple('FelItem', ['time_fld', 'event_fld', 'priority_fld'])
 TraceRecord = namedtuple('TraceRecord', ['record_number_fld', 'time_fld',
                          'priority_fld', 'record_type_fld', 'name_fld'])
 
-class Experiment(_NamedObject):
+class Simulation(_NamedObject):
 
     """ Schedule events and manage the future event list (FEL).
 
@@ -22,7 +22,7 @@ class Experiment(_NamedObject):
             A non-negative integer that defaults to zero.
     """
 
-    def __init__(self, initial_time = 0):
+    def __init__(self, initial_time=0):
         """Initialize the event object.
         """
         self.console_output = True
@@ -35,7 +35,7 @@ class Experiment(_NamedObject):
 
     @property
     def now(self):
-        """The current time of the experiment. The time is a unit-less
+        """The current time of the simulation. The time is a unit-less
         integer."""
         return int(self._now / 10)
     
@@ -70,14 +70,14 @@ class Experiment(_NamedObject):
         
     @property
     def models(self):
-        """Get a list of all models attached to the experiment.
+        """Get a list of all models attached to the simulation.
         
         *Returns:* A list of despy.model.Model objects.
         """
         return self._models
     
     def append_model(self, model):
-        """ Append a model object to the experiment.
+        """ Append a model object to the simulation.
         
         *Arguments*
             model:
@@ -85,7 +85,7 @@ class Experiment(_NamedObject):
         """
         self._models.append(model)
 
-    def schedule(self, event, delay = 0, priority = PRIORITY_STANDARD):
+    def schedule(self, event, delay=0, priority=PRIORITY_STANDARD):
         """ Add an event to the FEL.
 
         *Arguments*
@@ -102,10 +102,10 @@ class Experiment(_NamedObject):
         scheduleTime = self._now + (delay * 10) + priority
         
         heappush(self._futureEventList,
-                 FelItem(time_fld = scheduleTime, event_fld = event,
-                         priority_fld = priority))
+                 FelItem(time_fld=scheduleTime, event_fld=event,
+                         priority_fld=priority))
 
-    def peek(self, prioritized = True):
+    def peek(self, prioritized=True):
         """Return the time of the next scheduled event, or infinity if there
         is no remaining events.
         """
@@ -145,11 +145,11 @@ class Experiment(_NamedObject):
             self.now = int((fel_item.time_fld - \
                     fel_item.priority_fld) / 10)
             
-        #Record event in trace report
-        self.trace.add_event(self.now, fel_item.priority_fld, 
+        # Record event in trace report
+        self.trace.add_event(self.now, fel_item.priority_fld,
                              fel_item.event_fld.name)
 
-        #Run event
+        # Run event
         fel_item.event_fld.do_event()
         
 
@@ -196,15 +196,15 @@ class Experiment(_NamedObject):
         if self.trace_file is not None:
             self.trace.write_trace()
 
-    def reset(self, initial_time = 0):
+    def reset(self, initial_time=0):
         """Reset the simulation time to zero so the simulation can be
         rerun.
         """
         self._now = initial_time * 10
         self._futureEventList = []
         #  Each event gets a unique integer ID, starting with 0 for the first
-        #event.
-        self._counter=count()
+        # event.
+        self._counter = count()
         self.trace.clear()
         for model in self.models:
             model.initial_events_scheduled = False
@@ -215,8 +215,8 @@ class NoEventsRemainingError(Exception):
 
 class Trace(object):
     
-    def __init__(self, experiment):
-        self.experiment = experiment
+    def __init__(self, simulation):
+        self.simulation = simulation
         self._list = []
         self.event_number = 0
     
@@ -224,20 +224,20 @@ class Trace(object):
         self._list.append(item)
         
     def add_trace_record(self, time, priority, record_type, name):
-        trace_record = TraceRecord(record_number_fld = self.event_number,
-                                   time_fld = time, priority_fld = priority,
-                                   name_fld = name,
-                                   record_type_fld = record_type)
+        trace_record = TraceRecord(record_number_fld=self.event_number,
+                                   time_fld=time, priority_fld=priority,
+                                   name_fld=name,
+                                   record_type_fld=record_type)
         self.append(trace_record)
         self.event_number = self.event_number + 1
         
-        if self.experiment.console_output:
+        if self.simulation.console_output:
             console_output = str(trace_record.time_fld).rjust(8) + \
                 ':   ' + trace_record.name_fld
             print(console_output)
             
     def add_output(self, output):
-        self.add_trace_record(self.experiment.now, "N/A", "Std. Ouput", output)
+        self.add_trace_record(self.simulation.now, "N/A", "Std. Ouput", output)
     
     def add_event(self, time, priority, name):
         self.add_trace_record(time, priority, "Event", name)
@@ -252,14 +252,14 @@ class Trace(object):
         return len(self._list)
     
     def write_trace(self):
-        file_path, file_name = os.path.split(self.experiment.trace_file)
-        trace_file = self.experiment.trace_file + \
-                self.experiment.run_stop_time.strftime('_%y_%j_%H_%M_%S') +\
+        file_path, file_name = os.path.split(self.simulation.trace_file)
+        trace_file = self.simulation.trace_file + \
+                self.simulation.run_stop_time.strftime('_%y_%j_%H_%M_%S') + \
                 '.csv'
         if not os.path.exists(file_path):
             print("makeing directory")
             os.makedirs(file_path)
-        with open(trace_file, 'w', newline = '') as file:
+        with open(trace_file, 'w', newline='') as file:
             trace_writer = csv.writer(file)
             
             row = [file_name]
@@ -270,10 +270,10 @@ class Trace(object):
             trace_writer.writerow(row)
             
             row = []
-            elapsed_time = self.experiment.run_stop_time - \
-                            self.experiment.run_start_time
-            row.append(self.experiment.run_start_time.ctime())
-            row.extend(['', '', self.experiment.run_stop_time.ctime()])
+            elapsed_time = self.simulation.run_stop_time - \
+                            self.simulation.run_start_time
+            row.append(self.simulation.run_start_time.ctime())
+            row.extend(['', '', self.simulation.run_stop_time.ctime()])
             row.extend(['', '', elapsed_time.microseconds])
             trace_writer.writerow(row)
 

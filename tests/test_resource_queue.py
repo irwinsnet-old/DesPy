@@ -89,16 +89,16 @@ class testResource(unittest.TestCase):
             self.customer_process = self.CustArrProcess(self,
                                                         self.server_resource)
     
-    def test_resource_in_experiment(self):
+    def test_resource_in_simulation(self):
         print()
         print("TEST RESOURCE IN EXPERIMENT OUTPUT")
         self.ResModel.Customer.set_counter()
         model = self.ResModel("Resource Model")
-        experiment = model.experiment
-        experiment.trace_file = "_trace/test_resource"
-#         experiment.initialize_models() # DEBUG:
-#         experiment.step()   # DEBUG:
-        experiment.run(100)
+        simulation = model.sim
+        simulation.trace_file = "_trace/test_resource"
+#         simulation.initialize_models() # DEBUG:
+#         simulation.step()   # DEBUG:
+        simulation.run(100)
 
 if __name__ == '__main__':
     unittest.main()
