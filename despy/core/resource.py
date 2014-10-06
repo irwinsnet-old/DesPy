@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-from despy.core.base import _ModelMember
+from despy.core.base import _ModelComponent
 from despy.core import Event
 
 # TODO: Add different options for selection of empty resources, either
 # prioritization by number, random selection, or equal loading.
 
-class Resource(_ModelMember):
+class Resource(_ModelComponent):
     
     class Position():
         def __init__(self, index):

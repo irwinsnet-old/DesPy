@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from despy.core.base import _ModelMember, PRIORITY_STANDARD
+from despy.core.base import _ModelComponent, PRIORITY_STANDARD
 from despy.core.event import Event
 from collections import namedtuple
 import types
@@ -8,7 +8,7 @@ import types
 #TODO : Refactor processTuple. Make attribute names consistent with
 #felItem class.
 
-class Process(_ModelMember):
+class Process(_ModelComponent):
     """Represents a simulation process that periodically schedules events and
     maintains state (i.e., retains variable values) between events.
     """
@@ -23,8 +23,7 @@ class Process(_ModelMember):
                 A short string that will be displayed in trace reports
                 and other outputs.
         """
-        self._name = name
-        self._model = model
+        super().__init__(model, name)
         
         self.processTuple = namedtuple('processTuple', ['event_',
                                                         'delay_',

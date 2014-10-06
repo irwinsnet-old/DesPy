@@ -52,10 +52,11 @@ class _NamedObject(object):
     def __str__(self):
         return self.name
 
-class _ModelMember(_NamedObject):
+class _ModelComponent(_NamedObject):
     def __init__(self, model, name):
         super().__init__(name)
         self._model = model
+        model.add_component(self)
         
         if not hasattr(self, "count"):
             self.set_counter()

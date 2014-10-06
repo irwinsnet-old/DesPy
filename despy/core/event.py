@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import types
-from despy.core.base import _ModelMember
+from despy.core.base import _ModelComponent
 
-class Event(_ModelMember):
+class Event(_ModelComponent):
     """ An base class for all events that can be scheduled on the future event
     list (FEL).
 

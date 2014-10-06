@@ -30,6 +30,7 @@ class Model(_NamedObject):
         """Create a model object."""
         self._name = name
         self.initial_events_scheduled = False
+        self._components = []
         
         # Create a default simulation if no simulation is provided
         # to the constructor.
@@ -43,6 +44,9 @@ class Model(_NamedObject):
         #Create link to model in simulation object
         self._sim.append_model(self)
         self._initialize = None
+        
+    def add_component(self, component):
+        self._components.append(component)
 
     @property
     def initial_events_scheduled(self):
