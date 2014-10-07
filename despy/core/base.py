@@ -83,4 +83,4 @@ class _ModelComponent(_NamedObject):
         return next(cls.count)
     
     def __str__(self):
-        return "{0}:{1} # {2}".format(self.model, self.name, self.get_id())
+        return "{0}:{1}#{2}".format(self.model, self.name, self.number)

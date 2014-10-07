@@ -71,24 +71,22 @@ class Resource(_ModelComponent):
             return False
         
     def start_activity(self, index):
-        trace_output = "Trace: Position {0} ".format(self[index].name)
-        trace_output += \
-                "starting activity on {0} ".format(self[index].user.name)
-        trace_output += "# {0}".format(self[index].user.number)
-        self.model.sim.trace.add_output(trace_output)
+        trace = "Position {0} ".format(self[index].name)
+        trace += "starting activity on {0}.".format(self[index].user)
+        self.model.sim.trace.add_output(trace)
         
         service_time = self.get_activity_time()
-        event_name = "Position {0} Finished Activity "\
-                .format(self[index].name)
-        event_name += "on {0} # {1}. ".format(self[index].user.name,
-                                            self[index].user.number)
-        event_name += "Service time was {0} minutes.".format(service_time)
+
         finish_event = ResourceFinishActivityEvent(\
-            self, event_name, index)
-        
+            self, "Finished Service", index, service_time)
         self.model.schedule(finish_event, service_time)
         
-    def finish_activity(self, index):
+    def finish_activity(self, index, service_time):
+        trace = "Position {0} finished Activity ".format(self[index].name)
+        trace += "on {0}.  ".format(self[index].user)
+        trace += "Service time was {0} minutes.".format(service_time)
+        self.model.sim.trace.add_output(trace)
+        
         self.remove_user(index)
         if self.queue.length > 0:
             user = self.queue.remove()
@@ -102,11 +100,12 @@ class Resource(_ModelComponent):
     
 class ResourceFinishActivityEvent(Event):
     def check_resource_queue(self):
-        self._resource.finish_activity(self.index)
+        self._resource.finish_activity(self.index, self.service_time)
     
-    def __init__(self, resource, name, index):
+    def __init__(self, resource, name, index, service_time):
         self._resource = resource
         super().__init__(resource.model, name)
         self.append_callback(self.check_resource_queue)
         self.index = index
+        self.service_time = service_time
         
