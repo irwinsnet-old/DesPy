@@ -43,7 +43,7 @@ class testDespyb(unittest.TestCase):
         #Create model with default simulation.
         testModel = Model("Test Model")
         self.assertEqual(testModel.name, "Test Model")
-        self.assertEqual(testModel.sim.name, "Test Model Default Simulation")
+        self.assertEqual(testModel.sim.name, "Test Model:Default Simulation")
         self.assertEqual(len(testModel.sim.models), 1)
         self.assertEqual(testModel.sim.models[0].name, "Test Model")
         
@@ -157,7 +157,7 @@ class testDespyb(unittest.TestCase):
                 yield self.schedule_timeout("Repeated Event", delay)
         
         process = Process(model, "Test Process", generator)
-        self.assertEqual(len(model._components), 1)
+        self.assertEqual(len(model.components), 1)
         process.start()
         model.sim.run(20)
         
@@ -166,7 +166,7 @@ class testDespyb(unittest.TestCase):
         model = Model("Simultaneous Events Model")
         model.schedule(Event(model, "Event #1"), 3)
         model.schedule(Event(model, "Event #2"), 3)
-        self.assertEqual(len(model._components), 2)
+        self.assertEqual(len(model.components), 2)
         model.sim.run()
         self.assertEqual(model.sim.trace.length(), 2)
         

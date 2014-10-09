@@ -122,6 +122,7 @@ class testQueue(unittest.TestCase):
         simulation.trace_file = "_trace/test_queue_in_simulation"
         
         simulation.run(100)
+        self.assertGreater(len(model.components), 0)
 
 if __name__ == '__main__':
     unittest.main()

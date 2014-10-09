@@ -30,14 +30,14 @@ class Model(_NamedObject):
         """Create a model object."""
         self._name = name
         self.initial_events_scheduled = False
-        self._components = []
+        self.components = []
         
         # Create a default simulation if no simulation is provided
         # to the constructor.
         if sim == None:
-            exp = Simulation()
-            exp.name = "{0} Default Simulation".format(name)
-            self._sim = exp
+            simulation = Simulation()
+            simulation.name = "{0}:Default Simulation".format(name)
+            self._sim = simulation
         else:
             self._sim = sim
             
@@ -46,7 +46,13 @@ class Model(_NamedObject):
         self._initialize = None
         
     def add_component(self, component):
-        self._components.append(component)
+        self.components.append(component)
+        
+    def __getitem__(self, index):
+        return self.components[index]
+    
+    def __setitem__(self, index, item):
+        self.components[index] = item
 
     @property
     def initial_events_scheduled(self):
@@ -97,9 +103,6 @@ class Model(_NamedObject):
             self._initialize(self)
         except:
             return
-    
-    def getCounter(self, start = 1):
-        return count(start)
 
     def schedule(self, event, delay = 0,
                  priority = PRIORITY_STANDARD):

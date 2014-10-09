@@ -22,7 +22,7 @@ class Simulation(_NamedObject):
             A non-negative integer that defaults to zero.
     """
 
-    def __init__(self, initial_time=0):
+    def __init__(self, initial_time=0, name = None):
         """Initialize the event object.
         """
         self.console_output = True
@@ -32,6 +32,7 @@ class Simulation(_NamedObject):
         self.trace_file = None
         self.run_start_time = None
         self.run_stop_time = None
+        self._seed = None
 
     @property
     def now(self):
@@ -216,7 +217,7 @@ class NoEventsRemainingError(Exception):
 class Trace(object):
     
     def __init__(self, simulation):
-        self.simulation = simulation
+        self.sim = simulation
         self._list = []
         self.event_number = 0
     
@@ -231,13 +232,13 @@ class Trace(object):
         self.append(trace_record)
         self.event_number = self.event_number + 1
         
-        if self.simulation.console_output:
+        if self.sim.console_output:
             console_output = str(trace_record.time_fld).rjust(8) + \
                 ':   ' + trace_record.name_fld
             print(console_output)
             
     def add_output(self, output):
-        self.add_trace_record(self.simulation.now, "N/A", "Std. Ouput", output)
+        self.add_trace_record(self.sim.now, "N/A", "Std. Ouput", output)
     
     def add_event(self, time, priority, name):
         self.add_trace_record(time, priority, "Event", name)
@@ -252,33 +253,33 @@ class Trace(object):
         return len(self._list)
     
     def write_trace(self):
-        file_path, file_name = os.path.split(self.simulation.trace_file)
-        trace_file = self.simulation.trace_file + \
-                self.simulation.run_stop_time.strftime('_%y_%j_%H_%M_%S') + \
+        # Add time stamp to file name
+        file_path, file_name = os.path.split(self.sim.trace_file)
+        trace_file = self.sim.trace_file + \
+                self.sim.run_stop_time.strftime('_%y_%j_%H_%M_%S') + \
                 '.csv'
+                
+        # Create directory if it doesn't exist
         if not os.path.exists(file_path):
-            print("makeing directory")
             os.makedirs(file_path)
+        
+        # Open csv file
         with open(trace_file, 'w', newline='') as file:
             trace_writer = csv.writer(file)
             
-            row = [file_name]
-            trace_writer.writerow(row)
-            
-            row = ['Start Time', '' , '' , 'Stop Time']
-            row.extend(['', '', 'Elapsed time (usec)'])
-            trace_writer.writerow(row)
-            
-            row = []
-            elapsed_time = self.simulation.run_stop_time - \
-                            self.simulation.run_start_time
-            row.append(self.simulation.run_start_time.ctime())
-            row.extend(['', '', self.simulation.run_stop_time.ctime()])
-            row.extend(['', '', elapsed_time.microseconds])
-            trace_writer.writerow(row)
-
+            # Write header rows
+            trace_writer.writerow(['Simulation:', self.sim.name])
+            trace_writer.writerow(['File:', trace_file])
+            trace_writer.writerow(['Seed:', self.sim.seed])
+            trace_writer.writerow(['Start Time:',
+                                   self.sim.run_start_time.ctime()])
+            trace_writer.writerow(['Stop Time:',
+                                   self.sim.run_stop_time.ctime()])
+            elapsed_time = self.sim.run_stop_time - self.sim.run_start_time
+            trace_writer.writerow(['Elapsed Time:', elapsed_time.microseconds])
             trace_writer.writerow([])
             
+            # Write trace table
             trace_writer.writerow(['Record #', 'Time', 'Priority',
                                    'Record Type', 'Name'])
             for row in self._list:
