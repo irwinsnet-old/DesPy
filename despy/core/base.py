@@ -84,3 +84,6 @@ class _ModelComponent(_NamedObject):
     
     def __str__(self):
         return "{0}:{1}#{2}".format(self.model, self.name, self.number)
+    
+    def get_report(self):
+        return None

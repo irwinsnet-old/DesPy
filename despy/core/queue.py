@@ -3,7 +3,7 @@
 from despy.core.base import _ModelComponent
 from collections import deque, namedtuple
 
-Queue_item = namedtuple('Queue_item', ['q_item', 'q_time_in'])
+Queue_item = namedtuple('Queue_item', ['item_fld', 'time_in_fld'])
 
 class Queue(_ModelComponent):
     def __init__(self, model, name, max_length = None):
@@ -13,13 +13,16 @@ class Queue(_ModelComponent):
             self._queue = deque(max_length)
         else:
             self._queue = deque()
+        self.wait_times = []
 
     def add(self, item):
-        self._queue.append(Queue_item(q_item = item, \
-                                      q_time_in = self.model.sim.now))
+        self._queue.append(Queue_item(item_fld = item, \
+                                      time_in_fld = self.model.sim.now))
     
     def remove(self):
-        return self._queue.popleft().q_item
+        item = self._queue.popleft()
+        self.wait_times.append(self.model.sim.now - item.time_in_fld)
+        return item.item_fld
     
     @property
     def length(self):

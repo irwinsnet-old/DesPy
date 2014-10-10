@@ -13,9 +13,9 @@ class testResource(unittest.TestCase):
         print()
         print("TEST RESOURCE INIT OUTPUT")
         model = dp.Model("Resource Test #1")
-        server = dp.Resource(model, "Server #1", 2)
+        server = dp.Resource(model, "Server", 2)
         server.activity_time = self.get_rnd_exp
-        self.assertEqual(server.name, "Server #1")
+        self.assertEqual(server.name, "Server")
         ents = []
         for i in range(3):
             ents.append(dp.Entity(model, "Entity #{0}".format(i)))
@@ -31,8 +31,8 @@ class testResource(unittest.TestCase):
          
         self.assertTrue(server[1].user is None)
         self.assertTrue(server[2].user is None)
-        self.assertEqual(server[1].name, "#1")
-        self.assertEqual(server[2].name, "#2")
+        self.assertEqual(server[1].name, "Server #1")
+        self.assertEqual(server[2].name, "Server #2")
          
         #   Check that entities were created.
         self.assertEqual(ents[0].name, "Entity #0")
@@ -89,6 +89,7 @@ class testResource(unittest.TestCase):
             self.customer_process = self.CustArrProcess(self,
                                                         self.server_resource)
      
+#TODO: Add seed to test so results and logic can be asserted.
     def test_resource_in_simulation(self):
         print()
         print("TEST RESOURCE IN EXPERIMENT OUTPUT")

@@ -9,16 +9,19 @@ from despy.core import Event
 class Resource(_ModelComponent):
     
     class Position():
-        def __init__(self, index):
-            self.name = "#{0}".format(index)
+        def __init__(self, index, name):
+            self.name = "{0} #{1}".format(name, index)
             self.user = None
             self.start_time = None
+        
+        def __str__(self):
+            return self.name
             
     def __init__(self, model, name, capacity):
         super().__init__(model, name)
         self.capacity = capacity
 
-        self._positions = {index: Resource.Position(index) \
+        self._positions = {index: Resource.Position(index, name) \
                            for index in range(1, self.capacity + 1)}
 
         self._queue = None
@@ -71,8 +74,8 @@ class Resource(_ModelComponent):
             return False
         
     def start_activity(self, index):
-        trace = "Position {0} ".format(self[index].name)
-        trace += "starting activity on {0}.".format(self[index].user)
+        trace = "{0} starting activity on {1}.".format(self[index],
+                                                       self[index].user)
         self.model.sim.trace.add_output(trace)
         
         service_time = self.get_activity_time()
@@ -82,8 +85,8 @@ class Resource(_ModelComponent):
         self.model.schedule(finish_event, service_time)
         
     def finish_activity(self, index, service_time):
-        trace = "Position {0} finished Activity ".format(self[index].name)
-        trace += "on {0}.  ".format(self[index].user)
+        trace = "{0} finished Activity on {1}. ".format(self[index],
+                                                      self[index].user)
         trace += "Service time was {0} minutes.".format(service_time)
         self.model.sim.trace.add_output(trace)
         
