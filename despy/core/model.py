@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from itertools import count
 from despy.core.simulation import Simulation
+from despy.core.event import Event
 from despy.core.base import _NamedObject, PRIORITY_STANDARD
 
 class Model(_NamedObject):
@@ -30,7 +30,8 @@ class Model(_NamedObject):
         """Create a model object."""
         self._name = name
         self.initial_events_scheduled = False
-        self.components = []
+        Event.set_counter()
+        self.components = {}
         
         # Create a default simulation if no simulation is provided
         # to the constructor.
@@ -45,14 +46,14 @@ class Model(_NamedObject):
         self._sim.append_model(self)
         self._initialize = None
         
-    def add_component(self, component):
-        self.components.append(component)
-        
-    def __getitem__(self, index):
-        return self.components[index]
+    def __getitem__(self, key):
+        return self.components[key]
     
-    def __setitem__(self, index, item):
-        self.components[index] = item
+    def __setitem__(self, key, item):
+        self.components[key] = item
+        
+    def delete_component(self, key):
+        del self.components[key]
 
     @property
     def initial_events_scheduled(self):
@@ -99,6 +100,9 @@ class Model(_NamedObject):
         self._initialize = initialize_method
 
     def initialize(self):
+        for key, component in self.components.items():
+            component.initialize()
+        
         try:
             self._initialize(self)
         except:

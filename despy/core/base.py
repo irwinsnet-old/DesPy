@@ -56,18 +56,15 @@ class Component(_NamedObject):
     def __init__(self, model, name):
         super().__init__(name)
         self._model = model
-        model.add_component(self)
         
         if not hasattr(self, "count"):
             self.set_counter()
-        self.number = self.get_id()
+        self.number = self.get_next_number()
+        
+        model[self.id] = self
     
     @property
     def model(self):
-        """ Get the entity's model.
-        
-        *Returns:* despy.model
-        """
         return self._model
     
     @model.setter
@@ -79,11 +76,23 @@ class Component(_NamedObject):
         cls.count = count(1)
     
     @classmethod
-    def get_id(cls):
+    def get_next_number(cls):
         return next(cls.count)
     
     def __str__(self):
         return "{0}:{1}#{2}".format(self.model, self.name, self.number)
     
+    @property
+    def id(self):
+        return "{0}#{1}".format(type(self), self.number)
+    
+    def initialize(self):
+        pass
+    
+    def finalize(self):
+        pass
+    
     def get_report(self):
         return None
+        
+    

@@ -43,7 +43,6 @@ class Event(Component):
         super().__init__(model, name)
         self._description = "Event"
         self._callbacks = []
-        self._id = model.sim.get_unique_id()
 
     @property
     def priority(self):
@@ -56,19 +55,6 @@ class Event(Component):
         """
         return self._priority
     
-    @property
-    def id(self):
-        """Get the unique integer that is appended to every event in the
-        simulation.
-        
-        Every event must have a unique id value, or else the FEL will
-        cause an error whenever two or more events are schedueled to
-        occur at the same time.
-        
-        *Returns:* A unique integer.
-        """
-        return self._id
-
     def append_callback(self, callback):
         """Appends a function to the event's callback list.
         

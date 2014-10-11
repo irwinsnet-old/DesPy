@@ -106,6 +106,13 @@ class testDespyb(unittest.TestCase):
         model.schedule(Event(model, "Third Event"), 8)
         model.sim.run()
         
+        self.assertEqual(len(model.components), 3)
+        component_keys = list(model.components.keys())
+        model.delete_component(component_keys[0])
+        self.assertEqual(len(model.components), 2)
+        model.delete_component(component_keys[1])
+        self.assertEqual(len(model.components), 1)
+        
         self.assertEqual(model.sim.out.trace.length(), 3)
         evtTrace = model.sim.out.trace
         self.assertEqual(evtTrace.get(0).name_fld, "First Event")
@@ -157,6 +164,7 @@ class testDespyb(unittest.TestCase):
                 yield self.schedule_timeout("Repeated Event", delay)
         
         process = Process(model, "Test Process", generator)
+        self.assertEqual(process.id,  "<class 'despy.core.process.Process'>#1")
         self.assertEqual(len(model.components), 1)
         process.start()
         model.sim.run(20)
