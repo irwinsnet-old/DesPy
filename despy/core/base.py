@@ -52,7 +52,7 @@ class _NamedObject(object):
     def __str__(self):
         return self.name
 
-class _ModelComponent(_NamedObject):
+class Component(_NamedObject):
     def __init__(self, model, name):
         super().__init__(name)
         self._model = model

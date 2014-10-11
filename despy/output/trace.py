@@ -2,6 +2,21 @@
 from collections import namedtuple
 import os, csv
 
+class Output(object):
+    def __init__(self, simulation):
+        self.sim = simulation
+        self.trace = Trace(self)
+        self.timestamp = None
+        
+    def write_files(self, path):
+        self.path = path
+        self.timestamp = self.sim.run_stop_time.strftime('_%y_%j_%H_%M_%S')
+        run_folder = self.path + '/Run' + self.timestamp
+        if not os.path.exists(run_folder):
+            os.makedirs(run_folder)
+        self.trace.write_csv(run_folder)
+        
+        
 TraceRecord = namedtuple('TraceRecord', ['record_number_fld', 'time_fld',
                          'priority_fld', 'record_type_fld', 'name_fld'])
 
@@ -9,8 +24,9 @@ TraceRecord = namedtuple('TraceRecord', ['record_number_fld', 'time_fld',
 #   receive the trace csv file, graphics, plots, etc.
 class Trace(object):
     
-    def __init__(self, simulation):
-        self.sim = simulation
+    def __init__(self, output):
+        self.out = output
+        self.sim = self.out.sim
         self._list = []
         self.event_number = 0
     
@@ -45,16 +61,9 @@ class Trace(object):
     def length(self):
         return len(self._list)
     
-    def write_trace(self):
+    def write_csv(self, directory):
         # Add time stamp to file name
-        file_path, file_name = os.path.split(self.sim.trace_file)
-        trace_file = self.sim.trace_file + \
-                self.sim.run_stop_time.strftime('_%y_%j_%H_%M_%S') + \
-                '.csv'
-                
-        # Create directory if it doesn't exist
-        if not os.path.exists(file_path):
-            os.makedirs(file_path)
+        trace_file = directory + '/trace.csv'
         
         # Open csv file
         with open(trace_file, 'w', newline='') as file:
@@ -80,4 +89,3 @@ class Trace(object):
                                       row.priority_fld, row.record_type_fld,
                                       row.name_fld])
             file.close()
-        

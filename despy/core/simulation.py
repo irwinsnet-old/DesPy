@@ -5,7 +5,7 @@ from itertools import count
 from collections import namedtuple
 import datetime
 import numpy as np
-from despy.report import Trace
+from despy.output import Output
 
 from despy.core.base import _NamedObject, PRIORITY_STANDARD
 
@@ -25,9 +25,9 @@ class Simulation(_NamedObject):
         """
         self.console_output = True
         self._models = []
-        self.trace = Trace(self)
+        self.out = Output(self)
         self.reset(initial_time)
-        self.trace_file = None
+        self.output_folder = None
         self.run_start_time = None
         self.run_stop_time = None
         self._seed = None
@@ -58,14 +58,6 @@ class Simulation(_NamedObject):
     @console_output.setter
     def console_output(self, output):
         self._console_output = output
-    
-    @property
-    def trace_file(self):
-        return self._trace_file
-    
-    @trace_file.setter
-    def trace_file(self, file):
-        self._trace_file = file
         
     @property
     def models(self):
@@ -145,8 +137,8 @@ class Simulation(_NamedObject):
                     fel_item.priority_fld) / 10)
             
         # Record event in trace report
-        self.trace.add_event(self.now, fel_item.priority_fld,
-                             fel_item.event_fld.name)
+        self.out.trace.add_event(self.now, fel_item.priority_fld,
+                                 fel_item.event_fld.name)
 
         # Run event
         fel_item.event_fld.do_event()
@@ -192,8 +184,8 @@ class Simulation(_NamedObject):
         
         self.run_stop_time = datetime.datetime.today()
         
-        if self.trace_file is not None:
-            self.trace.write_trace()
+        if self.output_folder is not None:
+            self.out.write_files(self.output_folder)
 
     def reset(self, initial_time=0):
         """Reset the simulation time to zero so the simulation can be
@@ -204,7 +196,7 @@ class Simulation(_NamedObject):
         #  Each event gets a unique integer ID, starting with 0 for the first
         # event.
         self._counter = count()
-        self.trace.clear()
+        self.out.trace.clear()
         for model in self.models:
             model.initial_events_scheduled = False
 

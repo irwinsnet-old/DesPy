@@ -119,7 +119,7 @@ class testQueue(unittest.TestCase):
         self.QuModel.Customer.set_counter()
         model = self.QuModel("Queue Model")
         simulation = model.sim
-        simulation.trace_file = "_trace/test_queue_in_simulation"
+        simulation.output_folder = "C:/Projects/despy_output/queue_sim"
         
         simulation.run(100)
         self.assertGreater(len(model.components), 0)

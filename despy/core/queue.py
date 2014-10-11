@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
-from despy.core.base import _ModelComponent
+from despy.core.base import Component
 from collections import deque, namedtuple
 
 Queue_item = namedtuple('Queue_item', ['item_fld', 'time_in_fld'])
 
-class Queue(_ModelComponent):
+class Queue(Component):
     def __init__(self, model, name, max_length = None):
         self._model = model
         self._name = name

@@ -96,7 +96,7 @@ class testResource(unittest.TestCase):
         self.ResModel.Customer.set_counter()
         model = self.ResModel("Resource Model")
         simulation = model.sim
-        simulation.trace_file = "_trace/test_resource"
+        simulation.output_folder = "C:/Projects/despy_output/resource_sim"
         simulation.run(100)
 
 if __name__ == '__main__':

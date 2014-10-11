@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-from despy.core.base import _ModelComponent
+from despy.core.base import Component
 from despy.core import Event
 
 # TODO: Add different options for selection of empty resources, either
 # prioritization by number, random selection, or equal loading.
 
-class Resource(_ModelComponent):
+class Resource(Component):
     
     class Position():
         def __init__(self, index, name):
@@ -76,7 +76,7 @@ class Resource(_ModelComponent):
     def start_activity(self, index):
         trace = "{0} starting activity on {1}.".format(self[index],
                                                        self[index].user)
-        self.model.sim.trace.add_output(trace)
+        self.model.sim.out.trace.add_output(trace)
         
         service_time = self.get_activity_time()
 
@@ -88,7 +88,7 @@ class Resource(_ModelComponent):
         trace = "{0} finished Activity on {1}. ".format(self[index],
                                                       self[index].user)
         trace += "Service time was {0} minutes.".format(service_time)
-        self.model.sim.trace.add_output(trace)
+        self.model.sim.out.trace.add_output(trace)
         
         self.remove_user(index)
         if self.queue.length > 0:

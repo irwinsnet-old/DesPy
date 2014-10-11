@@ -106,8 +106,8 @@ class testDespyb(unittest.TestCase):
         model.schedule(Event(model, "Third Event"), 8)
         model.sim.run()
         
-        self.assertEqual(model.sim.trace.length(), 3)
-        evtTrace = model.sim.trace
+        self.assertEqual(model.sim.out.trace.length(), 3)
+        evtTrace = model.sim.out.trace
         self.assertEqual(evtTrace.get(0).name_fld, "First Event")
         self.assertEqual(evtTrace.get(1).name_fld, "Second Event")
         self.assertEqual(evtTrace.get(1).time_fld, 4)
@@ -130,7 +130,7 @@ class testDespyb(unittest.TestCase):
         model.set_initialize_method(initializeModel)
         model.sim.run()
         
-        evtTrace = model.sim.trace
+        evtTrace = model.sim.out.trace
         self.assertEqual(evtTrace.length(), 2)
         self.assertEqual(evtTrace.get(0).name_fld, "First Event")
         self.assertEqual(evtTrace.get(0).time_fld, 5)
@@ -140,7 +140,7 @@ class testDespyb(unittest.TestCase):
         #Test reset method and until parameter
         model.sim.reset()
         model.sim.run(10)
-        evtTrace = model.sim.trace
+        evtTrace = model.sim.out.trace
         self.assertEqual(evtTrace.length(), 1)
         
         #Verify that simulation can be restarted from current point.
@@ -168,7 +168,7 @@ class testDespyb(unittest.TestCase):
         model.schedule(Event(model, "Event #2"), 3)
         self.assertEqual(len(model.components), 2)
         model.sim.run()
-        self.assertEqual(model.sim.trace.length(), 2)
+        self.assertEqual(model.sim.out.trace.length(), 2)
         
         #Test simultaneous, identical events.
         model2 = Model("Simultaneous Identical Events Model")
@@ -176,7 +176,7 @@ class testDespyb(unittest.TestCase):
         model2.schedule(event, 1)
         model2.schedule(event, 1)
         model2.sim.run()
-        self.assertEqual(model2.sim.trace.length(), 2)
+        self.assertEqual(model2.sim.out.trace.length(), 2)
 
 if __name__ == '__main__':
     unittest.main()
