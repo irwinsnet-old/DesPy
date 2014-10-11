@@ -89,7 +89,7 @@ class testResource(unittest.TestCase):
             self.customer_process = self.CustArrProcess(self,
                                                         self.server_resource)
      
-#TODO: Add seed to test so results and logic can be asserted.
+# TODO: Add seed to test so results and logic can be asserted.
     def test_resource_in_simulation(self):
         print()
         print("TEST RESOURCE IN EXPERIMENT OUTPUT")
