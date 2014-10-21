@@ -4,6 +4,7 @@ import unittest
 
 import despy.core as dp
 import scipy.stats as stats
+import matplotlib
 
 class testResource(unittest.TestCase):
     def get_rnd_exp(self):
@@ -99,6 +100,11 @@ class testResource(unittest.TestCase):
         simulation = model.sim
         simulation.output_folder = "C:/Projects/despy_output/resource_sim"
         simulation.run(100)
+        
+# TODO: add matplotlib test folder.
+    def test_matplotlib(self):
+        pass
+#         self.assertEqual(matplotlib.rcParams['backend'], 1)
 
 if __name__ == '__main__':
     unittest.main()

@@ -3,6 +3,8 @@
 from despy.core.base import Component
 from collections import deque, namedtuple
 
+import matplotlib.pyplot as plt
+
 Queue_item = namedtuple('Queue_item', ['item_fld', 'time_in_fld'])
 
 class Queue(Component):
@@ -27,3 +29,7 @@ class Queue(Component):
     @property
     def length(self):
         return len(self._queue)
+    
+    def get_report(self):
+        plt.hist(self.wait_times)
+        plt.savefig()

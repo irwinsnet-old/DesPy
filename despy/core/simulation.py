@@ -5,7 +5,7 @@ from itertools import count
 from collections import namedtuple
 import datetime
 import numpy as np
-from despy.output import Output
+from despy.output.results import Results
 
 from despy.core.base import _NamedObject, PRIORITY_STANDARD
 
@@ -25,7 +25,7 @@ class Simulation(_NamedObject):
         """
         self.console_output = True
         self._models = []
-        self.out = Output(self)
+        self.out = Results(self)
         self.reset(initial_time)
         self.output_folder = None
         self.run_start_time = None
@@ -186,6 +186,10 @@ class Simulation(_NamedObject):
         
         if self.output_folder is not None:
             self.out.write_files(self.output_folder)
+            
+        for mod in self.models:
+            for key, comp in mod.components.items():  # @UnusedVariable
+                comp.get_report()
 
     def reset(self, initial_time=0):
         """Reset the simulation time to zero so the simulation can be
