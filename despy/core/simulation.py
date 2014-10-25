@@ -164,9 +164,11 @@ class Simulation(_NamedObject):
                 
         """
 
+        # Initialize models and components
         self.run_start_time = datetime.datetime.today()
         self.initialize_models()
         
+        # Step through events on FEL
         if isinstance(until, int):
             stopTime = until
             while self.peek() <= stopTime:
@@ -174,7 +176,6 @@ class Simulation(_NamedObject):
                     self.step()
                 except NoEventsRemainingError:
                     break
-
         else:
             while True:
                 try:
@@ -182,14 +183,15 @@ class Simulation(_NamedObject):
                 except NoEventsRemainingError:
                     break
         
+        # Record stop time and write output files
         self.run_stop_time = datetime.datetime.today()
         
         if self.output_folder is not None:
             self.out.write_files(self.output_folder)
             
-        for mod in self.models:
-            for key, comp in mod.components.items():  # @UnusedVariable
-                comp.get_report()
+#         for mod in self.models:
+#             for key, comp in mod.components.items():  # @UnusedVariable
+#                 comp.get_report()
 
     def reset(self, initial_time=0):
         """Reset the simulation time to zero so the simulation can be

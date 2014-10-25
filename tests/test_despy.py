@@ -37,6 +37,7 @@ class testDespyb(unittest.TestCase):
         # Verify that a name can be assigned to the simulation.
         exp2.name = "Simulation Name!"
         self.assertEqual(exp2.name, "Simulation Name!")
+        self.assertEqual(exp2.slug, "Simulation_Name!")
         
     ### Model Class Tests
     def test_name(self):
@@ -44,12 +45,14 @@ class testDespyb(unittest.TestCase):
         testModel = Model("Test Model")
         self.assertEqual(testModel.name, "Test Model")
         self.assertEqual(testModel.sim.name, "Test Model:Default Simulation")
+        self.assertEqual(testModel.sim.slug, "Test_Model_Default_Simulation")
         self.assertEqual(len(testModel.sim.models), 1)
         self.assertEqual(testModel.sim.models[0].name, "Test Model")
         
         #Replace simulation.
         exp = Simulation()
-        exp.name = "New Simulation"
+        exp.name = "New Simulation C\\C/C|C*C?C"
+        self.assertEqual(exp.slug, "New_Simulation_C_C_C_C_C_C")
         self.assertIsInstance(testModel.sim, Simulation)
         self.assertIsNot(testModel.sim, exp)
         testModel.sim = exp
@@ -164,7 +167,7 @@ class testDespyb(unittest.TestCase):
                 yield self.schedule_timeout("Repeated Event", delay)
         
         process = Process(model, "Test Process", generator)
-        self.assertEqual(process.id,  "<class 'despy.core.process.Process'>#1")
+        self.assertEqual(process.id,  "Process_Model!Test_Process#1")
         self.assertEqual(len(model.components), 1)
         process.start()
         model.sim.run(20)

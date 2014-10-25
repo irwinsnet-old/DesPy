@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from itertools import count
+import re
 
 PRIORITY_EARLY = -1
 PRIORITY_STANDARD = 0
@@ -26,6 +27,10 @@ class _NamedObject(object):
     @name.setter
     def name(self, name):
         self._name = name
+    
+    @property
+    def slug(self):
+        return re.sub(r'[ <>/*?:|"\\]', '_', self._name)
     
     @property
     def description(self):
@@ -84,7 +89,7 @@ class Component(_NamedObject):
     
     @property
     def id(self):
-        return "{0}#{1}".format(type(self), self.number)
+        return "{0}!{1}#{2}".format(self.model.slug, self.slug, self.number)
     
     def initialize(self):
         pass
@@ -92,7 +97,7 @@ class Component(_NamedObject):
     def finalize(self):
         pass
     
-    def get_report(self):
+    def get_report(self, folder):
         return None
         
     
