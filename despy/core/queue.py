@@ -32,7 +32,6 @@ class Queue(Component):
     
     def get_output(self, folder):
         # Create Time in Queue Histogram
-        print("=====Queue Times Array Length: " + len(self.times_in_queue).__str__()) # DEBUG:
         qtimes = np.array(self.times_in_queue, np.int32)
         qtime_filename = '{0}_time_in_q.png'.format(self.id)
         plot.histogram(self.times_in_queue, folder, qtime_filename,

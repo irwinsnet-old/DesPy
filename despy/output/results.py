@@ -24,6 +24,8 @@ class Results(object):
         self.trace.write_csv(self.folder)
         
         for model in self.sim.models:
+            self.report.append_output(self.sim.get_output())
+            
             for _, component in model.components.items():
                 output = component.get_output(self.folder)
                 if output is not None:

@@ -6,6 +6,7 @@ from collections import namedtuple
 import datetime
 import numpy as np
 from despy.output.results import Results
+from despy.output.report import Datatype
 
 from despy.core.base import _NamedObject, PRIORITY_STANDARD
 
@@ -23,6 +24,7 @@ class Simulation(_NamedObject):
     def __init__(self, initial_time=0, name = None):
         """Initialize the event object.
         """
+        super().__init__(name)
         self.console_output = True
         self._models = []
         self.out = Results(self)
@@ -189,9 +191,20 @@ class Simulation(_NamedObject):
         if self.output_folder is not None:
             self.out.write_files(self.output_folder)
             
-#         for mod in self.models:
-#             for key, comp in mod.components.items():  # @UnusedVariable
-#                 comp.get_report()
+    def get_output(self):
+        elapsed_time = self.run_stop_time - self.run_start_time
+        
+        output = [(Datatype.title, "Simulation: " + self.name),
+                  (Datatype.paragraph, self.description),
+                  (Datatype.param_list,
+                    [('Output Folder', self.output_folder),
+                     ('Seed', self.seed),
+                     ('Start Time', self.run_start_time),
+                     ('Stop Time', self.run_stop_time),
+                     ('Elapsed Time', elapsed_time)])
+                  ]
+        
+        return output
 
     def reset(self, initial_time=0):
         """Reset the simulation time to zero so the simulation can be
