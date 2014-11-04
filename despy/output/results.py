@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 import os
 from despy.output.trace import Trace
-# from itertools import count
-# import matplotlib.pyplot as plt
-
+from despy.output.report import HtmlReport
+    
 class Results(object):
     def __init__(self, simulation):
         self.sim = simulation
@@ -11,6 +10,7 @@ class Results(object):
         self.timestamp = None
         self.path = None
         self.folder = None
+        self.report = HtmlReport()
         
     def set_folder(self, path):
         self.path = path
@@ -25,10 +25,8 @@ class Results(object):
         
         for model in self.sim.models:
             for _, component in model.components.items():
-                component.get_report(self.folder)
-#                 counter = count(1)
-#                 if report is not None:
-#                     file_name = '/' + "Rpt{0}.png".format(next(counter))
-#                     report.savefig(self.folder + file_name)
-                    
+                output = component.get_output(self.folder)
+                if output is not None:
+                    self.report.append_output(output)
             
+            self.report.write_report(self.folder)

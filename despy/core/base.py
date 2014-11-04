@@ -11,6 +11,7 @@ PRIORITY_LATE = 1
 class _NamedObject(object):
     def __init__(self, name):
         self._name = name
+        self._description = None
     
     """Provides name and description properties to multiple despy
     classes.
@@ -30,7 +31,7 @@ class _NamedObject(object):
     
     @property
     def slug(self):
-        return re.sub(r'[ <>/*?:|"\\]', '_', self._name)
+        return re.sub(r'[ <>/*?:|#!"\\]', '_', self._name)
     
     @property
     def description(self):
@@ -89,7 +90,7 @@ class Component(_NamedObject):
     
     @property
     def id(self):
-        return "{0}!{1}#{2}".format(self.model.slug, self.slug, self.number)
+        return "{0}.{1}.{2}".format(self.model.slug, self.slug, self.number)
     
     def initialize(self):
         pass
@@ -97,7 +98,7 @@ class Component(_NamedObject):
     def finalize(self):
         pass
     
-    def get_report(self, folder):
+    def get_output(self, folder):
         return None
         
     

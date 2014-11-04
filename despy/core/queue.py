@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
 from despy.core.base import Component
+from despy.output.report import Datatype
+import despy.output.plot as plot
 from collections import deque, namedtuple
 import numpy as np
-import xml.etree.ElementTree as ET
-
-import matplotlib.pyplot as plt
 
 Queue_item = namedtuple('Queue_item', ['item_fld', 'time_in_fld'])
 
@@ -31,26 +30,27 @@ class Queue(Component):
     def length(self):
         return len(self._queue)
     
-    def get_report(self, folder):
-        times = np.array(self.times_in_queue)
-        max_time = np.amax(times)
-        min_time = np.amin(times)
-        mean_time = np.mean(times)
+    def get_output(self, folder):
+        # Create Time in Queue Histogram
+        print("=====Queue Times Array Length: " + len(self.times_in_queue).__str__()) # DEBUG:
+        qtimes = np.array(self.times_in_queue, np.int32)
+        qtime_filename = '{0}_time_in_q.png'.format(self.id)
+        plot.histogram(self.times_in_queue, folder, qtime_filename,
+                       title = self.name,
+                       x_label = "Time in Queue",
+                       y_label = "Frequency")     
          
-        doc = ET.Element('html')
-        ET.SubElement(doc, 'head')
-        doc_body = ET.SubElement(doc, 'body')
-        tag = ET.SubElement(doc_body, 'h1')
-        tag.text = "Queue Wait Times"
-        ET.SubElement(doc_body, 'img', {'src': 'queue.png'})
-        docTree = ET.ElementTree(doc)
-        docTree.write(folder + '/report.html', method = 'html')
+        # Create output
+        output = [(Datatype.title, "Queue Results: {0}".format(self.name)),
+                 (Datatype.paragraph, self.description.__str__()),
+                 (Datatype.param_list,
+                    [('Maximum Time in Queue', np.amax(qtimes)),
+                     ('Minimum Time in Queue', np.amin(qtimes)),
+                     ('Mean Time in Queue', np.mean(qtimes))]),
+                 (Datatype.image, qtime_filename)]
+     
+        return output
         
-        plt.clf()
-        plt.hist(times, [0, 1, 2, 3, 4, 5, 6])
-        plt.title(self.name)
-        plt.xlabel("Time in Queue")
-        plt.ylabel("Frequency")
-        plt.savefig(folder + '/queue.png')
+
     
         

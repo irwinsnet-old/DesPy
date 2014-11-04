@@ -37,7 +37,7 @@ class testDespyb(unittest.TestCase):
         # Verify that a name can be assigned to the simulation.
         exp2.name = "Simulation Name!"
         self.assertEqual(exp2.name, "Simulation Name!")
-        self.assertEqual(exp2.slug, "Simulation_Name!")
+        self.assertEqual(exp2.slug, "Simulation_Name_")
         
     ### Model Class Tests
     def test_name(self):
@@ -167,7 +167,7 @@ class testDespyb(unittest.TestCase):
                 yield self.schedule_timeout("Repeated Event", delay)
         
         process = Process(model, "Test Process", generator)
-        self.assertEqual(process.id,  "Process_Model!Test_Process#1")
+        self.assertEqual(process.id,  "Process_Model.Test_Process.1")
         self.assertEqual(len(model.components), 1)
         process.start()
         model.sim.run(20)
