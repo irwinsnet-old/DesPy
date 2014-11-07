@@ -84,13 +84,8 @@ class Resource(Component):
             self, "Finished Service", index, service_time)
         self.model.schedule(finish_event, service_time)
         
-    def finish_activity(self, index, service_time):
-        trace = "{0} finished Activity on {1}. ".format(self[index],
-                                                      self[index].user)
-        trace += "Service time was {0} minutes.".format(service_time)
-        self.model.sim.out.trace.add_message(trace)
-        
-        self.remove_user(index)
+    def finish_activity(self, event, index, service_time):
+        event.user = self.remove_user(index)
         if self.queue.length > 0:
             user = self.queue.remove()
             self.request(user)             
@@ -103,7 +98,7 @@ class Resource(Component):
     
 class ResourceFinishActivityEvent(Event):
     def check_resource_queue(self):
-        self._resource.finish_activity(self.index, self.service_time)
+        self._resource.finish_activity(self, self.index, self.service_time)
     
     def __init__(self, resource, name, index, service_time):
         self._resource = resource
@@ -111,4 +106,11 @@ class ResourceFinishActivityEvent(Event):
         self.append_callback(self.check_resource_queue)
         self.index = index
         self.service_time = service_time
+        self.user = None
+        
+    def update_trace_record(self, trace_record):
+        trace_record['entity'] = self.user
+        trace_record['duration_label'] = 'Service Time:'
+        trace_record['duration_field'] = self.service_time
+        return trace_record
         

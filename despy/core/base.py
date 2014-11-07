@@ -62,12 +62,17 @@ class Component(_NamedObject):
     def __init__(self, model, name):
         super().__init__(name)
         self._model = model
+        self._sim = model.sim
         
         if not hasattr(self, "count"):
             self.set_counter()
         self.number = self.get_next_number()
         
         model[self.id] = self
+    
+    @property
+    def sim(self):
+        return self._sim
     
     @property
     def model(self):

@@ -61,7 +61,7 @@ class Trace(object):
         trace_record = TraceRecord(self.number, self.sim.now, "N/A", "Msg", message)
         self.add(trace_record)
     
-    def add_event(self, time, priority, event, entity = None, duration = None):
+    def add_event(self, time, priority, event):
         trace_record = TraceRecord(self.number, time, priority, 'Event',
                                    event.name)
         self.add(event.update_trace_record(trace_record))
@@ -97,7 +97,7 @@ class Trace(object):
             
             # Write trace table
             trace_writer.writerow(['Record #', 'Time', 'Priority',
-                                   'Record Type', 'Name', 'Label', 'Value'])
+                                   'Record Type', 'Name', 'Target'])
             for trace_record in self._list:
                 csv_row = []
                 for _, field in trace_record.items():
