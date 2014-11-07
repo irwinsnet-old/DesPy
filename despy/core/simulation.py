@@ -138,9 +138,9 @@ class Simulation(_NamedObject):
             self.now = int((fel_item.time_fld - \
                     fel_item.priority_fld) / 10)
             
-        # Record event in trace report
+        # Record event in trace report        
         self.out.trace.add_event(self.now, fel_item.priority_fld,
-                                 fel_item.event_fld.name)
+                                 fel_item.event_fld)
 
         # Run event
         fel_item.event_fld.do_event()

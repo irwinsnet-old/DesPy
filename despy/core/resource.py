@@ -76,7 +76,7 @@ class Resource(Component):
     def start_activity(self, index):
         trace = "{0} starting activity on {1}.".format(self[index],
                                                        self[index].user)
-        self.model.sim.out.trace.add_output(trace)
+        self.model.sim.out.trace.add_message(trace)
         
         service_time = self.get_activity_time()
 
@@ -88,7 +88,7 @@ class Resource(Component):
         trace = "{0} finished Activity on {1}. ".format(self[index],
                                                       self[index].user)
         trace += "Service time was {0} minutes.".format(service_time)
-        self.model.sim.out.trace.add_output(trace)
+        self.model.sim.out.trace.add_message(trace)
         
         self.remove_user(index)
         if self.queue.length > 0:

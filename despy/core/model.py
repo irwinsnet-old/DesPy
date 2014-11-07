@@ -100,7 +100,7 @@ class Model(_NamedObject):
         self._initialize = initialize_method
 
     def initialize(self):
-        for key, component in self.components.items():
+        for _, component in self.components.items():
             component.initialize()
         
         try:

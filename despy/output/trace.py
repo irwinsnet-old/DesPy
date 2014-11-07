@@ -1,41 +1,70 @@
 #!/usr/bin/env python3
-from collections import namedtuple
+from collections import OrderedDict
 import csv
         
-TraceRecord = namedtuple('TraceRecord', ['record_number_fld', 'time_fld',
-                         'priority_fld', 'record_type_fld', 'name_fld'])
+class TraceRecord():
+    def __init__(self, number, time, priority, record_type, name):
+        self.records = OrderedDict()
+        self.records['number'] = number
+        self.records['time'] = time
+        self.records['priority'] = priority
+        self.records['record_type'] = record_type
+        self.records['name'] = name
+        
+    def __getitem__(self, key):
+        return self.records[key]
+    
+    def __setitem__(self, key, value):
+        self.records[key] = value
+        
+    def __delitem__(self, key):
+        del self.records[key]
+        
+    def __iter__(self):
+        return iter(self.records)
+    
+    def items(self):
+        return self.records.items()
 
-# TODO: Change output process -- user specifies an output folder, which will
-#   receive the trace csv file, graphics, plots, etc.
 class Trace(object):
     
     def __init__(self, output):
         self.out = output
         self.sim = self.out.sim
         self._list = []
-        self.event_number = 0
+        self.number = 0
     
     def append(self, item):
         self._list.append(item)
         
-    def add_trace_record(self, time, priority, record_type, name):
-        trace_record = TraceRecord(record_number_fld=self.event_number,
-                                   time_fld=time, priority_fld=priority,
-                                   name_fld=name,
-                                   record_type_fld=record_type)
+    def create_trace_record(self, time, priority, record_type, name,
+                         entity = None, duration = None):
+        trace_record = TraceRecord(self.number, time, priority, record_type,
+                                   name)
+        if entity is not None:
+            trace_record['entity'] = entity
+        if duration is not None:
+            trace_record['duration'] = duration
+            
+        return trace_record
+        
+    def add(self, trace_record):
         self.append(trace_record)
-        self.event_number = self.event_number + 1
+        self.number = self.number + 1
         
         if self.sim.console_output:
-            console_output = str(trace_record.time_fld).rjust(8) + \
-                ':   ' + trace_record.name_fld
+            console_output = str(trace_record['time']).rjust(8) + \
+                ':   ' + trace_record['name']
             print(console_output)
             
-    def add_output(self, output):
-        self.add_trace_record(self.sim.now, "N/A", "Std. Ouput", output)
+    def add_message(self, message):
+        trace_record = TraceRecord(self.number, self.sim.now, "N/A", "Msg", message)
+        self.add(trace_record)
     
-    def add_event(self, time, priority, name):
-        self.add_trace_record(time, priority, "Event", name)
+    def add_event(self, time, priority, event, entity = None, duration = None):
+        trace_record = TraceRecord(self.number, time, priority, 'Event',
+                                   event.name)
+        self.add(event.update_trace_record(trace_record))
         
     def clear(self):
         self._list = []
@@ -68,9 +97,10 @@ class Trace(object):
             
             # Write trace table
             trace_writer.writerow(['Record #', 'Time', 'Priority',
-                                   'Record Type', 'Name'])
-            for row in self._list:
-                trace_writer.writerow([row.record_number_fld, row.time_fld,
-                                      row.priority_fld, row.record_type_fld,
-                                      row.name_fld])
+                                   'Record Type', 'Name', 'Label', 'Value'])
+            for trace_record in self._list:
+                csv_row = []
+                for _, field in trace_record.items():
+                    csv_row.append(field)
+                trace_writer.writerow(csv_row)
             file.close()

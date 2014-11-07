@@ -85,6 +85,9 @@ class Event(Component):
 
             return True
     
+    def update_trace_record(self, trace_record):
+        return trace_record
+    
     def __lt__(self, y):
         return self.id < y.id
     
