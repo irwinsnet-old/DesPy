@@ -65,7 +65,7 @@ class Resource(Component):
         index = self.get_empty_position()
         if index:
             self[index].user = user
-            self[index].start_time = self.model.sim.now
+            self[index].start_time = self.sim.now
             self.start_activity(index)
             return index
         else:
@@ -76,7 +76,7 @@ class Resource(Component):
     def start_activity(self, index):
         trace = "{0} starting activity on {1}.".format(self[index],
                                                        self[index].user)
-        self.model.sim.out.trace.add_message(trace)
+        self.sim.out.trace.add_message(trace)
         
         service_time = self.get_activity_time()
 

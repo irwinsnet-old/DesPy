@@ -43,6 +43,7 @@ class Event(Component):
         super().__init__(model, name)
         self._description = "Event"
         self._callbacks = []
+        self.trace_records = []
 
     @property
     def priority(self):
@@ -84,9 +85,16 @@ class Event(Component):
                     callback()
 
             return True
+        
+    def append_trace_record(self, trace_record):
+        self.trace_records.append(trace_record)
     
     def update_trace_record(self, trace_record):
-        return trace_record
+        self.trace_records.insert(0, trace_record)
+        return self.trace_records
+    
+    def reset(self):
+        self.trace_records = []
     
     def __lt__(self, y):
         return self.id < y.id

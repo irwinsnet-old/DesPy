@@ -19,11 +19,11 @@ class Queue(Component):
 
     def add(self, item):
         self._queue.append(Queue_item(item_fld = item, \
-                                      time_in_fld = self.model.sim.now))
+                                      time_in_fld = self.sim.now))
     
     def remove(self):
         item = self._queue.popleft()
-        self.times_in_queue.append(self.model.sim.now - item.time_in_fld)
+        self.times_in_queue.append(self.sim.now - item.time_in_fld)
         return item.item_fld
     
     @property

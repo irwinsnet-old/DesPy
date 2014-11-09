@@ -4,7 +4,6 @@ import unittest
 
 import despy.core as dp
 import scipy.stats as stats
-import matplotlib
 
 class testResource(unittest.TestCase):
     def get_rnd_exp(self):
@@ -91,7 +90,6 @@ class testResource(unittest.TestCase):
             self.customer_process = self.CustArrProcess(self,
                                                         self.server_resource)
      
-# TODO: Add seed to test so results and logic can be asserted.
     def test_resource_in_simulation(self):
         print()
         print("TEST RESOURCE IN EXPERIMENT OUTPUT")
@@ -101,11 +99,6 @@ class testResource(unittest.TestCase):
         simulation.output_folder = "C:/Projects/despy_output/resource_sim"
         simulation.run(100)
         
-# TODO: add matplotlib test folder.
-    def test_matplotlib(self):
-        pass
-#         self.assertEqual(matplotlib.rcParams['backend'], 1)
-
 if __name__ == '__main__':
     unittest.main()
     

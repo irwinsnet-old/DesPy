@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from collections import OrderedDict
 import csv
+from despy.output.report import Datatype
         
 class TraceRecord():
     def __init__(self, number, time, priority, record_type, name):
@@ -48,14 +49,19 @@ class Trace(object):
             
         return trace_record
         
-    def add(self, trace_record):
-        self.append(trace_record)
-        self.number = self.number + 1
-        
-        if self.sim.console_output:
-            console_output = str(trace_record['time']).rjust(8) + \
-                ':   ' + trace_record['name']
-            print(console_output)
+    def add(self, trace_records):
+        if isinstance(trace_records, TraceRecord):
+            records = [trace_records]
+        elif isinstance(trace_records, list):
+            records = trace_records
+        for rec in records:
+            self.append(rec)
+            self.number = self.number + 1
+            
+            if self.sim.console_output:
+                console_output = str(rec['time']).rjust(8) + \
+                    ':   ' + rec['name']
+                print(console_output)
             
     def add_message(self, message):
         trace_record = TraceRecord(self.number, self.sim.now, "N/A", "Msg", message)
@@ -68,12 +74,24 @@ class Trace(object):
         
     def clear(self):
         self._list = []
+        self.number = 0
     
     def get(self, index):
         return self._list[index]
     
     def length(self):
         return len(self._list)
+    
+    def render_output(self, output, writer):
+        for section in output:
+            self.render_section(section, writer)
+    
+    def render_section(self, section, writer):
+        if section[0] == Datatype.title:
+            writer.writerow([section[1]])
+        if section[0] == Datatype.param_list:
+            for field in section[1]:
+                writer.writerow([field[0], field[1]])
     
     def write_csv(self, directory):
         # Add time stamp to file name
@@ -84,16 +102,7 @@ class Trace(object):
             trace_writer = csv.writer(file)
             
             # Write header rows
-            trace_writer.writerow(['Simulation:', self.sim.name])
-            trace_writer.writerow(['File:', trace_file])
-            trace_writer.writerow(['Seed:', self.sim.seed])
-            trace_writer.writerow(['Start Time:',
-                                   self.sim.run_start_time.ctime()])
-            trace_writer.writerow(['Stop Time:',
-                                   self.sim.run_stop_time.ctime()])
-            elapsed_time = self.sim.run_stop_time - self.sim.run_start_time
-            trace_writer.writerow(['Elapsed Time:', elapsed_time.microseconds])
-            trace_writer.writerow([])
+            self.render_output(self.sim.get_output(), trace_writer)
             
             # Write trace table
             trace_writer.writerow(['Record #', 'Time', 'Priority',

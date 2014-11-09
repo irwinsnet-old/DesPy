@@ -145,6 +145,9 @@ class Simulation(_NamedObject):
         self.out.trace.add_event(self.now, fel_item.priority_fld,
                                  fel_item.event_fld)
         
+        # Reset the event in case it is called again.
+        fel_item.event_fld.reset()
+        
         return fel_item
 
     def run(self, until=None):
@@ -211,10 +214,13 @@ class Simulation(_NamedObject):
         """
         self._now = initial_time * 10
         self._futureEventList = []
+        self.run_start_time = None
+        self.run_stop_time = None
         #  Each event gets a unique integer ID, starting with 0 for the first
         # event.
         self._counter = count()
         self.out.trace.clear()
+        self.out = Results(self)
         for model in self.models:
             model.initial_events_scheduled = False
 
