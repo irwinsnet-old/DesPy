@@ -4,6 +4,7 @@ import unittest
 
 import despy.core as dp
 import scipy.stats as stats
+from collections import OrderedDict
 
 class testResource(unittest.TestCase):
     def get_rnd_exp(self):
@@ -73,16 +74,20 @@ class testResource(unittest.TestCase):
              
             def generator(self):
                 customer = self.model.Customer(self.model)
-                yield self.schedule_timeout(\
-                            "Customer #{0} arrives.".format(customer.number),
-                            0)
+                args1 = OrderedDict()
+                args1["Customer"] = "Customer #{0}".format(customer.number)
+                yield self.schedule_timeout("Customer Arrives", 0,
+                                            trace_fields = args1)
+
                 while True:
                     self.server_resource.request(customer)
                     delay = stats.expon.rvs(scale = 3)
                     customer = self.model.Customer(self.model)
-                    yield self.schedule_timeout(\
-                            "Customer #{0} arrives.".format(customer.number),
-                            delay)
+                    args2 = OrderedDict()
+                    args2["Customer"] = "Customer #{0}".format(customer.number)
+                    args2["Interarrival_Time"] = delay
+                    yield self.schedule_timeout("Customer Arrives", delay,
+                            trace_fields = args2)
                      
         def __init__(self, name):
             super().__init__(name)

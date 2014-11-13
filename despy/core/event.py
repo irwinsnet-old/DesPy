@@ -29,7 +29,7 @@ class Event(Component):
             PRIORITY_STANDARD.
     """
 
-    def __init__(self, model, name):
+    def __init__(self, model, name, trace_fields = None):
         """Initialize the Event object.
 
         *Arguments*
@@ -38,11 +38,15 @@ class Event(Component):
             name (string):
                 A short string describing the event. The name will be
                 printed in the event trace report.
+            trace_fields (collections.OrderedDict)
+                An ordered dictionary of fields that will be added to the
+                trace record for this event.
         """
 
         super().__init__(model, name)
         self._description = "Event"
         self._callbacks = []
+        self.trace_fields = trace_fields
         self.trace_records = []
 
     @property
@@ -90,7 +94,16 @@ class Event(Component):
         self.trace_records.append(trace_record)
     
     def update_trace_record(self, trace_record):
-        self.trace_records.insert(0, trace_record)
+        try:
+            for key, value in self.trace_fields.items():
+                trace_record[key] = value
+            self.trace_records.insert(0, trace_record)
+        except (TypeError, AttributeError):
+            pass # Catches error if self.trace_fields is None.
+        except ValueError as err:
+            print(err)
+            raise
+        self.append_trace_record(trace_record)
         return self.trace_records
     
     def reset(self):

@@ -130,7 +130,7 @@ class testDespyb(unittest.TestCase):
         
         def evt1_callback(self):
             evt2 = Event(self.model, "Callback Event")
-            self.model.schedule(evt2, 10)        
+            self.model.schedule(evt2, 10)
 
         evt1.append_callback(evt1_callback)
         

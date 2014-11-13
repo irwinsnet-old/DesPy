@@ -189,7 +189,6 @@ class Simulation(_NamedObject):
         
         # Record stop time and write output files
         self.run_stop_time = datetime.datetime.today()
-        
         if self.output_folder is not None:
             self.out.write_files(self.output_folder)
             

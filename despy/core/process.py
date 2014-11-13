@@ -41,8 +41,9 @@ class Process(Component):
             raise TypeError(\
                     "generator_method must be a function or class method")
         
-    def schedule_timeout(self, name, delay = 0, priority = PRIORITY_STANDARD):
-        event = ProcessTimeOutEvent(self, name)
+    def schedule_timeout(self, name, delay = 0, priority = PRIORITY_STANDARD,
+                         trace_fields = None):
+        event = ProcessTimeOutEvent(self, name, trace_fields)
         return self.processTuple(event_ = event,
                                  delay_ = delay,
                                  priority_ = priority)
@@ -74,7 +75,7 @@ class ProcessTimeOutEvent(Event):
     def process_callback(self):
         self._process.call_process()
     
-    def __init__(self, process, name):
+    def __init__(self, process, name, trace_fields = None):
         self._process = process
-        super().__init__(process.model, name)
+        super().__init__(process.model, name, trace_fields)
         self.append_callback(self.process_callback)
