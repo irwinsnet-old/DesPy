@@ -75,16 +75,16 @@ class testResource(unittest.TestCase):
             def generator(self):
                 customer = self.model.Customer(self.model)
                 args1 = OrderedDict()
-                args1["Customer"] = "Customer #{0}".format(customer.number)
+                args1["Customer"] = customer
                 yield self.schedule_timeout("Customer Arrives", 0,
                                             trace_fields = args1)
 
                 while True:
                     self.server_resource.request(customer)
-                    delay = stats.expon.rvs(scale = 3)
+                    delay = round(stats.expon.rvs(scale = 3))
                     customer = self.model.Customer(self.model)
                     args2 = OrderedDict()
-                    args2["Customer"] = "Customer #{0}".format(customer.number)
+                    args2["Customer"] = customer
                     args2["Interarrival_Time"] = delay
                     yield self.schedule_timeout("Customer Arrives", delay,
                             trace_fields = args2)

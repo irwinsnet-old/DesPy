@@ -94,16 +94,11 @@ class Event(Component):
         self.trace_records.append(trace_record)
     
     def update_trace_record(self, trace_record):
-        try:
+        if self.trace_fields is not None:
             for key, value in self.trace_fields.items():
                 trace_record[key] = value
-            self.trace_records.insert(0, trace_record)
-        except (TypeError, AttributeError):
-            pass # Catches error if self.trace_fields is None.
-        except ValueError as err:
-            print(err)
-            raise
-        self.append_trace_record(trace_record)
+        
+        self.trace_records.insert(0, trace_record)
         return self.trace_records
     
     def reset(self):

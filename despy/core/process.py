@@ -79,3 +79,6 @@ class ProcessTimeOutEvent(Event):
         self._process = process
         super().__init__(process.model, name, trace_fields)
         self.append_callback(self.process_callback)
+        
+    def update_trace_record(self, trace_record):
+        return super().update_trace_record(trace_record)
