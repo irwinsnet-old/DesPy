@@ -2,6 +2,7 @@
 
 import types
 from despy.core.base import Component
+from collections import OrderedDict
 
 class Event(Component):
     """ An base class for all events that can be scheduled on the future event
@@ -46,7 +47,10 @@ class Event(Component):
         super().__init__(model, name)
         self._description = "Event"
         self._callbacks = []
-        self.trace_fields = trace_fields
+        self.trace_fields = OrderedDict()
+        if trace_fields is not None:
+            for key, value in trace_fields.items():
+                self.trace_fields[key] = value
         self.trace_records = []
 
     @property
@@ -89,17 +93,16 @@ class Event(Component):
                     callback()
 
             return True
-        
-    def append_trace_record(self, trace_record):
-        self.trace_records.append(trace_record)
     
     def update_trace_record(self, trace_record):
         if self.trace_fields is not None:
             for key, value in self.trace_fields.items():
                 trace_record[key] = value
-        
         self.trace_records.insert(0, trace_record)
         return self.trace_records
+    
+    def add_trace_field(self, key, value):
+        self.trace_fields[key] = value
     
     def reset(self):
         self.trace_records = []

@@ -2,6 +2,7 @@
 
 from despy.core.base import Component
 from despy.core import Event
+from collections import OrderedDict
 
 # TODO: Add different options for selection of empty resources, either
 # prioritization by number, random selection, or equal loading.
@@ -74,14 +75,16 @@ class Resource(Component):
             return False
         
     def start_activity(self, index):
-        trace = "{0} starting activity on {1}.".format(self[index],
-                                                       self[index].user)
-        self.sim.out.trace.add_message(trace)
+        fields = OrderedDict()
+        fields['Server'] = self[index]
+        fields['Customer'] = self[index].user
+        message = "Starting Activity"
+        self.sim.out.trace.add_message(message, fields)
         
         service_time = self.get_activity_time()
 
         finish_event = ResourceFinishActivityEvent(\
-            self, "Finished Service", index, service_time)
+            self, "Finished Activity", index, service_time)
         self.model.schedule(finish_event, service_time)
         
     def finish_activity(self, event, index, service_time):

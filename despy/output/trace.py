@@ -26,6 +26,10 @@ class TraceRecord():
     
     def items(self):
         return self.records.items()
+    
+    def add_fields(self, fields):
+        for key, value in fields.items():
+            self.records[key] = value
 
 class Trace(object):
     
@@ -63,9 +67,15 @@ class Trace(object):
                     ':   ' + rec['name']
                 print(console_output)
             
-    def add_message(self, message):
-        trace_record = TraceRecord(self.number, self.sim.now, "N/A", "Msg", message)
-        self.add(trace_record)
+    def add_message(self, message, fields = None):
+        trace_record = TraceRecord(self.number, self.sim.now, "N/A", "Msg",
+                                   message)
+        if fields is not None:
+            trace_record.add_fields(fields)
+        if self.out.sim.evt is None:
+            self.add(trace_record)
+        else:
+            self.out.sim.evt.trace_records.append(trace_record)
     
     def add_event(self, time, priority, event):
         trace_record = TraceRecord(self.number, time, priority, 'Event',

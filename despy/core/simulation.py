@@ -33,6 +33,7 @@ class Simulation(_NamedObject):
         self.run_start_time = None
         self.run_stop_time = None
         self._seed = None
+        self.evt = None
 
     @property
     def now(self):
@@ -139,7 +140,9 @@ class Simulation(_NamedObject):
                     fel_item.priority_fld) / 10)
 
         # Run event
+        self.evt = fel_item.event_fld
         fel_item.event_fld.do_event()
+        self.evt = None
 
         # Record event in trace report        
         self.out.trace.add_event(self.now, fel_item.priority_fld,
@@ -204,8 +207,10 @@ class Simulation(_NamedObject):
                      ('Stop Time', self.run_stop_time),
                      ('Elapsed Time', elapsed_time)])
                   ]
-        
         return output
+    
+    def add_trace_record(self, trace_record):
+        self.evt.trace_records.append(trace_record)
 
     def reset(self, initial_time=0):
         """Reset the simulation time to zero so the simulation can be
