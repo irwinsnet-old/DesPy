@@ -46,6 +46,10 @@ class Model(_NamedObject):
         self._sim.append_model(self)
         self._initialize = None
         
+        # Convenience Attributes
+        self.out = self.sim.out
+        self.trace = self.sim.out.trace
+        
     def __getitem__(self, key):
         return self.components[key]
     

@@ -5,7 +5,7 @@ from itertools import count
 from collections import namedtuple
 import datetime
 import numpy as np
-from despy.output.results import Results
+from despy.output.results import Output
 from despy.output.report import Datatype
 
 from despy.core.base import _NamedObject, PRIORITY_STANDARD
@@ -27,7 +27,7 @@ class Simulation(_NamedObject):
         super().__init__(name)
         self.console_output = True
         self._models = []
-        self.out = Results(self)
+        self.out = Output(self)
         self.reset(initial_time)
         self.output_folder = None
         self.run_start_time = None
@@ -90,6 +90,8 @@ class Simulation(_NamedObject):
                 the event will be scheduled to occur mmediately.
 
         """
+        # Ensures delay value is always an integer.
+        delay = round(delay)
 
         # Places a tuple onto the FEL, consisting of the event time, ID,
         # and event object.
@@ -208,9 +210,6 @@ class Simulation(_NamedObject):
                      ('Elapsed Time', elapsed_time)])
                   ]
         return output
-    
-    def add_trace_record(self, trace_record):
-        self.evt.trace_records.append(trace_record)
 
     def reset(self, initial_time=0):
         """Reset the simulation time to zero so the simulation can be
@@ -224,7 +223,9 @@ class Simulation(_NamedObject):
         # event.
         self._counter = count()
         self.out.trace.clear()
-        self.out = Results(self)
+        #self.out = Output(self) #Removed because created problems with trace
+        # start and stop times following a simulation reset. Not quite sure
+        # why it was here in first place.
         for model in self.models:
             model.initial_events_scheduled = False
 

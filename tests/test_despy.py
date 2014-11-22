@@ -118,11 +118,11 @@ class testDespyb(unittest.TestCase):
         
         self.assertEqual(model.sim.out.trace.length(), 3)
         evtTrace = model.sim.out.trace
-        self.assertEqual(evtTrace.get(0)['name'], "First Event")
-        self.assertEqual(evtTrace.get(1)['name'], "Second Event")
-        self.assertEqual(evtTrace.get(1)['time'], 4)
-        self.assertEqual(evtTrace.get(2)['name'], "Third Event")
-        self.assertEqual(evtTrace.get(2)['time'], 8)
+        self.assertEqual(evtTrace[0]['name'], "First Event")
+        self.assertEqual(evtTrace[1]['name'], "Second Event")
+        self.assertEqual(evtTrace[1]['time'], 4)
+        self.assertEqual(evtTrace[2]['name'], "Third Event")
+        self.assertEqual(evtTrace[2]['time'], 8)
 
     def test_appendCallback(self):
         model = Model("AppendCallback Model")
@@ -143,10 +143,10 @@ class testDespyb(unittest.TestCase):
         
         evtTrace = model.sim.out.trace
         self.assertEqual(evtTrace.length(), 2)
-        self.assertEqual(evtTrace.get(0)['name'], "First Event")
-        self.assertEqual(evtTrace.get(0)['time'], 5)
-        self.assertEqual(evtTrace.get(1)['name'], "Callback Event")
-        self.assertEqual(evtTrace.get(1)['time'], 15)
+        self.assertEqual(evtTrace[0]['name'], "First Event")
+        self.assertEqual(evtTrace[0]['time'], 5)
+        self.assertEqual(evtTrace[1]['name'], "Callback Event")
+        self.assertEqual(evtTrace[1]['time'], 15)
         
         #Test reset method and until parameter
         model.sim.reset()
@@ -190,6 +190,56 @@ class testDespyb(unittest.TestCase):
         model2.schedule(event, 1)
         model2.sim.run()
         self.assertEqual(model2.sim.out.trace.length(), 2)
+        
+    def test_trace_control(self):
+        model = Model("Trace Control")
+        event = Event(model, "Trace Control Event")
+        
+        def event_callback(self):
+            self.model.schedule(self, 10)
+            
+        event.append_callback(event_callback)
+        model.sim.schedule(event, 0)
+        
+        # Default settings limit trace to time < 500
+        model.sim.run(1000)
+        self.assertEqual(model.trace.length(), 50)
+         
+        # User can set trace start and stop times
+        model.sim.reset()
+        model.sim.schedule(event, 0)
+        model.trace.start = 200
+        model.trace.stop = 300
+        model.sim.console_output = False
+        model.sim.run(1000)
+        self.assertEqual(model.trace.length(), 10)
+        self.assertEqual(model.trace[0]['time'], 200)
+        self.assertEqual(model.trace[9]['time'], 290)
+        
+        # Default maximum trace length is 1000 lines.
+        model.sim.reset()        
+        evt2 = Event(model, "Trace Control Event Step=1")
+        
+        def event_callback2(self):
+            self.model.schedule(self, 1)
+        
+        evt2.append_callback(event_callback2)
+        model.sim.schedule(evt2, 0)
+        model.trace.start = 0
+        model.trace.stop = 10000
+        model.sim.run(5000)
+        self.assertEqual(model.trace.length(), 1000)
+        
+        # User can set maximum trace length
+        model.sim.reset()
+        model.sim.schedule(evt2, 0)
+        model.trace.max_length = 2000
+        model.trace.start = 365
+        model.trace.stop = 2999
+        model.sim.run(3000)
+        self.assertEqual(model.trace.length(), 2000)
+        self.assertEqual(model.trace[0]['time'], 365)
+        self.assertEqual(model.trace[1999]['time'], 2364)
 
 if __name__ == '__main__':
     unittest.main()

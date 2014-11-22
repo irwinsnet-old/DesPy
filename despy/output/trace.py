@@ -38,6 +38,26 @@ class Trace(object):
         self.sim = self.out.sim
         self._list = []
         self.number = 0
+        self.start = 0
+        self._stop = 500
+        self.max_length = 1000
+        
+    @property
+    def stop(self):
+        return self._stop
+    
+    @stop.setter
+    def stop(self, stop):
+        try:
+            if stop > self.start:
+                self._stop = round(stop)
+        except:
+            pass
+    
+    def active(self):
+        now = self.sim.now
+        return (now < self.stop) and (self.number < self.max_length) \
+            and (now >= self.start) 
     
     def append(self, item):
         self._list.append(item)
@@ -54,18 +74,19 @@ class Trace(object):
         return trace_record
         
     def add(self, trace_records):
-        if isinstance(trace_records, TraceRecord):
-            records = [trace_records]
-        elif isinstance(trace_records, list):
-            records = trace_records
-        for rec in records:
-            self.append(rec)
-            self.number = self.number + 1
-            
-            if self.sim.console_output:
-                console_output = str(rec['time']).rjust(8) + \
-                    ':   ' + rec['name']
-                print(console_output)
+        if self.active():
+            if isinstance(trace_records, TraceRecord):
+                records = [trace_records]
+            elif isinstance(trace_records, list):
+                records = trace_records
+            for rec in records:
+                self.append(rec)
+                self.number = self.number + 1
+                
+                if self.sim.console_output:
+                    console_output = str(rec['time']).rjust(8) + \
+                        ':   ' + rec['name']
+                    print(console_output)
             
     def add_message(self, message, fields = None):
         trace_record = TraceRecord(self.number, self.sim.now, "N/A", "Msg",
@@ -78,15 +99,16 @@ class Trace(object):
             self.out.sim.evt.trace_records.append(trace_record)
     
     def add_event(self, time, priority, event):
-        trace_record = TraceRecord(self.number, time, priority, 'Event',
-                                   event.name)
-        self.add(event.update_trace_record(trace_record))
+        if self.active():
+            trace_record = TraceRecord(self.number, time, priority, 'Event',
+                                       event.name)
+            self.add(event.update_trace_record(trace_record))
         
     def clear(self):
-        self._list = []
+        del self._list[:]
         self.number = 0
     
-    def get(self, index):
+    def __getitem__(self, index):
         return self._list[index]
     
     def length(self):

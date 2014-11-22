@@ -3,7 +3,7 @@ import os
 from despy.output.trace import Trace
 from despy.output.report import HtmlReport
     
-class Results(object):
+class Output(object):
     def __init__(self, simulation):
         self.sim = simulation
         self.trace = Trace(self)

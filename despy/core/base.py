@@ -6,8 +6,6 @@ PRIORITY_EARLY = -1
 PRIORITY_STANDARD = 0
 PRIORITY_LATE = 1
 
-# TODO: Do something with the descriptions."
-
 class _NamedObject(object):
     def __init__(self, name):
         self._name = name
