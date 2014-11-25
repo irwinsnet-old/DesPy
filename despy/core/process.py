@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-from despy.core.component import Component
-from despy.core.named_object import PRIORITY_STANDARD
-from despy.core.event import Event
 from collections import namedtuple
 import types
+from despy.core.component import Component
+from despy.base.named_object import PRIORITY_STANDARD
+from despy.core.event import Event
 
 #TODO : Refactor processTuple. Make attribute names consistent with
 #felItem class.

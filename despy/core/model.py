@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from despy.core.simulation import Simulation
-from despy.core.named_object import NamedObject, PRIORITY_STANDARD
+from despy.base.named_object import NamedObject, PRIORITY_STANDARD
 
 class Model(NamedObject):
 

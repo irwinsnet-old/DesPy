@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
+from collections import OrderedDict
+
 from despy.core.component import Component
 from despy.core.event import Event
-from collections import OrderedDict
 
 # TODO: Add different options for selection of empty resources, either
 # prioritization by number, random selection, or equal loading.

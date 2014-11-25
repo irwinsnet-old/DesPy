@@ -9,5 +9,5 @@ from despy.core.queue import Queue
 from despy.core.entity import Entity
 from despy.core.resource import Resource
  
-from despy.core.named_object import PRIORITY_EARLY, PRIORITY_STANDARD
-from despy.core.named_object import PRIORITY_LATE
+from despy.base.named_object import PRIORITY_EARLY, PRIORITY_STANDARD
+from despy.base.named_object import PRIORITY_LATE

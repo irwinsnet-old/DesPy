@@ -1,7 +1,7 @@
 from itertools import count
 
-from despy.core.named_object import NamedObject
-from despy.core.types import is_model
+from despy.base.named_object import NamedObject
+from despy.base.types import is_model
 
 class Component(NamedObject):
     """A base class that provides object counters and other attributes.

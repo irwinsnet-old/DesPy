@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import types
-from despy.core.component import Component
 from collections import OrderedDict
+from despy.core.component import Component
 
 class Event(Component):
     """ An base class for all events that can be scheduled on the future event

@@ -8,7 +8,7 @@ import numpy as np
 from despy.output.results import Output
 from despy.output.report import Datatype
 
-from despy.core.named_object import NamedObject, PRIORITY_STANDARD
+from despy.base.named_object import NamedObject, PRIORITY_STANDARD
 
 FelItem = namedtuple('FelItem', ['time_fld', 'event_fld', 'priority_fld'])
 

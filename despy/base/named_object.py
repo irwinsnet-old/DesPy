@@ -4,7 +4,7 @@
 #   Copyright (c) 2014, Stacy Irwin
 
 """
-..  module:: despy.core.named_object
+..  module:: despy.base.named_object
 
 Base classes for other Despy classes.
 

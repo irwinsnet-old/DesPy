@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
+from collections import deque, namedtuple
+import numpy as np
+
 from despy.core.component import Component
 from despy.output.report import Datatype
 import despy.output.plot as plot
-from collections import deque, namedtuple
-import numpy as np
 
 Queue_item = namedtuple('Queue_item', ['item_fld', 'time_in_fld'])
 
