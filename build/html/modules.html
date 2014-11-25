@@ -52,17 +52,17 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-despy.core.base">
-<span id="despy-modules"></span><h1>Despy Modules<a class="headerlink" href="#module-despy.core.base" title="Permalink to this headline">¶</a></h1>
-<p>Base classes for other Despy classes.</p>
+  <div class="section" id="despy-modules">
+<h1>Despy Modules<a class="headerlink" href="#despy-modules" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-despy.base.named_object">
+<span id="named-object"></span><h2>named_object<a class="headerlink" href="#module-despy.base.named_object" title="Permalink to this headline">¶</a></h2>
+<p>A base class that provides name and description attributes to
+subclasses.</p>
 <dl class="docutils">
 <dt><strong>NamedObject</strong></dt>
 <dd>Inherited directly or indirectly by all Despy classes.
-<a class="reference internal" href="classes.html#despy.core.base.NamedObject" title="despy.core.base.NamedObject"><tt class="xref py py-class docutils literal"><span class="pre">NamedObject</span></tt></a> provides a name attribute, a description
+<a class="reference internal" href="classes.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><tt class="xref py py-class docutils literal"><span class="pre">NamedObject</span></tt></a> provides a name attribute, a description
 attribute, and other helper methods.</dd>
-<dt><strong>Component</strong></dt>
-<dd>A portion of a Despy model. Components generally represent an
-element of the system that is being simulated.</dd>
 <dt><strong>Priority Constants</strong></dt>
 <dd><p class="first">The despy.base package includes three constants that are used to
 prioritize events that are scheduled to occur a the same time.
@@ -84,6 +84,15 @@ may be executed in any order.</p>
 </dd>
 </dl>
 </div>
+<div class="section" id="module-despy.core.component">
+<span id="component"></span><h2>component<a class="headerlink" href="#module-despy.core.component" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><strong>Component</strong></dt>
+<dd>A portion of a Despy model. Components represent an element of the
+system that is being simulated.</dd>
+</dl>
+</div>
+</div>
 
 
           </div>
@@ -91,6 +100,15 @@ may be executed in any order.</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Despy Modules</a><ul>
+<li><a class="reference internal" href="#module-despy.base.named_object">named_object</a></li>
+<li><a class="reference internal" href="#module-despy.core.component">component</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
                         title="previous chapter">Despy</a></p>

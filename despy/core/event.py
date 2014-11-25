@@ -45,7 +45,7 @@ class Event(Component):
         """
 
         super().__init__(model, name)
-        self._description = "Event"
+        self.description = "Event"
         self._callbacks = []
         self.trace_fields = OrderedDict()
         if trace_fields is not None:

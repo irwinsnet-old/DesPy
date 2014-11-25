@@ -4,5 +4,5 @@ from despy.core.component import Component
 
 class Entity(Component):
     
-    def __init__(self, model, name):
-        super().__init__(model, name)
+    def __init__(self, model, name, description = None):
+        super().__init__(model, name, description)

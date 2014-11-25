@@ -1,5 +1,8 @@
 Despy Classes
 *************
 
-..  autoclass:: despy.core.base.NamedObject
-    :members: name, description, __init__, __str__, slug
+.. toctree::
+   :maxdepth: 2
+   
+   despy.base.named_object.NamedObject <namedobject>
+   despy.core.component.Component <component>

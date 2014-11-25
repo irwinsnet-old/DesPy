@@ -6,17 +6,14 @@
 """
 ..  module:: despy.base.named_object
 
-Base classes for other Despy classes.
+A base class that provides name and description attributes to
+subclasses.
 
 **NamedObject**
     Inherited directly or indirectly by all Despy classes.
     :class:`.NamedObject` provides a name attribute, a description
     attribute, and other helper methods.
-
-**Component**
-    A portion of a Despy model. Components generally represent an
-    element of the system that is being simulated.
-    
+   
 **Priority Constants**
     The despy.base package includes three constants that are used to
     prioritize events that are scheduled to occur a the same time.
@@ -58,7 +55,7 @@ class NamedObject(object):
         object.
         
     **Methods**
-      * :meth:`.__str__` Returns the name attribute.
+      * :meth:`__str__` Returns the name attribute.
       * :meth:`.slug` Returns the name attribute, but replaces all
         characters that are not allowed in Windows file names with an
         underscore character.

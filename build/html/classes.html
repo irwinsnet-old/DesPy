@@ -24,6 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Despy 1 documentation" href="index.html" />
+    <link rel="next" title="NamedObject" href="namedobject.html" />
     <link rel="prev" title="Despy Modules" href="modules.html" /> 
   </head>
   <body>
@@ -36,6 +37,9 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="namedobject.html" title="NamedObject"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="modules.html" title="Despy Modules"
              accesskey="P">previous</a> |</li>
@@ -50,101 +54,12 @@
             
   <div class="section" id="despy-classes">
 <h1>Despy Classes<a class="headerlink" href="#despy-classes" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="despy.core.base.NamedObject">
-<em class="property">class </em><tt class="descclassname">despy.core.base.</tt><tt class="descname">NamedObject</tt><big>(</big><em>name</em>, <em>description=None</em><big>)</big><a class="reference internal" href="_modules/despy/core/base.html#NamedObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.base.NamedObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>A base class that provides name and description fields.</p>
-<p>Subclasses should include a call to the
-<tt class="xref py py-meth docutils literal"><span class="pre">NamedObject.__init__()</span></tt> method in the subclass
-<tt class="xref py py-meth docutils literal"><span class="pre">__init__()</span></tt> method.</p>
-<dl class="docutils">
-<dt><strong>Attributes</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.core.base.NamedObject.name" title="despy.core.base.NamedObject.name"><tt class="xref py py-attr docutils literal"><span class="pre">name</span></tt></a>: Object name.</li>
-<li><a class="reference internal" href="#despy.core.base.NamedObject.description" title="despy.core.base.NamedObject.description"><tt class="xref py py-attr docutils literal"><span class="pre">description</span></tt></a>: One or more paragraphs that describes the
-object.</li>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namedobject.html">despy.base.named_object.NamedObject</a></li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">despy.core.component.Component</a></li>
 </ul>
-</dd>
-<dt><strong>Methods</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.core.base.NamedObject.__str__" title="despy.core.base.NamedObject.__str__"><tt class="xref py py-meth docutils literal"><span class="pre">__str__()</span></tt></a> Returns the name attribute.</li>
-<li><tt class="xref py py-meth docutils literal"><span class="pre">slug()</span></tt> Returns the name attribute, but replaces all
-characters that are not allowed in Windows file names with an
-underscore character.</li>
-</ul>
-</dd>
-<dt><strong>Superclass</strong></dt>
-<dd><ul class="first last simple">
-<li><tt class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></tt></li>
-<li><tt class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></tt></li>
-</ul>
-</dd>
-</dl>
-<dl class="method">
-<dt id="despy.core.base.NamedObject.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>description=None</em><big>)</big><a class="reference internal" href="_modules/despy/core/base.html#NamedObject.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.base.NamedObject.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates an instance of a NamedObject.</p>
-<p>All NamedObject instances and subclasses must have a name,
-therefore the constructor requires a name argument.</p>
-<dl class="docutils">
-<dt><em>Arguments</em></dt>
-<dd><ul class="first last simple">
-<li><em>name:</em> The value of the <a class="reference internal" href="#despy.core.base.NamedObject.name" title="despy.core.base.NamedObject.name"><tt class="xref py py-attr docutils literal"><span class="pre">name</span></tt></a> attribute. Required.
-Type: str.</li>
-<li><em>description:</em> The value of the <a class="reference internal" href="#despy.core.base.NamedObject.description" title="despy.core.base.NamedObject.description"><tt class="xref py py-attr docutils literal"><span class="pre">description</span></tt></a>
-attribute. Optional, default value is <tt class="docutils literal"><span class="pre">None</span></tt>. Type: str.</li>
-</ul>
-</dd>
-<dt><em>Raises</em></dt>
-<dd><em>TypeError:</em> if name is not a string, or if
-description is neither a string or type <tt class="docutils literal"><span class="pre">None</span></tt>.</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="despy.core.base.NamedObject.__str__">
-<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/despy/core/base.html#NamedObject.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.base.NamedObject.__str__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the name attribute.</p>
-<p>Unless overriden by the subclass, statements such as
-<tt class="docutils literal"><span class="pre">print(NamedObject_subclass)</span></tt> will display the name attribute.</p>
-<p><em>Returns:</em> string</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="despy.core.base.NamedObject.description">
-<tt class="descname">description</tt><a class="reference internal" href="_modules/despy/core/base.html#NamedObject.description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.base.NamedObject.description" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets a description of the model.</p>
-<p>One or more paragraphs that describes the purpose and behavior
-of the object.  The description will be included in output
-reports as html paragraphs (or equivalent for other output
-formats).</p>
-<p><em>Returns:</em> string</p>
-<p><em>Raises:</em> <tt class="docutils literal"><span class="pre">TypeError</span></tt> if description is not a string or type
-<tt class="docutils literal"><span class="pre">None</span></tt>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="despy.core.base.NamedObject.name">
-<tt class="descname">name</tt><a class="reference internal" href="_modules/despy/core/base.html#NamedObject.name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.base.NamedObject.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>The name of the object.</p>
-<p>A short phrase, such as &#8220;Customer&#8221; or &#8220;Server Queue&#8221; that
-identifies the object.  Using title case and spaces will result
-in pleasant formatting in output reports and trace files.</p>
-<p><em>Returns:</em> string</p>
-<p><em>Raises:</em> <tt class="docutils literal"><span class="pre">TypeError</span></tt> if name is not a string.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="despy.core.base.NamedObject.slug">
-<tt class="descname">slug</tt><a class="reference internal" href="_modules/despy/core/base.html#NamedObject.slug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.base.NamedObject.slug" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a modified version of the name attribute.</p>
-<p>Spaces and all characters not allowed in Windows filenames
-([]&lt;&gt;/*?:|#!&#8221;) are replaced with underscores.</p>
-<p><em>Returns:</em> string</p>
-</dd></dl>
-
-</dd></dl>
-
+</div>
 </div>
 
 
@@ -156,6 +71,9 @@ in pleasant formatting in output reports and trace files.</p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="modules.html"
                         title="previous chapter">Despy Modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="namedobject.html"
+                        title="next chapter">NamedObject</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/classes.txt"
@@ -187,6 +105,9 @@ in pleasant formatting in output reports and trace files.</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="namedobject.html" title="NamedObject"
+             >next</a> |</li>
         <li class="right" >
           <a href="modules.html" title="Despy Modules"
              >previous</a> |</li>
