@@ -6,13 +6,9 @@ test_core_queue.py tests queue performance.
 
 import unittest
 
-import despy.core as dp
 import scipy.stats as stats
 
-Simulation = dp.Simulation
-FelItem = dp.FelItem
-Event = dp.Event
-Process = dp.Process
+import despy.core as dp
 
 class testQueue(unittest.TestCase):
     def test_negative_time(self):

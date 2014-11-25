@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 import unittest
+from collections import OrderedDict
+
+import scipy.stats as stats
 
 import despy.core as dp
-import scipy.stats as stats
-from collections import OrderedDict
 
 class testResource(unittest.TestCase):
     def get_rnd_exp(self):

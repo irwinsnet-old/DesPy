@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from despy.core.base import Component
-from despy.core import Event
+from despy.core.component import Component
+from despy.core.event import Event
 from collections import OrderedDict
 
 # TODO: Add different options for selection of empty resources, either

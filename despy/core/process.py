@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from despy.core.base import Component, PRIORITY_STANDARD
+from despy.core.component import Component
+from despy.core.named_object import PRIORITY_STANDARD
 from despy.core.event import Event
 from collections import namedtuple
 import types

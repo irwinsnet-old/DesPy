@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from despy.core.base import Component
+from despy.core.component import Component
 
 class Entity(Component):
     

@@ -8,11 +8,11 @@ import numpy as np
 from despy.output.results import Output
 from despy.output.report import Datatype
 
-from despy.core.base import _NamedObject, PRIORITY_STANDARD
+from despy.core.named_object import NamedObject, PRIORITY_STANDARD
 
 FelItem = namedtuple('FelItem', ['time_fld', 'event_fld', 'priority_fld'])
 
-class Simulation(_NamedObject):
+class Simulation(NamedObject):
 
     """ Schedule events and manage the future event list (FEL).
 
@@ -21,10 +21,11 @@ class Simulation(_NamedObject):
             A non-negative integer that defaults to zero.
     """
 
-    def __init__(self, initial_time=0, name = None):
+    def __init__(self, initial_time=0, name = "Simulation",
+                 description = None):
         """Initialize the event object.
         """
-        super().__init__(name)
+        super().__init__(name, description)
         self.console_output = True
         self._models = []
         self.out = Output(self)

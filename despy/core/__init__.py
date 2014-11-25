@@ -8,5 +8,6 @@ from despy.core.process import Process
 from despy.core.queue import Queue
 from despy.core.entity import Entity
 from despy.core.resource import Resource
-
-from despy.core.base import PRIORITY_EARLY, PRIORITY_STANDARD, PRIORITY_LATE
+ 
+from despy.core.named_object import PRIORITY_EARLY, PRIORITY_STANDARD
+from despy.core.named_object import PRIORITY_LATE

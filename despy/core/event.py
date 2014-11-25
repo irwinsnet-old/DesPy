@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import types
-from despy.core.base import Component
+from despy.core.component import Component
 from collections import OrderedDict
 
 class Event(Component):

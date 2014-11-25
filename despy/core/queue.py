@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from despy.core.base import Component
+from despy.core.component import Component
 from despy.output.report import Datatype
 import despy.output.plot as plot
 from collections import deque, namedtuple

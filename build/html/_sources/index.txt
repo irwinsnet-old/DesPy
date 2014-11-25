@@ -9,7 +9,8 @@ Despy
 **A Discrete Event Simulation Framework for Python**
 
 Despy is a discrete event simulation framework that is written in Python 3.4
-and is heavily influenced by DESMO-J and SimPy. I wrote Despy primarily to
+and is heavily influenced by `DESMO-J <http://desmoj.sourceforge.net/>`_ and
+`SimPy <https://simpy.readthedocs.org/en/latest/>`_. I wrote Despy primarily to
 teach myself Python and to work through examples in the *Discrete Event
 Simulation* text by Banks, Carson, Nelson, and Nicol.
 
@@ -29,17 +30,23 @@ My goals for despy are to:
   simulation parameters to reduce the amount of code needed to run a
   simulation.
 * Write the simulation using only the standard Python library or
-  mainstream packages that are available in the Anaconda Python stack.
-  Despy relies heavily on Numpy and Matplotlib.
+  mainstream packages that are available in the `Anaconda Python stack
+  <https://store.continuum.io/cshop/anaconda/>`_. Despy relies heavily on
+  `Numpy <http://www.numpy.org/>`_ and `Matplotlib <http://matplotlib.org/>`_.
+  
+Despy is released under the
+`MIT License <http://opensource.org/licenses/MIT>`_.
 
-.. todo::
+Copyright (c) 2014 Stacy Irwin
 
-   Add hyperlinks to Anaconda, Numpy, DESMO-J, Simpy, Matplotlib, etc.
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
+   
+   modules
+   classes
 
 
 

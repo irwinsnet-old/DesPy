@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
 from despy.core.simulation import Simulation
-from despy.core.event import Event
-from despy.core.base import _NamedObject, PRIORITY_STANDARD
+from despy.core.named_object import NamedObject, PRIORITY_STANDARD
 
-class Model(_NamedObject):
+class Model(NamedObject):
 
     """Contains the logical elements of the simulation, such as
     servers, entities, processes, and queues.
@@ -26,11 +25,10 @@ class Model(_NamedObject):
 
     """
 
-    def __init__(self, name, sim = None):
+    def __init__(self, name, sim = None, description = None):
         """Create a model object."""
-        self._name = name
+        super().__init__(name, description)
         self.initial_events_scheduled = False
-        Event.set_counter()
         self.components = {}
         
         # Create a default simulation if no simulation is provided
