@@ -18,9 +18,9 @@ class testQueue(unittest.TestCase):
         print()
         model = dp.Model("Negative Time Model")
         model.schedule(dp.Event(model, "Positive Time"),
-                       priority = dp.PRIORITY_LATE)        
+                       priority = dp.fi.PRIORITY_LATE)        
         model.schedule(dp.Event(model, "Negative Time"),
-                       priority = dp.PRIORITY_EARLY)
+                       priority = dp.fi.PRIORITY_EARLY)
         self.assertEqual(model.sim.peek(False), -0.1)
 
         model.sim.run()
@@ -68,7 +68,7 @@ class testQueue(unittest.TestCase):
                 super().__init__(model, "Customer")
                 
         def initialize(self):
-            self.customer_process.start(0, dp.PRIORITY_EARLY)
+            self.customer_process.start(0, dp.fi.PRIORITY_EARLY)
             self.service_process.start()
             
         class CustArrProcess(dp.Process):

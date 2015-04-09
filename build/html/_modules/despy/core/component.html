@@ -61,7 +61,7 @@
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
 
 <span class="kn">from</span> <span class="nn">despy.base.named_object</span> <span class="kn">import</span> <span class="n">NamedObject</span>
-<span class="kn">from</span> <span class="nn">despy.base.types</span> <span class="kn">import</span> <span class="n">is_model</span>
+<span class="kn">from</span> <span class="nn">despy.base.named_object_types</span> <span class="kn">import</span> <span class="n">is_model</span>
 
 <div class="viewcode-block" id="Component"><a class="viewcode-back" href="../../../component.html#despy.core.component.Component">[docs]</a><span class="k">class</span> <span class="nc">Component</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A base class that provides object counters and other attributes.</span>
@@ -77,6 +77,7 @@
 <span class="sd">    method in the subclass :meth:`__init__` method.</span>
 <span class="sd">    </span>
 <span class="sd">    **Attributes**</span>
+
 <span class="sd">      * :attr:`.model`: The :class:`despy.core.model.Model` object that</span>
 <span class="sd">        the component belongs to.</span>
 <span class="sd">      * :attr:`.sim`: The :class:`despy.core.simulation.Simulation` </span>

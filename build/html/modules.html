@@ -61,27 +61,22 @@ subclasses.</p>
 <dl class="docutils">
 <dt><strong>NamedObject</strong></dt>
 <dd>Inherited directly or indirectly by all Despy classes.
-<a class="reference internal" href="classes.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><tt class="xref py py-class docutils literal"><span class="pre">NamedObject</span></tt></a> provides a name attribute, a description
+<tt class="xref py py-class docutils literal"><span class="pre">NamedObject</span></tt> provides a name attribute, a description
 attribute, and other helper methods.</dd>
-<dt><strong>Priority Constants</strong></dt>
-<dd><p class="first">The despy.base package includes three constants that are used to
-prioritize events that are scheduled to occur a the same time.
-Events assigned a higher priority will occur before events that are
-assigned lower priorities.</p>
-<dl class="docutils">
-<dt><em>PRIORITY_STANDARD</em></dt>
-<dd>Despy uses PRIORITY_STANDARD as the default priority when no
-other priority is specified.</dd>
-<dt><em>PRIORITY_EARLY</em></dt>
-<dd>Events assigned PRIORITY_EARLY will be executed before
-PRIORITY_STANDARD and PRIORITY_LATE events.</dd>
-<dt><em>PRIORITY_LATE</em></dt>
-<dd>Events assigned PRIORITY_LATE will be executed after
-PRIORITY_EARLY and PRIORITY_STANDARD events.</dd>
 </dl>
-<p class="last">Events scheduled to occur at the same time with the same priority
-may be executed in any order.</p>
-</dd>
+</div>
+<div class="section" id="module-despy.core.simulation">
+<span id="simulation"></span><h2>simulation<a class="headerlink" href="#module-despy.core.simulation" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><strong>Simulation</strong></dt>
+<dd>The <em>Simulation</em> class maintains and executes the future event list
+(FEL).</dd>
+<dt><strong>FelItem</strong></dt>
+<dd>A <em>FelItem</em> is a named tuple that represents a scheduled event. The
+FEL is a binary heap of <em>FelItems</em>.</dd>
+<dt><strong>NoEventsRemaining</strong></dt>
+<dd>The <em>Simulation</em> instance raises this subclass of Exception when
+there are no more events on the FEL.</dd>
 </dl>
 </div>
 <div class="section" id="module-despy.core.component">
@@ -104,6 +99,7 @@ system that is being simulated.</dd>
   <ul>
 <li><a class="reference internal" href="#">Despy Modules</a><ul>
 <li><a class="reference internal" href="#module-despy.base.named_object">named_object</a></li>
+<li><a class="reference internal" href="#module-despy.core.simulation">simulation</a></li>
 <li><a class="reference internal" href="#module-despy.core.component">component</a></li>
 </ul>
 </li>

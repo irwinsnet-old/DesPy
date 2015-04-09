@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from despy.core.simulation import Simulation
-from despy.base.named_object import NamedObject, PRIORITY_STANDARD
+from despy.core.simulation import Simulation, FelItem as fi
+from despy.base.named_object import NamedObject
 
 class Model(NamedObject):
 
@@ -111,7 +111,7 @@ class Model(NamedObject):
             return
 
     def schedule(self, event, delay = 0,
-                 priority = PRIORITY_STANDARD):
+                 priority = fi.PRIORITY_STANDARD):
         """A convenience method that calls the Simulation object's
         schedule() method to schedule an event on the FEL.
 

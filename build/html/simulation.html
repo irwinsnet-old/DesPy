@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Simulation &mdash; Despy 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="index.html" />
+    <link rel="up" title="Despy Classes" href="classes.html" />
+    <link rel="next" title="Component" href="component.html" />
+    <link rel="prev" title="FelItem" href="felitem.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="component.html" title="Component"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="felitem.html" title="FelItem"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Despy 1 documentation</a> &raquo;</li>
+          <li><a href="classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="simulation">
+<h1>Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt>
+<em class="property">class </em><tt class="descclassname">despy.core.simulation.</tt><tt class="descname">Simulation</tt><big>(</big><em>initial_time=0</em>, <em>name='Simulation'</em>, <em>description=None</em><big>)</big><a class="reference internal" href="_modules/despy/core/simulation.html#Simulation"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Schedules events and manages the future event list (FEL).</p>
+<p>Every model is assigned to one (and only one) Simulation object.
+A Simulation object may contain one or more models.</p>
+<p><strong>Attributes</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="xref py py-attr docutils literal"><span class="pre">name</span></tt>: Simulation object&#8217;s name. Inherited from
+<tt class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></tt>. Type: string.</li>
+<li><tt class="xref py py-attr docutils literal"><span class="pre">description</span></tt>: One or more paragraphs that describes the
+simulation. Inherited from
+<tt class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></tt> Type: string.</li>
+<li><tt class="xref py py-attr docutils literal"><span class="pre">models</span></tt>: A list of all <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> objects that
+have been assigned to the simulation.</li>
+<li><tt class="xref py py-attr docutils literal"><span class="pre">seed</span></tt>: The np.random.seed method will be seeded with
+this integer prior to running the simulation.</li>
+<li><tt class="xref py py-attr docutils literal"><span class="pre">now</span></tt>: An integer representing the current simulation
+time. Type: integer (non-negative).</li>
+<li><tt class="xref py py-attr docutils literal"><span class="pre">evt</span></tt>: Returns the <tt class="xref py py-class docutils literal"><span class="pre">despy.core.event.Event</span></tt> object
+that is currently being executed. If no event is being executed,
+returns <cite>None</cite>. Read-only.</li>
+<li><tt class="xref py py-attr docutils literal"><span class="pre">run_start_time</span></tt>: The real-world start time for the
+simulation. Type: datetime.datetime, or <cite>None</cite> if the simulation
+has not yet been run. Read-only.</li>
+<li><tt class="xref py py-attr docutils literal"><span class="pre">run_stop_time</span></tt>: The real-world stop time for the
+simulation. Type: datetime.datetime, or <cite>None</cite> if the simulation
+has not yet been run. Read-only.</li>
+<li><tt class="xref py py-attr docutils literal"><span class="pre">console_output</span></tt>: If True, the trace record for each
+event will be sent to the standard output. The default value
+is True. Type: Boolean.</li>
+<li><tt class="xref py py-attr docutils literal"><span class="pre">output_folder</span></tt>: If NONE (the default value), the
+simulation will not generate any output or trace files.</li>
+<li><tt class="xref py py-attr docutils literal"><span class="pre">out</span></tt>: A <tt class="xref py py-class docutils literal"><span class="pre">despy.output.results</span></tt> object that will
+generate all output files.</li>
+</ul>
+</div></blockquote>
+<p><strong>Methods</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="xref py py-meth docutils literal"><span class="pre">append_model()</span></tt>: Appends a <tt class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></tt>
+object to the Simulation object. A Despy simulation can run
+multiple models simultaneously.</li>
+<li><tt class="xref py py-meth docutils literal"><span class="pre">schedule()</span></tt>: Schedules an event on the FEL.</li>
+<li><tt class="xref py py-meth docutils literal"><span class="pre">peek()</span></tt>: Gets the time of the next scheduled event, but
+leaves the event on the FEL.</li>
+<li><tt class="xref py py-meth docutils literal"><span class="pre">step()</span></tt>: Executes the next event on the FEL.</li>
+<li><tt class="xref py py-meth docutils literal"><span class="pre">run()</span></tt>: Executes the remaining events on the FEL in order,
+until no events remain, or until the time specified in the
+until parameter is reached.</li>
+<li><tt class="xref py py-meth docutils literal"><span class="pre">get_output()</span></tt>: Gets a Python list that contains 
+simulation parameters, such as name, run time, etc.</li>
+<li><tt class="xref py py-meth docutils literal"><span class="pre">reset()</span></tt>: Resets the simulation time to the beginning of
+the simulation and resets the model and its components to their
+initial state.</li>
+<li><tt class="xref py py-meth docutils literal"><span class="pre">_initialize_models()</span></tt>: Calls the
+<tt class="xref py py-meth docutils literal"><span class="pre">despy.core.model.Model.initialize()</span></tt> method for every model
+assigned to the Simulation object. This method is marked as
+private and is not intended to be called by the DES designer
+or user. The Simulation calls this object before executing any
+events from the FEL.</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt><strong>Inherits</strong></dt>
+<dd><ul class="first last simple">
+<li><tt class="xref py py-class docutils literal"><span class="pre">despy.core.base.NamedObject</span></tt></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt>
+<tt class="descname">models</tt><a class="reference internal" href="_modules/despy/core/simulation.html#Simulation.models"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Get a list of all models attached to the simulation.</p>
+<p><em>Returns:</em> A list of despy.model.Model objects.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">now</tt><a class="reference internal" href="_modules/despy/core/simulation.html#Simulation.now"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>The current time of the simulation. The time is a unit-less
+integer.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="felitem.html"
+                        title="previous chapter">FelItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="component.html"
+                        title="next chapter">Component</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/simulation.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="component.html" title="Component"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="felitem.html" title="FelItem"
+             >previous</a> |</li>
+        <li><a href="index.html">Despy 1 documentation</a> &raquo;</li>
+          <li><a href="classes.html" >Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Stacy Irwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

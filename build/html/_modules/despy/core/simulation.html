@@ -1,0 +1,485 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>despy.core.simulation &mdash; Despy 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for despy.core.simulation</h1><div class="highlight"><pre>
+<span class="c">#   Despy: A discrete event simulation framework for Python</span>
+<span class="c">#   Version 0.1</span>
+<span class="c">#   Released under the MIT License (MIT)</span>
+<span class="c">#   Copyright (c) 2014, Stacy Irwin</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">..  module:: despy.core.simulation</span>
+
+<span class="sd">**Simulation**</span>
+<span class="sd">    The *Simulation* class maintains and executes the future event list</span>
+<span class="sd">    (FEL).</span>
+<span class="sd">**FelItem**</span>
+<span class="sd">    A *FelItem* is a named tuple that represents a scheduled event. The</span>
+<span class="sd">    FEL is a binary heap of *FelItems*.</span>
+<span class="sd">**NoEventsRemaining**</span>
+<span class="sd">    The *Simulation* instance raises this subclass of Exception when</span>
+<span class="sd">    there are no more events on the FEL.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">heapq</span> <span class="kn">import</span> <span class="n">heappush</span><span class="p">,</span> <span class="n">heappop</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">despy.output.results</span> <span class="kn">import</span> <span class="n">Output</span>
+<span class="kn">from</span> <span class="nn">despy.output.report</span> <span class="kn">import</span> <span class="n">Datatype</span>
+<span class="kn">from</span> <span class="nn">despy.base.named_object</span> <span class="kn">import</span> <span class="n">NamedObject</span>
+
+<div class="viewcode-block" id="FelItem"><a class="viewcode-back" href="../../../felitem.html#despy.core.simulation.FelItem">[docs]</a><span class="k">class</span> <span class="nc">FelItem</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FelItemTuple&#39;</span><span class="p">,</span>
+                         <span class="p">[</span><span class="s">&#39;time_fld&#39;</span><span class="p">,</span> <span class="s">&#39;event_fld&#39;</span><span class="p">,</span> <span class="s">&#39;priority_fld&#39;</span><span class="p">])):</span>
+    <span class="sd">&quot;&quot;&quot;A named tuple that represents a scheduled event.</span>
+<span class="sd">    </span>
+<span class="sd">    **Attributes**</span>
+<span class="sd">    </span>
+<span class="sd">      * :attr:`time_fld`: The time that the event is scheduled for</span>
+<span class="sd">        execution. Type: a non-negative integer.</span>
+<span class="sd">      * :attr:`event_fld`: An instance of</span>
+<span class="sd">        :class:`despy.core.event.Event`.</span>
+<span class="sd">      * :attr:`priority_fld`: A priority constant from the </span>
+<span class="sd">        :module:`despy.base.named_object` module, or an integer between</span>
+<span class="sd">        -4 and +4, inclusive.</span>
+<span class="sd">        </span>
+<span class="sd">    **Priority Constants**</span>
+<span class="sd">        The despy.base package includes three constants that are used to</span>
+<span class="sd">        prioritize events that are scheduled to occur a the same time.</span>
+<span class="sd">        Events assigned a higher priority will occur before events that</span>
+<span class="sd">        are assigned lower priorities.</span>
+<span class="sd">        </span>
+<span class="sd">        *PRIORITY_STANDARD*</span>
+<span class="sd">            Despy uses PRIORITY_STANDARD as the default priority when no</span>
+<span class="sd">            other priority is specified.</span>
+<span class="sd">            </span>
+<span class="sd">        *PRIORITY_EARLY*</span>
+<span class="sd">            Events assigned PRIORITY_EARLY will be executed before</span>
+<span class="sd">            PRIORITY_STANDARD and PRIORITY_LATE events.</span>
+<span class="sd">            </span>
+<span class="sd">        *PRIORITY_LATE*</span>
+<span class="sd">            Events assigned PRIORITY_LATE will be executed after</span>
+<span class="sd">            PRIORITY_EARLY and PRIORITY_STANDARD events.</span>
+<span class="sd">            </span>
+<span class="sd">        Events scheduled to occur at the same time with the same</span>
+<span class="sd">        priority may be executed in any order.</span>
+<span class="sd">        </span>
+<span class="sd">        The priority integer value is added to the scheduled event time.</span>
+<span class="sd">        Internally, Despy multiplies the scheduled time by 10. This</span>
+<span class="sd">        means that events scheduled to occur at time 1 are internally</span>
+<span class="sd">        scheduled for time 10, time 12 would occur at internal time</span>
+<span class="sd">        120, etc. This scheduling mechanism allows priorities as high</span>
+<span class="sd">        as 4 and as low as -4. A model that requires more than three</span>
+<span class="sd">        different priorities probably needs to be redesigned, therefore,</span>
+<span class="sd">        Despy only provides named constants for priorities from -1 to 1.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">PRIORITY_EARLY</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">PRIORITY_STANDARD</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">PRIORITY_LATE</span> <span class="o">=</span> <span class="mi">1</span>
+</div>
+<div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Schedules events and manages the future event list (FEL).</span>
+<span class="sd">    </span>
+<span class="sd">    Every model is assigned to one (and only one) Simulation object.</span>
+<span class="sd">    A Simulation object may contain one or more models.</span>
+<span class="sd">    </span>
+<span class="sd">    **Attributes**</span>
+
+<span class="sd">      * :attr:`name`: Simulation object&#39;s name. Inherited from</span>
+<span class="sd">        :class:`despy.base.named_object.NamedObject`. Type: string.</span>
+<span class="sd">      * :attr:`.description`: One or more paragraphs that describes the</span>
+<span class="sd">        simulation. Inherited from</span>
+<span class="sd">        :class:`despy.base.named_object.NamedObject` Type: string.</span>
+<span class="sd">      * :attr:`.models`: A list of all :class:`.Model` objects that</span>
+<span class="sd">        have been assigned to the simulation.</span>
+<span class="sd">      * :attr:`.seed`: The np.random.seed method will be seeded with</span>
+<span class="sd">        this integer prior to running the simulation.</span>
+<span class="sd">      * :attr:`.now`: An integer representing the current simulation</span>
+<span class="sd">        time. Type: integer (non-negative).</span>
+<span class="sd">      * :attr:`evt`: Returns the :class:`despy.core.event.Event` object</span>
+<span class="sd">        that is currently being executed. If no event is being executed,</span>
+<span class="sd">        returns `None`. Read-only.</span>
+<span class="sd">      * :attr:`.run_start_time`: The real-world start time for the</span>
+<span class="sd">        simulation. Type: datetime.datetime, or `None` if the simulation</span>
+<span class="sd">        has not yet been run. Read-only.</span>
+<span class="sd">      * :attr:`run_stop_time`: The real-world stop time for the</span>
+<span class="sd">        simulation. Type: datetime.datetime, or `None` if the simulation</span>
+<span class="sd">        has not yet been run. Read-only.</span>
+<span class="sd">      * :attr:`.console_output`: If True, the trace record for each</span>
+<span class="sd">        event will be sent to the standard output. The default value</span>
+<span class="sd">        is True. Type: Boolean.</span>
+<span class="sd">      * :attr:`.output_folder`: If NONE (the default value), the</span>
+<span class="sd">        simulation will not generate any output or trace files.</span>
+<span class="sd">      * :attr:`out`: A :class:`despy.output.results` object that will</span>
+<span class="sd">        generate all output files.</span>
+
+
+<span class="sd">    **Methods**</span>
+
+<span class="sd">      * :meth:`.append_model`: Appends a :class:`despy.core.model.Model`</span>
+<span class="sd">        object to the Simulation object. A Despy simulation can run</span>
+<span class="sd">        multiple models simultaneously.</span>
+<span class="sd">      * :meth:`.schedule`: Schedules an event on the FEL.</span>
+<span class="sd">      * :meth:`.peek`: Gets the time of the next scheduled event, but</span>
+<span class="sd">        leaves the event on the FEL.</span>
+<span class="sd">      * :meth:`.step`: Executes the next event on the FEL.</span>
+<span class="sd">      * :meth:`.run`: Executes the remaining events on the FEL in order,</span>
+<span class="sd">        until no events remain, or until the time specified in the</span>
+<span class="sd">        until parameter is reached.</span>
+<span class="sd">      * :meth:`.get_output`: Gets a Python list that contains </span>
+<span class="sd">        simulation parameters, such as name, run time, etc.</span>
+<span class="sd">      * :meth:`.reset`: Resets the simulation time to the beginning of</span>
+<span class="sd">        the simulation and resets the model and its components to their</span>
+<span class="sd">        initial state.</span>
+<span class="sd">      * :meth:`._initialize_models`: Calls the</span>
+<span class="sd">        :meth:`despy.core.model.Model.initialize` method for every model</span>
+<span class="sd">        assigned to the Simulation object. This method is marked as</span>
+<span class="sd">        private and is not intended to be called by the DES designer</span>
+<span class="sd">        or user. The Simulation calls this object before executing any</span>
+<span class="sd">        events from the FEL.</span>
+<span class="sd">        </span>
+<span class="sd">    **Inherits**</span>
+<span class="sd">      * :class:`despy.core.base.NamedObject`</span>
+<span class="sd">      </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Simulation&quot;</span><span class="p">,</span>
+                 <span class="n">description</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates and initializes the Simulation object.</span>
+<span class="sd">        </span>
+<span class="sd">        The Simulation object contains and manages the future event</span>
+<span class="sd">        list (FEL).</span>
+<span class="sd">        </span>
+<span class="sd">        **Arguments**</span>
+<span class="sd">            * *initial_time:* Optional. A non-negative integer that</span>
+<span class="sd">              specifies the initial simulation time. Defaults to 0.</span>
+<span class="sd">            * *name:* Optional. A word or short phrase that describes</span>
+<span class="sd">              the simulation. Type: string. Defaults to &quot;Simulation&quot;.</span>
+<span class="sd">            * *description:* Optional. A sentence or short paragraph</span>
+<span class="sd">              that describes the simulation in more detail than the</span>
+<span class="sd">              name attribute. Type: string or type None. Defaults to</span>
+<span class="sd">              type None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_models</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_evt</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_start_time</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_stop_time</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">console_output</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_folder</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_out</span> <span class="o">=</span> <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">initial_time</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Simulation.models"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation.models">[docs]</a>    <span class="k">def</span> <span class="nf">models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a list of all models attached to the simulation.</span>
+<span class="sd">        </span>
+<span class="sd">        *Returns:* A list of despy.model.Model objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_models</span>
+    </div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span>
+    
+    <span class="nd">@seed.setter</span>
+    <span class="k">def</span> <span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span> <span class="o">=</span> <span class="n">seed</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">now</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The current time of the simulation. The time is a unit-less</span>
+<span class="sd">        integer.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_now</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+    
+    <span class="nd">@now.setter</span>
+<div class="viewcode-block" id="Simulation.now"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation.now">[docs]</a>    <span class="k">def</span> <span class="nf">now</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_now</span> <span class="o">=</span> <span class="n">time</span> <span class="o">*</span> <span class="mi">10</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">evt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evt</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">run_start_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_start_time</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">run_stop_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_stop_time</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">console_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_console_output</span>
+    
+    <span class="nd">@console_output.setter</span>
+    <span class="k">def</span> <span class="nf">console_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_console_output</span> <span class="o">=</span> <span class="n">output</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">output_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_folder</span>
+    
+    <span class="nd">@output_folder.setter</span>
+    <span class="k">def</span> <span class="nf">output_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_folder</span> <span class="o">=</span> <span class="n">folder</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">out</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_out</span>
+    
+    <span class="nd">@out.setter</span>
+    <span class="k">def</span> <span class="nf">out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_out</span> <span class="o">=</span> <span class="n">output</span>
+    
+    <span class="k">def</span> <span class="nf">append_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Append a model object to the simulation.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            model:</span>
+<span class="sd">                A despy.model.Model object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">FelItem</span><span class="o">.</span><span class="n">PRIORITY_STANDARD</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Add an event to the FEL.</span>
+
+<span class="sd">        *Arguments*</span>
+<span class="sd">            event (despy.Event):</span>
+<span class="sd">                An instance or subclass of the despy.Event class.</span>
+<span class="sd">            delay (integer):</span>
+<span class="sd">                A non-negative integer that defaults to zero, meaning</span>
+<span class="sd">                the event will be scheduled to occur mmediately.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Ensures delay value is always an integer.</span>
+        <span class="n">delay</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+
+        <span class="c"># Places a tuple onto the FEL, consisting of the event time, ID,</span>
+        <span class="c"># and event object.</span>
+        <span class="n">scheduleTime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_now</span> <span class="o">+</span> <span class="p">(</span><span class="n">delay</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="n">priority</span>
+        
+        <span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span><span class="p">,</span>
+                 <span class="n">FelItem</span><span class="p">(</span><span class="n">time_fld</span><span class="o">=</span><span class="n">scheduleTime</span><span class="p">,</span> <span class="n">event_fld</span><span class="o">=</span><span class="n">event</span><span class="p">,</span>
+                         <span class="n">priority_fld</span><span class="o">=</span><span class="n">priority</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prioritized</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the time of the next scheduled event, or infinity if there</span>
+<span class="sd">        is no remaining events.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">prioritized</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time_fld</span> <span class="o">-</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">priority_fld</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time_fld</span> <span class="o">/</span> <span class="mi">10</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;Infinity&#39;</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">_initialize_models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="o">.</span><span class="n">initial_events_scheduled</span><span class="p">:</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">initial_events_scheduled</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Advance simulation time to the next time on the FEL and</span>
+<span class="sd">        executes the next event.</span>
+
+<span class="sd">        *Raises*</span>
+<span class="sd">            NoEventsRemaining:</span>
+<span class="sd">                Occurs if no more events are scheduled on the FEL.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Get next event from FEL and advance current simulation time.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fel_item</span> <span class="o">=</span> <span class="n">heappop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NoEventsRemainingError</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">now</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">fel_item</span><span class="o">.</span><span class="n">time_fld</span> <span class="o">-</span> \
+                    <span class="n">fel_item</span><span class="o">.</span><span class="n">priority_fld</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+
+        <span class="c"># Run event</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_evt</span> <span class="o">=</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span>
+        <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="o">.</span><span class="n">do_event</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_evt</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c"># Record event in trace report        </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">now</span><span class="p">,</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">priority_fld</span><span class="p">,</span>
+                                 <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="p">)</span>
+        
+        <span class="c"># Reset the event in case it is called again.</span>
+        <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="n">fel_item</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Continue to advance simulation time and execute events on the FEL</span>
+<span class="sd">        until there are no more events or until the time specified in the</span>
+<span class="sd">        &quot;until&quot; parameter is reached.</span>
+
+<span class="sd">        *Arguments*</span>
+<span class="sd">            until (integer):</span>
+<span class="sd">                A non-negative integer specifying the simulation time</span>
+<span class="sd">                at which the simulation will stop. Defaults to &#39;None&#39;,</span>
+<span class="sd">                meaining the simulation will run until there are no</span>
+<span class="sd">                remaining events on the FEL.  The events at the time</span>
+<span class="sd">                specified in &#39;until&#39; will be executed. For example, if</span>
+<span class="sd">                until = 100 and there are events scheduled at time</span>
+<span class="sd">                100, those events will be executed, but events at time</span>
+<span class="sd">                101 or later will not.</span>
+<span class="sd">                </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Initialize models and components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_models</span><span class="p">()</span>
+        
+        <span class="c"># Step through events on FEL</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">until</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">stopTime</span> <span class="o">=</span> <span class="n">until</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">peek</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">stopTime</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+                <span class="k">except</span> <span class="n">NoEventsRemainingError</span><span class="p">:</span>
+                    <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+                <span class="k">except</span> <span class="n">NoEventsRemainingError</span><span class="p">:</span>
+                    <span class="k">break</span>
+        
+        <span class="c"># Record stop time and write output files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_stop_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">write_files</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_folder</span><span class="p">)</span>
+            
+    <span class="k">def</span> <span class="nf">get_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">elapsed_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_stop_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_start_time</span>
+        
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[(</span><span class="n">Datatype</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s">&quot;Simulation: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                  <span class="p">(</span><span class="n">Datatype</span><span class="o">.</span><span class="n">paragraph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">),</span>
+                  <span class="p">(</span><span class="n">Datatype</span><span class="o">.</span><span class="n">param_list</span><span class="p">,</span>
+                    <span class="p">[(</span><span class="s">&#39;Output Folder&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_folder</span><span class="p">),</span>
+                     <span class="p">(</span><span class="s">&#39;Seed&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">),</span>
+                     <span class="p">(</span><span class="s">&#39;Start Time&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_start_time</span><span class="p">),</span>
+                     <span class="p">(</span><span class="s">&#39;Stop Time&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_stop_time</span><span class="p">),</span>
+                     <span class="p">(</span><span class="s">&#39;Elapsed Time&#39;</span><span class="p">,</span> <span class="n">elapsed_time</span><span class="p">)])</span>
+                  <span class="p">]</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_time</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset the simulation time to zero so the simulation can be</span>
+<span class="sd">        rerun.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_now</span> <span class="o">=</span> <span class="n">initial_time</span> <span class="o">*</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_start_time</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_stop_time</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c">#  Each event gets a unique integer ID, starting with 0 for the first</span>
+        <span class="c"># event.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_counter</span> <span class="o">=</span> <span class="n">count</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="c">#self.out = Output(self) #Removed because created problems with trace</span>
+        <span class="c"># start and stop times following a simulation reset. Not quite sure</span>
+        <span class="c"># why it was here in first place.</span>
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">:</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">initial_events_scheduled</span> <span class="o">=</span> <span class="bp">False</span>
+</div>
+<span class="k">class</span> <span class="nc">NoEventsRemainingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Stacy Irwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

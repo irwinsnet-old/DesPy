@@ -3,7 +3,7 @@
 from collections import namedtuple
 import types
 from despy.core.component import Component
-from despy.base.named_object import PRIORITY_STANDARD
+from despy.core.simulation import FelItem as fi
 from despy.core.event import Event
 
 #TODO : Refactor processTuple. Make attribute names consistent with
@@ -42,7 +42,8 @@ class Process(Component):
             raise TypeError(\
                     "generator_method must be a function or class method")
         
-    def schedule_timeout(self, name, delay = 0, priority = PRIORITY_STANDARD,
+    def schedule_timeout(self, name, delay = 0,
+                         priority = fi.PRIORITY_STANDARD,
                          trace_fields = None):
         event = ProcessTimeOutEvent(self, name, trace_fields)
         return self.processTuple(event_ = event,
@@ -59,7 +60,7 @@ class Process(Component):
     def reset_process(self):
         self.generator = self._generator()
         
-    def start(self, delay = 0, priority = PRIORITY_STANDARD):
+    def start(self, delay = 0, priority = fi.PRIORITY_STANDARD):
         self.model.schedule(ProcessTimeOutEvent(self, "Start " + self.name),
                             delay, priority)
         self.awake = True
@@ -68,7 +69,7 @@ class Process(Component):
         self.awake = False
         return None
     
-    def wake(self, delay = 0, priority = PRIORITY_STANDARD):
+    def wake(self, delay = 0, priority = fi.PRIORITY_STANDARD):
         if not self.awake:
             self.start(delay, priority)
         

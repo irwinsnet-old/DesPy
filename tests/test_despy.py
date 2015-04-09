@@ -76,7 +76,7 @@ class testDespyb(unittest.TestCase):
         
         model.schedule(dp.Event(model, "Event #1"),
                        20,
-                       dp.PRIORITY_EARLY)
+                       dp.fi.PRIORITY_EARLY)
         self.assertEqual(model.sim.peek(), 20)
         
         model.schedule(dp.Event(model, "Event #2"), 5)
@@ -90,9 +90,9 @@ class testDespyb(unittest.TestCase):
         ev_late = dp.Event(model, "Late Event")
         
         #Schedule Events
-        model.schedule(ev_late, 5, dp.PRIORITY_LATE)
-        model.schedule(ev_early, 5, dp.PRIORITY_EARLY)
-        model.schedule(ev_standard, 5, dp.PRIORITY_STANDARD)
+        model.schedule(ev_late, 5, dp.fi.PRIORITY_LATE)
+        model.schedule(ev_early, 5, dp.fi.PRIORITY_EARLY)
+        model.schedule(ev_standard, 5, dp.fi.PRIORITY_STANDARD)
         
         #Verify events run in correct order.
         print()

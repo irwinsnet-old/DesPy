@@ -12,7 +12,7 @@
 from itertools import count
 
 from despy.base.named_object import NamedObject
-from despy.base.types import is_model
+from despy.base.named_object_types import is_model
 
 class Component(NamedObject):
     """A base class that provides object counters and other attributes.
@@ -28,6 +28,7 @@ class Component(NamedObject):
     method in the subclass :meth:`__init__` method.
     
     **Attributes**
+
       * :attr:`.model`: The :class:`despy.core.model.Model` object that
         the component belongs to.
       * :attr:`.sim`: The :class:`despy.core.simulation.Simulation` 

@@ -57,7 +57,7 @@ class testResource(unittest.TestCase):
                 super().__init__(model, "Customer")
              
         def initialize(self):
-            self.customer_process.start(0, dp.PRIORITY_EARLY)
+            self.customer_process.start(0, dp.fi.PRIORITY_EARLY)
             super().initialize()
              
         class CustServiceResource(dp.Resource):

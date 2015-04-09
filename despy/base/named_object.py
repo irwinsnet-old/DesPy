@@ -13,34 +13,9 @@ subclasses.
     Inherited directly or indirectly by all Despy classes.
     :class:`.NamedObject` provides a name attribute, a description
     attribute, and other helper methods.
-   
-**Priority Constants**
-    The despy.base package includes three constants that are used to
-    prioritize events that are scheduled to occur a the same time.
-    Events assigned a higher priority will occur before events that are
-    assigned lower priorities.
-    
-    *PRIORITY_STANDARD*
-        Despy uses PRIORITY_STANDARD as the default priority when no
-        other priority is specified.
-        
-    *PRIORITY_EARLY*
-        Events assigned PRIORITY_EARLY will be executed before
-        PRIORITY_STANDARD and PRIORITY_LATE events.
-        
-    *PRIORITY_LATE*
-        Events assigned PRIORITY_LATE will be executed after
-        PRIORITY_EARLY and PRIORITY_STANDARD events.
-        
-    Events scheduled to occur at the same time with the same priority
-    may be executed in any order.
 """
 
 import re
-
-PRIORITY_EARLY = -1
-PRIORITY_STANDARD = 0
-PRIORITY_LATE = 1
 
 class NamedObject(object):
     """A base class that provides name and description fields.
