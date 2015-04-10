@@ -1,7 +1,7 @@
 #   Despy: A discrete event simulation framework for Python
 #   Version 0.1
 #   Released under the MIT License (MIT)
-#   Copyright (c) 2014, Stacy Irwin
+#   Copyright (c) 2015, Stacy Irwin
 
 """
 ..  module:: despy.core.__init__.py

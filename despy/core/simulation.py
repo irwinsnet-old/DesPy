@@ -1,7 +1,7 @@
 #   Despy: A discrete event simulation framework for Python
 #   Version 0.1
 #   Released under the MIT License (MIT)
-#   Copyright (c) 2014, Stacy Irwin
+#   Copyright (c) 2015, Stacy Irwin
 """
 ..  module:: despy.core.simulation
 
@@ -180,21 +180,61 @@ class Simulation(NamedObject):
     
     @property
     def seed(self):
+        """ The np.random.seed method will be seeded with
+        this integer prior to running the simulation.
+        
+        Set seed to an integer, an array of integers of any length or to
+        None (default).
+        
+        By default (i.e., when seed is set to None), Despy will use a
+        different seed, and hence a different random number sequence for
+        each run of the simulation. For troubleshooting or testing
+        purposes, it's often useful to repeatedly run the simulation
+        with the same sequence of random numbers. This can be
+        accomplished by setting the seed variable.
+        
+        Despy uses the random generator in the SciPy Numpy package to
+        generate random numbers. Numpy uses a Mersenne twister 
+        algorithm to generate the random numbers.
+        
+        """
         return self._seed
     
     @seed.setter
     def seed(self, seed):
+        """ Set seed to an integer, an array of integers of any length
+        or to None (default).
+        """
         self._seed = seed
         np.random.seed(seed)
 
     @property
     def now(self):
-        """The current time of the simulation. The time is a unit-less
-        integer."""
+        """The current time of the simulation. The time is an integer.
+        
+        By default, a simulation starts at time zero and continues
+        until three are no events remaining on the FEL or until the
+        simulation detects a stop condition. The unit of time
+        represented by the integer value stored in the `now` property
+        is defined by the simulation.
+        
+        Internally, Despy multiplies the time by a factor of ten and
+        each step in the simulation is a multiple of ten. This allows
+        assignment of priorities to each event. For example,
+        PRIORITY_EARLY events would be scheduled to run at time 39,
+        PRIORITY_DEFAULT events at time 40, and PRIORITY_LATE events at
+        time 41. Despy would indicate that all of these events occurred
+        at time = 4 in standard reports and output. This practice
+        simplifies the routines that run the events because events are
+        placed on the FEL in the order that they will actually be run,
+        taking assigned priorities into account.
+        """
         return int(self._now / 10)
     
     @now.setter
     def now(self, time):
+        """ An integer.
+        """
         self._now = time * 10
 
     @property

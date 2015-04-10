@@ -52,7 +52,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Despy'
-copyright = '2014, Stacy Irwin'
+copyright = '2015, Stacy Irwin'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -101,12 +101,21 @@ pygments_style = 'sphinx'
 # If true, keep warnings as "system message" paragraphs in the built documents.
 #keep_warnings = False
 
+# def skip(app, what, name, obj, skip, options):
+#     if name == "__init__":
+#        return False
+#     return skip
+#     
+# def setup(app):
+#     app.connect("autodoc-skip-member", skip)
+
 
 # -- Options for HTML output ----------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+# Possible choices: alabaster, classic, bizstyle
+html_theme = 'bizstyle'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

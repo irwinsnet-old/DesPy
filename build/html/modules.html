@@ -1,5 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<!doctype html>
 
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -8,7 +9,7 @@
     
     <title>Despy Modules &mdash; Despy 1 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -23,12 +24,17 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="top" title="Despy 1 documentation" href="index.html" />
     <link rel="next" title="Despy Classes" href="classes.html" />
-    <link rel="prev" title="Despy" href="index.html" /> 
+    <link rel="prev" title="Despy Packages" href="packages.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -41,16 +47,56 @@
           <a href="classes.html" title="Despy Classes"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Despy"
+          <a href="packages.html" title="Despy Packages"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Despy 1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Despy Modules</a><ul>
+<li><a class="reference internal" href="#module-despy.base.named_object">named_object</a></li>
+<li><a class="reference internal" href="#module-despy.core.simulation">simulation</a></li>
+<li><a class="reference internal" href="#module-despy.core.component">component</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="packages.html"
+                        title="previous chapter">Despy Packages</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="classes.html"
+                        title="next chapter">Despy Classes</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/modules.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="despy-modules">
 <h1>Despy Modules<a class="headerlink" href="#despy-modules" title="Permalink to this headline">¶</a></h1>
@@ -61,7 +107,7 @@ subclasses.</p>
 <dl class="docutils">
 <dt><strong>NamedObject</strong></dt>
 <dd>Inherited directly or indirectly by all Despy classes.
-<tt class="xref py py-class docutils literal"><span class="pre">NamedObject</span></tt> provides a name attribute, a description
+<code class="xref py py-class docutils literal"><span class="pre">NamedObject</span></code> provides a name attribute, a description
 attribute, and other helper methods.</dd>
 </dl>
 </div>
@@ -93,47 +139,9 @@ system that is being simulated.</dd>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Despy Modules</a><ul>
-<li><a class="reference internal" href="#module-despy.base.named_object">named_object</a></li>
-<li><a class="reference internal" href="#module-despy.core.simulation">simulation</a></li>
-<li><a class="reference internal" href="#module-despy.core.component">component</a></li>
-</ul>
-</li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Despy</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="classes.html"
-                        title="next chapter">Despy Classes</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/modules.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -146,14 +154,14 @@ system that is being simulated.</dd>
           <a href="classes.html" title="Despy Classes"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Despy"
+          <a href="packages.html" title="Despy Packages"
              >previous</a> |</li>
-        <li><a href="index.html">Despy 1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2014, Stacy Irwin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Stacy Irwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

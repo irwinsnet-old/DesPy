@@ -37,7 +37,7 @@ My goals for despy are to:
 Despy is released under the
 `MIT License <http://opensource.org/licenses/MIT>`_.
 
-Copyright (c) 2014 Stacy Irwin
+Copyright (c) 2015 Stacy Irwin
 
 
 Contents:
@@ -45,6 +45,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
    
+   packages
    modules
    classes
 
