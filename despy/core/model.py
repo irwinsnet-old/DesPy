@@ -45,8 +45,8 @@ class Model(NamedObject):
         self._initialize = None
         
         # Convenience Attributes
-        self.out = self.sim.out
-        self.trace = self.sim.out.trace
+        self.gen = self.sim.gen
+        self.trace = self.sim.gen.trace
         
     def __getitem__(self, key):
         return self.components[key]

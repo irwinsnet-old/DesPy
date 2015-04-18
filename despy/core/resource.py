@@ -80,7 +80,7 @@ class Resource(Component):
         fields['Server'] = self[index]
         fields['Customer'] = self[index].user
         message = "Starting Activity"
-        self.sim.out.trace.add_message(message, fields)
+        self.sim.gen.trace.add_message(message, fields)
         
         service_time = self.get_activity_time()
 

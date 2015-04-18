@@ -119,8 +119,8 @@ class testDespyb(unittest.TestCase):
         model.delete_component(component_keys[1])
         self.assertEqual(len(model.components), 1)
         
-        self.assertEqual(model.sim.out.trace.length(), 3)
-        evtTrace = model.sim.out.trace
+        self.assertEqual(model.sim.gen.trace.length(), 3)
+        evtTrace = model.sim.gen.trace
         self.assertEqual(evtTrace[0]['name'], "First Event")
         self.assertEqual(evtTrace[1]['name'], "Second Event")
         self.assertEqual(evtTrace[1]['time'], 4)
@@ -144,7 +144,7 @@ class testDespyb(unittest.TestCase):
         model.sim.output_folder = "C:/Projects/despy_output/append_callback1"
         model.sim.run()
         
-        evtTrace = model.sim.out.trace
+        evtTrace = model.sim.gen.trace
         self.assertEqual(evtTrace.length(), 2)
         self.assertEqual(evtTrace[0]['name'], "First Event")
         self.assertEqual(evtTrace[0]['time'], 5)
@@ -155,7 +155,7 @@ class testDespyb(unittest.TestCase):
         model.sim.reset()
         model.sim.output_folder = "C:/Projects/despy_output/append_callback2"
         model.sim.run(10)
-        evtTrace = model.sim.out.trace
+        evtTrace = model.sim.gen.trace
         self.assertEqual(evtTrace.length(), 1)
         
         #Verify that simulation can be restarted from current point.
@@ -184,7 +184,7 @@ class testDespyb(unittest.TestCase):
         model.schedule(dp.Event(model, "Event #2"), 3)
         self.assertEqual(len(model.components), 2)
         model.sim.run()
-        self.assertEqual(model.sim.out.trace.length(), 2)
+        self.assertEqual(model.sim.gen.trace.length(), 2)
         
         #Test simultaneous, identical events.
         model2 = dp.Model("Simultaneous Identical Events Model")
@@ -192,7 +192,7 @@ class testDespyb(unittest.TestCase):
         model2.schedule(event, 1)
         model2.schedule(event, 1)
         model2.sim.run()
-        self.assertEqual(model2.sim.out.trace.length(), 2)
+        self.assertEqual(model2.sim.gen.trace.length(), 2)
         
     def test_trace_control(self):
         model = dp.Model("Trace Control")

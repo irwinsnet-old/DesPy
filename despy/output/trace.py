@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from collections import OrderedDict
 import csv
-from despy.output.report import Datatype
+from despy.output.datatype import Datatype
         
 class TraceRecord():
     def __init__(self, number, time, priority, record_type, name):
@@ -34,8 +34,8 @@ class TraceRecord():
 class Trace(object):
     
     def __init__(self, output):
-        self.out = output
-        self.sim = self.out.sim
+        self.gen = output
+        self.sim = self.gen.sim
         self._list = []
         self.number = 0
         self.start = 0
@@ -93,10 +93,10 @@ class Trace(object):
                                    message)
         if fields is not None:
             trace_record.add_fields(fields)
-        if self.out.sim.evt is None:
+        if self.gen.sim.evt is None:
             self.add(trace_record)
         else:
-            self.out.sim.evt.trace_records.append(trace_record)
+            self.gen.sim.evt.trace_records.append(trace_record)
     
     def add_event(self, time, priority, event):
         if self.active():
@@ -134,7 +134,7 @@ class Trace(object):
             trace_writer = csv.writer(file)
             
             # Write header rows
-            self.render_output(self.sim.get_output(), trace_writer)
+            self.render_output(self.sim.get_data(), trace_writer)
             
             # Write trace table
             trace_writer.writerow(['Record #', 'Time', 'Priority',

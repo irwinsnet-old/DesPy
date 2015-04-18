@@ -45,7 +45,7 @@ class Component(NamedObject):
         initialize the component prior to running the simulation.
       * :meth:`.finalize`: Subclasses should override this method to
         delete unneeded objects or execute other post-simulation code.
-      * :meth:`.get_output`: Subclasses should override this method to
+      * :meth:`.get_data`: Subclasses should override this method to
         provide output data to the simulation report.
       * :meth:`__str__`: Returns a string that uniquely identifies the
         component.
@@ -207,7 +207,7 @@ class Component(NamedObject):
         """
         pass
     
-    def get_output(self, folder):
+    def get_data(self, folder):
         """Subclasses should override this method to provide simulation
         output that will be included in the output report.
         

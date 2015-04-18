@@ -117,7 +117,7 @@
 <span class="sd">        initialize the component prior to running the simulation.</span>
 <span class="sd">      * :meth:`.finalize`: Subclasses should override this method to</span>
 <span class="sd">        delete unneeded objects or execute other post-simulation code.</span>
-<span class="sd">      * :meth:`.get_output`: Subclasses should override this method to</span>
+<span class="sd">      * :meth:`.get_data`: Subclasses should override this method to</span>
 <span class="sd">        provide output data to the simulation report.</span>
 <span class="sd">      * :meth:`__str__`: Returns a string that uniquely identifies the</span>
 <span class="sd">        component.</span>
@@ -279,7 +279,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
     </div>
-<div class="viewcode-block" id="Component.get_output"><a class="viewcode-back" href="../../../component.html#despy.core.component.Component.get_output">[docs]</a>    <span class="k">def</span> <span class="nf">get_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Subclasses should override this method to provide simulation</span>
 <span class="sd">        output that will be included in the output report.</span>
 <span class="sd">        </span>
@@ -323,7 +323,7 @@
 <span class="sd">                         (&#39;Mean Time in Queue&#39;, np.mean(qtimes))]),</span>
 <span class="sd">                     (Datatype.image, qtime_filename)]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">None</span></div></div>
+        <span class="k">return</span> <span class="bp">None</span></div>
 </pre></div>
 
           </div>

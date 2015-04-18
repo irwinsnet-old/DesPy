@@ -21,8 +21,8 @@ from itertools import count
 from collections import namedtuple
 import datetime
 import numpy as np
-from despy.output.results import Output
-from despy.output.report import Datatype
+from despy.output.generator import Generator
+from despy.output.datatype import Datatype
 from despy.base.named_object import NamedObject
 
 class FelItem(namedtuple('FelItemTuple',
@@ -36,7 +36,7 @@ class FelItem(namedtuple('FelItemTuple',
       * :attr:`event_fld`: An instance of
         :class:`despy.core.event.Event`.
       * :attr:`priority_fld`: A priority constant from the 
-        :module:`despy.base.named_object` module, or an integer between
+        :mod:`despy.base.named_object` module, or an integer between
         -4 and +4, inclusive.
         
     **Priority Constants**
@@ -76,25 +76,25 @@ class FelItem(namedtuple('FelItemTuple',
     PRIORITY_LATE = 1
 
 class Simulation(NamedObject):
-    """ Schedules events and manages the future event list (FEL).
+    """ Schedule events and manage the future event list (FEL).
     
-    Every model is assigned to one (and only one) Simulation object.
-    A Simulation object may contain one or more models.
+    Every model is assigned to one (and only one) `Simulation` object.
+    A `Simulation` object may contain one or more models.
     
     **Attributes**
 
-      * :attr:`name`: Simulation object's name. Inherited from
-        :class:`despy.base.named_object.NamedObject`. Type: string.
+      * :attr:`.name`: Simulation object's name. Inherited from
+        :class:`despy.base.named_object.NamedObject`. Type: `string`.
       * :attr:`.description`: One or more paragraphs that describes the
         simulation. Inherited from
-        :class:`despy.base.named_object.NamedObject` Type: string.
+        :class:`despy.base.named_object.NamedObject` Type: `string`.
       * :attr:`.models`: A list of all :class:`.Model` objects that
         have been assigned to the simulation.
       * :attr:`.seed`: The np.random.seed method will be seeded with
         this integer prior to running the simulation.
       * :attr:`.now`: An integer representing the current simulation
-        time. Type: integer (non-negative).
-      * :attr:`evt`: Returns the :class:`despy.core.event.Event` object
+        time. Type: `integer` (non-negative).
+      * :attr:`.evt`: Returns the :class:`despy.core.event.Event` object
         that is currently being executed. If no event is being executed,
         returns `None`. Read-only.
       * :attr:`.run_start_time`: The real-world start time for the
@@ -103,12 +103,12 @@ class Simulation(NamedObject):
       * :attr:`run_stop_time`: The real-world stop time for the
         simulation. Type: datetime.datetime, or `None` if the simulation
         has not yet been run. Read-only.
-      * :attr:`.console_output`: If True, the trace record for each
+      * :attr:`.console_output`: If `True`, the trace record for each
         event will be sent to the standard output. The default value
         is True. Type: Boolean.
-      * :attr:`.output_folder`: If NONE (the default value), the
+      * :attr:`.output_folder`: If `None` (the default value), the
         simulation will not generate any output or trace files.
-      * :attr:`out`: A :class:`despy.output.results` object that will
+      * :attr:`.gen`: A :class:`despy.output.generator` object that will
         generate all output files.
 
 
@@ -124,7 +124,7 @@ class Simulation(NamedObject):
       * :meth:`.run`: Executes the remaining events on the FEL in order,
         until no events remain, or until the time specified in the
         until parameter is reached.
-      * :meth:`.get_output`: Gets a Python list that contains 
+      * :meth:`.get_data`: Gets a Python list that contains 
         simulation parameters, such as name, run time, etc.
       * :meth:`.reset`: Resets the simulation time to the beginning of
         the simulation and resets the model and its components to their
@@ -166,7 +166,7 @@ class Simulation(NamedObject):
         self._run_stop_time = None
         self.console_output = True
         self._output_folder = None
-        self._out = Output(self)
+        self._gen = Generator(self)
         
         self.reset(initial_time)
 
@@ -184,7 +184,7 @@ class Simulation(NamedObject):
         this integer prior to running the simulation.
         
         Set seed to an integer, an array of integers of any length or to
-        None (default).
+        `None` (default).
         
         By default (i.e., when seed is set to None), Despy will use a
         different seed, and hence a different random number sequence for
@@ -202,15 +202,14 @@ class Simulation(NamedObject):
     
     @seed.setter
     def seed(self, seed):
-        """ Set seed to an integer, an array of integers of any length
-        or to None (default).
-        """
         self._seed = seed
         np.random.seed(seed)
 
     @property
     def now(self):
         """The current time of the simulation. The time is an integer.
+        
+        *Returns:* Integer
         
         By default, a simulation starts at time zero and continues
         until three are no events remaining on the FEL or until the
@@ -221,36 +220,63 @@ class Simulation(NamedObject):
         Internally, Despy multiplies the time by a factor of ten and
         each step in the simulation is a multiple of ten. This allows
         assignment of priorities to each event. For example,
-        PRIORITY_EARLY events would be scheduled to run at time 39,
-        PRIORITY_DEFAULT events at time 40, and PRIORITY_LATE events at
-        time 41. Despy would indicate that all of these events occurred
-        at time = 4 in standard reports and output. This practice
-        simplifies the routines that run the events because events are
-        placed on the FEL in the order that they will actually be run,
-        taking assigned priorities into account.
+        `PRIORITY_EARLY` events would be scheduled to run at time 39,
+        `RIORITY_DEFAULT` events at time 40, and `PRIORITY_LATE` events
+        at time 41. Despy would indicate that all of these events
+        occurred at time = 4 in standard reports and output. This
+        practice simplifies the routines that run the events because
+        events are placed on the FEL in the order that they will
+        actually be run, taking assigned priorities into account.
         """
         return int(self._now / 10)
     
     @now.setter
     def now(self, time):
-        """ An integer.
-        """
         self._now = time * 10
 
     @property
     def evt(self):
+        """The event that is currently being executed by the simulation
+        at time = ``self.now`` (read only).
+        
+        *Returns:* :class: 'despy.core.event.Event`
+        
+        """
         return self._evt
         
     @property
     def run_start_time(self):
+        """The real-world time (i.e., date, hours, minutes, etc.) at
+        which the simulation starts (read only).
+        
+        *Returns:* None or :class: `datetime.datetime`
+        
+        Despy uses the run_start_time attribute to calculate the
+        simulation's elapsed time. The attribute will return ``None``
+        if the simulation has not yet been completed.
+        """
         return self._run_start_time
     
     @property
     def run_stop_time(self):
+        """The real-world stop time (i.e., date, hours, minutes, etc.)
+        for the simulation (read only).
+        
+        *Returns:* `None` or :class: `datetime.datetime`
+        
+        Despy uses the `run_stop_time` attribute to calculate elapsed
+        simulation time and to assign unique names to output files. The
+        attribute will return `None` if the simulation has not yet been
+        run.
+        """
         return self._run_stop_time
 
     @property
     def console_output(self):
+        """ Send trace record to standard output if `True`.
+
+        The default value is True. Type: `Boolean`.
+        """
         return self._console_output
     
     @console_output.setter
@@ -259,6 +285,15 @@ class Simulation(NamedObject):
         
     @property
     def output_folder(self):
+        """ A string that identifies the folder where output reports and
+        graphs will be placed.
+        
+        If `None` (the default value), the simulation will not generate
+        any output or trace files. The value stored in `output_folder`
+        should be an absolute reference. For example::
+        
+            simulation.output_folder = "C:/Projects/despy_output/resource_sim"
+        """
         return self._output_folder
     
     @output_folder.setter
@@ -266,19 +301,24 @@ class Simulation(NamedObject):
         self._output_folder = folder
         
     @property
-    def out(self):
-        return self._out
+    def gen(self):
+        """ A :class:`despy.output.generator` object.
+        
+        A link to the generator object that contains the methods that
+        generate all output files.
+        """
+        return self._gen
     
-    @out.setter
-    def out(self, output):
-        self._out = output
+    @gen.setter
+    def gen(self, output):
+        self._gen = output
     
     def append_model(self, model):
         """ Append a model object to the simulation.
         
         *Arguments*
             model:
-                A despy.model.Model object.
+                A :class:`~despy.core.model.Model` object.
         """
         self._models.append(model)
 
@@ -286,12 +326,17 @@ class Simulation(NamedObject):
         """ Add an event to the FEL.
 
         *Arguments*
-            event (despy.Event):
-                An instance or subclass of the despy.Event class.
-            delay (integer):
-                A non-negative integer that defaults to zero, meaning
-                the event will be scheduled to occur mmediately.
-
+            event (:class:`despy.core.event.Event`):
+                An instance or subclass of the `Event` class.
+            delay (`integer`):
+                A non-negative integer that defaults to zero. If zero,
+                the event will be scheduled to occur immediately.
+            priority (`integer`)
+                An attribute of the
+                :class:`despy.core.simulation.FelItem` enumeration, or
+                an integer ranging from -5 to +5. The default is
+                `FelItem.PRIORITY_STANDARD`, which is equivalent to
+                zero.
         """
         # Ensures delay value is always an integer.
         delay = round(delay)
@@ -305,8 +350,20 @@ class Simulation(NamedObject):
                          priority_fld=priority))
 
     def peek(self, prioritized=True):
-        """Return the time of the next scheduled event, or infinity if there
-        is no remaining events.
+        """Return the time of the next scheduled event.
+        
+        *Arguments*
+            prioritized (`Boolean`):
+                If `True`, the time will reflect the event's priority.
+                For example, for a `PRIORITY_EARLY` event scheduled to
+                run at time = 25, `peek` will return 24.9 if the
+                `prioritized` attribute is set to `True`. If `False`,
+                then our example would return 25, the nominal scheduled
+                time. The default value is `True`.
+        
+        *Returns*
+            An integer or float value if the FEL contains events.
+            Infinity if there are no remaining events.
         """
         try:
             if prioritized:
@@ -318,18 +375,32 @@ class Simulation(NamedObject):
             return float('Infinity')
         
     def _initialize_models(self):
+        """Run the `initialize` method on every attached model.
+        
+        `_initialize_models` is called by the
+        :meth:`.run` method. (INTERNAL)
+        """
         for model in self._models:
             if not model.initial_events_scheduled:
                 model.initialize()
                 model.initial_events_scheduled = True
 
     def step(self):
-        """Advance simulation time to the next time on the FEL and
-        executes the next event.
+        """Advance simulation time and execute the next event.
+        
+        The `step` method will only execute one event. Users might
+        call the `step` method for troubleshooting purposes or other
+        special cases. Users will generally run their simulation by
+        calling the :meth:`.run` method, which repeatedly calls the
+        `step` method until reaching a stop condition or there are no
+        remaining events on the FEL.
 
         *Raises*
             NoEventsRemaining:
                 Occurs if no more events are scheduled on the FEL.
+                
+        *Returns*
+            :class:`despy.core.simulation.FelItem`
         """
 
         # Get next event from FEL and advance current simulation time.
@@ -347,7 +418,7 @@ class Simulation(NamedObject):
         self._evt = None
 
         # Record event in trace report        
-        self.out.trace.add_event(self.now, fel_item.priority_fld,
+        self.gen.trace.add_event(self.now, fel_item.priority_fld,
                                  fel_item.event_fld)
         
         # Reset the event in case it is called again.
@@ -356,23 +427,31 @@ class Simulation(NamedObject):
         return fel_item
 
     def run(self, until=None):
-        """ Continue to advance simulation time and execute events on the FEL
-        until there are no more events or until the time specified in the
-        "until" parameter is reached.
+        """ Execute events on the FEL until reaching a stop condition.
+        
+        The `run` method will advance simulation time and execute events
+        until the FEL is empty or until the time specified in the
+        `until` parameter is reached.
+        
+        Before executing any events, `run` will ensure models are
+        initialized by calling `_initialize_models`.
+        `_initialize_models` ensures models are only initialized one
+        time, so users can call `run` multiple times and Despy will only
+        initialize the models on the first call to `run` (unless
+        :meth:`.reset` is called, of course).
 
         *Arguments*
             until (integer):
                 A non-negative integer specifying the simulation time
                 at which the simulation will stop. Defaults to 'None',
-                meaining the simulation will run until there are no
+                meaning the simulation will run until there are no
                 remaining events on the FEL.  The events at the time
-                specified in 'until' will be executed. For example, if
+                specified in `until` will be executed. For example, if
                 until = 100 and there are events scheduled at time
                 100, those events will be executed, but events at time
                 101 or later will not.
                 
         """
-
         # Initialize models and components
         self._run_start_time = datetime.datetime.today()
         self._initialize_models()
@@ -395,15 +474,29 @@ class Simulation(NamedObject):
         # Record stop time and write output files
         self._run_stop_time = datetime.datetime.today()
         if self.output_folder is not None:
-            self.out.write_files(self.output_folder)
+            self.gen.write_files(self.output_folder)
             
-    def get_output(self):
+    def get_data(self):
+        """ Get a Python list with simulation parameters and results.
+        
+        The generator object calls the get_data method of the simulation
+        and model objects and places the data in the simulation report.
+        The generator object will also call the user-defined get_data
+        methods from all of the model components.
+        
+        *Returns*
+            A Python list of tuples. The first item of each tuple is
+            a member of the :class:`despy.output.datatype.Datatype`
+            enumeration, which describes the structure of the data
+            item (e.g., paragraph, list, etc.).
+            
+        """
         elapsed_time = self.run_stop_time - self.run_start_time
         
         output = [(Datatype.title, "Simulation: " + self.name),
                   (Datatype.paragraph, self.description),
                   (Datatype.param_list,
-                    [('Output Folder', self.output_folder),
+                    [('Generator Folder', self.output_folder),
                      ('Seed', self.seed),
                      ('Start Time', self.run_start_time),
                      ('Stop Time', self.run_stop_time),
@@ -422,8 +515,8 @@ class Simulation(NamedObject):
         #  Each event gets a unique integer ID, starting with 0 for the first
         # event.
         self._counter = count()
-        self.out.trace.clear()
-        #self.out = Output(self) #Removed because created problems with trace
+        self.gen.trace.clear()
+        #self.gen = Generator(self) #Removed because created problems with trace
         # start and stop times following a simulation reset. Not quite sure
         # why it was here in first place.
         for model in self.models:
@@ -432,5 +525,5 @@ class Simulation(NamedObject):
 class NoEventsRemainingError(Exception):
     pass
 
-
+# TODO: Reorder methods in documentation.
 

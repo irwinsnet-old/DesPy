@@ -1,13 +1,7 @@
 #!/usr/bin/env python3
 
 import xml.etree.ElementTree as ET
-from enum import Enum
-
-class Datatype(Enum):
-    title = 1
-    paragraph = 2
-    param_list = 3
-    image = 4
+from despy.output.datatype import Datatype
 
 class HtmlReport():
     
