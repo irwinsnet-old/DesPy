@@ -504,11 +504,20 @@ class Simulation(NamedObject):
                   ]
         return output
 
-    def reset(self, initial_time=0):
-        """Reset the simulation time to zero so the simulation can be
-        rerun.
+    def reset(self):
+        """Reset the time to zero, allowing the simulation to be rerun.
+        
+        Sets the simulation time to zero. Also sets the model's
+        initial_events_scheduled attribute to `False`, which will cause
+        the model's initialize methods to be executed the next time the
+        simulation is run. In addition:
+        
+            * Clears the FEL
+            * Erases the run_start_time and run_stop_time properties
+            * Clears the trace records
+            * Resets the main simulation counter
         """
-        self._now = initial_time * 10
+        self._now = 0
         self._futureEventList = []
         self._run_start_time = None
         self._run_stop_time = None
@@ -523,6 +532,8 @@ class Simulation(NamedObject):
             model.initial_events_scheduled = False
 
 class NoEventsRemainingError(Exception):
+    """ Raised by despy.core.simulation's step method when FEL is empty.
+    """
     pass
 
 # TODO: Reorder methods in documentation.

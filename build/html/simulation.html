@@ -469,9 +469,20 @@ item (e.g., paragraph, list, etc.).</dd>
 
 <dl class="method">
 <dt id="despy.core.simulation.Simulation.reset">
-<code class="descclassname">Simulation.</code><code class="descname">reset</code><span class="sig-paren">(</span><em>initial_time=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/simulation.html#Simulation.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reset the simulation time to zero so the simulation can be
-rerun.</p>
+<code class="descclassname">Simulation.</code><code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/simulation.html#Simulation.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the time to zero, allowing the simulation to be rerun.</p>
+<p>Sets the simulation time to zero. Also sets the model&#8217;s
+initial_events_scheduled attribute to <cite>False</cite>, which will cause
+the model&#8217;s initialize methods to be executed the next time the
+simulation is run. In addition:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Clears the FEL</li>
+<li>Erases the run_start_time and run_stop_time properties</li>
+<li>Clears the trace records</li>
+<li>Resets the main simulation counter</li>
+</ul>
+</div></blockquote>
 </dd></dl>
 
 </div>

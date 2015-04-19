@@ -576,11 +576,20 @@
                   <span class="p">]</span>
         <span class="k">return</span> <span class="n">output</span>
 </div>
-<div class="viewcode-block" id="Simulation.reset"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_time</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Reset the simulation time to zero so the simulation can be</span>
-<span class="sd">        rerun.</span>
+<div class="viewcode-block" id="Simulation.reset"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset the time to zero, allowing the simulation to be rerun.</span>
+<span class="sd">        </span>
+<span class="sd">        Sets the simulation time to zero. Also sets the model&#39;s</span>
+<span class="sd">        initial_events_scheduled attribute to `False`, which will cause</span>
+<span class="sd">        the model&#39;s initialize methods to be executed the next time the</span>
+<span class="sd">        simulation is run. In addition:</span>
+<span class="sd">        </span>
+<span class="sd">            * Clears the FEL</span>
+<span class="sd">            * Erases the run_start_time and run_stop_time properties</span>
+<span class="sd">            * Clears the trace records</span>
+<span class="sd">            * Resets the main simulation counter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_now</span> <span class="o">=</span> <span class="n">initial_time</span> <span class="o">*</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_now</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_run_start_time</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_run_stop_time</span> <span class="o">=</span> <span class="bp">None</span>
@@ -594,11 +603,13 @@
         <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">:</span>
             <span class="n">model</span><span class="o">.</span><span class="n">initial_events_scheduled</span> <span class="o">=</span> <span class="bp">False</span>
 </div></div>
-<span class="k">class</span> <span class="nc">NoEventsRemainingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="NoEventsRemainingError"><a class="viewcode-back" href="../../../NoEventsRemaining.html#despy.core.simulation.NoEventsRemainingError">[docs]</a><span class="k">class</span> <span class="nc">NoEventsRemainingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Raised by despy.core.simulation&#39;s step method when FEL is empty.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span>
 
 <span class="c"># TODO: Reorder methods in documentation.</span>
-</pre></div>
+</pre></div></div>
 
           </div>
         </div>

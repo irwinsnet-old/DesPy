@@ -100,15 +100,63 @@
 <h1>Despy Packages<a class="headerlink" href="#despy-packages" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-despy.core.__init__.py">
 <span id="despy-core"></span><h2>despy.core<a class="headerlink" href="#module-despy.core.__init__.py" title="Permalink to this headline">¶</a></h2>
-<dl class="docutils">
-<dt><strong>despy.core</strong></dt>
-<dd><p class="first">The __init__.py module for the despy.core package imports typical
+<p><strong>despy.core</strong></p>
+<blockquote>
+<div><p>The <cite>despy.core</cite> package includes classes that are essential for any
+Despy simulation.</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code>: Every Despy
+simulation must have one instance of the <cite>simulation</cite> class.
+The <cite>simulation</cite> class initializes the top-level model and its
+components, manages the simulation clock and FEL, and executes
+events.</li>
+<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.FelItem</span></code>: Every item on the FEL
+must be an instance of FelItem. A FelItem consists of the
+event, the scheduled time, and priority.</li>
+<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.NoEventsRemainingError</span></code>: Raised by the
+<cite>Simulation.step</cite> method when no events remain on the FEL.</li>
+<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.event.Event</span></code>: Instances of the Event class
+are placed on the FEL and executed by the simulation. Users
+may define custom events by sub-classing the event class.</li>
+<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.Model.model</span></code>: The model represents the
+real- world system that is being simulated. The user will
+generally build their model by sub-classing the <cite>model</cite> class.</li>
+<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code>: Models consist of
+several components, such as queues, processes, and entities.
+The <cite>Component</cite> class is the base class for the model&#8217;s
+components. It maintains a counter, which uniquely identifies
+components, and has attributes for access the model and
+simulation objects.</li>
+<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.entity.Entity</span></code>: An entity is a component
+that represents something in the real world that moves through
+the system.</li>
+<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.resource.Resource</span></code>: A resource is a
+component that represents a real-world resource &#8211; generally
+an object or entity with limited availability that provides
+some kind of service.</li>
+<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.resource.ResourceFinishActivityEvent</span></code>:
+Occurs when a resource completes an activity and becomes
+available.</li>
+<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.process.Process</span></code>: The Process class
+supports process style simulations. It allows the user to
+implement a generator function that adds events to the FEL
+that represent a related sequence of real-world activities.</li>
+<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.process.ProcessTimeOutEvent</span></code>: A subclass
+of Event that is scheduled by a process.</li>
+<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.queue.Queue</span></code>: A component that represents
+a real world queue, such as a line of customers waiting for a
+a server, or a group of products waiting for a machine.</li>
+</ul>
+</div></blockquote>
+<p>The __init__.py module for the despy.core package imports all
 core modules, so the user does not have to import each module
 individually. For example, the following statement imports all
-core modules under the <code class="docutils literal"><span class="pre">dp</span></code> namespace.:</p>
-<p class="last">import despy.core as dp</p>
-</dd>
-</dl>
+core modules under the <cite>dp</cite> namespace.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">despy.core</span> <span class="kn">as</span> <span class="nn">dp</span>
+</pre></div>
+</div>
+</div></blockquote>
 </div>
 </div>
 
