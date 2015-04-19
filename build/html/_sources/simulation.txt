@@ -15,7 +15,9 @@ Class Description
 Class Attributes
 ****************
 ..  autoattribute:: despy.base.named_object.NamedObject.name
+    :noindex:
 ..  autoattribute:: despy.base.named_object.NamedObject.description
+    :noindex:
 
 ..  autoattribute:: Simulation.models
 ..  autoattribute:: Simulation.seed
@@ -23,8 +25,6 @@ Class Attributes
 ..  autoattribute:: Simulation.evt
 ..  autoattribute:: Simulation.run_start_time
 ..  autoattribute:: Simulation.run_stop_time
-..  autoattribute:: Simulation.console_output
-..  autoattribute:: Simulation.output_folder
 ..  autoattribute:: Simulation.gen
 
 *************

@@ -1,0 +1,277 @@
+
+
+<!doctype html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>despy.core.model &mdash; Despy 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/bizstyle.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for despy.core.model</h1><div class="highlight"><pre>
+<span class="c">#   Despy: A discrete event simulation framework for Python</span>
+<span class="c">#   Version 0.1</span>
+<span class="c">#   Released under the MIT License (MIT)</span>
+<span class="c">#   Copyright (c) 2015, Stacy Irwin</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">..  module:: despy.core.model</span>
+
+<span class="sd">**Model**</span>
+<span class="sd">    * :class:`despy.core.Model.model`: The model represents the </span>
+<span class="sd">      real-world system that is being simulated. The user will generally</span>
+<span class="sd">      build their model by sub-classing the `model` class.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">despy.core.simulation</span> <span class="kn">import</span> <span class="n">Simulation</span><span class="p">,</span> <span class="n">FelItem</span> <span class="k">as</span> <span class="n">fi</span>
+<span class="kn">from</span> <span class="nn">despy.base.named_object</span> <span class="kn">import</span> <span class="n">NamedObject</span>
+
+<div class="viewcode-block" id="Model"><a class="viewcode-back" href="../../../model.html#despy.core.model.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents the logical elements of the real-world system.</span>
+<span class="sd">    </span>
+<span class="sd">    Contains the simulation elements that represent the logical</span>
+<span class="sd">    elements of the real-world system, such as servers, entities,</span>
+<span class="sd">    processes, and queues.</span>
+<span class="sd">    </span>
+<span class="sd">    For simple simulations, users can add components to the model</span>
+<span class="sd">    using dictionary notation and rely on the model&#39;s default behavior.</span>
+<span class="sd">    For more complex simulations, users will most likely create their</span>
+<span class="sd">    own model class by sub-classing this class.</span>
+
+<span class="sd">    **Attributes**</span>
+<span class="sd">      * :attr:`.name`: Model object&#39;s name. Inherited from</span>
+<span class="sd">        :class:`despy.base.named_object.NamedObject`. Type: `string`.</span>
+<span class="sd">      * :attr:`.description`: One or more paragraphs that describes the</span>
+<span class="sd">        Model. Inherited from</span>
+<span class="sd">        :class:`despy.base.named_object.NamedObject` Type: `string`.</span>
+<span class="sd">      * :attr:`.initial_events_scheduled`: Returns `False` if the model</span>
+<span class="sd">        and it&#39;s components have not yet been initialized. Otherwise</span>
+<span class="sd">        returns true.</span>
+<span class="sd">      * :attr:`.sim`: The corresponding instance of the</span>
+<span class="sd">        :class:`despy.core.simulation.Simulation` class.</span>
+<span class="sd">        </span>
+<span class="sd">    **Methods**</span>
+<span class="sd">      * :meth:`.__set_item__`: This Python magic method allows users to</span>
+<span class="sd">        add components to the model using dictionary (i.e., &#39;[]&#39;)</span>
+<span class="sd">        notation.</span>
+<span class="sd">      * :meth:`.__get_item__`: This Python magic method allows users to</span>
+<span class="sd">        access model components using dictionary notation.</span>
+<span class="sd">      * :meth:`.delete_component`: Remove a component from the model.</span>
+<span class="sd">      * :meth:`.set_initialize_method` Set the model&#39;s initialize</span>
+<span class="sd">        method to a function provided as a method argument.</span>
+<span class="sd">        Not used if user includes a custom initialize method in a model</span>
+<span class="sd">        subclass.</span>
+<span class="sd">      * :meth:`.initialize`: The default initialize method. Calls the</span>
+<span class="sd">        initialize method on all model components.</span>
+<span class="sd">      * :meth:`.schedule`: A convenience method. Calls the</span>
+<span class="sd">        :class:`despy.core.simulation.Simulation` class&#39;s `schedule`</span>
+<span class="sd">        method.</span>
+<span class="sd">        </span>
+<span class="sd">    **Inherits**</span>
+<span class="sd">      * :class:`despy.core.base.NamedObject`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sim</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">description</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a model object.</span>
+<span class="sd">        </span>
+<span class="sd">        *Constructor Arguments*</span>
+<span class="sd">            name (string):</span>
+<span class="sd">                A short string that will be displayed in trace reports</span>
+<span class="sd">                and other outputs.</span>
+<span class="sd">            name (string):</span>
+<span class="sd">                A short name for the model. The model name is displayed</span>
+<span class="sd">                in output reports.</span>
+<span class="sd">            simulation (despy.Simulation) (Optional):</span>
+<span class="sd">                The model object must be attached to an simulation</span>
+<span class="sd">                object, which will run the model&#39;s events on the FEL.</span>
+<span class="sd">                If the simulation argument is omitted, the constructor</span>
+<span class="sd">                will create and assign a default enviroment object to</span>
+<span class="sd">                the model. A different simulation can be assigned later</span>
+<span class="sd">                using the model object&#39;s simulation property.        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_events_scheduled</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">components</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c"># Create a default simulation if no simulation is provided</span>
+        <span class="c"># to the constructor.</span>
+        <span class="k">if</span> <span class="n">sim</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">simulation</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">()</span>
+            <span class="n">simulation</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;{0}:Default Simulation&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span> <span class="o">=</span> <span class="n">simulation</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span> <span class="o">=</span> <span class="n">sim</span>
+            
+        <span class="c">#Create link to model in simulation object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">append_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize</span> <span class="o">=</span> <span class="bp">None</span>
+        
+        <span class="c"># Convenience Attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">gen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">trace</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">initial_events_scheduled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return True of the model&#39;s initialize method has</span>
+<span class="sd">        been executed.</span>
+<span class="sd">        </span>
+<span class="sd">        *Returns:* (Boolean)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_events_scheduled</span>
+    
+    <span class="nd">@initial_events_scheduled.setter</span>
+    <span class="k">def</span> <span class="nf">initial_events_scheduled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scheduled</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set to True if the model&#39;s initialize method has been</span>
+<span class="sd">        run.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            schedule (Boolean):</span>
+<span class="sd">                Set to True if the model&#39;s initialize method has</span>
+<span class="sd">                been run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_events_scheduled</span> <span class="o">=</span> <span class="n">scheduled</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the simulation object.</span>
+<span class="sd">        </span>
+<span class="sd">        *Returns:* (despby.Simulation)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span>
+    
+    <span class="nd">@sim.setter</span>
+    <span class="k">def</span> <span class="nf">sim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Assigns the model to a new simulation.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            simulation (despy.Simulation):</span>
+<span class="sd">                An simulation object that will run the simulation</span>
+<span class="sd">                and execute the model&#39;s events.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span> <span class="o">=</span> <span class="n">sim</span>
+  
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        
+    <span class="k">def</span> <span class="nf">delete_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        
+    <span class="k">def</span> <span class="nf">set_initialize_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initialize_method</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize</span> <span class="o">=</span> <span class="n">initialize_method</span>
+
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">component</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span>
+
+    <span class="k">def</span> <span class="nf">schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                 <span class="n">priority</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">PRIORITY_STANDARD</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A convenience method that calls the Simulation object&#39;s</span>
+<span class="sd">        schedule() method to schedule an event on the FEL.</span>
+
+<span class="sd">        *Arguments*</span>
+<span class="sd">            event (despby.Event):</span>
+<span class="sd">                The event that will be scheduled.</span>
+<span class="sd">            delay (integer):</span>
+<span class="sd">                A non-negative integer that specifies how much time</span>
+<span class="sd">                will elapse before the event will be scheduled. The</span>
+<span class="sd">                delay plus the current time equals the absolute time</span>
+<span class="sd">                that the event will occur.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">priority</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Stacy Irwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

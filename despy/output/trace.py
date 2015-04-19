@@ -83,10 +83,10 @@ class Trace(object):
                 self.append(rec)
                 self.number = self.number + 1
                 
-                if self.sim.console_output:
-                    console_output = str(rec['time']).rjust(8) + \
+                if self.sim.gen.console_trace:
+                    console_trace = str(rec['time']).rjust(8) + \
                         ':   ' + rec['name']
-                    print(console_output)
+                    print(console_trace)
             
     def add_message(self, message, fields = None):
         trace_record = TraceRecord(self.number, self.sim.now, "N/A", "Msg",

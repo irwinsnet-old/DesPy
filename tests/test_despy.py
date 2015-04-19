@@ -15,13 +15,13 @@ class testDespyb(unittest.TestCase):
         # Verify that Simulation.now is set to 0 by default.
         exp1 = dp.Simulation()
         self.assertEqual(exp1.now, 0)
-        self.assertTrue(exp1.console_output)
+        self.assertTrue(exp1.gen.console_trace)
         
         # Test console_output property.
-        exp1.console_output = False
-        self.assertFalse(exp1.console_output)
-        exp1.console_output = True
-        self.assertTrue(exp1.console_output)
+        exp1.gen.console_trace = False
+        self.assertFalse(exp1.gen.console_trace)
+        exp1.gen.console_trace = True
+        self.assertTrue(exp1.gen.console_trace)
         
         # Verify that Simulation.now can be set by the class constructor.
         exp2 = dp.Simulation(42)
@@ -141,7 +141,7 @@ class testDespyb(unittest.TestCase):
             self.schedule(evt1, 5)
         
         model.set_initialize_method(initializeModel)
-        model.sim.output_folder = "C:/Projects/despy_output/append_callback1"
+        model.sim.gen.output_folder = "C:/Projects/despy_output/append_callback1"
         model.sim.run()
         
         evtTrace = model.sim.gen.trace
@@ -153,7 +153,7 @@ class testDespyb(unittest.TestCase):
         
         #Test reset method and until parameter
         model.sim.reset()
-        model.sim.output_folder = "C:/Projects/despy_output/append_callback2"
+        model.sim.gen.output_folder = "C:/Projects/despy_output/append_callback2"
         model.sim.run(10)
         evtTrace = model.sim.gen.trace
         self.assertEqual(evtTrace.length(), 1)

@@ -8,4 +8,5 @@ Despy Classes
    despy.core.simulation.FelItem <felitem>
    despy.core.simulation.Simulation <simulation>
    despy.core.simulation.NoEventsRemaining <NoEventsRemainingError>
+   despy.core.model.Model <model>
    despy.core.component.Component <component>

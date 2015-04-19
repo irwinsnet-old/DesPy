@@ -4,6 +4,47 @@ from despy.output.trace import Trace
 from despy.output.report import HtmlReport
     
 class Generator(object):
+    """ The Generator class generates the simulation's output.
+    
+    *Attributes*
+          * :attr:`.console_trace`: If `True`, the trace record for each
+            event will be sent to the standard output. The default value
+            is True. Type: Boolean.
+          * :attr:`.output_folder`: If `None` (the default value), the
+            simulation will not generate any output or trace files.
+    
+    """
+    
+    
+    @property
+    def console_trace(self):
+        """ Send trace record to standard output (console) if `True`.
+
+        The default value is True. Type: `Boolean`.
+        """
+        return self._console_output
+        
+    @property
+    def output_folder(self):
+        """ A string that identifies the folder where output reports and
+        graphs will be placed.
+        
+        If `None` (the default value), the simulation will not generate
+        any output or trace files. The value stored in `output_folder`
+        should be an absolute reference. For example::
+        
+            simulation.output_folder = "C:/Projects/despy_output/resource_sim"
+        """
+        return self._output_folder
+    
+    @output_folder.setter
+    def output_folder(self, folder):
+        self._output_folder = folder
+    
+    @console_trace.setter
+    def console_trace(self, output):
+        self._console_output = output
+            
     def __init__(self, simulation):
         self.sim = simulation
         self.trace = Trace(self)

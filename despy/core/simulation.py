@@ -103,11 +103,6 @@ class Simulation(NamedObject):
       * :attr:`run_stop_time`: The real-world stop time for the
         simulation. Type: datetime.datetime, or `None` if the simulation
         has not yet been run. Read-only.
-      * :attr:`.console_output`: If `True`, the trace record for each
-        event will be sent to the standard output. The default value
-        is True. Type: Boolean.
-      * :attr:`.output_folder`: If `None` (the default value), the
-        simulation will not generate any output or trace files.
       * :attr:`.gen`: A :class:`despy.output.generator` object that will
         generate all output files.
 
@@ -164,9 +159,9 @@ class Simulation(NamedObject):
         self._evt = None
         self._run_start_time = None
         self._run_stop_time = None
-        self.console_output = True
-        self._output_folder = None
-        self._gen = Generator(self)
+        self.gen = Generator(self)
+        self.gen.console_trace = True
+        self.gen.output_folder = None
         
         self.reset(initial_time)
 
@@ -270,35 +265,6 @@ class Simulation(NamedObject):
         run.
         """
         return self._run_stop_time
-
-    @property
-    def console_output(self):
-        """ Send trace record to standard output if `True`.
-
-        The default value is True. Type: `Boolean`.
-        """
-        return self._console_output
-    
-    @console_output.setter
-    def console_output(self, output):
-        self._console_output = output
-        
-    @property
-    def output_folder(self):
-        """ A string that identifies the folder where output reports and
-        graphs will be placed.
-        
-        If `None` (the default value), the simulation will not generate
-        any output or trace files. The value stored in `output_folder`
-        should be an absolute reference. For example::
-        
-            simulation.output_folder = "C:/Projects/despy_output/resource_sim"
-        """
-        return self._output_folder
-    
-    @output_folder.setter
-    def output_folder(self, folder):
-        self._output_folder = folder
         
     @property
     def gen(self):
@@ -473,8 +439,8 @@ class Simulation(NamedObject):
         
         # Record stop time and write output files
         self._run_stop_time = datetime.datetime.today()
-        if self.output_folder is not None:
-            self.gen.write_files(self.output_folder)
+        if self.gen.output_folder is not None:
+            self.gen.write_files(self.gen.output_folder)
             
     def get_data(self):
         """ Get a Python list with simulation parameters and results.
@@ -496,7 +462,7 @@ class Simulation(NamedObject):
         output = [(Datatype.title, "Simulation: " + self.name),
                   (Datatype.paragraph, self.description),
                   (Datatype.param_list,
-                    [('Generator Folder', self.output_folder),
+                    [('Generator Folder', self.gen.output_folder),
                      ('Seed', self.seed),
                      ('Start Time', self.run_start_time),
                      ('Stop Time', self.run_stop_time),
@@ -504,7 +470,7 @@ class Simulation(NamedObject):
                   ]
         return output
 
-    def reset(self):
+    def reset(self, initial_time = 0):
         """Reset the time to zero, allowing the simulation to be rerun.
         
         Sets the simulation time to zero. Also sets the model's
@@ -516,8 +482,12 @@ class Simulation(NamedObject):
             * Erases the run_start_time and run_stop_time properties
             * Clears the trace records
             * Resets the main simulation counter
+            
+        *Arguments*
+            `initial_time`: Set the simulation clock to the value
+            specified in `initial_time`. Defaults to zero.
         """
-        self._now = 0
+        self._now = initial_time * 10
         self._futureEventList = []
         self._run_start_time = None
         self._run_stop_time = None

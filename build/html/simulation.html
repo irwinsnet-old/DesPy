@@ -27,7 +27,7 @@
     <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="top" title="Despy 1 documentation" href="index.html" />
     <link rel="up" title="Despy Classes" href="classes.html" />
-    <link rel="next" title="Component" href="component.html" />
+    <link rel="next" title="despy.core.simulation.NoEventsRemaining" href="NoEventsRemainingError.html" />
     <link rel="prev" title="FelItem" href="felitem.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
@@ -45,7 +45,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="component.html" title="Component"
+          <a href="NoEventsRemainingError.html" title="despy.core.simulation.NoEventsRemaining"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="felitem.html" title="FelItem"
@@ -71,8 +71,8 @@
   <p class="topless"><a href="felitem.html"
                         title="previous chapter">FelItem</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="component.html"
-                        title="next chapter">Component</a></p>
+  <p class="topless"><a href="NoEventsRemainingError.html"
+                        title="next chapter">despy.core.simulation.NoEventsRemaining</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -114,9 +114,9 @@ A <cite>Simulation</cite> object may contain one or more models.</p>
 <p><strong>Attributes</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><a class="reference internal" href="#despy.base.named_object.NamedObject.name" title="despy.base.named_object.NamedObject.name"><code class="xref py py-attr docutils literal"><span class="pre">name</span></code></a>: Simulation object&#8217;s name. Inherited from
+<li><code class="xref py py-attr docutils literal"><span class="pre">name</span></code>: Simulation object&#8217;s name. Inherited from
 <code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code>. Type: <cite>string</cite>.</li>
-<li><a class="reference internal" href="#despy.base.named_object.NamedObject.description" title="despy.base.named_object.NamedObject.description"><code class="xref py py-attr docutils literal"><span class="pre">description</span></code></a>: One or more paragraphs that describes the
+<li><code class="xref py py-attr docutils literal"><span class="pre">description</span></code>: One or more paragraphs that describes the
 simulation. Inherited from
 <code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code> Type: <cite>string</cite>.</li>
 <li><a class="reference internal" href="#despy.core.simulation.Simulation.models" title="despy.core.simulation.Simulation.models"><code class="xref py py-attr docutils literal"><span class="pre">models</span></code></a>: A list of all <code class="xref py py-class docutils literal"><span class="pre">Model</span></code> objects that
@@ -134,11 +134,6 @@ has not yet been run. Read-only.</li>
 <li><a class="reference internal" href="#despy.core.simulation.Simulation.run_stop_time" title="despy.core.simulation.Simulation.run_stop_time"><code class="xref py py-attr docutils literal"><span class="pre">run_stop_time</span></code></a>: The real-world stop time for the
 simulation. Type: datetime.datetime, or <cite>None</cite> if the simulation
 has not yet been run. Read-only.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.console_output" title="despy.core.simulation.Simulation.console_output"><code class="xref py py-attr docutils literal"><span class="pre">console_output</span></code></a>: If <cite>True</cite>, the trace record for each
-event will be sent to the standard output. The default value
-is True. Type: Boolean.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.output_folder" title="despy.core.simulation.Simulation.output_folder"><code class="xref py py-attr docutils literal"><span class="pre">output_folder</span></code></a>: If <cite>None</cite> (the default value), the
-simulation will not generate any output or trace files.</li>
 <li><a class="reference internal" href="#despy.core.simulation.Simulation.gen" title="despy.core.simulation.Simulation.gen"><code class="xref py py-attr docutils literal"><span class="pre">gen</span></code></a>: A <code class="xref py py-class docutils literal"><span class="pre">despy.output.generator</span></code> object that will
 generate all output files.</li>
 </ul>
@@ -182,8 +177,8 @@ events from the FEL.</li>
 <div class="section" id="class-attributes">
 <h2>Class Attributes<a class="headerlink" href="#class-attributes" title="Permalink to this headline">¶</a></h2>
 <dl class="attribute">
-<dt id="despy.base.named_object.NamedObject.name">
-<code class="descclassname">NamedObject.</code><code class="descname">name</code><a class="headerlink" href="#despy.base.named_object.NamedObject.name" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">name</code></dt>
 <dd><p>The name of the object.</p>
 <p>A short phrase, such as &#8220;Customer&#8221; or &#8220;Server Queue&#8221; that
 identifies the object.  Using title case and spaces will result
@@ -196,8 +191,8 @@ in pleasant formatting in output reports and trace files.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="despy.base.named_object.NamedObject.description">
-<code class="descclassname">NamedObject.</code><code class="descname">description</code><a class="headerlink" href="#despy.base.named_object.NamedObject.description" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">description</code></dt>
 <dd><p>Gets a description of the model.</p>
 <p>One or more paragraphs that describes the purpose and behavior
 of the object.  The description will be included in output
@@ -284,26 +279,6 @@ for the simulation (read only).</p>
 simulation time and to assign unique names to output files. The
 attribute will return <cite>None</cite> if the simulation has not yet been
 run.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="despy.core.simulation.Simulation.console_output">
-<code class="descclassname">Simulation.</code><code class="descname">console_output</code><a class="headerlink" href="#despy.core.simulation.Simulation.console_output" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send trace record to standard output if <cite>True</cite>.</p>
-<p>The default value is True. Type: <cite>Boolean</cite>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="despy.core.simulation.Simulation.output_folder">
-<code class="descclassname">Simulation.</code><code class="descname">output_folder</code><a class="headerlink" href="#despy.core.simulation.Simulation.output_folder" title="Permalink to this definition">¶</a></dt>
-<dd><p>A string that identifies the folder where output reports and
-graphs will be placed.</p>
-<p>If <cite>None</cite> (the default value), the simulation will not generate
-any output or trace files. The value stored in <cite>output_folder</cite>
-should be an absolute reference. For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">simulation</span><span class="o">.</span><span class="n">output_folder</span> <span class="o">=</span> <span class="s">&quot;C:/Projects/despy_output/resource_sim&quot;</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -469,7 +444,7 @@ item (e.g., paragraph, list, etc.).</dd>
 
 <dl class="method">
 <dt id="despy.core.simulation.Simulation.reset">
-<code class="descclassname">Simulation.</code><code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/simulation.html#Simulation.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation.reset" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Simulation.</code><code class="descname">reset</code><span class="sig-paren">(</span><em>initial_time=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/simulation.html#Simulation.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset the time to zero, allowing the simulation to be rerun.</p>
 <p>Sets the simulation time to zero. Also sets the model&#8217;s
 initial_events_scheduled attribute to <cite>False</cite>, which will cause
@@ -483,6 +458,11 @@ simulation is run. In addition:</p>
 <li>Resets the main simulation counter</li>
 </ul>
 </div></blockquote>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><cite>initial_time</cite>: Set the simulation clock to the value
+specified in <cite>initial_time</cite>. Defaults to zero.</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -517,7 +497,7 @@ should be considered private.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="component.html" title="Component"
+          <a href="NoEventsRemainingError.html" title="despy.core.simulation.NoEventsRemaining"
              >next</a> |</li>
         <li class="right" >
           <a href="felitem.html" title="FelItem"
