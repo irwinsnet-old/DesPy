@@ -39,10 +39,10 @@ class Model(NamedObject):
         :class:`despy.core.simulation.Simulation` class.
         
     **Methods**
-      * :meth:`.__set_item__`: This Python magic method allows users to
+      * :meth:`.__setitem__`: This Python magic method allows users to
         add components to the model using dictionary (i.e., '[]')
         notation.
-      * :meth:`.__get_item__`: This Python magic method allows users to
+      * :meth:`.__getitem__`: This Python magic method allows users to
         access model components using dictionary notation.
       * :meth:`.delete_component`: Remove a component from the model.
       * :meth:`.set_initialize_method` Set the model's initialize
@@ -50,7 +50,7 @@ class Model(NamedObject):
         Not used if user includes a custom initialize method in a model
         subclass.
       * :meth:`.initialize`: The default initialize method. Calls the
-        initialize method on all model components.
+        `initialize` method on all model components.
       * :meth:`.schedule`: A convenience method. Calls the
         :class:`despy.core.simulation.Simulation` class's `schedule`
         method.
@@ -61,22 +61,22 @@ class Model(NamedObject):
     """
 
     def __init__(self, name, sim = None, description = None):
-        """Create a model object.
+        """Create a Model object.
         
-        *Constructor Arguments*
-            name (string):
-                A short string that will be displayed in trace reports
-                and other outputs.
-            name (string):
+        *Arguments*
+            `name` (string):
                 A short name for the model. The model name is displayed
                 in output reports.
-            simulation (despy.Simulation) (Optional):
-                The model object must be attached to an simulation
-                object, which will run the model's events on the FEL.
+            `sim` (:class:`despy.core.simulation.Simulation`)(Optional):
+                The model object must be attached to a simulation
+                object, which will manage events and the FEL.
                 If the simulation argument is omitted, the constructor
-                will create and assign a default enviroment object to
+                will create and assign a default environment object to
                 the model. A different simulation can be assigned later
-                using the model object's simulation property.        
+                using the model object's simulation property.
+            `description` (string):
+                A brief description generally consisting of a few
+                sentences.
         """
         super().__init__(name, description)
         self.initial_events_scheduled = False
@@ -124,7 +124,7 @@ class Model(NamedObject):
     def sim(self):
         """Gets the simulation object.
         
-        *Returns:* (despby.Simulation)
+        *Returns:* (:class:`despy.core.simulation.Simulation`)
         """
         return self._sim
     
@@ -133,29 +133,76 @@ class Model(NamedObject):
         """Assigns the model to a new simulation.
         
         *Arguments*
-            simulation (despy.Simulation):
-                An simulation object that will run the simulation
+            simulation (:class:`despy.core.simulation.Simulation`):
+                A simulation object that will run the simulation
                 and execute the model's events.
-        
         """
         self._sim = sim
   
     def __setitem__(self, key, item):
+        """ Assign a component to the model using dictionary notation.
+        
+        *Arguments*
+            `key` (String)
+                The dictionary key that will be used to retrieve the
+                component.
+            `item` (:class:`despy.core.component.Component`)
+                An instance of `Component` or one of it's sub-classes.
+        """
         self.components[key] = item
 
     def __getitem__(self, key):
+        """Access a component using a dictionary key.
+        
+        *Arguments*
+            `key` (String)
+                The dictionary key that will be used to retrieve the
+                component.
+            `item` (:class:`despy.core.component.Component`)
+                An instance of `Component` or one of it's sub-classes.
+        """
         return self.components[key]
         
     def delete_component(self, key):
+        """Remove a component from the model.
+        
+        *Arguments*
+            `key` (String)
+                The dictionary key that will be used to identify the
+                component that will be removed from the model.
+        """
         del self.components[key]
         
     def set_initialize_method(self, initialize_method):
+        """Assign an initialize method to the model.
+        
+        The initialize method is run once, when the simulation is run,
+        before any events are executed. Initialize methods are often
+        used to add the first events to the FEL.
+        
+        Users can pass an initialize method to the model with this
+        method, or they can override the `_initialize` method in a model
+        subclass.
+        
+        *Arguments*
+            `initialize_method` (function)
+                A Python function that will initialize the model.
+        """
         self._initialize = initialize_method
 
     def initialize(self):
+        """Initialize the model and all components.
+        
+        This default initialize method will first call all of the
+        components' `initialize` methods, in no particular order.
+        Next it will call whatever method was passed to
+        `set_initialize_method.`
+        """
+        # Initialize components that are attached to the model.
         for _, component in self.components.items():
             component.initialize()
         
+        # Call the method passed to self.set_initialize_method.
         try:
             self._initialize(self)
         except:
@@ -163,11 +210,10 @@ class Model(NamedObject):
 
     def schedule(self, event, delay = 0,
                  priority = fi.PRIORITY_STANDARD):
-        """A convenience method that calls the Simulation object's
-        schedule() method to schedule an event on the FEL.
+        """Call the Simulation object's schedule() method.
 
         *Arguments*
-            event (despby.Event):
+            event (:class:`despy.core.event.Event`):
                 The event that will be scheduled.
             delay (integer):
                 A non-negative integer that specifies how much time

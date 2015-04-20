@@ -143,12 +143,12 @@ class Simulation(NamedObject):
         The Simulation object contains and manages the future event
         list (FEL).
         
-        **Arguments**
-            * *initial_time:* Optional. A non-negative integer that
+        *Arguments*
+            * `initial_time:` Optional. A non-negative integer that
               specifies the initial simulation time. Defaults to 0.
-            * *name:* Optional. A word or short phrase that describes
+            * `name:` Optional. A word or short phrase that describes
               the simulation. Type: string. Defaults to "Simulation".
-            * *description:* Optional. A sentence or short paragraph
+            * `description:` Optional. A sentence or short paragraph
               that describes the simulation in more detail than the
               name attribute. Type: string or type None. Defaults to
               type None.
