@@ -5,10 +5,10 @@
 """
 ..  module:: despy.core.model
 
-**Model**
-    * :class:`despy.core.Model.model`: The model represents the 
-      real-world system that is being simulated. The user will generally
-      build their model by sub-classing the `model` class.
+:class:`despy.core.model.Model`: 
+    The model represents the real-world system that is being simulated.
+    The user will generally build their model by sub-classing the
+    `model` class.
 """
 
 from despy.core.simulation import Simulation, FelItem as fi

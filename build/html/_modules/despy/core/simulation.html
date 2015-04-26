@@ -97,9 +97,12 @@
 <span class="kn">from</span> <span class="nn">despy.output.datatype</span> <span class="kn">import</span> <span class="n">Datatype</span>
 <span class="kn">from</span> <span class="nn">despy.base.named_object</span> <span class="kn">import</span> <span class="n">NamedObject</span>
 
-<div class="viewcode-block" id="FelItem"><a class="viewcode-back" href="../../../felitem.html#despy.core.simulation.FelItem">[docs]</a><span class="k">class</span> <span class="nc">FelItem</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FelItemTuple&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="FelItem"><a class="viewcode-back" href="../../../packages.html#despy.core.simulation.FelItem">[docs]</a><span class="k">class</span> <span class="nc">FelItem</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FelItemTuple&#39;</span><span class="p">,</span>
                          <span class="p">[</span><span class="s">&#39;time_fld&#39;</span><span class="p">,</span> <span class="s">&#39;event_fld&#39;</span><span class="p">,</span> <span class="s">&#39;priority_fld&#39;</span><span class="p">])):</span>
     <span class="sd">&quot;&quot;&quot;A named tuple that represents a scheduled event.</span>
+<span class="sd">    </span>
+<span class="sd">    Every item on the FEL must be an instance of FelItem. A FelItem</span>
+<span class="sd">    consists of the event, the scheduled time, and priority.</span>
 <span class="sd">    </span>
 <span class="sd">    **Attributes**</span>
 <span class="sd">    </span>
@@ -150,8 +153,10 @@
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Schedule events and manage the future event list (FEL).</span>
 <span class="sd">    </span>
-<span class="sd">    Every model is assigned to one (and only one) `Simulation` object.</span>
-<span class="sd">    A `Simulation` object may contain one or more models.</span>
+<span class="sd">    Every Despy simulation must have one instance of the</span>
+<span class="sd">    `simulation` class. The `simulation` class initializes the</span>
+<span class="sd">    top-level model and its components, manages the simulation</span>
+<span class="sd">    clock and FEL, and executes events.</span>
 <span class="sd">    </span>
 <span class="sd">    **Attributes**</span>
 
@@ -184,7 +189,8 @@
 <span class="sd">      * :meth:`.append_model`: Appends a :class:`despy.core.model.Model`</span>
 <span class="sd">        object to the Simulation object. A Despy simulation can run</span>
 <span class="sd">        multiple models simultaneously.</span>
-<span class="sd">      * :meth:`.schedule`: Schedules an event on the FEL.</span>
+<span class="sd">      * :meth:`despy.core.simulation.Simulation.schedule`: Schedules an</span>
+<span class="sd">        event on the FEL.</span>
 <span class="sd">      * :meth:`.peek`: Gets the time of the next scheduled event, but</span>
 <span class="sd">        leaves the event on the FEL.</span>
 <span class="sd">      * :meth:`.step`: Executes the next event on the FEL.</span>
@@ -573,8 +579,11 @@
         <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">:</span>
             <span class="n">model</span><span class="o">.</span><span class="n">initial_events_scheduled</span> <span class="o">=</span> <span class="bp">False</span>
 </div></div>
-<div class="viewcode-block" id="NoEventsRemainingError"><a class="viewcode-back" href="../../../NoEventsRemainingError.html#despy.core.simulation.NoEventsRemainingError">[docs]</a><span class="k">class</span> <span class="nc">NoEventsRemainingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="NoEventsRemainingError"><a class="viewcode-back" href="../../../packages.html#despy.core.simulation.NoEventsRemainingError">[docs]</a><span class="k">class</span> <span class="nc">NoEventsRemainingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Raised by despy.core.simulation&#39;s step method when FEL is empty.</span>
+<span class="sd">    </span>
+<span class="sd">    Raised by the `Simulation.step` method when no events remain on the</span>
+<span class="sd">    FEL.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span>
 

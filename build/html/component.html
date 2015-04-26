@@ -27,7 +27,7 @@
     <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="top" title="Despy 1 documentation" href="index.html" />
     <link rel="up" title="Despy Classes" href="classes.html" />
-    <link rel="prev" title="despy.core.simulation.Simulation" href="simulation.html" />
+    <link rel="prev" title="despy.core.model.Model" href="model.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -44,7 +44,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="simulation.html" title="despy.core.simulation.Simulation"
+          <a href="model.html" title="despy.core.model.Model"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
@@ -53,8 +53,8 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="simulation.html"
-                        title="previous chapter">despy.core.simulation.Simulation</a></p>
+  <p class="topless"><a href="model.html"
+                        title="previous chapter">despy.core.model.Model</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -86,14 +86,15 @@
   <div class="section" id="component">
 <h1>Component<a class="headerlink" href="#component" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt>
-<em class="property">class </em><code class="descclassname">despy.core.component.</code><code class="descname">Component</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/component.html#Component"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="despy.core.component.Component">
+<em class="property">class </em><code class="descclassname">despy.core.component.</code><code class="descname">Component</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/component.html#Component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.component.Component" title="Permalink to this definition">¶</a></dt>
 <dd><p>A base class that provides object counters and other attributes.</p>
-<p>A component is a portion of a Despy model.  Components generally
-represent an element of the system that is being simulated.  Several
-Despy classes (e.g., <code class="xref py py-class docutils literal"><span class="pre">Entity</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Resource</span></code>,
-<code class="xref py py-class docutils literal"><span class="pre">Progress</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Queue</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Event</span></code>) inherit from
-the Component class. Users can create their own model elements by
+<p>Models consist of several components, such as queues, processes, and
+entities. Components generally represent an element of the system
+that is being simulated.  The <cite>Component</cite> class is the base class
+for the model&#8217;s components. It maintains a counter, which uniquely
+identifies components, and has attributes for access the model and
+simulation objects. Users can create their own model elements by
 inheriting from the Component class.</p>
 <p>Subclasses should include a call to the <code class="xref py py-meth docutils literal"><span class="pre">__init()__`()</span></code>
 method in the subclass <code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code> method.</p>
@@ -102,7 +103,7 @@ method in the subclass <code class="xref py py-meth docutils literal"><span clas
 <div><ul class="simple">
 <li><code class="xref py py-attr docutils literal"><span class="pre">model</span></code>: The <code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code> object that
 the component belongs to.</li>
-<li><code class="xref py py-attr docutils literal"><span class="pre">sim</span></code>: The <code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code> 
+<li><a class="reference internal" href="model.html#despy.core.model.Model.sim" title="despy.core.model.Model.sim"><code class="xref py py-attr docutils literal"><span class="pre">sim</span></code></a>: The <code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code> 
 object that the component&#8217;s model belongs to.</li>
 <li><code class="xref py py-attr docutils literal"><span class="pre">number</span></code>: A unique integer that is assigned to each
 instance of a component.  The first component instantiated by
@@ -115,11 +116,11 @@ instance.</li>
 <dl class="docutils">
 <dt><strong>Methods</strong></dt>
 <dd><ul class="first last simple">
-<li><code class="xref py py-meth docutils literal"><span class="pre">initialize()</span></code>: Subclasses should override this method to
+<li><a class="reference internal" href="model.html#despy.core.model.Model.initialize" title="despy.core.model.Model.initialize"><code class="xref py py-meth docutils literal"><span class="pre">initialize()</span></code></a>: Subclasses should override this method to
 initialize the component prior to running the simulation.</li>
 <li><code class="xref py py-meth docutils literal"><span class="pre">finalize()</span></code>: Subclasses should override this method to
 delete unneeded objects or execute other post-simulation code.</li>
-<li><code class="xref py py-meth docutils literal"><span class="pre">get_data()</span></code>: Subclasses should override this method to
+<li><a class="reference internal" href="simulation.html#despy.core.simulation.Simulation.get_data" title="despy.core.simulation.Simulation.get_data"><code class="xref py py-meth docutils literal"><span class="pre">get_data()</span></code></a>: Subclasses should override this method to
 provide output data to the simulation report.</li>
 <li><code class="xref py py-meth docutils literal"><span class="pre">__str__()</span></code>: Returns a string that uniquely identifies the
 component.</li>
@@ -144,95 +145,6 @@ next unused number from the number counter.</li>
 </ul>
 </dd>
 </dl>
-<dl class="method">
-<dt>
-<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/component.html#Component.__str__"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Returns a string that uniquely identifies every <em>Component</em>
-instance.</p>
-<p>The format of the return value is
-&lt;model.name&gt;:&lt;component.name&gt;#&lt;component.number&gt;</p>
-<p><em>Returns</em> str</p>
-</dd></dl>
-
-<dl class="classmethod">
-<dt>
-<em class="property">classmethod </em><code class="descname">_get_next_number</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/component.html#Component._get_next_number"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>A private method called from the <em>__init__()</em> method that
-gets the next unused number.</p>
-<p><em>Returns</em> integer</p>
-</dd></dl>
-
-<dl class="method">
-<dt>
-<code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/component.html#Component.finalize"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Subclasses should override this method with cleanup or other
-code that will be executed after all events on the FEL.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="descname">id</code></dt>
-<dd><p>A string that uniquely identifies the component instance.</p>
-<p>The id attribute is of the format
-&#8220;&lt;model.slug&gt;.&lt;component.slug&gt;.&lt;component.number&gt;&#8221;. The
-<code class="xref py py-meth docutils literal"><span class="pre">slug()</span></code> attribute is inherited from
-<code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code>. The slug is the
-name attribute with spaces and characters that are not allowed
-in Windows replaced by underscores. The <em>id</em> attribute is
-suitable for creating file names.</p>
-</dd></dl>
-
-<dl class="method">
-<dt>
-<code class="descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/component.html#Component.initialize"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Subclasses should override this method with initialization
-code that will be executed prior to any events on the future
-event list (FEL).</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="descname">model</code></dt>
-<dd><p>A link to the component&#8217;s model object.</p>
-<p>This read-only attribute is set by the <a class="reference internal" href="simulation.html#despy.core.simulation.Simulation.__init__" title="despy.core.simulation.Simulation.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a>
-method.</p>
-<p><em>Returns</em> <code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="descname">number</code></dt>
-<dd><p>An integer that uniquely identifies the <em>Component</em> instance.</p>
-<p>This attribute is read only.</p>
-<p><em>Returns</em> integer</p>
-</dd></dl>
-
-<dl class="classmethod">
-<dt>
-<em class="property">classmethod </em><code class="descname">set_counter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/component.html#Component.set_counter"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>A class method that resets the <em>Component&#8217;s</em> or subclass&#8217;s
-number counter back to 1.</p>
-<p>By default, the <em>Component</em> class and all subclasses of
-<em>Component</em> use the same static number counter. For example,
-the first <em>Component</em> to be instantiated is number 1, regardless
-of whether it&#8217;s type <em>Component</em> or a subclass like <em>Event</em> or
-<em>Queue</em>. The __init__ method assigns number 2 to the second
-instantiated <em>Component</em> or subclass, regardless of type, and
-so on.</p>
-<p>The simulation designer can assign a separate static counter
-object to a subclass of <em>Component</em> by calling the static
-method <em>set_counter()</em> on a subclass. The subclass&#8217;s number
-attributes will be the unbroken sequence 1, 2, 3, ...</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="descname">sim</code></dt>
-<dd><p>A link to the model&#8217;s simulation attribute.</p>
-<p>This read-only attribute is provided for convenience.</p>
-<p><em>Returns:</em> <code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></p>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -253,7 +165,7 @@ attributes will be the unbroken sequence 1, 2, 3, ...</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="simulation.html" title="despy.core.simulation.Simulation"
+          <a href="model.html" title="despy.core.model.Model"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="classes.html" >Despy Classes</a> &raquo;</li> 

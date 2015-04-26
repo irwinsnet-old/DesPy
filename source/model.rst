@@ -1,5 +1,7 @@
 ..  currentmodule:: despy.core.model
 
+..  class:: despy.core.model.Model
+
 ######################
 despy.core.model.Model
 ######################

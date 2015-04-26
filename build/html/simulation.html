@@ -109,8 +109,10 @@
 <dt>
 <em class="property">class </em><code class="descclassname">despy.core.simulation.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>initial_time=0</em>, <em>name='Simulation'</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/simulation.html#Simulation"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Schedule events and manage the future event list (FEL).</p>
-<p>Every model is assigned to one (and only one) <cite>Simulation</cite> object.
-A <cite>Simulation</cite> object may contain one or more models.</p>
+<p>Every Despy simulation must have one instance of the
+<cite>simulation</cite> class. The <cite>simulation</cite> class initializes the
+top-level model and its components, manages the simulation
+clock and FEL, and executes events.</p>
 <p><strong>Attributes</strong></p>
 <blockquote>
 <div><ul class="simple">
@@ -144,7 +146,8 @@ generate all output files.</li>
 <li><a class="reference internal" href="#despy.core.simulation.Simulation.append_model" title="despy.core.simulation.Simulation.append_model"><code class="xref py py-meth docutils literal"><span class="pre">append_model()</span></code></a>: Appends a <code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code>
 object to the Simulation object. A Despy simulation can run
 multiple models simultaneously.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.schedule" title="despy.core.simulation.Simulation.schedule"><code class="xref py py-meth docutils literal"><span class="pre">schedule()</span></code></a>: Schedules an event on the FEL.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.schedule" title="despy.core.simulation.Simulation.schedule"><code class="xref py py-meth docutils literal"><span class="pre">despy.core.simulation.Simulation.schedule()</span></code></a>: Schedules an
+event on the FEL.</li>
 <li><a class="reference internal" href="#despy.core.simulation.Simulation.peek" title="despy.core.simulation.Simulation.peek"><code class="xref py py-meth docutils literal"><span class="pre">peek()</span></code></a>: Gets the time of the next scheduled event, but
 leaves the event on the FEL.</li>
 <li><a class="reference internal" href="#despy.core.simulation.Simulation.step" title="despy.core.simulation.Simulation.step"><code class="xref py py-meth docutils literal"><span class="pre">step()</span></code></a>: Executes the next event on the FEL.</li>
@@ -157,7 +160,7 @@ simulation parameters, such as name, run time, etc.</li>
 the simulation and resets the model and its components to their
 initial state.</li>
 <li><a class="reference internal" href="#despy.core.simulation.Simulation._initialize_models" title="despy.core.simulation.Simulation._initialize_models"><code class="xref py py-meth docutils literal"><span class="pre">_initialize_models()</span></code></a>: Calls the
-<code class="xref py py-meth docutils literal"><span class="pre">despy.core.model.Model.initialize()</span></code> method for every model
+<a class="reference internal" href="model.html#despy.core.model.Model.initialize" title="despy.core.model.Model.initialize"><code class="xref py py-meth docutils literal"><span class="pre">despy.core.model.Model.initialize()</span></code></a> method for every model
 assigned to the Simulation object. This method is marked as
 private and is not intended to be called by the DES designer
 or user. The Simulation calls this object before executing any

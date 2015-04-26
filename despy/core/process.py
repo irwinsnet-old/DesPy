@@ -12,6 +12,10 @@ from despy.core.event import Event
 class Process(Component):
     """Represents a simulation process that periodically schedules events and
     maintains state (i.e., retains variable values) between events.
+    
+    The Process class supports process style simulations. It allows the
+    user to implement a generator function that adds events to the FEL
+    that represent a related sequence of real-world activities.
     """
 
     def __init__(self, model, name, generator_function = None):

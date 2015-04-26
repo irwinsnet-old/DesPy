@@ -29,6 +29,9 @@ class FelItem(namedtuple('FelItemTuple',
                          ['time_fld', 'event_fld', 'priority_fld'])):
     """A named tuple that represents a scheduled event.
     
+    Every item on the FEL must be an instance of FelItem. A FelItem
+    consists of the event, the scheduled time, and priority.
+    
     **Attributes**
     
       * :attr:`time_fld`: The time that the event is scheduled for
@@ -78,8 +81,10 @@ class FelItem(namedtuple('FelItemTuple',
 class Simulation(NamedObject):
     """ Schedule events and manage the future event list (FEL).
     
-    Every model is assigned to one (and only one) `Simulation` object.
-    A `Simulation` object may contain one or more models.
+    Every Despy simulation must have one instance of the
+    `simulation` class. The `simulation` class initializes the
+    top-level model and its components, manages the simulation
+    clock and FEL, and executes events.
     
     **Attributes**
 
@@ -112,7 +117,8 @@ class Simulation(NamedObject):
       * :meth:`.append_model`: Appends a :class:`despy.core.model.Model`
         object to the Simulation object. A Despy simulation can run
         multiple models simultaneously.
-      * :meth:`.schedule`: Schedules an event on the FEL.
+      * :meth:`despy.core.simulation.Simulation.schedule`: Schedules an
+        event on the FEL.
       * :meth:`.peek`: Gets the time of the next scheduled event, but
         leaves the event on the FEL.
       * :meth:`.step`: Executes the next event on the FEL.
@@ -503,6 +509,9 @@ class Simulation(NamedObject):
 
 class NoEventsRemainingError(Exception):
     """ Raised by despy.core.simulation's step method when FEL is empty.
+    
+    Raised by the `Simulation.step` method when no events remain on the
+    FEL.
     """
     pass
 

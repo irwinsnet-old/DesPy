@@ -10,6 +10,11 @@ import despy.output.plot as plot
 Queue_item = namedtuple('Queue_item', ['item_fld', 'time_in_fld'])
 
 class Queue(Component):
+    """A component that represents a real world queue, such as a line
+    of customers waiting for a server, or a group of products waiting
+    for a machine.
+    """
+
     def __init__(self, model, name, max_length = None):
         super().__init__(model, name)
         if isinstance(max_length, int):

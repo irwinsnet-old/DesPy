@@ -9,6 +9,11 @@ from despy.core.event import Event
 # prioritization by number, random selection, or equal loading.
 
 class Resource(Component):
+    """A resource is a component that represents a real-world resource.
+    
+    Generally an object or entity with limited availability that
+    provides some kind of service.
+    """
     
     class Position():
         def __init__(self, index, name):
