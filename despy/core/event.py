@@ -2,47 +2,71 @@
 #   Version 0.1
 #   Released under the MIT License (MIT)
 #   Copyright (c) 2015, Stacy Irwin
+"""
+..  module:: despy.core.event
+
+:class:`Event`:
+    An event object represents an occurrence within the system being
+    simulated.
+"""
+
+#TODO: Add remove_trace_field method.
 
 import types
 from collections import OrderedDict
 from despy.core.component import Component
 
 class Event(Component):
-    """ An base class for all events that can be scheduled on the future event
-    list (FEL).
+    """ A base class for all events.
 
-    Create an event by inheriting from the Event class. Subclasses of Event
-    must instantiate one or more of the doPriorEvent(), do_event(), or
-    doPostEvent() methods. The Simulation will execute these methods when the
-    Event time occurs and the Event object is removed from the FEL.
+    Create an event by inheriting from the Event class. Subclasses of
+    Event must instantiate one or more of the doPriorEvent(),
+    _do_event(), or doPostEvent() methods. The Simulation will execute
+    these methods when the Event time occurs and the Event object is
+    removed from the FEL.
+      
+    **Inherited Classes**
+      * :class:`despy.base.named_object.NamedObject`
+      * :class:`despy.core.component.Component`
     
-    *Arguments*
-        model (despy.Model):
-            The model that the event is assigned to.
-        name (string):
-            A short name that describes the event. The event name is
-            printed in simulation reports.
-        priority (integer):
-            When there are events scheduled to occurr at the same
-            time, the priority determines if the simulation
-            executes some events before other events.
-            PRIORITY_EARLY events are executed before all other events
-            with that are PRIORITY STANDARD or PRIORITY_LATE.
-            PRIORITY_LATE events are executed after all other events
-            that are PRIORITY_EARLY or PRIORITY_STANDARD. Defaults to
-            PRIORITY_STANDARD.
+    **Attributes**
+      * :attr:`Event.trace_fields`: Read Only. An ordered dictionary
+        containing custom trace data.
+      * :attr:`Event.trace_records`: Read Only. A list of trace records
+        for completed events.
+      
+    **Methods**
+      * :meth:`Event.append_callback`: Appends a function to the event's
+        callback list.
+      * :meth:`Event.add_trace_field`: Add custom fields to the event's
+        trace record.
+      
+    **Internal Attributes**
+      * attr:`Event._callbacks`. An list of methods that will be called
+        every time the event is executed.
+      
+    **Internal Methods**
+      * :meth:`Event._do_event`: Executes an event's callback functions.
+      * :meth:`Event._update_trace_record`: Updates a trace record with
+        custom fields.
+      * :meth:`Event._reset`: Resets the event to it's initial state. *
+      * :meth:`Event.__lt__`: A Python Magic Method that defines how
+        `Event` objects respond to less-than operator.
+      * :meth:`Event.__gt__`: A Python Magic Method that defines how
+        `Event` objects respond to greater-than operator.
     """
+
 
     def __init__(self, model, name, trace_fields = None):
         """Initialize the Event object.
 
         *Arguments*
-            model (despy.Model):
+            `model` (:class:`despy.core.model.Model`):
                 The Model that the event belongs to.
-            name (string):
+            `name` (string):
                 A short string describing the event. The name will be
                 printed in the event trace report.
-            trace_fields (collections.OrderedDict)
+            `trace_fields` (collections.OrderedDict)
                 An ordered dictionary of fields that will be added to the
                 trace record for this event.
         """
@@ -50,22 +74,34 @@ class Event(Component):
         super().__init__(model, name)
         self.description = "Event"
         self._callbacks = []
-        self.trace_fields = OrderedDict()
+        self._trace_fields = OrderedDict()
         if trace_fields is not None:
             for key, value in trace_fields.items():
                 self.trace_fields[key] = value
-        self.trace_records = []
-
-    @property
-    def priority(self):
-        """Gets the priority of the event.
+        self._trace_records = []
         
-        *Returns:* An integer representing the priority of the event.
-            * PRIORITY_EARLY = -1
-            * PRIORITY_STANDARD = 0
-            * PRIORITY_LATE = 1
+    @property
+    def trace_fields(self):
+        """An ordered dictionary containing custom trace data.
+        
+        *Returns:* An instance of `OrderedDict` with custom trace data
+        stored as key: value pairs.
         """
-        return self._priority
+        return self._trace_fields
+    
+    @property
+    def trace_records(self):
+        """A list of trace records for completed events.
+        
+        A single event object can be reused by rescheduling it on the
+        FEL. The `trace_records` attribute is a list of all
+        trace records that have been completed for the `Event` object.
+        
+        *Returns:* A list of :class:`despy.output.trace.TraceRecord`
+        objects.
+        """
+        
+        return self._trace_records
     
     def append_callback(self, callback):
         """Appends a function to the event's callback list.
@@ -79,12 +115,31 @@ class Event(Component):
         
         """
         self._callbacks.append(callback)
-
-    def do_event(self):
-        """Executes the callback functions that are on the event's
-        callback list. _do_event() is called by the simulation's step
-        method.
+    
+    def add_trace_field(self, key, value):
+        """Add custom fields to the event's trace record.
         
+        This method is typically called from an event's callback method.
+        It adds `value` to the event's trace record, labeled with the
+        text in `key`.
+        
+        *Arguments*
+            `key` (String)
+                A text label that describes the data in `value`.
+            `value` (String or Number)
+                A number, string, or other text-convertible value.
+        """
+        self.trace_fields[key] = value
+
+    def _do_event(self):
+        """Executes an event's callback functions.
+        
+        Internal Method. The `_do_event` called by the `Simulation`
+        class's `step()` method. It is not intended to be called by the
+        user.
+        
+        *Returns:* `True` if a callback method is executed. `None` if
+        there are no callbacks attached to the event.
         """
         if len(self._callbacks)==0:
             return None
@@ -97,22 +152,70 @@ class Event(Component):
 
             return True
     
-    def update_trace_record(self, trace_record):
+    def _update_trace_record(self, trace_record):
+        """Updates a trace record with custom fields.
+        
+        Internal Method. The `_update_trace_record` method is called by
+        the `trace` object. It is not intended to be called by the user.
+        
+        *Arguments*
+            `trace_record`
+                A :class:`despy.output.trace.TraceRecord` object. The
+                TraceRecord will be added to the simulation's trace
+                report to record the occurrence of the event.
+        
+        *Returns:* A Python list containing the updated trace record.
+        
+        """
         if self.trace_fields is not None:
             for key, value in self.trace_fields.items():
                 trace_record[key] = value
-        self.trace_records.insert(0, trace_record)
-        return self.trace_records
+        
+        # If the event object is reused, object will keep list of all
+        # of it's trace records.        
+        self._trace_records.insert(0, trace_record)
+        return trace_record
     
-    def add_trace_field(self, key, value):
-        self.trace_fields[key] = value
-    
-    def reset(self):
-        self.trace_records = []
+    def _reset(self):
+        """Resets the event to it's initial state.
+        
+        Internal Method. The `reset` method is called by the
+        `Simulation` class's `reset` method. It deletes all
+        trace_records from the event.
+        """
+        self._trace_records = []
     
     def __lt__(self, y):
+        """Defines how `Event` objects respond to less-than operator.
+        
+        The Python magic methods `__lt__` and `__gt__` are necessary
+        because the FEL is implemented as a heap. All items on a heap
+        must be sortable. Events are primarily sorted by simulation time.
+        For events that are scheduled to occur at the same time, this
+        method provides a secondary sort order based on the `Event`
+        object's `id` attribute.
+        
+        *Arguments*
+            `y`
+                The other `Event` object that is being compared with
+                the less-than operator.
+                
+        *Returns:* `True` if `self.id < y.id`, `False` otherwise.
+        """
         return self.id < y.id
-    
+     
     def __gt__(self, y):
+        """Defines how `Event` objects respond to greater-than operator.
+        
+        See documentation for `__lt__` for an explanation of why this
+        Python magic method is necessary.
+        
+        *Arguments*
+            `y`
+                The other `Event` object that is being compared with
+                the greater-than operator.
+                
+        *Returns:* `True` if `self.id > y.id`, `False` otherwise.
+        """
         return self.id > y.id
         

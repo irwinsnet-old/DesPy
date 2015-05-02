@@ -28,12 +28,12 @@ class NamedObject(object):
       * :attr:`.name`: Object name.
       * :attr:`.description`: One or more paragraphs that describes the
         object.
+      * :attr:`.slug`: Returns the name attribute, but replaces all
+        characters that are not allowed in Windows file names with an
+        underscore character.
         
     **Methods**
       * :meth:`__str__` Returns the name attribute.
-      * :meth:`.slug` Returns the name attribute, but replaces all
-        characters that are not allowed in Windows file names with an
-        underscore character.
       
     **Superclass**
       * :class:`despy.core.model.Model`

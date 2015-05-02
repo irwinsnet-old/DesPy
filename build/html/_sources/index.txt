@@ -49,7 +49,13 @@ Contents:
    modules
    classes
 
-
+**Conventions**
+# Methods and attributes that begin with an underscore (_) are internal
+methods. Internal methods are called by Despy classes, but are not
+intended to be called by users who are building simulations. I've
+included documentation for internal methods for developers who are
+extending or revising this framework, and to help users understand
+how Despy works.
 
 Indices and tables
 ==================

@@ -8,8 +8,7 @@ despy.core.simulation.Simulation
 Class Description
 *****************
 
-..  autoclass:: despy.core.simulation.Simulation
-    :noindex:
+..  autoclass:: Simulation
 
 ****************
 Class Attributes

@@ -125,21 +125,24 @@ mainstream packages that are available in the <a class="reference external" href
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Despy Modules</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="modules.html#module-despy.base.named_object">named_object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#module-despy.core.simulation">simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#module-despy.core.component">component</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="classes.html">Despy Classes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="namedobject.html">despy.base.named_object.NamedObject</a></li>
-<li class="toctree-l2"><a class="reference internal" href="felitem.html">despy.core.simulation.FelItem</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simulation.html">despy.core.simulation.Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="NoEventsRemainingError.html">despy.core.simulation.NoEventsRemaining</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html">despy.core.model.Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="component.html">despy.core.component.Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base/namedobject.html">despy.base.namedobject.NamedObject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/simulation.html">despy.core.simulation.Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/model.html">despy.core.model.Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/event.html">despy.core.event.Event</a></li>
 </ul>
 </li>
 </ul>
 </div>
+<p><strong>Conventions</strong>
+# Methods and attributes that begin with an underscore (_) are internal
+methods. Internal methods are called by Despy classes, but are not
+intended to be called by users who are building simulations. I&#8217;ve
+included documentation for internal methods for developers who are
+extending or revising this framework, and to help users understand
+how Despy works.</p>
 </div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>

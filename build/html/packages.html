@@ -59,7 +59,7 @@
 <li><a class="reference internal" href="#">Despy Packages</a><ul>
 <li><a class="reference internal" href="#module-despy.core.__init__.py">despy.core</a><ul>
 <li><a class="reference internal" href="#module-despy.core.simulation">despy.core.simulation</a></li>
-<li><a class="reference internal" href="#despy-core-event">despy.core.event</a></li>
+<li><a class="reference internal" href="#module-despy.core.event">despy.core.event</a></li>
 <li><a class="reference internal" href="#module-despy.core.model">despy.core.model</a></li>
 <li><a class="reference internal" href="#module-despy.core.component">despy.core.component</a></li>
 <li><a class="reference internal" href="#despy-core-entity">despy.core.entity</a></li>
@@ -122,24 +122,29 @@ core modules under the <cite>dp</cite> namespace.:</p>
 <div class="section" id="module-despy.core.simulation">
 <span id="despy-core-simulation"></span><h3>despy.core.simulation<a class="headerlink" href="#module-despy.core.simulation" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
-<dt><strong>Simulation</strong></dt>
+<dt><a class="reference internal" href="core/simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">Simulation</span></code></a></dt>
 <dd>The <em>Simulation</em> class maintains and executes the future event list
 (FEL).</dd>
-<dt><strong>FelItem</strong></dt>
+<dt><a class="reference internal" href="felitem.html#despy.core.simulation.FelItem" title="despy.core.simulation.FelItem"><code class="xref py py-class docutils literal"><span class="pre">FelItem</span></code></a></dt>
 <dd>A <em>FelItem</em> is a named tuple that represents a scheduled event. The
 FEL is a binary heap of <em>FelItems</em>.</dd>
-<dt><strong>NoEventsRemaining</strong></dt>
+<dt><code class="xref py py-class docutils literal"><span class="pre">NoEventsRemaining</span></code></dt>
 <dd>The <em>Simulation</em> instance raises this subclass of Exception when
 there are no more events on the FEL.</dd>
 </dl>
 </div>
-<div class="section" id="despy-core-event">
-<h3>despy.core.event<a class="headerlink" href="#despy-core-event" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-despy.core.event">
+<span id="despy-core-event"></span><h3>despy.core.event<a class="headerlink" href="#module-despy.core.event" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><a class="reference internal" href="core/event.html#despy.core.event.Event" title="despy.core.event.Event"><code class="xref py py-class docutils literal"><span class="pre">Event</span></code></a>:</dt>
+<dd>An event object represents an occurrence within the system being
+simulated.</dd>
+</dl>
 </div>
 <div class="section" id="module-despy.core.model">
 <span id="despy-core-model"></span><h3>despy.core.model<a class="headerlink" href="#module-despy.core.model" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
-<dt><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code>: </dt>
+<dt><a class="reference internal" href="core/model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a>: </dt>
 <dd>The model represents the real-world system that is being simulated.
 The user will generally build their model by sub-classing the
 <cite>model</cite> class.</dd>
@@ -148,7 +153,7 @@ The user will generally build their model by sub-classing the
 <div class="section" id="module-despy.core.component">
 <span id="despy-core-component"></span><h3>despy.core.component<a class="headerlink" href="#module-despy.core.component" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
-<dt><code class="xref py py-class docutils literal"><span class="pre">component</span></code></dt>
+<dt><a class="reference internal" href="component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">Component</span></code></a></dt>
 <dd>A portion of a Despy model. Components represent an element of the
 system that is being simulated.</dd>
 </dl>

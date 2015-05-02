@@ -1,0 +1,514 @@
+
+
+<!doctype html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>despy.core.event.Event &mdash; Despy 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="../index.html" />
+    <link rel="up" title="Despy Classes" href="../classes.html" />
+    <link rel="prev" title="despy.core.model.Model" href="model.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="despy.core.model.Model"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">despy.core.event.Event</a><ul>
+<li><a class="reference internal" href="#class-description">Class Description</a></li>
+<li><a class="reference internal" href="#init">__init__</a></li>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#inherited-attributes">Inherited Attributes</a></li>
+<li><a class="reference internal" href="#methods">Methods</a></li>
+<li><a class="reference internal" href="#inherited-methods">Inherited Methods</a></li>
+<li><a class="reference internal" href="#internal-methods">Internal Methods</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.html"
+                        title="previous chapter">despy.core.model.Model</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/core/event.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="despy-core-event-event">
+<h1>despy.core.event.Event<a class="headerlink" href="#despy-core-event-event" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="class-description">
+<h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="despy.core.event.Event">
+<em class="property">class </em><code class="descclassname">despy.core.event.</code><code class="descname">Event</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>trace_fields=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/event.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.event.Event" title="Permalink to this definition">¶</a></dt>
+<dd><p>A base class for all events.</p>
+<p>Create an event by inheriting from the Event class. Subclasses of
+Event must instantiate one or more of the doPriorEvent(),
+_do_event(), or doPostEvent() methods. The Simulation will execute
+these methods when the Event time occurs and the Event object is
+removed from the FEL.</p>
+<dl class="docutils">
+<dt><strong>Inherited Classes</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a></li>
+<li><a class="reference internal" href="../component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a></li>
+</ul>
+</dd>
+<dt><strong>Attributes</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#despy.core.event.Event.trace_fields" title="despy.core.event.Event.trace_fields"><code class="xref py py-attr docutils literal"><span class="pre">Event.trace_fields</span></code></a>: Read Only. An ordered dictionary
+containing custom trace data.</li>
+<li><a class="reference internal" href="#despy.core.event.Event.trace_records" title="despy.core.event.Event.trace_records"><code class="xref py py-attr docutils literal"><span class="pre">Event.trace_records</span></code></a>: Read Only. A list of trace records
+for completed events.</li>
+</ul>
+</dd>
+<dt><strong>Methods</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#despy.core.event.Event.append_callback" title="despy.core.event.Event.append_callback"><code class="xref py py-meth docutils literal"><span class="pre">Event.append_callback()</span></code></a>: Appends a function to the event&#8217;s
+callback list.</li>
+<li><a class="reference internal" href="#despy.core.event.Event.add_trace_field" title="despy.core.event.Event.add_trace_field"><code class="xref py py-meth docutils literal"><span class="pre">Event.add_trace_field()</span></code></a>: Add custom fields to the event&#8217;s
+trace record.</li>
+</ul>
+</dd>
+<dt><strong>Internal Attributes</strong></dt>
+<dd><ul class="first last simple">
+<li>attr:<cite>Event._callbacks</cite>. An list of methods that will be called
+every time the event is executed.</li>
+</ul>
+</dd>
+<dt><strong>Internal Methods</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#despy.core.event.Event._do_event" title="despy.core.event.Event._do_event"><code class="xref py py-meth docutils literal"><span class="pre">Event._do_event()</span></code></a>: Executes an event&#8217;s callback functions.</li>
+<li><a class="reference internal" href="#despy.core.event.Event._update_trace_record" title="despy.core.event.Event._update_trace_record"><code class="xref py py-meth docutils literal"><span class="pre">Event._update_trace_record()</span></code></a>: Updates a trace record with
+custom fields.</li>
+<li><a class="reference internal" href="#despy.core.event.Event._reset" title="despy.core.event.Event._reset"><code class="xref py py-meth docutils literal"><span class="pre">Event._reset()</span></code></a>: Resets the event to it&#8217;s initial state. *</li>
+<li><a class="reference internal" href="#despy.core.event.Event.__lt__" title="despy.core.event.Event.__lt__"><code class="xref py py-meth docutils literal"><span class="pre">Event.__lt__()</span></code></a>: A Python Magic Method that defines how
+<cite>Event</cite> objects respond to less-than operator.</li>
+<li><a class="reference internal" href="#despy.core.event.Event.__gt__" title="despy.core.event.Event.__gt__"><code class="xref py py-meth docutils literal"><span class="pre">Event.__gt__()</span></code></a>: A Python Magic Method that defines how
+<cite>Event</cite> objects respond to greater-than operator.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="init">
+<h2>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt>
+<code class="descclassname">Event.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>trace_fields=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/event.html#Event.__init__"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Initialize the Event object.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><cite>model</cite> (<a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a>):</dt>
+<dd>The Model that the event belongs to.</dd>
+<dt><cite>name</cite> (string):</dt>
+<dd>A short string describing the event. The name will be
+printed in the event trace report.</dd>
+<dt><cite>trace_fields</cite> (collections.OrderedDict)</dt>
+<dd>An ordered dictionary of fields that will be added to the
+trace record for this event.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="despy.core.event.Event.trace_fields">
+<code class="descclassname">Event.</code><code class="descname">trace_fields</code><a class="headerlink" href="#despy.core.event.Event.trace_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>An ordered dictionary containing custom trace data.</p>
+<p><em>Returns:</em> An instance of <cite>OrderedDict</cite> with custom trace data
+stored as key: value pairs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.event.Event.trace_records">
+<code class="descclassname">Event.</code><code class="descname">trace_records</code><a class="headerlink" href="#despy.core.event.Event.trace_records" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of trace records for completed events.</p>
+<p>A single event object can be reused by rescheduling it on the
+FEL. The <cite>trace_records</cite> attribute is a list of all
+trace records that have been completed for the <cite>Event</cite> object.</p>
+<p><em>Returns:</em> A list of <code class="xref py py-class docutils literal"><span class="pre">despy.output.trace.TraceRecord</span></code>
+objects.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="inherited-attributes">
+<h2>Inherited Attributes<a class="headerlink" href="#inherited-attributes" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">name</code></dt>
+<dd><p>The name of the object.</p>
+<p>A short phrase, such as &#8220;Customer&#8221; or &#8220;Server Queue&#8221; that
+identifies the object.  Using title case and spaces will result
+in pleasant formatting in output reports and trace files.</p>
+<p><em>Returns:</em> <cite>string</cite></p>
+<dl class="docutils">
+<dt><em>Raises:</em></dt>
+<dd><cite>TypeError</cite> if name is not a string.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">description</code></dt>
+<dd><p>Gets a description of the model.</p>
+<p>One or more paragraphs that describes the purpose and behavior
+of the object.  The description will be included in output
+reports as html paragraphs (or equivalent for other output
+formats).</p>
+<p><em>Returns:</em> <cite>string</cite></p>
+<p><em>Raises:</em> <cite>TypeError</cite> if description is not a string or type
+<cite>None</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">slug</code></dt>
+<dd><p>Returns a modified version of the name attribute.</p>
+<p>Spaces and all characters not allowed in Windows filenames
+([]&lt;&gt;/*?:|#!&#8221;) are replaced with underscores.</p>
+<p><em>Returns:</em> str</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">model</code></dt>
+<dd><p>A link to the component&#8217;s model object.</p>
+<p>This read-only attribute is set by the <a class="reference internal" href="simulation.html#despy.core.simulation.Simulation.__init__" title="despy.core.simulation.Simulation.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a>
+method.</p>
+<p><em>Returns</em> <a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">sim</code></dt>
+<dd><p>A link to the model&#8217;s simulation attribute.</p>
+<p>This read-only attribute is provided for convenience.</p>
+<p><em>Returns:</em> <a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">number</code></dt>
+<dd><p>An integer that uniquely identifies the <em>Component</em> instance.</p>
+<p>This attribute is read only.</p>
+<p><em>Returns</em> integer</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">id</code></dt>
+<dd><p>A string that uniquely identifies the component instance.</p>
+<p>The id attribute is of the format
+&#8220;&lt;model.slug&gt;.&lt;component.slug&gt;.&lt;component.number&gt;&#8221;. The
+<code class="xref py py-meth docutils literal"><span class="pre">slug()</span></code> attribute is inherited from
+<a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a>. The slug is the
+name attribute with spaces and characters that are not allowed
+in Windows replaced by underscores. The <em>id</em> attribute is
+suitable for creating file names.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="despy.core.event.Event.append_callback">
+<code class="descclassname">Event.</code><code class="descname">append_callback</code><span class="sig-paren">(</span><em>callback</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/event.html#Event.append_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.event.Event.append_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a function to the event&#8217;s callback list.</p>
+<p>The function will be called when the event is removed from the
+FEL and executed.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt>callback (function):</dt>
+<dd>A variable that represents a class method or function.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.event.Event.add_trace_field">
+<code class="descclassname">Event.</code><code class="descname">add_trace_field</code><span class="sig-paren">(</span><em>key</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/event.html#Event.add_trace_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.event.Event.add_trace_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add custom fields to the event&#8217;s trace record.</p>
+<p>This method is typically called from an event&#8217;s callback method.
+It adds <cite>value</cite> to the event&#8217;s trace record, labeled with the
+text in <cite>key</cite>.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><cite>key</cite> (String)</dt>
+<dd>A text label that describes the data in <cite>value</cite>.</dd>
+<dt><cite>value</cite> (String or Number)</dt>
+<dd>A number, string, or other text-convertible value.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="inherited-methods">
+<h2>Inherited Methods<a class="headerlink" href="#inherited-methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component.initialize"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Subclasses should override this method with initialization
+code that will be executed prior to any events on the future
+event list (FEL).</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component.finalize"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Subclasses should override this method with cleanup or other
+code that will be executed after all events on the FEL.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">get_data</code><span class="sig-paren">(</span><em>folder</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component.get_data"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Subclasses should override this method to provide simulation
+output that will be included in the output report.</p>
+<p>The output is a Python list of two-element tuples. The first
+element of each tuple is a <code class="xref py py-class docutils literal"><span class="pre">despy.output.report.DataType</span></code>
+enumeration that determines how the rest of the tuple will be
+presented in the output report:</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>Datatype.title:</em> The first element is the <em>Datatype.title
+enumeration</em> value and the second element is a string that
+will be displayed as a heading element in the html output
+report, or equivalent formatting for other output report
+formats.</li>
+<li><em>Datatype.paragraph:</em> The first element is the
+<em>Datatype.paragraph</em> enumaration value and the second
+element is a string that will be displayed as a paragraph
+element in the html output report, or equivalent formatting
+for other output report formats.</li>
+<li><em>Datatype.param_list:</em> The first element is the
+<em>Datatype.param_list enumeration value and the second
+element is a list with one or more two-element sub-tuples.
+The first element of the sub-tuples is a string caption
+describing the parameter, and the second element is the
+parameter. The *Datatype.param_list</em> will be displayed in
+the output report as a list of parameters with descriptive
+captions.</li>
+<li><em>Datatype.image:</em> The first element is the <em>Datatype.image</em>
+enumeration value and the second element is the image
+filename. The image will be displayed in the output report.</li>
+</ul>
+</div></blockquote>
+<p>The order of the datatypes in the output report will be the
+same as the order in the Python list that is returned from this
+method. Here is an example of the output from the
+<code class="xref py py-class docutils literal"><span class="pre">despy.core.queue.Queue</span></code> class:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">output</span> <span class="o">=</span> <span class="p">[(</span><span class="n">Datatype</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s">&quot;Queue Results: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)),</span>
+           <span class="p">(</span><span class="n">Datatype</span><span class="o">.</span><span class="n">paragraph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">__str__</span><span class="p">()),</span>
+           <span class="p">(</span><span class="n">Datatype</span><span class="o">.</span><span class="n">param_list</span><span class="p">,</span>
+              <span class="p">[(</span><span class="s">&#39;Maximum Time in Queue&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">qtimes</span><span class="p">)),</span>
+               <span class="p">(</span><span class="s">&#39;Minimum Time in Queue&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">qtimes</span><span class="p">)),</span>
+               <span class="p">(</span><span class="s">&#39;Mean Time in Queue&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">qtimes</span><span class="p">))]),</span>
+           <span class="p">(</span><span class="n">Datatype</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="n">qtime_filename</span><span class="p">)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="classmethod">
+<dt>
+<em class="property">classmethod </em><code class="descclassname">Component.</code><code class="descname">set_counter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component.set_counter"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>A class method that resets the <em>Component&#8217;s</em> or subclass&#8217;s
+number counter back to 1.</p>
+<p>By default, the <em>Component</em> class and all subclasses of
+<em>Component</em> use the same static number counter. For example,
+the first <em>Component</em> to be instantiated is number 1, regardless
+of whether it&#8217;s type <em>Component</em> or a subclass like <em>Event</em> or
+<em>Queue</em>. The __init__ method assigns number 2 to the second
+instantiated <em>Component</em> or subclass, regardless of type, and
+so on.</p>
+<p>The simulation designer can assign a separate static counter
+object to a subclass of <em>Component</em> by calling the static
+method <em>set_counter()</em> on a subclass. The subclass&#8217;s number
+attributes will be the unbroken sequence 1, 2, 3, ...</p>
+</dd></dl>
+
+</div>
+<div class="section" id="internal-methods">
+<h2>Internal Methods<a class="headerlink" href="#internal-methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="despy.core.event.Event._do_event">
+<code class="descclassname">Event.</code><code class="descname">_do_event</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/event.html#Event._do_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.event.Event._do_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes an event&#8217;s callback functions.</p>
+<p>Internal Method. The <cite>_do_event</cite> called by the <cite>Simulation</cite>
+class&#8217;s <cite>step()</cite> method. It is not intended to be called by the
+user.</p>
+<p><em>Returns:</em> <cite>True</cite> if a callback method is executed. <cite>None</cite> if
+there are no callbacks attached to the event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.event.Event._update_trace_record">
+<code class="descclassname">Event.</code><code class="descname">_update_trace_record</code><span class="sig-paren">(</span><em>trace_record</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/event.html#Event._update_trace_record"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.event.Event._update_trace_record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates a trace record with custom fields.</p>
+<p>Internal Method. The <cite>_update_trace_record</cite> method is called by
+the <cite>trace</cite> object. It is not intended to be called by the user.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><cite>trace_record</cite></dt>
+<dd>A <code class="xref py py-class docutils literal"><span class="pre">despy.output.trace.TraceRecord</span></code> object. The
+TraceRecord will be added to the simulation&#8217;s trace
+report to record the occurrence of the event.</dd>
+</dl>
+</dd>
+</dl>
+<p><em>Returns:</em> A Python list containing the updated trace record.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.event.Event._reset">
+<code class="descclassname">Event.</code><code class="descname">_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/event.html#Event._reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.event.Event._reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the event to it&#8217;s initial state.</p>
+<p>Internal Method. The <cite>reset</cite> method is called by the
+<cite>Simulation</cite> class&#8217;s <cite>reset</cite> method. It deletes all
+trace_records from the event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.event.Event.__lt__">
+<code class="descclassname">Event.</code><code class="descname">__lt__</code><span class="sig-paren">(</span><em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/event.html#Event.__lt__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.event.Event.__lt__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines how <cite>Event</cite> objects respond to less-than operator.</p>
+<p>The Python magic methods <cite>__lt__</cite> and <cite>__gt__</cite> are necessary
+because the FEL is implemented as a heap. All items on a heap
+must be sortable. Events are primarily sorted by simulation time.
+For events that are scheduled to occur at the same time, this
+method provides a secondary sort order based on the <cite>Event</cite>
+object&#8217;s <cite>id</cite> attribute.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><cite>y</cite></dt>
+<dd>The other <cite>Event</cite> object that is being compared with
+the less-than operator.</dd>
+</dl>
+</dd>
+</dl>
+<p><em>Returns:</em> <cite>True</cite> if <cite>self.id &lt; y.id</cite>, <cite>False</cite> otherwise.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.event.Event.__gt__">
+<code class="descclassname">Event.</code><code class="descname">__gt__</code><span class="sig-paren">(</span><em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/event.html#Event.__gt__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.event.Event.__gt__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines how <cite>Event</cite> objects respond to greater-than operator.</p>
+<p>See documentation for <cite>__lt__</cite> for an explanation of why this
+Python magic method is necessary.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><cite>y</cite></dt>
+<dd>The other <cite>Event</cite> object that is being compared with
+the greater-than operator.</dd>
+</dl>
+</dd>
+</dl>
+<p><em>Returns:</em> <cite>True</cite> if <cite>self.id &gt; y.id</cite>, <cite>False</cite> otherwise.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="despy.core.model.Model"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" >Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Stacy Irwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

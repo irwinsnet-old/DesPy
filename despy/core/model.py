@@ -56,7 +56,7 @@ class Model(NamedObject):
         method.
         
     **Inherits**
-      * :class:`despy.core.base.NamedObject`
+      * :class:`despy.base.named_object.NamedObject`
 
     """
 

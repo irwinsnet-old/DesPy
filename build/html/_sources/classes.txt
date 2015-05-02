@@ -4,9 +4,7 @@ Despy Classes
 .. toctree::
    :maxdepth: 2
    
-   despy.base.named_object.NamedObject <namedobject>
-   despy.core.simulation.FelItem <felitem>
-   despy.core.simulation.Simulation <simulation>
-   despy.core.simulation.NoEventsRemaining <NoEventsRemainingError>
-   despy.core.model.Model <model>
-   despy.core.component.Component <component>
+   base/namedobject
+   core/simulation
+   core/model
+   core/event

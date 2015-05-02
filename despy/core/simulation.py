@@ -5,13 +5,13 @@
 """
 ..  module:: despy.core.simulation
 
-**Simulation**
+:class:`.Simulation`
     The *Simulation* class maintains and executes the future event list
     (FEL).
-**FelItem**
+:class:`.FelItem`
     A *FelItem* is a named tuple that represents a scheduled event. The
     FEL is a binary heap of *FelItems*.
-**NoEventsRemaining**
+:class:`.NoEventsRemaining`
     The *Simulation* instance raises this subclass of Exception when
     there are no more events on the FEL.
 """
@@ -386,7 +386,7 @@ class Simulation(NamedObject):
 
         # Run event
         self._evt = fel_item.event_fld
-        fel_item.event_fld.do_event()
+        fel_item.event_fld._do_event()
         self._evt = None
 
         # Record event in trace report        
@@ -394,7 +394,7 @@ class Simulation(NamedObject):
                                  fel_item.event_fld)
         
         # Reset the event in case it is called again.
-        fel_item.event_fld.reset()
+        fel_item.event_fld._reset()
         
         return fel_item
 

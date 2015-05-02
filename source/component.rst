@@ -1,4 +1,19 @@
-Component
-#########
+..  currentmodule:: despy.core.component
 
-..  autoclass:: despy.core.component.Component
+##############################
+despy.core.component.Component
+##############################
+
+*****************
+Class Description
+*****************
+
+.. autoclass:: Component
+
+****************
+Class Attributes
+****************
+..  autoattribute:: .Component.model
+..  autoattribute:: .Component.sim
+..  autoattribute:: .Component.number
+..  autoattribute:: .Component.id

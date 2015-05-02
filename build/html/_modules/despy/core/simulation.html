@@ -77,13 +77,13 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">..  module:: despy.core.simulation</span>
 
-<span class="sd">**Simulation**</span>
+<span class="sd">:class:`.Simulation`</span>
 <span class="sd">    The *Simulation* class maintains and executes the future event list</span>
 <span class="sd">    (FEL).</span>
-<span class="sd">**FelItem**</span>
+<span class="sd">:class:`.FelItem`</span>
 <span class="sd">    A *FelItem* is a named tuple that represents a scheduled event. The</span>
 <span class="sd">    FEL is a binary heap of *FelItems*.</span>
-<span class="sd">**NoEventsRemaining**</span>
+<span class="sd">:class:`.NoEventsRemaining`</span>
 <span class="sd">    The *Simulation* instance raises this subclass of Exception when</span>
 <span class="sd">    there are no more events on the FEL.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -97,7 +97,7 @@
 <span class="kn">from</span> <span class="nn">despy.output.datatype</span> <span class="kn">import</span> <span class="n">Datatype</span>
 <span class="kn">from</span> <span class="nn">despy.base.named_object</span> <span class="kn">import</span> <span class="n">NamedObject</span>
 
-<div class="viewcode-block" id="FelItem"><a class="viewcode-back" href="../../../packages.html#despy.core.simulation.FelItem">[docs]</a><span class="k">class</span> <span class="nc">FelItem</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FelItemTuple&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="FelItem"><a class="viewcode-back" href="../../../felitem.html#despy.core.simulation.FelItem">[docs]</a><span class="k">class</span> <span class="nc">FelItem</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FelItemTuple&#39;</span><span class="p">,</span>
                          <span class="p">[</span><span class="s">&#39;time_fld&#39;</span><span class="p">,</span> <span class="s">&#39;event_fld&#39;</span><span class="p">,</span> <span class="s">&#39;priority_fld&#39;</span><span class="p">])):</span>
     <span class="sd">&quot;&quot;&quot;A named tuple that represents a scheduled event.</span>
 <span class="sd">    </span>
@@ -150,7 +150,7 @@
     <span class="n">PRIORITY_STANDARD</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">PRIORITY_LATE</span> <span class="o">=</span> <span class="mi">1</span>
 </div>
-<div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Schedule events and manage the future event list (FEL).</span>
 <span class="sd">    </span>
 <span class="sd">    Every Despy simulation must have one instance of the</span>
@@ -214,7 +214,7 @@
 <span class="sd">      </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Simulation.__init__"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Simulation&quot;</span><span class="p">,</span>
+<div class="viewcode-block" id="Simulation.__init__"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Simulation&quot;</span><span class="p">,</span>
                  <span class="n">description</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creates and initializes the Simulation object.</span>
 <span class="sd">        </span>
@@ -357,7 +357,7 @@
     <span class="k">def</span> <span class="nf">gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gen</span> <span class="o">=</span> <span class="n">output</span>
     
-<div class="viewcode-block" id="Simulation.append_model"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation.append_model">[docs]</a>    <span class="k">def</span> <span class="nf">append_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulation.append_model"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.append_model">[docs]</a>    <span class="k">def</span> <span class="nf">append_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Append a model object to the simulation.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
@@ -366,7 +366,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simulation.schedule"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation.schedule">[docs]</a>    <span class="k">def</span> <span class="nf">schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">FelItem</span><span class="o">.</span><span class="n">PRIORITY_STANDARD</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulation.schedule"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.schedule">[docs]</a>    <span class="k">def</span> <span class="nf">schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">FelItem</span><span class="o">.</span><span class="n">PRIORITY_STANDARD</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Add an event to the FEL.</span>
 
 <span class="sd">        *Arguments*</span>
@@ -393,7 +393,7 @@
                  <span class="n">FelItem</span><span class="p">(</span><span class="n">time_fld</span><span class="o">=</span><span class="n">scheduleTime</span><span class="p">,</span> <span class="n">event_fld</span><span class="o">=</span><span class="n">event</span><span class="p">,</span>
                          <span class="n">priority_fld</span><span class="o">=</span><span class="n">priority</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="Simulation.peek"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation.peek">[docs]</a>    <span class="k">def</span> <span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prioritized</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulation.peek"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.peek">[docs]</a>    <span class="k">def</span> <span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prioritized</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the time of the next scheduled event.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
@@ -418,7 +418,7 @@
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;Infinity&#39;</span><span class="p">)</span>
         </div>
-<div class="viewcode-block" id="Simulation._initialize_models"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation._initialize_models">[docs]</a>    <span class="k">def</span> <span class="nf">_initialize_models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulation._initialize_models"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation._initialize_models">[docs]</a>    <span class="k">def</span> <span class="nf">_initialize_models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run the `initialize` method on every attached model.</span>
 <span class="sd">        </span>
 <span class="sd">        `_initialize_models` is called by the</span>
@@ -429,7 +429,7 @@
                 <span class="n">model</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
                 <span class="n">model</span><span class="o">.</span><span class="n">initial_events_scheduled</span> <span class="o">=</span> <span class="bp">True</span>
 </div>
-<div class="viewcode-block" id="Simulation.step"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulation.step"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Advance simulation time and execute the next event.</span>
 <span class="sd">        </span>
 <span class="sd">        The `step` method will only execute one event. Users might</span>
@@ -458,7 +458,7 @@
 
         <span class="c"># Run event</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_evt</span> <span class="o">=</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span>
-        <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="o">.</span><span class="n">do_event</span><span class="p">()</span>
+        <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="o">.</span><span class="n">_do_event</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_evt</span> <span class="o">=</span> <span class="bp">None</span>
 
         <span class="c"># Record event in trace report        </span>
@@ -466,11 +466,11 @@
                                  <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="p">)</span>
         
         <span class="c"># Reset the event in case it is called again.</span>
-        <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
         
         <span class="k">return</span> <span class="n">fel_item</span>
 </div>
-<div class="viewcode-block" id="Simulation.run"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulation.run"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Execute events on the FEL until reaching a stop condition.</span>
 <span class="sd">        </span>
 <span class="sd">        The `run` method will advance simulation time and execute events</span>
@@ -520,7 +520,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">output_folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">write_files</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">output_folder</span><span class="p">)</span>
             </div>
-<div class="viewcode-block" id="Simulation.get_data"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulation.get_data"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Get a Python list with simulation parameters and results.</span>
 <span class="sd">        </span>
 <span class="sd">        The generator object calls the get_data method of the simulation</span>
@@ -548,7 +548,7 @@
                   <span class="p">]</span>
         <span class="k">return</span> <span class="n">output</span>
 </div>
-<div class="viewcode-block" id="Simulation.reset"><a class="viewcode-back" href="../../../simulation.html#despy.core.simulation.Simulation.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_time</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulation.reset"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_time</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Reset the time to zero, allowing the simulation to be rerun.</span>
 <span class="sd">        </span>
 <span class="sd">        Sets the simulation time to zero. Also sets the model&#39;s</span>
@@ -579,7 +579,7 @@
         <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">:</span>
             <span class="n">model</span><span class="o">.</span><span class="n">initial_events_scheduled</span> <span class="o">=</span> <span class="bp">False</span>
 </div></div>
-<div class="viewcode-block" id="NoEventsRemainingError"><a class="viewcode-back" href="../../../packages.html#despy.core.simulation.NoEventsRemainingError">[docs]</a><span class="k">class</span> <span class="nc">NoEventsRemainingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="NoEventsRemainingError"><a class="viewcode-back" href="../../../NoEventsRemainingError.html#despy.core.simulation.NoEventsRemainingError">[docs]</a><span class="k">class</span> <span class="nc">NoEventsRemainingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Raised by despy.core.simulation&#39;s step method when FEL is empty.</span>
 <span class="sd">    </span>
 <span class="sd">    Raised by the `Simulation.step` method when no events remain on the</span>

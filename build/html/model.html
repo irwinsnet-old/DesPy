@@ -27,8 +27,7 @@
     <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="top" title="Despy 1 documentation" href="index.html" />
     <link rel="up" title="Despy Classes" href="classes.html" />
-    <link rel="next" title="Component" href="component.html" />
-    <link rel="prev" title="despy.core.simulation.NoEventsRemaining" href="NoEventsRemainingError.html" />
+    <link rel="prev" title="despy.core.simulation.Simulation" href="simulation.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -45,10 +44,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="component.html" title="Component"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="NoEventsRemainingError.html" title="despy.core.simulation.NoEventsRemaining"
+          <a href="simulation.html" title="despy.core.simulation.Simulation"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
@@ -62,17 +58,13 @@
 <li><a class="reference internal" href="#class-description">Class Description</a></li>
 <li><a class="reference internal" href="#class-attributes">Class Attributes</a></li>
 <li><a class="reference internal" href="#class-methods">Class Methods</a></li>
-<li><a class="reference internal" href="#internal-private-methods">Internal (Private) Methods</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="NoEventsRemainingError.html"
-                        title="previous chapter">despy.core.simulation.NoEventsRemaining</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="component.html"
-                        title="next chapter">Component</a></p>
+  <p class="topless"><a href="simulation.html"
+                        title="previous chapter">despy.core.simulation.Simulation</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -101,18 +93,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <dl class="class">
-<dt id="despy.core.model.despy.core.model.Model">
-<em class="property">class </em><code class="descclassname">despy.core.model.</code><code class="descname">Model</code><a class="headerlink" href="#despy.core.model.despy.core.model.Model" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<div class="section" id="despy-core-model-model">
+  <div class="section" id="despy-core-model-model">
 <h1>despy.core.model.Model<a class="headerlink" href="#despy-core-model-model" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="class-description">
 <h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt>
-<em class="property">class </em><code class="descclassname">despy.core.model.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>name</em>, <em>sim=None</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/model.html#Model"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="despy.core.model.Model">
+<em class="property">class </em><code class="descclassname">despy.core.model.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>name</em>, <em>sim=None</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/model.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.model.Model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents the logical elements of the real-world system.</p>
 <p>Contains the simulation elements that represent the logical
 elements of the real-world system, such as servers, entities,
@@ -124,16 +111,16 @@ own model class by sub-classing this class.</p>
 <dl class="docutils">
 <dt><strong>Attributes</strong></dt>
 <dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.base.named_object.NamedObject.name" title="despy.base.named_object.NamedObject.name"><code class="xref py py-attr docutils literal"><span class="pre">name</span></code></a>: Model object&#8217;s name. Inherited from
-<code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code>. Type: <cite>string</cite>.</li>
-<li><a class="reference internal" href="#despy.base.named_object.NamedObject.description" title="despy.base.named_object.NamedObject.description"><code class="xref py py-attr docutils literal"><span class="pre">description</span></code></a>: One or more paragraphs that describes the
+<li><a class="reference internal" href="namedobject.html#despy.base.named_object.NamedObject.name" title="despy.base.named_object.NamedObject.name"><code class="xref py py-attr docutils literal"><span class="pre">name</span></code></a>: Model object&#8217;s name. Inherited from
+<a class="reference internal" href="namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a>. Type: <cite>string</cite>.</li>
+<li><a class="reference internal" href="namedobject.html#despy.base.named_object.NamedObject.description" title="despy.base.named_object.NamedObject.description"><code class="xref py py-attr docutils literal"><span class="pre">description</span></code></a>: One or more paragraphs that describes the
 Model. Inherited from
-<code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code> Type: <cite>string</cite>.</li>
+<a class="reference internal" href="namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a> Type: <cite>string</cite>.</li>
 <li><a class="reference internal" href="#despy.core.model.Model.initial_events_scheduled" title="despy.core.model.Model.initial_events_scheduled"><code class="xref py py-attr docutils literal"><span class="pre">initial_events_scheduled</span></code></a>: Returns <cite>False</cite> if the model
 and it&#8217;s components have not yet been initialized. Otherwise
 returns true.</li>
 <li><a class="reference internal" href="#despy.core.model.Model.sim" title="despy.core.model.Model.sim"><code class="xref py py-attr docutils literal"><span class="pre">sim</span></code></a>: The corresponding instance of the
-<code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code> class.</li>
+<a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a> class.</li>
 </ul>
 </dd>
 <dt><strong>Methods</strong></dt>
@@ -151,13 +138,13 @@ subclass.</li>
 <li><a class="reference internal" href="#despy.core.model.Model.initialize" title="despy.core.model.Model.initialize"><code class="xref py py-meth docutils literal"><span class="pre">initialize()</span></code></a>: The default initialize method. Calls the
 <cite>initialize</cite> method on all model components.</li>
 <li><a class="reference internal" href="#despy.core.model.Model.schedule" title="despy.core.model.Model.schedule"><code class="xref py py-meth docutils literal"><span class="pre">schedule()</span></code></a>: A convenience method. Calls the
-<code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code> class&#8217;s <cite>schedule</cite>
+<a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a> class&#8217;s <cite>schedule</cite>
 method.</li>
 </ul>
 </dd>
 <dt><strong>Inherits</strong></dt>
 <dd><ul class="first last simple">
-<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.base.NamedObject</span></code></li>
+<li><a class="reference internal" href="namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a></li>
 </ul>
 </dd>
 </dl>
@@ -167,8 +154,8 @@ method.</li>
 <div class="section" id="class-attributes">
 <h2>Class Attributes<a class="headerlink" href="#class-attributes" title="Permalink to this headline">¶</a></h2>
 <dl class="attribute">
-<dt id="despy.base.named_object.NamedObject.name">
-<code class="descclassname">NamedObject.</code><code class="descname">name</code><a class="headerlink" href="#despy.base.named_object.NamedObject.name" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">name</code></dt>
 <dd><p>The name of the object.</p>
 <p>A short phrase, such as &#8220;Customer&#8221; or &#8220;Server Queue&#8221; that
 identifies the object.  Using title case and spaces will result
@@ -181,8 +168,8 @@ in pleasant formatting in output reports and trace files.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="despy.base.named_object.NamedObject.description">
-<code class="descclassname">NamedObject.</code><code class="descname">description</code><a class="headerlink" href="#despy.base.named_object.NamedObject.description" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">description</code></dt>
 <dd><p>Gets a description of the model.</p>
 <p>One or more paragraphs that describes the purpose and behavior
 of the object.  The description will be included in output
@@ -205,7 +192,7 @@ been executed.</p>
 <dt id="despy.core.model.Model.sim">
 <code class="descclassname">Model.</code><code class="descname">sim</code><a class="headerlink" href="#despy.core.model.Model.sim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the simulation object.</p>
-<p><em>Returns:</em> (<code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code>)</p>
+<p><em>Returns:</em> (<a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a>)</p>
 </dd></dl>
 
 </div>
@@ -221,7 +208,7 @@ been executed.</p>
 <dt><cite>name</cite> (string):</dt>
 <dd>A short name for the model. The model name is displayed
 in output reports.</dd>
-<dt><cite>sim</cite> (<code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code>)(Optional):</dt>
+<dt><cite>sim</cite> (<a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a>)(Optional):</dt>
 <dd>The model object must be attached to a simulation
 object, which will manage events and the FEL.
 If the simulation argument is omitted, the constructor
@@ -335,11 +322,6 @@ that the event will occur.</dd>
 </dd></dl>
 
 </div>
-<div class="section" id="internal-private-methods">
-<h2>Internal (Private) Methods<a class="headerlink" href="#internal-private-methods" title="Permalink to this headline">¶</a></h2>
-<p>These methods are not intended to be called by the user. They
-should be considered private.</p>
-</div>
 </div>
 
 
@@ -358,10 +340,7 @@ should be considered private.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="component.html" title="Component"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="NoEventsRemainingError.html" title="despy.core.simulation.NoEventsRemaining"
+          <a href="simulation.html" title="despy.core.simulation.Simulation"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="classes.html" >Despy Classes</a> &raquo;</li> 

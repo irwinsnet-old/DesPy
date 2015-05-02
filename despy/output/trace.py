@@ -102,7 +102,7 @@ class Trace(object):
         if self.active():
             trace_record = TraceRecord(self.number, time, priority, 'Event',
                                        event.name)
-            self.add(event.update_trace_record(trace_record))
+            self.add(event._update_trace_record(trace_record))
         
     def clear(self):
         del self._list[:]

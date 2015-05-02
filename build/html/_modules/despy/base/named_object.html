@@ -89,7 +89,7 @@
 
 <span class="kn">import</span> <span class="nn">re</span>
 
-<div class="viewcode-block" id="NamedObject"><a class="viewcode-back" href="../../../namedobject.html#despy.base.named_object.NamedObject">[docs]</a><span class="k">class</span> <span class="nc">NamedObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="NamedObject"><a class="viewcode-back" href="../../../base/namedobject.html#despy.base.named_object.NamedObject">[docs]</a><span class="k">class</span> <span class="nc">NamedObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A base class that provides name and description fields.</span>
 <span class="sd">    </span>
 <span class="sd">    Subclasses should include a call to the</span>
@@ -100,12 +100,12 @@
 <span class="sd">      * :attr:`.name`: Object name.</span>
 <span class="sd">      * :attr:`.description`: One or more paragraphs that describes the</span>
 <span class="sd">        object.</span>
+<span class="sd">      * :attr:`.slug`: Returns the name attribute, but replaces all</span>
+<span class="sd">        characters that are not allowed in Windows file names with an</span>
+<span class="sd">        underscore character.</span>
 <span class="sd">        </span>
 <span class="sd">    **Methods**</span>
 <span class="sd">      * :meth:`__str__` Returns the name attribute.</span>
-<span class="sd">      * :meth:`.slug` Returns the name attribute, but replaces all</span>
-<span class="sd">        characters that are not allowed in Windows file names with an</span>
-<span class="sd">        underscore character.</span>
 <span class="sd">      </span>
 <span class="sd">    **Superclass**</span>
 <span class="sd">      * :class:`despy.core.model.Model`</span>
@@ -113,7 +113,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     
     
-<div class="viewcode-block" id="NamedObject.__init__"><a class="viewcode-back" href="../../../namedobject.html#despy.base.named_object.NamedObject.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creates an instance of a NamedObject.</span>
 <span class="sd">        </span>
 <span class="sd">        All NamedObject instances and subclasses must have a name,</span>
@@ -131,7 +131,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
-</div>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The name of the object.</span>
@@ -182,7 +182,7 @@
                     <span class="s">&quot; argument. Should be a string or None.&quot;</span>             
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
-<div class="viewcode-block" id="NamedObject.__str__"><a class="viewcode-back" href="../../../namedobject.html#despy.base.named_object.NamedObject.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NamedObject.__str__"><a class="viewcode-back" href="../../../base/namedobject.html#despy.base.named_object.NamedObject.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the name attribute.</span>
 <span class="sd">        </span>
 <span class="sd">        Unless overriden by the subclass, statements such as</span>

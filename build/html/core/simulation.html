@@ -1,0 +1,517 @@
+
+
+<!doctype html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>despy.core.simulation.Simulation &mdash; Despy 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="../index.html" />
+    <link rel="up" title="Despy Classes" href="../classes.html" />
+    <link rel="next" title="despy.core.model.Model" href="model.html" />
+    <link rel="prev" title="despy.base.namedobject.NamedObject" href="../base/namedobject.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="despy.core.model.Model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../base/namedobject.html" title="despy.base.namedobject.NamedObject"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">despy.core.simulation.Simulation</a><ul>
+<li><a class="reference internal" href="#class-description">Class Description</a></li>
+<li><a class="reference internal" href="#class-attributes">Class Attributes</a></li>
+<li><a class="reference internal" href="#class-methods">Class Methods</a></li>
+<li><a class="reference internal" href="#internal-private-methods">Internal (Private) Methods</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../base/namedobject.html"
+                        title="previous chapter">despy.base.namedobject.NamedObject</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model.html"
+                        title="next chapter">despy.core.model.Model</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/core/simulation.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="despy-core-simulation-simulation">
+<h1>despy.core.simulation.Simulation<a class="headerlink" href="#despy-core-simulation-simulation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="class-description">
+<h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="despy.core.simulation.Simulation">
+<em class="property">class </em><code class="descclassname">despy.core.simulation.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>initial_time=0</em>, <em>name='Simulation'</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/simulation.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Schedule events and manage the future event list (FEL).</p>
+<p>Every Despy simulation must have one instance of the
+<cite>simulation</cite> class. The <cite>simulation</cite> class initializes the
+top-level model and its components, manages the simulation
+clock and FEL, and executes events.</p>
+<p><strong>Attributes</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject.name" title="despy.base.named_object.NamedObject.name"><code class="xref py py-attr docutils literal"><span class="pre">name</span></code></a>: Simulation object&#8217;s name. Inherited from
+<a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a>. Type: <cite>string</cite>.</li>
+<li><a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject.description" title="despy.base.named_object.NamedObject.description"><code class="xref py py-attr docutils literal"><span class="pre">description</span></code></a>: One or more paragraphs that describes the
+simulation. Inherited from
+<a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a> Type: <cite>string</cite>.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.models" title="despy.core.simulation.Simulation.models"><code class="xref py py-attr docutils literal"><span class="pre">models</span></code></a>: A list of all <a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> objects that
+have been assigned to the simulation.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.seed" title="despy.core.simulation.Simulation.seed"><code class="xref py py-attr docutils literal"><span class="pre">seed</span></code></a>: The np.random.seed method will be seeded with
+this integer prior to running the simulation.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.now" title="despy.core.simulation.Simulation.now"><code class="xref py py-attr docutils literal"><span class="pre">now</span></code></a>: An integer representing the current simulation
+time. Type: <cite>integer</cite> (non-negative).</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.evt" title="despy.core.simulation.Simulation.evt"><code class="xref py py-attr docutils literal"><span class="pre">evt</span></code></a>: Returns the <a class="reference internal" href="event.html#despy.core.event.Event" title="despy.core.event.Event"><code class="xref py py-class docutils literal"><span class="pre">despy.core.event.Event</span></code></a> object
+that is currently being executed. If no event is being executed,
+returns <cite>None</cite>. Read-only.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.run_start_time" title="despy.core.simulation.Simulation.run_start_time"><code class="xref py py-attr docutils literal"><span class="pre">run_start_time</span></code></a>: The real-world start time for the
+simulation. Type: datetime.datetime, or <cite>None</cite> if the simulation
+has not yet been run. Read-only.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.run_stop_time" title="despy.core.simulation.Simulation.run_stop_time"><code class="xref py py-attr docutils literal"><span class="pre">run_stop_time</span></code></a>: The real-world stop time for the
+simulation. Type: datetime.datetime, or <cite>None</cite> if the simulation
+has not yet been run. Read-only.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.gen" title="despy.core.simulation.Simulation.gen"><code class="xref py py-attr docutils literal"><span class="pre">gen</span></code></a>: A <code class="xref py py-class docutils literal"><span class="pre">despy.output.generator</span></code> object that will
+generate all output files.</li>
+</ul>
+</div></blockquote>
+<p><strong>Methods</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.append_model" title="despy.core.simulation.Simulation.append_model"><code class="xref py py-meth docutils literal"><span class="pre">append_model()</span></code></a>: Appends a <a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a>
+object to the Simulation object. A Despy simulation can run
+multiple models simultaneously.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.schedule" title="despy.core.simulation.Simulation.schedule"><code class="xref py py-meth docutils literal"><span class="pre">despy.core.simulation.Simulation.schedule()</span></code></a>: Schedules an
+event on the FEL.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.peek" title="despy.core.simulation.Simulation.peek"><code class="xref py py-meth docutils literal"><span class="pre">peek()</span></code></a>: Gets the time of the next scheduled event, but
+leaves the event on the FEL.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.step" title="despy.core.simulation.Simulation.step"><code class="xref py py-meth docutils literal"><span class="pre">step()</span></code></a>: Executes the next event on the FEL.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.run" title="despy.core.simulation.Simulation.run"><code class="xref py py-meth docutils literal"><span class="pre">run()</span></code></a>: Executes the remaining events on the FEL in order,
+until no events remain, or until the time specified in the
+until parameter is reached.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.get_data" title="despy.core.simulation.Simulation.get_data"><code class="xref py py-meth docutils literal"><span class="pre">get_data()</span></code></a>: Gets a Python list that contains 
+simulation parameters, such as name, run time, etc.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.reset" title="despy.core.simulation.Simulation.reset"><code class="xref py py-meth docutils literal"><span class="pre">reset()</span></code></a>: Resets the simulation time to the beginning of
+the simulation and resets the model and its components to their
+initial state.</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation._initialize_models" title="despy.core.simulation.Simulation._initialize_models"><code class="xref py py-meth docutils literal"><span class="pre">_initialize_models()</span></code></a>: Calls the
+<a class="reference internal" href="model.html#despy.core.model.Model.initialize" title="despy.core.model.Model.initialize"><code class="xref py py-meth docutils literal"><span class="pre">despy.core.model.Model.initialize()</span></code></a> method for every model
+assigned to the Simulation object. This method is marked as
+private and is not intended to be called by the DES designer
+or user. The Simulation calls this object before executing any
+events from the FEL.</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt><strong>Inherits</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.base.NamedObject</span></code></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="class-attributes">
+<h2>Class Attributes<a class="headerlink" href="#class-attributes" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">name</code></dt>
+<dd><p>The name of the object.</p>
+<p>A short phrase, such as &#8220;Customer&#8221; or &#8220;Server Queue&#8221; that
+identifies the object.  Using title case and spaces will result
+in pleasant formatting in output reports and trace files.</p>
+<p><em>Returns:</em> <cite>string</cite></p>
+<dl class="docutils">
+<dt><em>Raises:</em></dt>
+<dd><cite>TypeError</cite> if name is not a string.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">description</code></dt>
+<dd><p>Gets a description of the model.</p>
+<p>One or more paragraphs that describes the purpose and behavior
+of the object.  The description will be included in output
+reports as html paragraphs (or equivalent for other output
+formats).</p>
+<p><em>Returns:</em> <cite>string</cite></p>
+<p><em>Raises:</em> <cite>TypeError</cite> if description is not a string or type
+<cite>None</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.simulation.Simulation.models">
+<code class="descclassname">Simulation.</code><code class="descname">models</code><a class="headerlink" href="#despy.core.simulation.Simulation.models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of all models attached to the simulation.</p>
+<p><em>Returns:</em> A list of despy.model.Model objects.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.simulation.Simulation.seed">
+<code class="descclassname">Simulation.</code><code class="descname">seed</code><a class="headerlink" href="#despy.core.simulation.Simulation.seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>The np.random.seed method will be seeded with
+this integer prior to running the simulation.</p>
+<p>Set seed to an integer, an array of integers of any length or to
+<cite>None</cite> (default).</p>
+<p>By default (i.e., when seed is set to None), Despy will use a
+different seed, and hence a different random number sequence for
+each run of the simulation. For troubleshooting or testing
+purposes, it&#8217;s often useful to repeatedly run the simulation
+with the same sequence of random numbers. This can be
+accomplished by setting the seed variable.</p>
+<p>Despy uses the random generator in the SciPy Numpy package to
+generate random numbers. Numpy uses a Mersenne twister 
+algorithm to generate the random numbers.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.simulation.Simulation.now">
+<code class="descclassname">Simulation.</code><code class="descname">now</code><a class="headerlink" href="#despy.core.simulation.Simulation.now" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current time of the simulation. The time is an integer.</p>
+<p><em>Returns:</em> Integer</p>
+<p>By default, a simulation starts at time zero and continues
+until three are no events remaining on the FEL or until the
+simulation detects a stop condition. The unit of time
+represented by the integer value stored in the <cite>now</cite> property
+is defined by the simulation.</p>
+<p>Internally, Despy multiplies the time by a factor of ten and
+each step in the simulation is a multiple of ten. This allows
+assignment of priorities to each event. For example,
+<cite>PRIORITY_EARLY</cite> events would be scheduled to run at time 39,
+<cite>RIORITY_DEFAULT</cite> events at time 40, and <cite>PRIORITY_LATE</cite> events
+at time 41. Despy would indicate that all of these events
+occurred at time = 4 in standard reports and output. This
+practice simplifies the routines that run the events because
+events are placed on the FEL in the order that they will
+actually be run, taking assigned priorities into account.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.simulation.Simulation.evt">
+<code class="descclassname">Simulation.</code><code class="descname">evt</code><a class="headerlink" href="#despy.core.simulation.Simulation.evt" title="Permalink to this definition">¶</a></dt>
+<dd><p>The event that is currently being executed by the simulation
+at time = <code class="docutils literal"><span class="pre">self.now</span></code> (read only).</p>
+<p><em>Returns:</em> :class: &#8216;despy.core.event.Event`</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.simulation.Simulation.run_start_time">
+<code class="descclassname">Simulation.</code><code class="descname">run_start_time</code><a class="headerlink" href="#despy.core.simulation.Simulation.run_start_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>The real-world time (i.e., date, hours, minutes, etc.) at
+which the simulation starts (read only).</p>
+<p><em>Returns:</em> None or :class: <cite>datetime.datetime</cite></p>
+<p>Despy uses the run_start_time attribute to calculate the
+simulation&#8217;s elapsed time. The attribute will return <code class="docutils literal"><span class="pre">None</span></code>
+if the simulation has not yet been completed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.simulation.Simulation.run_stop_time">
+<code class="descclassname">Simulation.</code><code class="descname">run_stop_time</code><a class="headerlink" href="#despy.core.simulation.Simulation.run_stop_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>The real-world stop time (i.e., date, hours, minutes, etc.)
+for the simulation (read only).</p>
+<p><em>Returns:</em> <cite>None</cite> or :class: <cite>datetime.datetime</cite></p>
+<p>Despy uses the <cite>run_stop_time</cite> attribute to calculate elapsed
+simulation time and to assign unique names to output files. The
+attribute will return <cite>None</cite> if the simulation has not yet been
+run.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.simulation.Simulation.gen">
+<code class="descclassname">Simulation.</code><code class="descname">gen</code><a class="headerlink" href="#despy.core.simulation.Simulation.gen" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <code class="xref py py-class docutils literal"><span class="pre">despy.output.generator</span></code> object.</p>
+<p>A link to the generator object that contains the methods that
+generate all output files.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="class-methods">
+<h2>Class Methods<a class="headerlink" href="#class-methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="despy.core.simulation.Simulation.__init__">
+<code class="descclassname">Simulation.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>initial_time=0</em>, <em>name='Simulation'</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/simulation.html#Simulation.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates and initializes the Simulation object.</p>
+<p>The Simulation object contains and manages the future event
+list (FEL).</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><ul class="first last simple">
+<li><cite>initial_time:</cite> Optional. A non-negative integer that
+specifies the initial simulation time. Defaults to 0.</li>
+<li><cite>name:</cite> Optional. A word or short phrase that describes
+the simulation. Type: string. Defaults to &#8220;Simulation&#8221;.</li>
+<li><cite>description:</cite> Optional. A sentence or short paragraph
+that describes the simulation in more detail than the
+name attribute. Type: string or type None. Defaults to
+type None.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.simulation.Simulation.append_model">
+<code class="descclassname">Simulation.</code><code class="descname">append_model</code><span class="sig-paren">(</span><em>model</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/simulation.html#Simulation.append_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation.append_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a model object to the simulation.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt>model:</dt>
+<dd>A <a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> object.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.simulation.Simulation.schedule">
+<code class="descclassname">Simulation.</code><code class="descname">schedule</code><span class="sig-paren">(</span><em>event</em>, <em>delay=0</em>, <em>priority=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/simulation.html#Simulation.schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation.schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an event to the FEL.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt>event (<a class="reference internal" href="event.html#despy.core.event.Event" title="despy.core.event.Event"><code class="xref py py-class docutils literal"><span class="pre">despy.core.event.Event</span></code></a>):</dt>
+<dd>An instance or subclass of the <cite>Event</cite> class.</dd>
+<dt>delay (<cite>integer</cite>):</dt>
+<dd>A non-negative integer that defaults to zero. If zero,
+the event will be scheduled to occur immediately.</dd>
+<dt>priority (<cite>integer</cite>)</dt>
+<dd>An attribute of the
+<a class="reference internal" href="../felitem.html#despy.core.simulation.FelItem" title="despy.core.simulation.FelItem"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.FelItem</span></code></a> enumeration, or
+an integer ranging from -5 to +5. The default is
+<cite>FelItem.PRIORITY_STANDARD</cite>, which is equivalent to
+zero.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.simulation.Simulation.peek">
+<code class="descclassname">Simulation.</code><code class="descname">peek</code><span class="sig-paren">(</span><em>prioritized=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/simulation.html#Simulation.peek"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation.peek" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the time of the next scheduled event.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt>prioritized (<cite>Boolean</cite>):</dt>
+<dd>If <cite>True</cite>, the time will reflect the event&#8217;s priority.
+For example, for a <cite>PRIORITY_EARLY</cite> event scheduled to
+run at time = 25, <cite>peek</cite> will return 24.9 if the
+<cite>prioritized</cite> attribute is set to <cite>True</cite>. If <cite>False</cite>,
+then our example would return 25, the nominal scheduled
+time. The default value is <cite>True</cite>.</dd>
+</dl>
+</dd>
+<dt><em>Returns</em></dt>
+<dd>An integer or float value if the FEL contains events.
+Infinity if there are no remaining events.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.simulation.Simulation.step">
+<code class="descclassname">Simulation.</code><code class="descname">step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/simulation.html#Simulation.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advance simulation time and execute the next event.</p>
+<p>The <cite>step</cite> method will only execute one event. Users might
+call the <cite>step</cite> method for troubleshooting purposes or other
+special cases. Users will generally run their simulation by
+calling the <a class="reference internal" href="#despy.core.simulation.Simulation.run" title="despy.core.simulation.Simulation.run"><code class="xref py py-meth docutils literal"><span class="pre">run()</span></code></a> method, which repeatedly calls the
+<cite>step</cite> method until reaching a stop condition or there are no
+remaining events on the FEL.</p>
+<dl class="docutils">
+<dt><em>Raises</em></dt>
+<dd><dl class="first last docutils">
+<dt>NoEventsRemaining:</dt>
+<dd>Occurs if no more events are scheduled on the FEL.</dd>
+</dl>
+</dd>
+<dt><em>Returns</em></dt>
+<dd><a class="reference internal" href="../felitem.html#despy.core.simulation.FelItem" title="despy.core.simulation.FelItem"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.FelItem</span></code></a></dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.simulation.Simulation.run">
+<code class="descclassname">Simulation.</code><code class="descname">run</code><span class="sig-paren">(</span><em>until=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/simulation.html#Simulation.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute events on the FEL until reaching a stop condition.</p>
+<p>The <cite>run</cite> method will advance simulation time and execute events
+until the FEL is empty or until the time specified in the
+<cite>until</cite> parameter is reached.</p>
+<p>Before executing any events, <cite>run</cite> will ensure models are
+initialized by calling <cite>_initialize_models</cite>.
+<cite>_initialize_models</cite> ensures models are only initialized one
+time, so users can call <cite>run</cite> multiple times and Despy will only
+initialize the models on the first call to <cite>run</cite> (unless
+<a class="reference internal" href="#despy.core.simulation.Simulation.reset" title="despy.core.simulation.Simulation.reset"><code class="xref py py-meth docutils literal"><span class="pre">reset()</span></code></a> is called, of course).</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt>until (integer):</dt>
+<dd>A non-negative integer specifying the simulation time
+at which the simulation will stop. Defaults to &#8216;None&#8217;,
+meaning the simulation will run until there are no
+remaining events on the FEL.  The events at the time
+specified in <cite>until</cite> will be executed. For example, if
+until = 100 and there are events scheduled at time
+100, those events will be executed, but events at time
+101 or later will not.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.simulation.Simulation.get_data">
+<code class="descclassname">Simulation.</code><code class="descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/simulation.html#Simulation.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a Python list with simulation parameters and results.</p>
+<p>The generator object calls the get_data method of the simulation
+and model objects and places the data in the simulation report.
+The generator object will also call the user-defined get_data
+methods from all of the model components.</p>
+<dl class="docutils">
+<dt><em>Returns</em></dt>
+<dd>A Python list of tuples. The first item of each tuple is
+a member of the <code class="xref py py-class docutils literal"><span class="pre">despy.output.datatype.Datatype</span></code>
+enumeration, which describes the structure of the data
+item (e.g., paragraph, list, etc.).</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.simulation.Simulation.reset">
+<code class="descclassname">Simulation.</code><code class="descname">reset</code><span class="sig-paren">(</span><em>initial_time=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/simulation.html#Simulation.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the time to zero, allowing the simulation to be rerun.</p>
+<p>Sets the simulation time to zero. Also sets the model&#8217;s
+initial_events_scheduled attribute to <cite>False</cite>, which will cause
+the model&#8217;s initialize methods to be executed the next time the
+simulation is run. In addition:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Clears the FEL</li>
+<li>Erases the run_start_time and run_stop_time properties</li>
+<li>Clears the trace records</li>
+<li>Resets the main simulation counter</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><cite>initial_time</cite>: Set the simulation clock to the value
+specified in <cite>initial_time</cite>. Defaults to zero.</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="internal-private-methods">
+<h2>Internal (Private) Methods<a class="headerlink" href="#internal-private-methods" title="Permalink to this headline">¶</a></h2>
+<p>These methods are not intended to be called by the user. They
+should be considered private.</p>
+<dl class="method">
+<dt id="despy.core.simulation.Simulation._initialize_models">
+<code class="descclassname">Simulation.</code><code class="descname">_initialize_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/simulation.html#Simulation._initialize_models"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.Simulation._initialize_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the <cite>initialize</cite> method on every attached model.</p>
+<p><cite>_initialize_models</cite> is called by the
+<a class="reference internal" href="#despy.core.simulation.Simulation.run" title="despy.core.simulation.Simulation.run"><code class="xref py py-meth docutils literal"><span class="pre">run()</span></code></a> method. (INTERNAL)</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="despy.core.model.Model"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../base/namedobject.html" title="despy.base.namedobject.NamedObject"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" >Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Stacy Irwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

@@ -5,7 +5,7 @@
 """
 ..  module:: despy.core.component
 
-:class:`.component`
+:class:`.Component`
     A portion of a Despy model. Components represent an element of the
     system that is being simulated.
 """
@@ -21,12 +21,12 @@ class Component(NamedObject):
     entities. Components generally represent an element of the system
     that is being simulated.  The `Component` class is the base class
     for the model's components. It maintains a counter, which uniquely
-    identifies components, and has attributes for access the model and
-    simulation objects. Users can create their own model elements by
+    identifies components, and has attributes for accessing the model
+    and simulation objects. Users can create their own model elements by
     inheriting from the Component class.
     
-    Subclasses should include a call to the :meth:`.__init()__``
-    method in the subclass :meth:`__init__` method.
+    Subclasses should include a call to the :meth:`Component.__init()__`
+    method in the subclass's `__init__` method.
     
     **Attributes**
 

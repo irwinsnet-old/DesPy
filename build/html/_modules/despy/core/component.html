@@ -77,7 +77,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">..  module:: despy.core.component</span>
 
-<span class="sd">:class:`.component`</span>
+<span class="sd">:class:`.Component`</span>
 <span class="sd">    A portion of a Despy model. Components represent an element of the</span>
 <span class="sd">    system that is being simulated.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -93,12 +93,12 @@
 <span class="sd">    entities. Components generally represent an element of the system</span>
 <span class="sd">    that is being simulated.  The `Component` class is the base class</span>
 <span class="sd">    for the model&#39;s components. It maintains a counter, which uniquely</span>
-<span class="sd">    identifies components, and has attributes for access the model and</span>
-<span class="sd">    simulation objects. Users can create their own model elements by</span>
+<span class="sd">    identifies components, and has attributes for accessing the model</span>
+<span class="sd">    and simulation objects. Users can create their own model elements by</span>
 <span class="sd">    inheriting from the Component class.</span>
 <span class="sd">    </span>
-<span class="sd">    Subclasses should include a call to the :meth:`.__init()__``</span>
-<span class="sd">    method in the subclass :meth:`__init__` method.</span>
+<span class="sd">    Subclasses should include a call to the :meth:`Component.__init()__`</span>
+<span class="sd">    method in the subclass&#39;s `__init__` method.</span>
 <span class="sd">    </span>
 <span class="sd">    **Attributes**</span>
 
@@ -228,7 +228,7 @@
         <span class="k">return</span> <span class="s">&quot;{0}.{1}.{2}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
     
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">set_counter</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+<div class="viewcode-block" id="Component.set_counter"><a class="viewcode-back" href="../../../core/event.html#despy.core.component.Component.set_counter">[docs]</a>    <span class="k">def</span> <span class="nf">set_counter</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A class method that resets the *Component&#39;s* or subclass&#39;s</span>
 <span class="sd">        number counter back to 1.</span>
 <span class="sd">        </span>
@@ -246,7 +246,7 @@
 <span class="sd">        attributes will be the unbroken sequence 1, 2, 3, ...</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cls</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="n">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    
+    </div>
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_get_next_number</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A private method called from the *__init__()* method that</span>
@@ -267,20 +267,20 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s">&quot;{0}:{1}#{2}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
     
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Component.initialize"><a class="viewcode-back" href="../../../core/event.html#despy.core.component.Component.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Subclasses should override this method with initialization</span>
 <span class="sd">        code that will be executed prior to any events on the future</span>
 <span class="sd">        event list (FEL).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
-    
-    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    </div>
+<div class="viewcode-block" id="Component.finalize"><a class="viewcode-back" href="../../../core/event.html#despy.core.component.Component.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Subclasses should override this method with cleanup or other</span>
 <span class="sd">        code that will be executed after all events on the FEL.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
-    
-    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+    </div>
+<div class="viewcode-block" id="Component.get_data"><a class="viewcode-back" href="../../../core/event.html#despy.core.component.Component.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Subclasses should override this method to provide simulation</span>
 <span class="sd">        output that will be included in the output report.</span>
 <span class="sd">        </span>
@@ -324,7 +324,7 @@
 <span class="sd">                         (&#39;Mean Time in Queue&#39;, np.mean(qtimes))]),</span>
 <span class="sd">                     (Datatype.image, qtime_filename)]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">None</span></div>
+        <span class="k">return</span> <span class="bp">None</span></div></div>
 </pre></div>
 
           </div>

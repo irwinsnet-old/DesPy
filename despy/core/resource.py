@@ -117,7 +117,7 @@ class ResourceFinishActivityEvent(Event):
         self.service_time = service_time
         self.user = None
         
-    def update_trace_record(self, trace_record):
+    def _update_trace_record(self, trace_record):
         trace_record['entity'] = self.user
         trace_record['duration_label'] = 'Service Time:'
         trace_record['duration_field'] = self.service_time

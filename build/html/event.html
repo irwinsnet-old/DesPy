@@ -1,0 +1,241 @@
+
+
+<!doctype html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>despy.core.event.Event &mdash; Despy 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="index.html" />
+    <link rel="up" title="Despy Classes" href="classes.html" />
+    <link rel="prev" title="despy.core.model.Model" href="model.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="despy.core.model.Model"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">despy.core.event.Event</a><ul>
+<li><a class="reference internal" href="#class-description">Class Description</a></li>
+<li><a class="reference internal" href="#class-attributes">Class Attributes</a></li>
+<li><a class="reference internal" href="#class-methods">Class Methods</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.html"
+                        title="previous chapter">despy.core.model.Model</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/event.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="despy-core-event-event">
+<h1>despy.core.event.Event<a class="headerlink" href="#despy-core-event-event" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="class-description">
+<h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="despy.core.event.Event">
+<em class="property">class </em><code class="descclassname">despy.core.event.</code><code class="descname">Event</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>trace_fields=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/event.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.event.Event" title="Permalink to this definition">¶</a></dt>
+<dd><p>An base class for all events.</p>
+<p>Create an event by inheriting from the Event class. Subclasses of
+Event must instantiate one or more of the doPriorEvent(),
+do_event(), or doPostEvent() methods. The Simulation will execute
+these methods when the Event time occurs and the Event object is
+removed from the FEL.</p>
+<dl class="docutils">
+<dt><strong>Attributes</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="namedobject.html#despy.base.named_object.NamedObject.name" title="despy.base.named_object.NamedObject.name"><code class="xref py py-attr docutils literal"><span class="pre">despy.base.named_object.NamedObject.name</span></code></a>: Event object&#8217;s
+name. Inherited from
+<a class="reference internal" href="namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a>. Type: <cite>string</cite>.</li>
+<li><a class="reference internal" href="namedobject.html#despy.base.named_object.NamedObject.description" title="despy.base.named_object.NamedObject.description"><code class="xref py py-attr docutils literal"><span class="pre">despy.base.named_object.NamedObject.description</span></code></a>: One or
+more paragraphs that describes the event. Inherited from
+<a class="reference internal" href="namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a> Type: <cite>string</cite>.</li>
+<li><a class="reference internal" href="component.html#despy.core.component.Component.model" title="despy.core.component.Component.model"><code class="xref py py-attr docutils literal"><span class="pre">despy.core.component.Component.model</span></code></a>: The
+<a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a> object that the component belongs
+to. Inherited from
+<a class="reference internal" href="component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a></li>
+<li><a class="reference internal" href="component.html#despy.core.component.Component.sim" title="despy.core.component.Component.sim"><code class="xref py py-attr docutils literal"><span class="pre">despy.core.component.Component.sim</span></code></a>: The
+<a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a> 
+object that the component&#8217;s model belongs to. Inherited from
+<a class="reference internal" href="component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a></li>
+<li><a class="reference internal" href="component.html#despy.core.component.Component.number" title="despy.core.component.Component.number"><code class="xref py py-attr docutils literal"><span class="pre">despy.core.component.Component.number</span></code></a>: A unique integer
+that is assigned to each instance of a component.  The first
+component instantiated by
+the model will be assigned number 1, followed by number 2 for
+the next component, and so on. Inherited from
+<a class="reference internal" href="component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a></li>
+<li><a class="reference internal" href="component.html#despy.core.component.Component.id" title="despy.core.component.Component.id"><code class="xref py py-attr docutils literal"><span class="pre">despy.core.component.Component.id</span></code></a>: A string that
+uniquely identifies the component instance. Inherited from
+<a class="reference internal" href="component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="class-attributes">
+<h2>Class Attributes<a class="headerlink" href="#class-attributes" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">name</code></dt>
+<dd><p>The name of the object.</p>
+<p>A short phrase, such as &#8220;Customer&#8221; or &#8220;Server Queue&#8221; that
+identifies the object.  Using title case and spaces will result
+in pleasant formatting in output reports and trace files.</p>
+<p><em>Returns:</em> <cite>string</cite></p>
+<dl class="docutils">
+<dt><em>Raises:</em></dt>
+<dd><cite>TypeError</cite> if name is not a string.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">description</code></dt>
+<dd><p>Gets a description of the model.</p>
+<p>One or more paragraphs that describes the purpose and behavior
+of the object.  The description will be included in output
+reports as html paragraphs (or equivalent for other output
+formats).</p>
+<p><em>Returns:</em> <cite>string</cite></p>
+<p><em>Raises:</em> <cite>TypeError</cite> if description is not a string or type
+<cite>None</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">model</code></dt>
+<dd><p>A link to the component&#8217;s model object.</p>
+<p>This read-only attribute is set by the <a class="reference internal" href="model.html#despy.core.model.Model.__init__" title="despy.core.model.Model.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a>
+method.</p>
+<p><em>Returns</em> <a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">sim</code></dt>
+<dd><p>A link to the model&#8217;s simulation attribute.</p>
+<p>This read-only attribute is provided for convenience.</p>
+<p><em>Returns:</em> <a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">number</code></dt>
+<dd><p>An integer that uniquely identifies the <em>Component</em> instance.</p>
+<p>This attribute is read only.</p>
+<p><em>Returns</em> integer</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">id</code></dt>
+<dd><p>A string that uniquely identifies the component instance.</p>
+<p>The id attribute is of the format
+&#8220;&lt;model.slug&gt;.&lt;component.slug&gt;.&lt;component.number&gt;&#8221;. The
+<code class="xref py py-meth docutils literal"><span class="pre">slug()</span></code> attribute is inherited from
+<a class="reference internal" href="namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a>. The slug is the
+name attribute with spaces and characters that are not allowed
+in Windows replaced by underscores. The <em>id</em> attribute is
+suitable for creating file names.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="class-methods">
+<h2>Class Methods<a class="headerlink" href="#class-methods" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="despy.core.model.Model"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="classes.html" >Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Stacy Irwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
