@@ -3,7 +3,9 @@
 #   Released under the MIT License (MIT)
 #   Copyright (c) 2015, Stacy Irwin
 """
-..  module:: despy.core.event
+****************
+despy.core.event
+****************
 
 :class:`Event`:
     An event object represents an occurrence within the system being
@@ -206,7 +208,7 @@ class Event(Component):
         return self.id < y.id
      
     def __gt__(self, y):
-        """Defines how ``Event`` objects respond to greater-than operator.
+        """Defines how ``Event`` objects respond to '>' operator.
         
         See documentation for ``__lt__`` for an explanation of why this
         Python magic method is necessary.

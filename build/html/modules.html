@@ -57,7 +57,10 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Despy Modules</a><ul>
-<li><a class="reference internal" href="#module-despy.base.named_object">named_object</a></li>
+<li><a class="reference internal" href="#module-despy.base.named_object">named_object</a><ul>
+<li><a class="reference internal" href="#despy-core-simulation">despy.core.simulation</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -108,6 +111,17 @@ subclasses.</p>
 <a class="reference internal" href="base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">NamedObject</span></code></a> provides a name attribute, a description
 attribute, and other helper methods.</dd>
 </dl>
+<div class="section" id="despy-core-simulation">
+<h3>despy.core.simulation<a class="headerlink" href="#despy-core-simulation" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><a class="reference internal" href="core/simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">Simulation</span></code></a></dt>
+<dd>Schedule events and manage the future event list (FEL).</dd>
+<dt><a class="reference internal" href="core/felitem.html#despy.core.simulation.FelItem" title="despy.core.simulation.FelItem"><code class="xref py py-class docutils literal"><span class="pre">FelItem</span></code></a></dt>
+<dd>A named tuple that represents a scheduled event.</dd>
+<dt><code class="xref py py-class docutils literal"><span class="pre">NoEventsRemaining</span></code></dt>
+<dd>Raised by despy.core.simulation&#8217;s step method when FEL is empty.</dd>
+</dl>
+</div>
 </div>
 </div>
 

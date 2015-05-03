@@ -63,7 +63,6 @@ class testResource(unittest.TestCase):
         class CustServiceResource(dp.Resource):
             def __init__(self, model, capacity):
                 super().__init__(model, "Server", capacity)
-                self.queue = dp.Queue(model, "Server Queue")
              
             def get_activity_time(self):
                 return round(stats.expon.rvs(scale = 4))

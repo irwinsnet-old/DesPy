@@ -3,17 +3,16 @@
 #   Released under the MIT License (MIT)
 #   Copyright (c) 2015, Stacy Irwin
 """
-..  module:: despy.core.simulation
+*********************
+despy.core.simulation
+*********************
 
 :class:`.Simulation`
-    The *Simulation* class maintains and executes the future event list
-    (FEL).
+    Schedule events and manage the future event list (FEL).
 :class:`.FelItem`
-    A *FelItem* is a named tuple that represents a scheduled event. The
-    FEL is a binary heap of *FelItems*.
+    A named tuple that represents a scheduled event.
 :class:`.NoEventsRemaining`
-    The *Simulation* instance raises this subclass of Exception when
-    there are no more events on the FEL.
+    Raised by despy.core.simulation's step method when FEL is empty.
 """
 
 from heapq import heappush, heappop
@@ -79,7 +78,7 @@ class FelItem(namedtuple('FelItemTuple',
     PRIORITY_LATE = 1
 
 class Simulation(NamedObject):
-    """ Schedule events and manage the future event list (FEL).
+    """Schedule events and manage the future event list (FEL).
     
     Every Despy simulation must have one instance of the
     ``Simulation`` class. The ``Simulation`` class initializes the
@@ -508,7 +507,7 @@ class Simulation(NamedObject):
             model.initial_events_scheduled = False
 
 class NoEventsRemainingError(Exception):
-    """ Raised by despy.core.simulation's step method when FEL is empty.
+    """Raised by despy.core.simulation's step method when FEL is empty.
     
     Raised by the ``Simulation.step`` method when no events remain on the
     FEL.

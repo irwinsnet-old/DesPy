@@ -3,7 +3,9 @@
 #   Released under the MIT License (MIT)
 #   Copyright (c) 2015, Stacy Irwin
 """
-..  module:: despy.core.model
+****************
+despy.core.model
+****************
 
 :class:`despy.core.model.Model`: 
     The model represents the real-world system that is being simulated.

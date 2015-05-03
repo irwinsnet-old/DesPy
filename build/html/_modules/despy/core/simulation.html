@@ -75,17 +75,16 @@
 <span class="c">#   Released under the MIT License (MIT)</span>
 <span class="c">#   Copyright (c) 2015, Stacy Irwin</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">..  module:: despy.core.simulation</span>
+<span class="sd">*********************</span>
+<span class="sd">despy.core.simulation</span>
+<span class="sd">*********************</span>
 
 <span class="sd">:class:`.Simulation`</span>
-<span class="sd">    The *Simulation* class maintains and executes the future event list</span>
-<span class="sd">    (FEL).</span>
+<span class="sd">    Schedule events and manage the future event list (FEL).</span>
 <span class="sd">:class:`.FelItem`</span>
-<span class="sd">    A *FelItem* is a named tuple that represents a scheduled event. The</span>
-<span class="sd">    FEL is a binary heap of *FelItems*.</span>
+<span class="sd">    A named tuple that represents a scheduled event.</span>
 <span class="sd">:class:`.NoEventsRemaining`</span>
-<span class="sd">    The *Simulation* instance raises this subclass of Exception when</span>
-<span class="sd">    there are no more events on the FEL.</span>
+<span class="sd">    Raised by despy.core.simulation&#39;s step method when FEL is empty.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">heapq</span> <span class="kn">import</span> <span class="n">heappush</span><span class="p">,</span> <span class="n">heappop</span>
@@ -151,7 +150,7 @@
     <span class="n">PRIORITY_LATE</span> <span class="o">=</span> <span class="mi">1</span>
 </div>
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Schedule events and manage the future event list (FEL).</span>
+    <span class="sd">&quot;&quot;&quot;Schedule events and manage the future event list (FEL).</span>
 <span class="sd">    </span>
 <span class="sd">    Every Despy simulation must have one instance of the</span>
 <span class="sd">    ``Simulation`` class. The ``Simulation`` class initializes the</span>
@@ -580,7 +579,7 @@
             <span class="n">model</span><span class="o">.</span><span class="n">initial_events_scheduled</span> <span class="o">=</span> <span class="bp">False</span>
 </div></div>
 <div class="viewcode-block" id="NoEventsRemainingError"><a class="viewcode-back" href="../../../core/NoEventsRemainingError.html#despy.core.simulation.NoEventsRemainingError">[docs]</a><span class="k">class</span> <span class="nc">NoEventsRemainingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Raised by despy.core.simulation&#39;s step method when FEL is empty.</span>
+    <span class="sd">&quot;&quot;&quot;Raised by despy.core.simulation&#39;s step method when FEL is empty.</span>
 <span class="sd">    </span>
 <span class="sd">    Raised by the ``Simulation.step`` method when no events remain on the</span>
 <span class="sd">    FEL.</span>

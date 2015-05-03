@@ -1,5 +1,6 @@
+#############
 Despy Classes
-*************
+#############
 
 .. toctree::
    :maxdepth: 2
@@ -11,4 +12,5 @@ Despy Classes
    core/model
    core/event
    core/NoEventsRemainingError
+   core/resource
    
