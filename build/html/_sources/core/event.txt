@@ -13,7 +13,6 @@ Class Description
 __init__
 ********
 ..  automethod:: Event.__init__
-    :noindex:
 
 **********
 Attributes

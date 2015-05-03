@@ -9,25 +9,26 @@
     
     <title>despy.core.component.Component &mdash; Despy 1 documentation</title>
     
-    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '../',
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/bizstyle.js"></script>
-    <link rel="top" title="Despy 1 documentation" href="index.html" />
-    <link rel="up" title="Despy Classes" href="classes.html" />
-    <link rel="prev" title="despy.core.model.Model" href="model.html" />
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="../index.html" />
+    <link rel="up" title="Despy Classes" href="../classes.html" />
+    <link rel="next" title="despy.core.simulation.Simulation" href="simulation.html" />
+    <link rel="prev" title="despy.base.namedobject.NamedObject" href="../base/namedobject.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -38,21 +39,24 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="model.html" title="despy.core.model.Model"
+          <a href="simulation.html" title="despy.core.simulation.Simulation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../base/namedobject.html" title="despy.base.namedobject.NamedObject"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">despy.core.component.Component</a><ul>
 <li><a class="reference internal" href="#class-description">Class Description</a></li>
@@ -62,18 +66,21 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="model.html"
-                        title="previous chapter">despy.core.model.Model</a></p>
+  <p class="topless"><a href="../base/namedobject.html"
+                        title="previous chapter">despy.base.namedobject.NamedObject</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="simulation.html"
+                        title="next chapter">despy.core.simulation.Simulation</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/component.txt"
+      <li><a href="../_sources/core/component.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
+    <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -98,23 +105,23 @@
 <h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="despy.core.component.Component">
-<em class="property">class </em><code class="descclassname">despy.core.component.</code><code class="descname">Component</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/despy/core/component.html#Component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.component.Component" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">despy.core.component.</code><code class="descname">Component</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.component.Component" title="Permalink to this definition">¶</a></dt>
 <dd><p>A base class that provides object counters and other attributes.</p>
 <p>Models consist of several components, such as queues, processes, and
 entities. Components generally represent an element of the system
-that is being simulated.  The <cite>Component</cite> class is the base class
+that is being simulated.  The <code class="docutils literal"><span class="pre">Component</span></code> class is the base class
 for the model&#8217;s components. It maintains a counter, which uniquely
 identifies components, and has attributes for accessing the model
 and simulation objects. Users can create their own model elements by
 inheriting from the Component class.</p>
 <p>Subclasses should include a call to the <code class="xref py py-meth docutils literal"><span class="pre">Component.__init()__()</span></code>
-method in the subclass&#8217;s <cite>__init__</cite> method.</p>
+method in the subclass&#8217;s <code class="docutils literal"><span class="pre">__init__</span></code> method.</p>
 <p><strong>Attributes</strong></p>
 <blockquote>
 <div><ul class="simple">
 <li><a class="reference internal" href="#despy.core.component.Component.model" title="despy.core.component.Component.model"><code class="xref py py-attr docutils literal"><span class="pre">model</span></code></a>: The <a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a> object that
 the component belongs to.</li>
-<li><a class="reference internal" href="#despy.core.component.Component.sim" title="despy.core.component.Component.sim"><code class="xref py py-attr docutils literal"><span class="pre">sim</span></code></a>: The <code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code> 
+<li><a class="reference internal" href="#despy.core.component.Component.sim" title="despy.core.component.Component.sim"><code class="xref py py-attr docutils literal"><span class="pre">sim</span></code></a>: The <a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a> 
 object that the component&#8217;s model belongs to.</li>
 <li><a class="reference internal" href="#despy.core.component.Component.number" title="despy.core.component.Component.number"><code class="xref py py-attr docutils literal"><span class="pre">number</span></code></a>: A unique integer that is assigned to each
 instance of a component.  The first component instantiated by
@@ -149,7 +156,7 @@ next unused number from the number counter.</li>
 <dt><strong>Superclass</strong></dt>
 <dd><ul class="first last simple">
 <li><code class="xref py py-class docutils literal"><span class="pre">despy.core.entity.Entity</span></code></li>
-<li><code class="xref py py-class docutils literal"><span class="pre">despy.core.event.Event</span></code></li>
+<li><a class="reference internal" href="event.html#despy.core.event.Event" title="despy.core.event.Event"><code class="xref py py-class docutils literal"><span class="pre">despy.core.event.Event</span></code></a></li>
 <li><code class="xref py py-class docutils literal"><span class="pre">despy.core.process.Process</span></code></li>
 <li><code class="xref py py-class docutils literal"><span class="pre">despy.core.queue.Queue</span></code></li>
 <li><code class="xref py py-class docutils literal"><span class="pre">despy.core.resource.Resource</span></code></li>
@@ -165,7 +172,7 @@ next unused number from the number counter.</li>
 <dt id="despy.core.component.Component.model">
 <code class="descclassname">Component.</code><code class="descname">model</code><a class="headerlink" href="#despy.core.component.Component.model" title="Permalink to this definition">¶</a></dt>
 <dd><p>A link to the component&#8217;s model object.</p>
-<p>This read-only attribute is set by the <a class="reference internal" href="simulation.html#despy.core.simulation.Simulation.__init__" title="despy.core.simulation.Simulation.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a>
+<p>This read-only attribute is set by the <code class="docutils literal"><span class="pre">Model.__init__</span></code>
 method.</p>
 <p><em>Returns</em> <a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a></p>
 </dd></dl>
@@ -175,7 +182,7 @@ method.</p>
 <code class="descclassname">Component.</code><code class="descname">sim</code><a class="headerlink" href="#despy.core.component.Component.sim" title="Permalink to this definition">¶</a></dt>
 <dd><p>A link to the model&#8217;s simulation attribute.</p>
 <p>This read-only attribute is provided for convenience.</p>
-<p><em>Returns:</em> <code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></p>
+<p><em>Returns:</em> <a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a></p>
 </dd></dl>
 
 <dl class="attribute">
@@ -193,7 +200,7 @@ method.</p>
 <p>The id attribute is of the format
 &#8220;&lt;model.slug&gt;.&lt;component.slug&gt;.&lt;component.number&gt;&#8221;. The
 <code class="xref py py-meth docutils literal"><span class="pre">slug()</span></code> attribute is inherited from
-<code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code>. The slug is the
+<a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a>. The slug is the
 name attribute with spaces and characters that are not allowed
 in Windows replaced by underscores. The <em>id</em> attribute is
 suitable for creating file names.</p>
@@ -212,16 +219,19 @@ suitable for creating file names.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="model.html" title="despy.core.model.Model"
+          <a href="simulation.html" title="despy.core.simulation.Simulation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../base/namedobject.html" title="despy.base.namedobject.NamedObject"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="classes.html" >Despy Classes</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" >Despy Classes</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

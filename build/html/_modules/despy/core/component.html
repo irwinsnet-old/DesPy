@@ -86,19 +86,19 @@
 <span class="kn">from</span> <span class="nn">despy.base.named_object</span> <span class="kn">import</span> <span class="n">NamedObject</span>
 <span class="kn">from</span> <span class="nn">despy.base.named_object_types</span> <span class="kn">import</span> <span class="n">is_model</span>
 
-<div class="viewcode-block" id="Component"><a class="viewcode-back" href="../../../component.html#despy.core.component.Component">[docs]</a><span class="k">class</span> <span class="nc">Component</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
+<div class="viewcode-block" id="Component"><a class="viewcode-back" href="../../../core/component.html#despy.core.component.Component">[docs]</a><span class="k">class</span> <span class="nc">Component</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A base class that provides object counters and other attributes.</span>
 
 <span class="sd">    Models consist of several components, such as queues, processes, and</span>
 <span class="sd">    entities. Components generally represent an element of the system</span>
-<span class="sd">    that is being simulated.  The `Component` class is the base class</span>
+<span class="sd">    that is being simulated.  The ``Component`` class is the base class</span>
 <span class="sd">    for the model&#39;s components. It maintains a counter, which uniquely</span>
 <span class="sd">    identifies components, and has attributes for accessing the model</span>
 <span class="sd">    and simulation objects. Users can create their own model elements by</span>
 <span class="sd">    inheriting from the Component class.</span>
 <span class="sd">    </span>
 <span class="sd">    Subclasses should include a call to the :meth:`Component.__init()__`</span>
-<span class="sd">    method in the subclass&#39;s `__init__` method.</span>
+<span class="sd">    method in the subclass&#39;s ``__init__`` method.</span>
 <span class="sd">    </span>
 <span class="sd">    **Attributes**</span>
 
@@ -196,7 +196,7 @@
     <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A link to the component&#39;s model object.</span>
 <span class="sd">        </span>
-<span class="sd">        This read-only attribute is set by the :meth:`.__init__`</span>
+<span class="sd">        This read-only attribute is set by the ``Model.__init__``</span>
 <span class="sd">        method.</span>
 <span class="sd">        </span>
 <span class="sd">        *Returns* :class:`despy.core.model.Model`</span>

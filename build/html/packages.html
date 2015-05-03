@@ -110,12 +110,12 @@
 <h1>Despy Packages<a class="headerlink" href="#despy-packages" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-despy.core.__init__.py">
 <span id="despy-core"></span><h2>despy.core<a class="headerlink" href="#module-despy.core.__init__.py" title="Permalink to this headline">¶</a></h2>
-<p>The <cite>despy.core</cite> package includes classes that are essential for any
+<p>The <code class="docutils literal"><span class="pre">despy.core</span></code> package includes classes that are essential for any
 Despy simulation.</p>
 <p>The __init__.py module for the despy.core package imports all
 core modules, so the user does not have to import each module
 individually. For example, the following statement imports all
-core modules under the <cite>dp</cite> namespace.:</p>
+core modules under the <code class="docutils literal"><span class="pre">dp</span></code> namespace.:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">despy.core</span> <span class="kn">as</span> <span class="nn">dp</span>
 </pre></div>
 </div>
@@ -125,7 +125,7 @@ core modules under the <cite>dp</cite> namespace.:</p>
 <dt><a class="reference internal" href="core/simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">Simulation</span></code></a></dt>
 <dd>The <em>Simulation</em> class maintains and executes the future event list
 (FEL).</dd>
-<dt><a class="reference internal" href="felitem.html#despy.core.simulation.FelItem" title="despy.core.simulation.FelItem"><code class="xref py py-class docutils literal"><span class="pre">FelItem</span></code></a></dt>
+<dt><a class="reference internal" href="core/felitem.html#despy.core.simulation.FelItem" title="despy.core.simulation.FelItem"><code class="xref py py-class docutils literal"><span class="pre">FelItem</span></code></a></dt>
 <dd>A <em>FelItem</em> is a named tuple that represents a scheduled event. The
 FEL is a binary heap of <em>FelItems</em>.</dd>
 <dt><code class="xref py py-class docutils literal"><span class="pre">NoEventsRemaining</span></code></dt>
@@ -147,13 +147,13 @@ simulated.</dd>
 <dt><a class="reference internal" href="core/model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a>: </dt>
 <dd>The model represents the real-world system that is being simulated.
 The user will generally build their model by sub-classing the
-<cite>model</cite> class.</dd>
+<code class="docutils literal"><span class="pre">Model</span></code> class.</dd>
 </dl>
 </div>
 <div class="section" id="module-despy.core.component">
 <span id="despy-core-component"></span><h3>despy.core.component<a class="headerlink" href="#module-despy.core.component" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
-<dt><a class="reference internal" href="component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">Component</span></code></a></dt>
+<dt><a class="reference internal" href="core/component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">Component</span></code></a></dt>
 <dd>A portion of a Despy model. Components represent an element of the
 system that is being simulated.</dd>
 </dl>

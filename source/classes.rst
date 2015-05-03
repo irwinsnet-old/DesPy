@@ -5,6 +5,10 @@ Despy Classes
    :maxdepth: 2
    
    base/namedobject
+   core/component
    core/simulation
+   core/felitem
    core/model
    core/event
+   core/NoEventsRemainingError
+   

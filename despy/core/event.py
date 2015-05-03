@@ -42,7 +42,7 @@ class Event(Component):
         trace record.
       
     **Internal Attributes**
-      * attr:`Event._callbacks`. An list of methods that will be called
+      * attr:`Event._callbacks`: An list of methods that will be called
         every time the event is executed.
       
     **Internal Methods**
@@ -51,9 +51,9 @@ class Event(Component):
         custom fields.
       * :meth:`Event._reset`: Resets the event to it's initial state. *
       * :meth:`Event.__lt__`: A Python Magic Method that defines how
-        `Event` objects respond to less-than operator.
+        ``Event`` objects respond to less-than operator.
       * :meth:`Event.__gt__`: A Python Magic Method that defines how
-        `Event` objects respond to greater-than operator.
+        ``Event`` objects respond to greater-than operator.
     """
 
 
@@ -61,12 +61,12 @@ class Event(Component):
         """Initialize the Event object.
 
         *Arguments*
-            `model` (:class:`despy.core.model.Model`):
+            ``model`` (:class:`despy.core.model.Model`):
                 The Model that the event belongs to.
-            `name` (string):
+            ``name`` (string):
                 A short string describing the event. The name will be
                 printed in the event trace report.
-            `trace_fields` (collections.OrderedDict)
+            ``trace_fields`` (collections.OrderedDict)
                 An ordered dictionary of fields that will be added to the
                 trace record for this event.
         """
@@ -84,7 +84,7 @@ class Event(Component):
     def trace_fields(self):
         """An ordered dictionary containing custom trace data.
         
-        *Returns:* An instance of `OrderedDict` with custom trace data
+        *Returns:* An instance of ``OrderedDict`` with custom trace data
         stored as key: value pairs.
         """
         return self._trace_fields
@@ -94,8 +94,8 @@ class Event(Component):
         """A list of trace records for completed events.
         
         A single event object can be reused by rescheduling it on the
-        FEL. The `trace_records` attribute is a list of all
-        trace records that have been completed for the `Event` object.
+        FEL. The ``trace_records`` attribute is a list of all
+        trace records that have been completed for the ``Event`` object.
         
         *Returns:* A list of :class:`despy.output.trace.TraceRecord`
         objects.
@@ -120,13 +120,13 @@ class Event(Component):
         """Add custom fields to the event's trace record.
         
         This method is typically called from an event's callback method.
-        It adds `value` to the event's trace record, labeled with the
-        text in `key`.
+        It adds ``value`` to the event's trace record, labeled with the
+        text in ``key``.
         
         *Arguments*
-            `key` (String)
-                A text label that describes the data in `value`.
-            `value` (String or Number)
+            ``key`` (String)
+                A text label that describes the data in ``value``.
+            ``value`` (String or Number)
                 A number, string, or other text-convertible value.
         """
         self.trace_fields[key] = value
@@ -134,11 +134,11 @@ class Event(Component):
     def _do_event(self):
         """Executes an event's callback functions.
         
-        Internal Method. The `_do_event` called by the `Simulation`
-        class's `step()` method. It is not intended to be called by the
+        Internal Method. The ``_do_event`` called by the ``Simulation``
+        class's ``step()`` method. It is not intended to be called by the
         user.
         
-        *Returns:* `True` if a callback method is executed. `None` if
+        *Returns:* ``True`` if a callback method is executed. ``None`` if
         there are no callbacks attached to the event.
         """
         if len(self._callbacks)==0:
@@ -155,11 +155,12 @@ class Event(Component):
     def _update_trace_record(self, trace_record):
         """Updates a trace record with custom fields.
         
-        Internal Method. The `_update_trace_record` method is called by
-        the `trace` object. It is not intended to be called by the user.
+        Internal Method. The ``_update_trace_record`` method is called
+        by the ``trace`` object. It is not intended to be called by the
+        user.
         
         *Arguments*
-            `trace_record`
+            ``trace_record``
                 A :class:`despy.output.trace.TraceRecord` object. The
                 TraceRecord will be added to the simulation's trace
                 report to record the occurrence of the event.
@@ -179,43 +180,43 @@ class Event(Component):
     def _reset(self):
         """Resets the event to it's initial state.
         
-        Internal Method. The `reset` method is called by the
-        `Simulation` class's `reset` method. It deletes all
+        Internal Method. The ``reset`` method is called by the
+        `Simulation` class's ``reset`` method. It deletes all
         trace_records from the event.
         """
         self._trace_records = []
     
     def __lt__(self, y):
-        """Defines how `Event` objects respond to less-than operator.
+        """Defines how ``Event`` objects respond to less-than operator.
         
-        The Python magic methods `__lt__` and `__gt__` are necessary
+        The Python magic methods ``__lt__`` and ``__gt__`` are necessary
         because the FEL is implemented as a heap. All items on a heap
         must be sortable. Events are primarily sorted by simulation time.
         For events that are scheduled to occur at the same time, this
-        method provides a secondary sort order based on the `Event`
-        object's `id` attribute.
+        method provides a secondary sort order based on the ``Event``
+        object's ``id`` attribute.
         
         *Arguments*
-            `y`
-                The other `Event` object that is being compared with
+            ``y``
+                The other ``Event`` object that is being compared with
                 the less-than operator.
                 
-        *Returns:* `True` if `self.id < y.id`, `False` otherwise.
+        *Returns:* ``True`` if ``self.id < y.id``, ``False`` otherwise.
         """
         return self.id < y.id
      
     def __gt__(self, y):
-        """Defines how `Event` objects respond to greater-than operator.
+        """Defines how ``Event`` objects respond to greater-than operator.
         
-        See documentation for `__lt__` for an explanation of why this
+        See documentation for ``__lt__`` for an explanation of why this
         Python magic method is necessary.
         
         *Arguments*
-            `y`
-                The other `Event` object that is being compared with
+            ``y``
+                The other ``Event`` object that is being compared with
                 the greater-than operator.
                 
-        *Returns:* `True` if `self.id > y.id`, `False` otherwise.
+        *Returns:* ``True`` if ``self.id > y.id``, ``False`` otherwise.
         """
         return self.id > y.id
         

@@ -9,23 +9,26 @@
     
     <title>FelItem &mdash; Despy 1 documentation</title>
     
-    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '../',
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/bizstyle.js"></script>
-    <link rel="top" title="Despy 1 documentation" href="index.html" />
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="../index.html" />
+    <link rel="up" title="Despy Classes" href="../classes.html" />
+    <link rel="next" title="despy.core.model.Model" href="model.html" />
+    <link rel="prev" title="despy.core.simulation.Simulation" href="simulation.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -36,26 +39,39 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="model.html" title="despy.core.model.Model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="simulation.html" title="despy.core.simulation.Simulation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="simulation.html"
+                        title="previous chapter">despy.core.simulation.Simulation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model.html"
+                        title="next chapter">despy.core.model.Model</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/felitem.txt"
+      <li><a href="../_sources/core/felitem.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
+    <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -78,7 +94,7 @@
 <h1>FelItem<a class="headerlink" href="#felitem" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="despy.core.simulation.FelItem">
-<em class="property">class </em><code class="descclassname">despy.core.simulation.</code><code class="descname">FelItem</code><a class="reference internal" href="_modules/despy/core/simulation.html#FelItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.FelItem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">despy.core.simulation.</code><code class="descname">FelItem</code><a class="reference internal" href="../_modules/despy/core/simulation.html#FelItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.FelItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>A named tuple that represents a scheduled event.</p>
 <p>Every item on the FEL must be an instance of FelItem. A FelItem
 consists of the event, the scheduled time, and priority.</p>
@@ -88,9 +104,9 @@ consists of the event, the scheduled time, and priority.</p>
 <li><code class="xref py py-attr docutils literal"><span class="pre">time_fld</span></code>: The time that the event is scheduled for
 execution. Type: a non-negative integer.</li>
 <li><code class="xref py py-attr docutils literal"><span class="pre">event_fld</span></code>: An instance of
-<a class="reference internal" href="core/event.html#despy.core.event.Event" title="despy.core.event.Event"><code class="xref py py-class docutils literal"><span class="pre">despy.core.event.Event</span></code></a>.</li>
+<a class="reference internal" href="event.html#despy.core.event.Event" title="despy.core.event.Event"><code class="xref py py-class docutils literal"><span class="pre">despy.core.event.Event</span></code></a>.</li>
 <li><code class="xref py py-attr docutils literal"><span class="pre">priority_fld</span></code>: A priority constant from the 
-<a class="reference internal" href="modules.html#module-despy.base.named_object" title="despy.base.named_object"><code class="xref py py-mod docutils literal"><span class="pre">despy.base.named_object</span></code></a> module, or an integer between
+<a class="reference internal" href="../modules.html#module-despy.base.named_object" title="despy.base.named_object"><code class="xref py py-mod docutils literal"><span class="pre">despy.base.named_object</span></code></a> module, or an integer between
 -4 and +4, inclusive.</li>
 </ul>
 </div></blockquote>
@@ -137,12 +153,19 @@ Despy only provides named constants for priorities from -1 to 1.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="model.html" title="despy.core.model.Model"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="simulation.html" title="despy.core.simulation.Simulation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" >Despy Classes</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

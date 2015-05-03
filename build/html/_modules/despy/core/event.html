@@ -114,7 +114,7 @@
 <span class="sd">        trace record.</span>
 <span class="sd">      </span>
 <span class="sd">    **Internal Attributes**</span>
-<span class="sd">      * attr:`Event._callbacks`. An list of methods that will be called</span>
+<span class="sd">      * attr:`Event._callbacks`: An list of methods that will be called</span>
 <span class="sd">        every time the event is executed.</span>
 <span class="sd">      </span>
 <span class="sd">    **Internal Methods**</span>
@@ -123,9 +123,9 @@
 <span class="sd">        custom fields.</span>
 <span class="sd">      * :meth:`Event._reset`: Resets the event to it&#39;s initial state. *</span>
 <span class="sd">      * :meth:`Event.__lt__`: A Python Magic Method that defines how</span>
-<span class="sd">        `Event` objects respond to less-than operator.</span>
+<span class="sd">        ``Event`` objects respond to less-than operator.</span>
 <span class="sd">      * :meth:`Event.__gt__`: A Python Magic Method that defines how</span>
-<span class="sd">        `Event` objects respond to greater-than operator.</span>
+<span class="sd">        ``Event`` objects respond to greater-than operator.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
@@ -133,12 +133,12 @@
         <span class="sd">&quot;&quot;&quot;Initialize the Event object.</span>
 
 <span class="sd">        *Arguments*</span>
-<span class="sd">            `model` (:class:`despy.core.model.Model`):</span>
+<span class="sd">            ``model`` (:class:`despy.core.model.Model`):</span>
 <span class="sd">                The Model that the event belongs to.</span>
-<span class="sd">            `name` (string):</span>
+<span class="sd">            ``name`` (string):</span>
 <span class="sd">                A short string describing the event. The name will be</span>
 <span class="sd">                printed in the event trace report.</span>
-<span class="sd">            `trace_fields` (collections.OrderedDict)</span>
+<span class="sd">            ``trace_fields`` (collections.OrderedDict)</span>
 <span class="sd">                An ordered dictionary of fields that will be added to the</span>
 <span class="sd">                trace record for this event.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -156,7 +156,7 @@
     <span class="k">def</span> <span class="nf">trace_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;An ordered dictionary containing custom trace data.</span>
 <span class="sd">        </span>
-<span class="sd">        *Returns:* An instance of `OrderedDict` with custom trace data</span>
+<span class="sd">        *Returns:* An instance of ``OrderedDict`` with custom trace data</span>
 <span class="sd">        stored as key: value pairs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trace_fields</span>
@@ -166,8 +166,8 @@
         <span class="sd">&quot;&quot;&quot;A list of trace records for completed events.</span>
 <span class="sd">        </span>
 <span class="sd">        A single event object can be reused by rescheduling it on the</span>
-<span class="sd">        FEL. The `trace_records` attribute is a list of all</span>
-<span class="sd">        trace records that have been completed for the `Event` object.</span>
+<span class="sd">        FEL. The ``trace_records`` attribute is a list of all</span>
+<span class="sd">        trace records that have been completed for the ``Event`` object.</span>
 <span class="sd">        </span>
 <span class="sd">        *Returns:* A list of :class:`despy.output.trace.TraceRecord`</span>
 <span class="sd">        objects.</span>
@@ -192,13 +192,13 @@
         <span class="sd">&quot;&quot;&quot;Add custom fields to the event&#39;s trace record.</span>
 <span class="sd">        </span>
 <span class="sd">        This method is typically called from an event&#39;s callback method.</span>
-<span class="sd">        It adds `value` to the event&#39;s trace record, labeled with the</span>
-<span class="sd">        text in `key`.</span>
+<span class="sd">        It adds ``value`` to the event&#39;s trace record, labeled with the</span>
+<span class="sd">        text in ``key``.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
-<span class="sd">            `key` (String)</span>
-<span class="sd">                A text label that describes the data in `value`.</span>
-<span class="sd">            `value` (String or Number)</span>
+<span class="sd">            ``key`` (String)</span>
+<span class="sd">                A text label that describes the data in ``value``.</span>
+<span class="sd">            ``value`` (String or Number)</span>
 <span class="sd">                A number, string, or other text-convertible value.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trace_fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
@@ -206,11 +206,11 @@
 <div class="viewcode-block" id="Event._do_event"><a class="viewcode-back" href="../../../core/event.html#despy.core.event.Event._do_event">[docs]</a>    <span class="k">def</span> <span class="nf">_do_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Executes an event&#39;s callback functions.</span>
 <span class="sd">        </span>
-<span class="sd">        Internal Method. The `_do_event` called by the `Simulation`</span>
-<span class="sd">        class&#39;s `step()` method. It is not intended to be called by the</span>
+<span class="sd">        Internal Method. The ``_do_event`` called by the ``Simulation``</span>
+<span class="sd">        class&#39;s ``step()`` method. It is not intended to be called by the</span>
 <span class="sd">        user.</span>
 <span class="sd">        </span>
-<span class="sd">        *Returns:* `True` if a callback method is executed. `None` if</span>
+<span class="sd">        *Returns:* ``True`` if a callback method is executed. ``None`` if</span>
 <span class="sd">        there are no callbacks attached to the event.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_callbacks</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
@@ -227,11 +227,12 @@
 <div class="viewcode-block" id="Event._update_trace_record"><a class="viewcode-back" href="../../../core/event.html#despy.core.event.Event._update_trace_record">[docs]</a>    <span class="k">def</span> <span class="nf">_update_trace_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_record</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Updates a trace record with custom fields.</span>
 <span class="sd">        </span>
-<span class="sd">        Internal Method. The `_update_trace_record` method is called by</span>
-<span class="sd">        the `trace` object. It is not intended to be called by the user.</span>
+<span class="sd">        Internal Method. The ``_update_trace_record`` method is called</span>
+<span class="sd">        by the ``trace`` object. It is not intended to be called by the</span>
+<span class="sd">        user.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
-<span class="sd">            `trace_record`</span>
+<span class="sd">            ``trace_record``</span>
 <span class="sd">                A :class:`despy.output.trace.TraceRecord` object. The</span>
 <span class="sd">                TraceRecord will be added to the simulation&#39;s trace</span>
 <span class="sd">                report to record the occurrence of the event.</span>
@@ -251,43 +252,43 @@
 <div class="viewcode-block" id="Event._reset"><a class="viewcode-back" href="../../../core/event.html#despy.core.event.Event._reset">[docs]</a>    <span class="k">def</span> <span class="nf">_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Resets the event to it&#39;s initial state.</span>
 <span class="sd">        </span>
-<span class="sd">        Internal Method. The `reset` method is called by the</span>
-<span class="sd">        `Simulation` class&#39;s `reset` method. It deletes all</span>
+<span class="sd">        Internal Method. The ``reset`` method is called by the</span>
+<span class="sd">        `Simulation` class&#39;s ``reset`` method. It deletes all</span>
 <span class="sd">        trace_records from the event.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_trace_records</span> <span class="o">=</span> <span class="p">[]</span>
     </div>
 <div class="viewcode-block" id="Event.__lt__"><a class="viewcode-back" href="../../../core/event.html#despy.core.event.Event.__lt__">[docs]</a>    <span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Defines how `Event` objects respond to less-than operator.</span>
+        <span class="sd">&quot;&quot;&quot;Defines how ``Event`` objects respond to less-than operator.</span>
 <span class="sd">        </span>
-<span class="sd">        The Python magic methods `__lt__` and `__gt__` are necessary</span>
+<span class="sd">        The Python magic methods ``__lt__`` and ``__gt__`` are necessary</span>
 <span class="sd">        because the FEL is implemented as a heap. All items on a heap</span>
 <span class="sd">        must be sortable. Events are primarily sorted by simulation time.</span>
 <span class="sd">        For events that are scheduled to occur at the same time, this</span>
-<span class="sd">        method provides a secondary sort order based on the `Event`</span>
-<span class="sd">        object&#39;s `id` attribute.</span>
+<span class="sd">        method provides a secondary sort order based on the ``Event``</span>
+<span class="sd">        object&#39;s ``id`` attribute.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
-<span class="sd">            `y`</span>
-<span class="sd">                The other `Event` object that is being compared with</span>
+<span class="sd">            ``y``</span>
+<span class="sd">                The other ``Event`` object that is being compared with</span>
 <span class="sd">                the less-than operator.</span>
 <span class="sd">                </span>
-<span class="sd">        *Returns:* `True` if `self.id &lt; y.id`, `False` otherwise.</span>
+<span class="sd">        *Returns:* ``True`` if ``self.id &lt; y.id``, ``False`` otherwise.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">y</span><span class="o">.</span><span class="n">id</span>
      </div>
 <div class="viewcode-block" id="Event.__gt__"><a class="viewcode-back" href="../../../core/event.html#despy.core.event.Event.__gt__">[docs]</a>    <span class="k">def</span> <span class="nf">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Defines how `Event` objects respond to greater-than operator.</span>
+        <span class="sd">&quot;&quot;&quot;Defines how ``Event`` objects respond to greater-than operator.</span>
 <span class="sd">        </span>
-<span class="sd">        See documentation for `__lt__` for an explanation of why this</span>
+<span class="sd">        See documentation for ``__lt__`` for an explanation of why this</span>
 <span class="sd">        Python magic method is necessary.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
-<span class="sd">            `y`</span>
-<span class="sd">                The other `Event` object that is being compared with</span>
+<span class="sd">            ``y``</span>
+<span class="sd">                The other ``Event`` object that is being compared with</span>
 <span class="sd">                the greater-than operator.</span>
 <span class="sd">                </span>
-<span class="sd">        *Returns:* `True` if `self.id &gt; y.id`, `False` otherwise.</span>
+<span class="sd">        *Returns:* ``True`` if ``self.id &gt; y.id``, ``False`` otherwise.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">&gt;</span> <span class="n">y</span><span class="o">.</span><span class="n">id</span>
         </div></div>

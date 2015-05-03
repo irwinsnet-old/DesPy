@@ -28,7 +28,7 @@
     <link rel="top" title="Despy 1 documentation" href="../index.html" />
     <link rel="up" title="Despy Classes" href="../classes.html" />
     <link rel="next" title="despy.core.event.Event" href="event.html" />
-    <link rel="prev" title="despy.core.simulation.Simulation" href="simulation.html" />
+    <link rel="prev" title="FelItem" href="felitem.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -48,7 +48,7 @@
           <a href="event.html" title="despy.core.event.Event"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="simulation.html" title="despy.core.simulation.Simulation"
+          <a href="felitem.html" title="FelItem"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
@@ -67,8 +67,8 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="simulation.html"
-                        title="previous chapter">despy.core.simulation.Simulation</a></p>
+  <p class="topless"><a href="felitem.html"
+                        title="previous chapter">FelItem</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="event.html"
                         title="next chapter">despy.core.event.Event</a></p>
@@ -119,11 +119,11 @@ own model class by sub-classing this class.</p>
 <dt><strong>Attributes</strong></dt>
 <dd><ul class="first last simple">
 <li><a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject.name" title="despy.base.named_object.NamedObject.name"><code class="xref py py-attr docutils literal"><span class="pre">name</span></code></a>: Model object&#8217;s name. Inherited from
-<a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a>. Type: <cite>string</cite>.</li>
+<a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a>. Type: string.</li>
 <li><a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject.description" title="despy.base.named_object.NamedObject.description"><code class="xref py py-attr docutils literal"><span class="pre">description</span></code></a>: One or more paragraphs that describes the
 Model. Inherited from
-<a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a> Type: <cite>string</cite>.</li>
-<li><a class="reference internal" href="#despy.core.model.Model.initial_events_scheduled" title="despy.core.model.Model.initial_events_scheduled"><code class="xref py py-attr docutils literal"><span class="pre">initial_events_scheduled</span></code></a>: Returns <cite>False</cite> if the model
+<a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a> Type: string.</li>
+<li><a class="reference internal" href="#despy.core.model.Model.initial_events_scheduled" title="despy.core.model.Model.initial_events_scheduled"><code class="xref py py-attr docutils literal"><span class="pre">initial_events_scheduled</span></code></a>: Returns <code class="docutils literal"><span class="pre">False</span></code> if the model
 and it&#8217;s components have not yet been initialized. Otherwise
 returns true.</li>
 <li><a class="reference internal" href="#despy.core.model.Model.sim" title="despy.core.model.Model.sim"><code class="xref py py-attr docutils literal"><span class="pre">sim</span></code></a>: The corresponding instance of the
@@ -143,9 +143,9 @@ method to a function provided as a method argument.
 Not used if user includes a custom initialize method in a model
 subclass.</li>
 <li><a class="reference internal" href="#despy.core.model.Model.initialize" title="despy.core.model.Model.initialize"><code class="xref py py-meth docutils literal"><span class="pre">initialize()</span></code></a>: The default initialize method. Calls the
-<cite>initialize</cite> method on all model components.</li>
+<code class="docutils literal"><span class="pre">initialize</span></code> method on all model components.</li>
 <li><a class="reference internal" href="#despy.core.model.Model.schedule" title="despy.core.model.Model.schedule"><code class="xref py py-meth docutils literal"><span class="pre">schedule()</span></code></a>: A convenience method. Calls the
-<a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a> class&#8217;s <cite>schedule</cite>
+<a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a> class&#8217;s <code class="docutils literal"><span class="pre">schedule</span></code>
 method.</li>
 </ul>
 </dd>
@@ -167,10 +167,10 @@ method.</li>
 <p>A short phrase, such as &#8220;Customer&#8221; or &#8220;Server Queue&#8221; that
 identifies the object.  Using title case and spaces will result
 in pleasant formatting in output reports and trace files.</p>
-<p><em>Returns:</em> <cite>string</cite></p>
+<p><em>Returns:</em> String</p>
 <dl class="docutils">
 <dt><em>Raises:</em></dt>
-<dd><cite>TypeError</cite> if name is not a string.</dd>
+<dd><code class="docutils literal"><span class="pre">TypeError</span></code> if name is not a string.</dd>
 </dl>
 </dd></dl>
 
@@ -182,9 +182,9 @@ in pleasant formatting in output reports and trace files.</p>
 of the object.  The description will be included in output
 reports as html paragraphs (or equivalent for other output
 formats).</p>
-<p><em>Returns:</em> <cite>string</cite></p>
-<p><em>Raises:</em> <cite>TypeError</cite> if description is not a string or type
-<cite>None</cite>.</p>
+<p><em>Returns:</em> string</p>
+<p><em>Raises:</em> <code class="docutils literal"><span class="pre">TypeError</span></code> if description is not a string or type
+<code class="docutils literal"><span class="pre">None</span></code>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -212,17 +212,17 @@ been executed.</p>
 <dl class="docutils">
 <dt><em>Arguments</em></dt>
 <dd><dl class="first last docutils">
-<dt><cite>name</cite> (string):</dt>
+<dt><code class="docutils literal"><span class="pre">name</span></code> (string):</dt>
 <dd>A short name for the model. The model name is displayed
 in output reports.</dd>
-<dt><cite>sim</cite> (<a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a>)(Optional):</dt>
-<dd>The model object must be attached to a simulation
-object, which will manage events and the FEL.
+<dt><code class="docutils literal"><span class="pre">sim</span></code> (<a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a>)</dt>
+<dd>(Optional): The model object must be attached to a
+simulation object, which will manage events and the FEL.
 If the simulation argument is omitted, the constructor
 will create and assign a default environment object to
 the model. A different simulation can be assigned later
 using the model object&#8217;s simulation property.</dd>
-<dt><cite>description</cite> (string):</dt>
+<dt><code class="docutils literal"><span class="pre">description</span></code> (string):</dt>
 <dd>A brief description generally consisting of a few
 sentences.</dd>
 </dl>
@@ -237,11 +237,11 @@ sentences.</dd>
 <dl class="docutils">
 <dt><em>Arguments</em></dt>
 <dd><dl class="first last docutils">
-<dt><cite>key</cite> (String)</dt>
+<dt><code class="docutils literal"><span class="pre">key</span></code> (String)</dt>
 <dd>The dictionary key that will be used to retrieve the
 component.</dd>
-<dt><cite>item</cite> (<a class="reference internal" href="../component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a>)</dt>
-<dd>An instance of <cite>Component</cite> or one of it&#8217;s sub-classes.</dd>
+<dt><code class="docutils literal"><span class="pre">item</span></code> (<a class="reference internal" href="component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a>)</dt>
+<dd>An instance of <code class="docutils literal"><span class="pre">Component</span></code> or one of it&#8217;s sub-classes.</dd>
 </dl>
 </dd>
 </dl>
@@ -254,11 +254,11 @@ component.</dd>
 <dl class="docutils">
 <dt><em>Arguments</em></dt>
 <dd><dl class="first last docutils">
-<dt><cite>key</cite> (String)</dt>
+<dt><code class="docutils literal"><span class="pre">key</span></code> (String)</dt>
 <dd>The dictionary key that will be used to retrieve the
 component.</dd>
-<dt><cite>item</cite> (<a class="reference internal" href="../component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a>)</dt>
-<dd>An instance of <cite>Component</cite> or one of it&#8217;s sub-classes.</dd>
+<dt><code class="docutils literal"><span class="pre">item</span></code> (<a class="reference internal" href="component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a>)</dt>
+<dd>An instance of <code class="docutils literal"><span class="pre">Component</span></code> or one of it&#8217;s sub-classes.</dd>
 </dl>
 </dd>
 </dl>
@@ -271,7 +271,7 @@ component.</dd>
 <dl class="docutils">
 <dt><em>Arguments</em></dt>
 <dd><dl class="first last docutils">
-<dt><cite>key</cite> (String)</dt>
+<dt><code class="docutils literal"><span class="pre">key</span></code> (String)</dt>
 <dd>The dictionary key that will be used to identify the
 component that will be removed from the model.</dd>
 </dl>
@@ -287,12 +287,12 @@ component that will be removed from the model.</dd>
 before any events are executed. Initialize methods are often
 used to add the first events to the FEL.</p>
 <p>Users can pass an initialize method to the model with this
-method, or they can override the <cite>_initialize</cite> method in a model
-subclass.</p>
+method, or they can override the <code class="docutils literal"><span class="pre">_initialize</span></code> method in a
+model subclass.</p>
 <dl class="docutils">
 <dt><em>Arguments</em></dt>
 <dd><dl class="first last docutils">
-<dt><cite>initialize_method</cite> (function)</dt>
+<dt><code class="docutils literal"><span class="pre">initialize_method</span></code> (function)</dt>
 <dd>A Python function that will initialize the model.</dd>
 </dl>
 </dd>
@@ -304,9 +304,9 @@ subclass.</p>
 <code class="descclassname">Model.</code><code class="descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/model.html#Model.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.model.Model.initialize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the model and all components.</p>
 <p>This default initialize method will first call all of the
-components&#8217; <cite>initialize</cite> methods, in no particular order.
+components&#8217; <code class="docutils literal"><span class="pre">initialize</span></code> methods, in no particular order.
 Next it will call whatever method was passed to
-<cite>set_initialize_method.</cite></p>
+<code class="docutils literal"><span class="pre">set_initialize_method</span></code>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -350,7 +350,7 @@ that the event will occur.</dd>
           <a href="event.html" title="despy.core.event.Event"
              >next</a> |</li>
         <li class="right" >
-          <a href="simulation.html" title="despy.core.simulation.Simulation"
+          <a href="felitem.html" title="FelItem"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../classes.html" >Despy Classes</a> &raquo;</li> 

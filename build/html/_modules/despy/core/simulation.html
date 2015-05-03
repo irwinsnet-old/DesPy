@@ -97,7 +97,7 @@
 <span class="kn">from</span> <span class="nn">despy.output.datatype</span> <span class="kn">import</span> <span class="n">Datatype</span>
 <span class="kn">from</span> <span class="nn">despy.base.named_object</span> <span class="kn">import</span> <span class="n">NamedObject</span>
 
-<div class="viewcode-block" id="FelItem"><a class="viewcode-back" href="../../../felitem.html#despy.core.simulation.FelItem">[docs]</a><span class="k">class</span> <span class="nc">FelItem</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FelItemTuple&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="FelItem"><a class="viewcode-back" href="../../../core/felitem.html#despy.core.simulation.FelItem">[docs]</a><span class="k">class</span> <span class="nc">FelItem</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FelItemTuple&#39;</span><span class="p">,</span>
                          <span class="p">[</span><span class="s">&#39;time_fld&#39;</span><span class="p">,</span> <span class="s">&#39;event_fld&#39;</span><span class="p">,</span> <span class="s">&#39;priority_fld&#39;</span><span class="p">])):</span>
     <span class="sd">&quot;&quot;&quot;A named tuple that represents a scheduled event.</span>
 <span class="sd">    </span>
@@ -154,31 +154,31 @@
     <span class="sd">&quot;&quot;&quot; Schedule events and manage the future event list (FEL).</span>
 <span class="sd">    </span>
 <span class="sd">    Every Despy simulation must have one instance of the</span>
-<span class="sd">    `simulation` class. The `simulation` class initializes the</span>
+<span class="sd">    ``Simulation`` class. The ``Simulation`` class initializes the</span>
 <span class="sd">    top-level model and its components, manages the simulation</span>
 <span class="sd">    clock and FEL, and executes events.</span>
 <span class="sd">    </span>
 <span class="sd">    **Attributes**</span>
 
 <span class="sd">      * :attr:`.name`: Simulation object&#39;s name. Inherited from</span>
-<span class="sd">        :class:`despy.base.named_object.NamedObject`. Type: `string`.</span>
+<span class="sd">        :class:`despy.base.named_object.NamedObject`. Type: string.</span>
 <span class="sd">      * :attr:`.description`: One or more paragraphs that describes the</span>
 <span class="sd">        simulation. Inherited from</span>
-<span class="sd">        :class:`despy.base.named_object.NamedObject` Type: `string`.</span>
+<span class="sd">        :class:`despy.base.named_object.NamedObject` Type: string.</span>
 <span class="sd">      * :attr:`.models`: A list of all :class:`.Model` objects that</span>
 <span class="sd">        have been assigned to the simulation.</span>
 <span class="sd">      * :attr:`.seed`: The np.random.seed method will be seeded with</span>
 <span class="sd">        this integer prior to running the simulation.</span>
 <span class="sd">      * :attr:`.now`: An integer representing the current simulation</span>
-<span class="sd">        time. Type: `integer` (non-negative).</span>
+<span class="sd">        time. Type: integer (non-negative).</span>
 <span class="sd">      * :attr:`.evt`: Returns the :class:`despy.core.event.Event` object</span>
 <span class="sd">        that is currently being executed. If no event is being executed,</span>
-<span class="sd">        returns `None`. Read-only.</span>
+<span class="sd">        returns ``None``. Read-only.</span>
 <span class="sd">      * :attr:`.run_start_time`: The real-world start time for the</span>
-<span class="sd">        simulation. Type: datetime.datetime, or `None` if the simulation</span>
+<span class="sd">        simulation. Type: datetime.datetime, or ``None`` if the simulation</span>
 <span class="sd">        has not yet been run. Read-only.</span>
 <span class="sd">      * :attr:`run_stop_time`: The real-world stop time for the</span>
-<span class="sd">        simulation. Type: datetime.datetime, or `None` if the simulation</span>
+<span class="sd">        simulation. Type: datetime.datetime, or ``None`` if the simulation</span>
 <span class="sd">        has not yet been run. Read-only.</span>
 <span class="sd">      * :attr:`.gen`: A :class:`despy.output.generator` object that will</span>
 <span class="sd">        generate all output files.</span>
@@ -222,11 +222,11 @@
 <span class="sd">        list (FEL).</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
-<span class="sd">            * `initial_time:` Optional. A non-negative integer that</span>
+<span class="sd">            * ``initial_time:`` Optional. A non-negative integer that</span>
 <span class="sd">              specifies the initial simulation time. Defaults to 0.</span>
-<span class="sd">            * `name:` Optional. A word or short phrase that describes</span>
+<span class="sd">            * ``name:`` Optional. A word or short phrase that describes</span>
 <span class="sd">              the simulation. Type: string. Defaults to &quot;Simulation&quot;.</span>
-<span class="sd">            * `description:` Optional. A sentence or short paragraph</span>
+<span class="sd">            * ``description:`` Optional. A sentence or short paragraph</span>
 <span class="sd">              that describes the simulation in more detail than the</span>
 <span class="sd">              name attribute. Type: string or type None. Defaults to</span>
 <span class="sd">              type None.</span>
@@ -257,7 +257,7 @@
 <span class="sd">        this integer prior to running the simulation.</span>
 <span class="sd">        </span>
 <span class="sd">        Set seed to an integer, an array of integers of any length or to</span>
-<span class="sd">        `None` (default).</span>
+<span class="sd">        ``None`` (default).</span>
 <span class="sd">        </span>
 <span class="sd">        By default (i.e., when seed is set to None), Despy will use a</span>
 <span class="sd">        different seed, and hence a different random number sequence for</span>
@@ -287,15 +287,15 @@
 <span class="sd">        By default, a simulation starts at time zero and continues</span>
 <span class="sd">        until three are no events remaining on the FEL or until the</span>
 <span class="sd">        simulation detects a stop condition. The unit of time</span>
-<span class="sd">        represented by the integer value stored in the `now` property</span>
+<span class="sd">        represented by the integer value stored in the ``now`` property</span>
 <span class="sd">        is defined by the simulation.</span>
 <span class="sd">        </span>
 <span class="sd">        Internally, Despy multiplies the time by a factor of ten and</span>
 <span class="sd">        each step in the simulation is a multiple of ten. This allows</span>
 <span class="sd">        assignment of priorities to each event. For example,</span>
-<span class="sd">        `PRIORITY_EARLY` events would be scheduled to run at time 39,</span>
-<span class="sd">        `RIORITY_DEFAULT` events at time 40, and `PRIORITY_LATE` events</span>
-<span class="sd">        at time 41. Despy would indicate that all of these events</span>
+<span class="sd">        ``PRIORITY_EARLY`` events would be scheduled to run at time 39,</span>
+<span class="sd">        ``PRIORITY_DEFAULT`` events at time 40, and ``PRIORITY_LATE``</span>
+<span class="sd">        events at time 41. Despy would indicate that all of these events</span>
 <span class="sd">        occurred at time = 4 in standard reports and output. This</span>
 <span class="sd">        practice simplifies the routines that run the events because</span>
 <span class="sd">        events are placed on the FEL in the order that they will</span>
@@ -312,7 +312,7 @@
         <span class="sd">&quot;&quot;&quot;The event that is currently being executed by the simulation</span>
 <span class="sd">        at time = ``self.now`` (read only).</span>
 <span class="sd">        </span>
-<span class="sd">        *Returns:* :class: &#39;despy.core.event.Event`</span>
+<span class="sd">        *Returns:* :class: `despy.core.event.Event`</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evt</span>
@@ -322,7 +322,7 @@
         <span class="sd">&quot;&quot;&quot;The real-world time (i.e., date, hours, minutes, etc.) at</span>
 <span class="sd">        which the simulation starts (read only).</span>
 <span class="sd">        </span>
-<span class="sd">        *Returns:* None or :class: `datetime.datetime`</span>
+<span class="sd">        *Returns:* ``None`` or :class: `datetime.datetime`</span>
 <span class="sd">        </span>
 <span class="sd">        Despy uses the run_start_time attribute to calculate the</span>
 <span class="sd">        simulation&#39;s elapsed time. The attribute will return ``None``</span>
@@ -335,11 +335,11 @@
         <span class="sd">&quot;&quot;&quot;The real-world stop time (i.e., date, hours, minutes, etc.)</span>
 <span class="sd">        for the simulation (read only).</span>
 <span class="sd">        </span>
-<span class="sd">        *Returns:* `None` or :class: `datetime.datetime`</span>
+<span class="sd">        *Returns:* ``None`` or :class: `datetime.datetime`</span>
 <span class="sd">        </span>
-<span class="sd">        Despy uses the `run_stop_time` attribute to calculate elapsed</span>
+<span class="sd">        Despy uses the ``run_stop_time`` attribute to calculate elapsed</span>
 <span class="sd">        simulation time and to assign unique names to output files. The</span>
-<span class="sd">        attribute will return `None` if the simulation has not yet been</span>
+<span class="sd">        attribute will return ``None`` if the simulation has not yet been</span>
 <span class="sd">        run.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_stop_time</span>
@@ -371,15 +371,15 @@
 
 <span class="sd">        *Arguments*</span>
 <span class="sd">            event (:class:`despy.core.event.Event`):</span>
-<span class="sd">                An instance or subclass of the `Event` class.</span>
-<span class="sd">            delay (`integer`):</span>
+<span class="sd">                An instance or subclass of the ``Event`` class.</span>
+<span class="sd">            delay (integer):</span>
 <span class="sd">                A non-negative integer that defaults to zero. If zero,</span>
 <span class="sd">                the event will be scheduled to occur immediately.</span>
-<span class="sd">            priority (`integer`)</span>
+<span class="sd">            priority (integer)</span>
 <span class="sd">                An attribute of the</span>
 <span class="sd">                :class:`despy.core.simulation.FelItem` enumeration, or</span>
 <span class="sd">                an integer ranging from -5 to +5. The default is</span>
-<span class="sd">                `FelItem.PRIORITY_STANDARD`, which is equivalent to</span>
+<span class="sd">                ``FelItem.PRIORITY_STANDARD``, which is equivalent to</span>
 <span class="sd">                zero.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># Ensures delay value is always an integer.</span>
@@ -397,13 +397,13 @@
         <span class="sd">&quot;&quot;&quot;Return the time of the next scheduled event.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
-<span class="sd">            prioritized (`Boolean`):</span>
-<span class="sd">                If `True`, the time will reflect the event&#39;s priority.</span>
-<span class="sd">                For example, for a `PRIORITY_EARLY` event scheduled to</span>
-<span class="sd">                run at time = 25, `peek` will return 24.9 if the</span>
-<span class="sd">                `prioritized` attribute is set to `True`. If `False`,</span>
-<span class="sd">                then our example would return 25, the nominal scheduled</span>
-<span class="sd">                time. The default value is `True`.</span>
+<span class="sd">            prioritized (Boolean):</span>
+<span class="sd">                If ``True``, the time will reflect the event&#39;s priority.</span>
+<span class="sd">                For example, for a ``PRIORITY_EARLY`` event scheduled to</span>
+<span class="sd">                run at time = 25, ``peek`` will return 24.9 if the</span>
+<span class="sd">                ``prioritized`` attribute is set to ``True``. If</span>
+<span class="sd">                ``False``, then our example would return 25, the nominal</span>
+<span class="sd">                scheduled time. The default value is ``True``.</span>
 <span class="sd">        </span>
 <span class="sd">        *Returns*</span>
 <span class="sd">            An integer or float value if the FEL contains events.</span>
@@ -419,9 +419,9 @@
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;Infinity&#39;</span><span class="p">)</span>
         </div>
 <div class="viewcode-block" id="Simulation._initialize_models"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation._initialize_models">[docs]</a>    <span class="k">def</span> <span class="nf">_initialize_models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Run the `initialize` method on every attached model.</span>
+        <span class="sd">&quot;&quot;&quot;Run the ``initialize`` method on every attached model.</span>
 <span class="sd">        </span>
-<span class="sd">        `_initialize_models` is called by the</span>
+<span class="sd">        ``_initialize_models`` is called by the</span>
 <span class="sd">        :meth:`.run` method. (INTERNAL)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="p">:</span>
@@ -432,11 +432,11 @@
 <div class="viewcode-block" id="Simulation.step"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Advance simulation time and execute the next event.</span>
 <span class="sd">        </span>
-<span class="sd">        The `step` method will only execute one event. Users might</span>
-<span class="sd">        call the `step` method for troubleshooting purposes or other</span>
+<span class="sd">        The ``step`` method will only execute one event. Users might</span>
+<span class="sd">        call the ``step`` method for troubleshooting purposes or other</span>
 <span class="sd">        special cases. Users will generally run their simulation by</span>
 <span class="sd">        calling the :meth:`.run` method, which repeatedly calls the</span>
-<span class="sd">        `step` method until reaching a stop condition or there are no</span>
+<span class="sd">        ``step`` method until reaching a stop condition or there are no</span>
 <span class="sd">        remaining events on the FEL.</span>
 
 <span class="sd">        *Raises*</span>
@@ -473,15 +473,15 @@
 <div class="viewcode-block" id="Simulation.run"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Execute events on the FEL until reaching a stop condition.</span>
 <span class="sd">        </span>
-<span class="sd">        The `run` method will advance simulation time and execute events</span>
+<span class="sd">        The ``run`` method will advance simulation time and execute events</span>
 <span class="sd">        until the FEL is empty or until the time specified in the</span>
-<span class="sd">        `until` parameter is reached.</span>
+<span class="sd">        ``until`` parameter is reached.</span>
 <span class="sd">        </span>
-<span class="sd">        Before executing any events, `run` will ensure models are</span>
-<span class="sd">        initialized by calling `_initialize_models`.</span>
+<span class="sd">        Before executing any events, ``run`` will ensure models are</span>
+<span class="sd">        initialized by calling ``_initialize_models``.</span>
 <span class="sd">        `_initialize_models` ensures models are only initialized one</span>
-<span class="sd">        time, so users can call `run` multiple times and Despy will only</span>
-<span class="sd">        initialize the models on the first call to `run` (unless</span>
+<span class="sd">        time, so users can call ``run`` multiple times and Despy will only</span>
+<span class="sd">        initialize the models on the first call to ``run`` (unless</span>
 <span class="sd">        :meth:`.reset` is called, of course).</span>
 
 <span class="sd">        *Arguments*</span>
@@ -490,7 +490,7 @@
 <span class="sd">                at which the simulation will stop. Defaults to &#39;None&#39;,</span>
 <span class="sd">                meaning the simulation will run until there are no</span>
 <span class="sd">                remaining events on the FEL.  The events at the time</span>
-<span class="sd">                specified in `until` will be executed. For example, if</span>
+<span class="sd">                specified in ``until`` will be executed. For example, if</span>
 <span class="sd">                until = 100 and there are events scheduled at time</span>
 <span class="sd">                100, those events will be executed, but events at time</span>
 <span class="sd">                101 or later will not.</span>
@@ -552,7 +552,7 @@
         <span class="sd">&quot;&quot;&quot;Reset the time to zero, allowing the simulation to be rerun.</span>
 <span class="sd">        </span>
 <span class="sd">        Sets the simulation time to zero. Also sets the model&#39;s</span>
-<span class="sd">        initial_events_scheduled attribute to `False`, which will cause</span>
+<span class="sd">        initial_events_scheduled attribute to ``False``, which will cause</span>
 <span class="sd">        the model&#39;s initialize methods to be executed the next time the</span>
 <span class="sd">        simulation is run. In addition:</span>
 <span class="sd">        </span>
@@ -562,8 +562,8 @@
 <span class="sd">            * Resets the main simulation counter</span>
 <span class="sd">            </span>
 <span class="sd">        *Arguments*</span>
-<span class="sd">            `initial_time`: Set the simulation clock to the value</span>
-<span class="sd">            specified in `initial_time`. Defaults to zero.</span>
+<span class="sd">            ``initial_time``: Set the simulation clock to the value</span>
+<span class="sd">            specified in ``initial_time``. Defaults to zero.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_now</span> <span class="o">=</span> <span class="n">initial_time</span> <span class="o">*</span> <span class="mi">10</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span> <span class="o">=</span> <span class="p">[]</span>
@@ -579,10 +579,10 @@
         <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">:</span>
             <span class="n">model</span><span class="o">.</span><span class="n">initial_events_scheduled</span> <span class="o">=</span> <span class="bp">False</span>
 </div></div>
-<div class="viewcode-block" id="NoEventsRemainingError"><a class="viewcode-back" href="../../../NoEventsRemainingError.html#despy.core.simulation.NoEventsRemainingError">[docs]</a><span class="k">class</span> <span class="nc">NoEventsRemainingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="NoEventsRemainingError"><a class="viewcode-back" href="../../../core/NoEventsRemainingError.html#despy.core.simulation.NoEventsRemainingError">[docs]</a><span class="k">class</span> <span class="nc">NoEventsRemainingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Raised by despy.core.simulation&#39;s step method when FEL is empty.</span>
 <span class="sd">    </span>
-<span class="sd">    Raised by the `Simulation.step` method when no events remain on the</span>
+<span class="sd">    Raised by the ``Simulation.step`` method when no events remain on the</span>
 <span class="sd">    FEL.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span>

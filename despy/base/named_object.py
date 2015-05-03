@@ -22,7 +22,7 @@ class NamedObject(object):
     
     Subclasses should include a call to the
     :meth:`NamedObject.__init__` method in the subclass
-    :meth:`__init__` method.
+    ``__init__`` method.
     
     **Attributes**
       * :attr:`.name`: Object name.
@@ -68,10 +68,10 @@ class NamedObject(object):
         identifies the object.  Using title case and spaces will result
         in pleasant formatting in output reports and trace files.
         
-        *Returns:* `string`
+        *Returns:* String
         
         *Raises:*
-            `TypeError` if name is not a string.
+            ``TypeError`` if name is not a string.
         
         """
         return self._name
@@ -94,10 +94,10 @@ class NamedObject(object):
         reports as html paragraphs (or equivalent for other output
         formats).
         
-        *Returns:* `string`
+        *Returns:* string
 
-        *Raises:* `TypeError` if description is not a string or type
-        `None`.
+        *Raises:* ``TypeError`` if description is not a string or type
+        ``None``.
         """
         return self._description
 

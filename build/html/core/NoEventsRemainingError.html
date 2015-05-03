@@ -9,23 +9,25 @@
     
     <title>despy.core.simulation.NoEventsRemaining &mdash; Despy 1 documentation</title>
     
-    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '../',
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/bizstyle.js"></script>
-    <link rel="top" title="Despy 1 documentation" href="index.html" />
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="../index.html" />
+    <link rel="up" title="Despy Classes" href="../classes.html" />
+    <link rel="prev" title="despy.core.event.Event" href="event.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -36,17 +38,21 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="event.html" title="despy.core.event.Event"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">despy.core.simulation.NoEventsRemaining</a><ul>
 <li><a class="reference internal" href="#class-description">Class Description</a></li>
@@ -54,16 +60,19 @@
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="event.html"
+                        title="previous chapter">despy.core.event.Event</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/NoEventsRemaining.txt"
+      <li><a href="../_sources/core/NoEventsRemainingError.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
+    <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -88,8 +97,10 @@
 <h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="despy.core.simulation.NoEventsRemainingError">
-<em class="property">class </em><code class="descclassname">despy.core.simulation.</code><code class="descname">NoEventsRemainingError</code><a class="reference internal" href="_modules/despy/core/simulation.html#NoEventsRemainingError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.NoEventsRemainingError" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">despy.core.simulation.</code><code class="descname">NoEventsRemainingError</code><a class="reference internal" href="../_modules/despy/core/simulation.html#NoEventsRemainingError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.NoEventsRemainingError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Raised by despy.core.simulation&#8217;s step method when FEL is empty.</p>
+<p>Raised by the <code class="docutils literal"><span class="pre">Simulation.step</span></code> method when no events remain on the
+FEL.</p>
 </dd></dl>
 
 </div>
@@ -105,12 +116,16 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="event.html" title="despy.core.event.Event"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" >Despy Classes</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -6,13 +6,13 @@
 """
 ..  module:: despy.core.__init__.py
 
-The `despy.core` package includes classes that are essential for any
+The ``despy.core`` package includes classes that are essential for any
 Despy simulation.
 
 The __init__.py module for the despy.core package imports all
 core modules, so the user does not have to import each module
 individually. For example, the following statement imports all
-core modules under the `dp` namespace.::
+core modules under the ``dp`` namespace.::
     
     import despy.core as dp
 

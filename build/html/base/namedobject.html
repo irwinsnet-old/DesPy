@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/bizstyle.js"></script>
     <link rel="top" title="Despy 1 documentation" href="../index.html" />
     <link rel="up" title="Despy Classes" href="../classes.html" />
-    <link rel="next" title="despy.core.simulation.Simulation" href="../core/simulation.html" />
+    <link rel="next" title="despy.core.component.Component" href="../core/component.html" />
     <link rel="prev" title="Despy Classes" href="../classes.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
@@ -45,7 +45,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../core/simulation.html" title="despy.core.simulation.Simulation"
+          <a href="../core/component.html" title="despy.core.component.Component"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../classes.html" title="Despy Classes"
@@ -70,8 +70,8 @@
   <p class="topless"><a href="../classes.html"
                         title="previous chapter">Despy Classes</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../core/simulation.html"
-                        title="next chapter">despy.core.simulation.Simulation</a></p>
+  <p class="topless"><a href="../core/component.html"
+                        title="next chapter">despy.core.component.Component</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -110,7 +110,7 @@
 <dd><p>A base class that provides name and description fields.</p>
 <p>Subclasses should include a call to the
 <code class="xref py py-meth docutils literal"><span class="pre">NamedObject.__init__()</span></code> method in the subclass
-<code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code> method.</p>
+<code class="docutils literal"><span class="pre">__init__</span></code> method.</p>
 <dl class="docutils">
 <dt><strong>Attributes</strong></dt>
 <dd><ul class="first last simple">
@@ -146,10 +146,10 @@ underscore character.</li>
 <p>A short phrase, such as &#8220;Customer&#8221; or &#8220;Server Queue&#8221; that
 identifies the object.  Using title case and spaces will result
 in pleasant formatting in output reports and trace files.</p>
-<p><em>Returns:</em> <cite>string</cite></p>
+<p><em>Returns:</em> String</p>
 <dl class="docutils">
 <dt><em>Raises:</em></dt>
-<dd><cite>TypeError</cite> if name is not a string.</dd>
+<dd><code class="docutils literal"><span class="pre">TypeError</span></code> if name is not a string.</dd>
 </dl>
 </dd></dl>
 
@@ -161,9 +161,9 @@ in pleasant formatting in output reports and trace files.</p>
 of the object.  The description will be included in output
 reports as html paragraphs (or equivalent for other output
 formats).</p>
-<p><em>Returns:</em> <cite>string</cite></p>
-<p><em>Raises:</em> <cite>TypeError</cite> if description is not a string or type
-<cite>None</cite>.</p>
+<p><em>Returns:</em> string</p>
+<p><em>Raises:</em> <code class="docutils literal"><span class="pre">TypeError</span></code> if description is not a string or type
+<code class="docutils literal"><span class="pre">None</span></code>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -206,7 +206,7 @@ formats).</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../core/simulation.html" title="despy.core.simulation.Simulation"
+          <a href="../core/component.html" title="despy.core.component.Component"
              >next</a> |</li>
         <li class="right" >
           <a href="../classes.html" title="Despy Classes"

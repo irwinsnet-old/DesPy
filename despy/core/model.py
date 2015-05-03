@@ -8,7 +8,7 @@
 :class:`despy.core.model.Model`: 
     The model represents the real-world system that is being simulated.
     The user will generally build their model by sub-classing the
-    `model` class.
+    ``Model`` class.
 """
 
 from despy.core.simulation import Simulation, FelItem as fi
@@ -28,11 +28,11 @@ class Model(NamedObject):
 
     **Attributes**
       * :attr:`.name`: Model object's name. Inherited from
-        :class:`despy.base.named_object.NamedObject`. Type: `string`.
+        :class:`despy.base.named_object.NamedObject`. Type: string.
       * :attr:`.description`: One or more paragraphs that describes the
         Model. Inherited from
-        :class:`despy.base.named_object.NamedObject` Type: `string`.
-      * :attr:`.initial_events_scheduled`: Returns `False` if the model
+        :class:`despy.base.named_object.NamedObject` Type: string.
+      * :attr:`.initial_events_scheduled`: Returns ``False`` if the model
         and it's components have not yet been initialized. Otherwise
         returns true.
       * :attr:`.sim`: The corresponding instance of the
@@ -50,9 +50,9 @@ class Model(NamedObject):
         Not used if user includes a custom initialize method in a model
         subclass.
       * :meth:`.initialize`: The default initialize method. Calls the
-        `initialize` method on all model components.
+        ``initialize`` method on all model components.
       * :meth:`.schedule`: A convenience method. Calls the
-        :class:`despy.core.simulation.Simulation` class's `schedule`
+        :class:`despy.core.simulation.Simulation` class's ``schedule``
         method.
         
     **Inherits**
@@ -64,17 +64,17 @@ class Model(NamedObject):
         """Create a Model object.
         
         *Arguments*
-            `name` (string):
+            ``name`` (string):
                 A short name for the model. The model name is displayed
                 in output reports.
-            `sim` (:class:`despy.core.simulation.Simulation`)(Optional):
-                The model object must be attached to a simulation
-                object, which will manage events and the FEL.
+            ``sim`` (:class:`despy.core.simulation.Simulation`)
+                (Optional): The model object must be attached to a
+                simulation object, which will manage events and the FEL.
                 If the simulation argument is omitted, the constructor
                 will create and assign a default environment object to
                 the model. A different simulation can be assigned later
                 using the model object's simulation property.
-            `description` (string):
+            ``description`` (string):
                 A brief description generally consisting of a few
                 sentences.
         """
@@ -143,11 +143,11 @@ class Model(NamedObject):
         """ Assign a component to the model using dictionary notation.
         
         *Arguments*
-            `key` (String)
+            ``key`` (String)
                 The dictionary key that will be used to retrieve the
                 component.
-            `item` (:class:`despy.core.component.Component`)
-                An instance of `Component` or one of it's sub-classes.
+            ``item`` (:class:`despy.core.component.Component`)
+                An instance of ``Component`` or one of it's sub-classes.
         """
         self.components[key] = item
 
@@ -155,11 +155,11 @@ class Model(NamedObject):
         """Access a component using a dictionary key.
         
         *Arguments*
-            `key` (String)
+            ``key`` (String)
                 The dictionary key that will be used to retrieve the
                 component.
-            `item` (:class:`despy.core.component.Component`)
-                An instance of `Component` or one of it's sub-classes.
+            ``item`` (:class:`despy.core.component.Component`)
+                An instance of ``Component`` or one of it's sub-classes.
         """
         return self.components[key]
         
@@ -167,7 +167,7 @@ class Model(NamedObject):
         """Remove a component from the model.
         
         *Arguments*
-            `key` (String)
+            ``key`` (String)
                 The dictionary key that will be used to identify the
                 component that will be removed from the model.
         """
@@ -181,11 +181,11 @@ class Model(NamedObject):
         used to add the first events to the FEL.
         
         Users can pass an initialize method to the model with this
-        method, or they can override the `_initialize` method in a model
-        subclass.
+        method, or they can override the ``_initialize`` method in a
+        model subclass.
         
         *Arguments*
-            `initialize_method` (function)
+            ``initialize_method`` (function)
                 A Python function that will initialize the model.
         """
         self._initialize = initialize_method
@@ -194,9 +194,9 @@ class Model(NamedObject):
         """Initialize the model and all components.
         
         This default initialize method will first call all of the
-        components' `initialize` methods, in no particular order.
+        components' ``initialize`` methods, in no particular order.
         Next it will call whatever method was passed to
-        `set_initialize_method.`
+        ``set_initialize_method``.
         """
         # Initialize components that are attached to the model.
         for _, component in self.components.items():

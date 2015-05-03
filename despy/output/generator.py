@@ -7,10 +7,10 @@ class Generator(object):
     """ The Generator class generates the simulation's output.
     
     *Attributes*
-          * :attr:`.console_trace`: If `True`, the trace record for each
+          * :attr:`.console_trace`: If ``True``, the trace record for each
             event will be sent to the standard output. The default value
             is True. Type: Boolean.
-          * :attr:`.output_folder`: If `None` (the default value), the
+          * :attr:`.output_folder`: If ``None`` (the default value), the
             simulation will not generate any output or trace files.
     
     """
@@ -18,9 +18,9 @@ class Generator(object):
     
     @property
     def console_trace(self):
-        """ Send trace record to standard output (console) if `True`.
+        """ Send trace record to standard output (console) if ``True``.
 
-        The default value is True. Type: `Boolean`.
+        The default value is True. Type: Boolean.
         """
         return self._console_output
         
@@ -29,8 +29,8 @@ class Generator(object):
         """ A string that identifies the folder where output reports and
         graphs will be placed.
         
-        If `None` (the default value), the simulation will not generate
-        any output or trace files. The value stored in `output_folder`
+        If ``None`` (the default value), the simulation will not generate
+        any output or trace files. The value stored in ``output_folder``
         should be an absolute reference. For example::
         
             simulation.output_folder = "C:/Projects/despy_output/resource_sim"

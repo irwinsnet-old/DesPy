@@ -82,31 +82,31 @@ class Simulation(NamedObject):
     """ Schedule events and manage the future event list (FEL).
     
     Every Despy simulation must have one instance of the
-    `simulation` class. The `simulation` class initializes the
+    ``Simulation`` class. The ``Simulation`` class initializes the
     top-level model and its components, manages the simulation
     clock and FEL, and executes events.
     
     **Attributes**
 
       * :attr:`.name`: Simulation object's name. Inherited from
-        :class:`despy.base.named_object.NamedObject`. Type: `string`.
+        :class:`despy.base.named_object.NamedObject`. Type: string.
       * :attr:`.description`: One or more paragraphs that describes the
         simulation. Inherited from
-        :class:`despy.base.named_object.NamedObject` Type: `string`.
+        :class:`despy.base.named_object.NamedObject` Type: string.
       * :attr:`.models`: A list of all :class:`.Model` objects that
         have been assigned to the simulation.
       * :attr:`.seed`: The np.random.seed method will be seeded with
         this integer prior to running the simulation.
       * :attr:`.now`: An integer representing the current simulation
-        time. Type: `integer` (non-negative).
+        time. Type: integer (non-negative).
       * :attr:`.evt`: Returns the :class:`despy.core.event.Event` object
         that is currently being executed. If no event is being executed,
-        returns `None`. Read-only.
+        returns ``None``. Read-only.
       * :attr:`.run_start_time`: The real-world start time for the
-        simulation. Type: datetime.datetime, or `None` if the simulation
+        simulation. Type: datetime.datetime, or ``None`` if the simulation
         has not yet been run. Read-only.
       * :attr:`run_stop_time`: The real-world stop time for the
-        simulation. Type: datetime.datetime, or `None` if the simulation
+        simulation. Type: datetime.datetime, or ``None`` if the simulation
         has not yet been run. Read-only.
       * :attr:`.gen`: A :class:`despy.output.generator` object that will
         generate all output files.
@@ -150,11 +150,11 @@ class Simulation(NamedObject):
         list (FEL).
         
         *Arguments*
-            * `initial_time:` Optional. A non-negative integer that
+            * ``initial_time:`` Optional. A non-negative integer that
               specifies the initial simulation time. Defaults to 0.
-            * `name:` Optional. A word or short phrase that describes
+            * ``name:`` Optional. A word or short phrase that describes
               the simulation. Type: string. Defaults to "Simulation".
-            * `description:` Optional. A sentence or short paragraph
+            * ``description:`` Optional. A sentence or short paragraph
               that describes the simulation in more detail than the
               name attribute. Type: string or type None. Defaults to
               type None.
@@ -185,7 +185,7 @@ class Simulation(NamedObject):
         this integer prior to running the simulation.
         
         Set seed to an integer, an array of integers of any length or to
-        `None` (default).
+        ``None`` (default).
         
         By default (i.e., when seed is set to None), Despy will use a
         different seed, and hence a different random number sequence for
@@ -215,15 +215,15 @@ class Simulation(NamedObject):
         By default, a simulation starts at time zero and continues
         until three are no events remaining on the FEL or until the
         simulation detects a stop condition. The unit of time
-        represented by the integer value stored in the `now` property
+        represented by the integer value stored in the ``now`` property
         is defined by the simulation.
         
         Internally, Despy multiplies the time by a factor of ten and
         each step in the simulation is a multiple of ten. This allows
         assignment of priorities to each event. For example,
-        `PRIORITY_EARLY` events would be scheduled to run at time 39,
-        `RIORITY_DEFAULT` events at time 40, and `PRIORITY_LATE` events
-        at time 41. Despy would indicate that all of these events
+        ``PRIORITY_EARLY`` events would be scheduled to run at time 39,
+        ``PRIORITY_DEFAULT`` events at time 40, and ``PRIORITY_LATE``
+        events at time 41. Despy would indicate that all of these events
         occurred at time = 4 in standard reports and output. This
         practice simplifies the routines that run the events because
         events are placed on the FEL in the order that they will
@@ -240,7 +240,7 @@ class Simulation(NamedObject):
         """The event that is currently being executed by the simulation
         at time = ``self.now`` (read only).
         
-        *Returns:* :class: 'despy.core.event.Event`
+        *Returns:* :class: `despy.core.event.Event`
         
         """
         return self._evt
@@ -250,7 +250,7 @@ class Simulation(NamedObject):
         """The real-world time (i.e., date, hours, minutes, etc.) at
         which the simulation starts (read only).
         
-        *Returns:* None or :class: `datetime.datetime`
+        *Returns:* ``None`` or :class: `datetime.datetime`
         
         Despy uses the run_start_time attribute to calculate the
         simulation's elapsed time. The attribute will return ``None``
@@ -263,11 +263,11 @@ class Simulation(NamedObject):
         """The real-world stop time (i.e., date, hours, minutes, etc.)
         for the simulation (read only).
         
-        *Returns:* `None` or :class: `datetime.datetime`
+        *Returns:* ``None`` or :class: `datetime.datetime`
         
-        Despy uses the `run_stop_time` attribute to calculate elapsed
+        Despy uses the ``run_stop_time`` attribute to calculate elapsed
         simulation time and to assign unique names to output files. The
-        attribute will return `None` if the simulation has not yet been
+        attribute will return ``None`` if the simulation has not yet been
         run.
         """
         return self._run_stop_time
@@ -299,15 +299,15 @@ class Simulation(NamedObject):
 
         *Arguments*
             event (:class:`despy.core.event.Event`):
-                An instance or subclass of the `Event` class.
-            delay (`integer`):
+                An instance or subclass of the ``Event`` class.
+            delay (integer):
                 A non-negative integer that defaults to zero. If zero,
                 the event will be scheduled to occur immediately.
-            priority (`integer`)
+            priority (integer)
                 An attribute of the
                 :class:`despy.core.simulation.FelItem` enumeration, or
                 an integer ranging from -5 to +5. The default is
-                `FelItem.PRIORITY_STANDARD`, which is equivalent to
+                ``FelItem.PRIORITY_STANDARD``, which is equivalent to
                 zero.
         """
         # Ensures delay value is always an integer.
@@ -325,13 +325,13 @@ class Simulation(NamedObject):
         """Return the time of the next scheduled event.
         
         *Arguments*
-            prioritized (`Boolean`):
-                If `True`, the time will reflect the event's priority.
-                For example, for a `PRIORITY_EARLY` event scheduled to
-                run at time = 25, `peek` will return 24.9 if the
-                `prioritized` attribute is set to `True`. If `False`,
-                then our example would return 25, the nominal scheduled
-                time. The default value is `True`.
+            prioritized (Boolean):
+                If ``True``, the time will reflect the event's priority.
+                For example, for a ``PRIORITY_EARLY`` event scheduled to
+                run at time = 25, ``peek`` will return 24.9 if the
+                ``prioritized`` attribute is set to ``True``. If
+                ``False``, then our example would return 25, the nominal
+                scheduled time. The default value is ``True``.
         
         *Returns*
             An integer or float value if the FEL contains events.
@@ -347,9 +347,9 @@ class Simulation(NamedObject):
             return float('Infinity')
         
     def _initialize_models(self):
-        """Run the `initialize` method on every attached model.
+        """Run the ``initialize`` method on every attached model.
         
-        `_initialize_models` is called by the
+        ``_initialize_models`` is called by the
         :meth:`.run` method. (INTERNAL)
         """
         for model in self._models:
@@ -360,11 +360,11 @@ class Simulation(NamedObject):
     def step(self):
         """Advance simulation time and execute the next event.
         
-        The `step` method will only execute one event. Users might
-        call the `step` method for troubleshooting purposes or other
+        The ``step`` method will only execute one event. Users might
+        call the ``step`` method for troubleshooting purposes or other
         special cases. Users will generally run their simulation by
         calling the :meth:`.run` method, which repeatedly calls the
-        `step` method until reaching a stop condition or there are no
+        ``step`` method until reaching a stop condition or there are no
         remaining events on the FEL.
 
         *Raises*
@@ -401,15 +401,15 @@ class Simulation(NamedObject):
     def run(self, until=None):
         """ Execute events on the FEL until reaching a stop condition.
         
-        The `run` method will advance simulation time and execute events
+        The ``run`` method will advance simulation time and execute events
         until the FEL is empty or until the time specified in the
-        `until` parameter is reached.
+        ``until`` parameter is reached.
         
-        Before executing any events, `run` will ensure models are
-        initialized by calling `_initialize_models`.
+        Before executing any events, ``run`` will ensure models are
+        initialized by calling ``_initialize_models``.
         `_initialize_models` ensures models are only initialized one
-        time, so users can call `run` multiple times and Despy will only
-        initialize the models on the first call to `run` (unless
+        time, so users can call ``run`` multiple times and Despy will only
+        initialize the models on the first call to ``run`` (unless
         :meth:`.reset` is called, of course).
 
         *Arguments*
@@ -418,7 +418,7 @@ class Simulation(NamedObject):
                 at which the simulation will stop. Defaults to 'None',
                 meaning the simulation will run until there are no
                 remaining events on the FEL.  The events at the time
-                specified in `until` will be executed. For example, if
+                specified in ``until`` will be executed. For example, if
                 until = 100 and there are events scheduled at time
                 100, those events will be executed, but events at time
                 101 or later will not.
@@ -480,7 +480,7 @@ class Simulation(NamedObject):
         """Reset the time to zero, allowing the simulation to be rerun.
         
         Sets the simulation time to zero. Also sets the model's
-        initial_events_scheduled attribute to `False`, which will cause
+        initial_events_scheduled attribute to ``False``, which will cause
         the model's initialize methods to be executed the next time the
         simulation is run. In addition:
         
@@ -490,8 +490,8 @@ class Simulation(NamedObject):
             * Resets the main simulation counter
             
         *Arguments*
-            `initial_time`: Set the simulation clock to the value
-            specified in `initial_time`. Defaults to zero.
+            ``initial_time``: Set the simulation clock to the value
+            specified in ``initial_time``. Defaults to zero.
         """
         self._now = initial_time * 10
         self._futureEventList = []
@@ -510,7 +510,7 @@ class Simulation(NamedObject):
 class NoEventsRemainingError(Exception):
     """ Raised by despy.core.simulation's step method when FEL is empty.
     
-    Raised by the `Simulation.step` method when no events remain on the
+    Raised by the ``Simulation.step`` method when no events remain on the
     FEL.
     """
     pass

@@ -19,14 +19,14 @@ class Component(NamedObject):
 
     Models consist of several components, such as queues, processes, and
     entities. Components generally represent an element of the system
-    that is being simulated.  The `Component` class is the base class
+    that is being simulated.  The ``Component`` class is the base class
     for the model's components. It maintains a counter, which uniquely
     identifies components, and has attributes for accessing the model
     and simulation objects. Users can create their own model elements by
     inheriting from the Component class.
     
     Subclasses should include a call to the :meth:`Component.__init()__`
-    method in the subclass's `__init__` method.
+    method in the subclass's ``__init__`` method.
     
     **Attributes**
 
@@ -124,7 +124,7 @@ class Component(NamedObject):
     def model(self):
         """A link to the component's model object.
         
-        This read-only attribute is set by the :meth:`.__init__`
+        This read-only attribute is set by the ``Model.__init__``
         method.
         
         *Returns* :class:`despy.core.model.Model`

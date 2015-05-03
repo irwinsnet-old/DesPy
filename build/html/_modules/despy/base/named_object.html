@@ -94,7 +94,7 @@
 <span class="sd">    </span>
 <span class="sd">    Subclasses should include a call to the</span>
 <span class="sd">    :meth:`NamedObject.__init__` method in the subclass</span>
-<span class="sd">    :meth:`__init__` method.</span>
+<span class="sd">    ``__init__`` method.</span>
 <span class="sd">    </span>
 <span class="sd">    **Attributes**</span>
 <span class="sd">      * :attr:`.name`: Object name.</span>
@@ -140,10 +140,10 @@
 <span class="sd">        identifies the object.  Using title case and spaces will result</span>
 <span class="sd">        in pleasant formatting in output reports and trace files.</span>
 <span class="sd">        </span>
-<span class="sd">        *Returns:* `string`</span>
+<span class="sd">        *Returns:* String</span>
 <span class="sd">        </span>
 <span class="sd">        *Raises:*</span>
-<span class="sd">            `TypeError` if name is not a string.</span>
+<span class="sd">            ``TypeError`` if name is not a string.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
@@ -166,10 +166,10 @@
 <span class="sd">        reports as html paragraphs (or equivalent for other output</span>
 <span class="sd">        formats).</span>
 <span class="sd">        </span>
-<span class="sd">        *Returns:* `string`</span>
+<span class="sd">        *Returns:* string</span>
 
-<span class="sd">        *Raises:* `TypeError` if description is not a string or type</span>
-<span class="sd">        `None`.</span>
+<span class="sd">        *Raises:* ``TypeError`` if description is not a string or type</span>
+<span class="sd">        ``None``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_description</span>
 
