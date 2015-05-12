@@ -15,8 +15,8 @@ class testResource(unittest.TestCase):
         print()
         print("TEST RESOURCE INIT OUTPUT")
         model = dp.Model("Resource Test #1")
-        server = dp.Resource(model, "Server", 2)
-        server.activity_time = self.get_rnd_exp
+        server = dp.ResourceQueue(model, "Server", 2)
+        server.service_time = self.get_rnd_exp
         self.assertEqual(server.name, "Server")
         ents = []
         for i in range(3):
@@ -60,11 +60,11 @@ class testResource(unittest.TestCase):
             self.customer_process.start(0, dp.fi.PRIORITY_EARLY)
             super().initialize()
              
-        class CustServiceResource(dp.Resource):
+        class CustServiceResource(dp.ResourceQueue):
             def __init__(self, model, capacity):
                 super().__init__(model, "Server", capacity)
              
-            def get_activity_time(self):
+            def get_service_time(self, user, index):
                 return round(stats.expon.rvs(scale = 4))
          
         class CustArrProcess(dp.Process):

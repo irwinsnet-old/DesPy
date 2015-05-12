@@ -7,7 +7,7 @@
 despy.core.resource
 *******************
 
-:class:`Resource`
+:class:`ResourceQueue`
     Represents a limited, real-world, entity that provides a service.
 """
 
@@ -22,42 +22,16 @@ from despy.core.queue import Queue
 #TODO: Revise get activity time to allow parameters.
 
 class Resource(Component):
-    """Represents a limited, real-world entity that provides a service.
-    
-    Generally an object or entity with limited availability that
-    provides some kind of service.
-    
-    **Inherited Classes**
-      * :class:`despy.base.named_object.NamedObject`
-      * :class:`despy.core.component.Component`
-      
-    **Attributes**
-      * :attr:`Resource.capacity`: The number of entities that can be
-        served simultaneously.
-      * :attr:`Resource.activity_time`: A method that returns the time
-        required by the resource.
-        
-    **Methods**
-      * :meth:`Resource.get_activity_time`: Gets the time needed for a
-        position to complete an activity.
-      * :meth:`Resource.get_empty_position`: Gets the empty resource
-        position with the lowest number.
-      * :meth:`Resource.__getitem__`: Allows accessing resource
-        positions with array brackets.
-      * :meth:`Resource.__setitem__`: Allows setting resource positions
-        with array brackets.
-    """
-    
-    def __init__(self, model, name, capacity):
+#    def __init__(self, model, resource, index, name):
+#        super().__init__(model, "{0} #{1}".format(name, index))
+    def __init__(self, model, name, capacity = 1, time_function = None):
         super().__init__(model, name)
-        self._capacity = capacity
+        self.capacity = capacity
+        self.service_time = time_function
+        self._res_Queue = None
+        self.user = None
+        self.start_time = None
 
-        self._positions = {index: Resource.Position(index, name) \
-                           for index in range(1, self.capacity + 1)}
-
-        self._queue = Queue(model, name + "-Queue")
-        self._activity_time = None
-        
     @property
     def capacity(self):
         """The number of entities that can be served simultaneously.
@@ -74,6 +48,123 @@ class Resource(Component):
             ``capacity`` (Integer)
         """
         self._capacity = capacity
+        
+    @property    
+    def res_queue(self):
+        """The resourceQueue that contains the queue of incoming users.
+        
+        *Returns:* a :class:`despy.core.resource.ResourceQueue` object.
+        """
+        return self._res_queue
+    
+    def __str__(self):
+        return self.name
+    
+    @property
+    def service_time(self):
+        """A method that returns the time required by the resource.
+        
+        *Returns:* A Python method.
+        """
+        return self._service_time
+    
+    @service_time.setter
+    def service_time(self, time_function):
+        """A method that returns the time required by the resource.
+        
+        *Arguments*
+            ``time_function`` (Python function)
+                Python function that returns the time required for a
+                resource position to complete the service.
+        """
+        self._service_time = time_function
+
+    def get_service_time(self, user = None, **arguments):
+        """Gets the time needed for a position to complete an activity.
+        
+        *Arguments*
+            ``user``
+                The entity that is being serviced by the resource.
+            ``arguments``
+                All other arguments will be passed to the
+                service_time function defined by the user.
+            
+        *Raises*
+            ``NotImplementedError``: Raised if user has not set the
+            ``ResourceQueue.service_time`` property to a function.
+        """
+        if self.service_time is None:
+            raise NotImplementedError
+        else:
+            return self.service_time(user, *arguments)
+    
+    def start_service(self):
+        """Commence servicing a user at the index position.
+        
+        *Arguments*
+            ``index``
+                The index number of the resource position that will
+                be servicing the user.
+        """
+        #Create trace record for starting the service.
+        fields = OrderedDict()
+        fields['Server'] = self
+        fields['Customer'] = self.user
+        message = "Starting Service"
+        self.sim.gen.trace.add_message(message, fields)
+        
+        #Get service time and schedule end of service on FEL.
+        service_time = self.resource.get_service_time(self.user, self.index)
+        finish_event = ResourceFinishServiceEvent(\
+            self, "Finished Service", service_time)
+        self.model.schedule(finish_event, service_time)
+        
+    def finish_service(self, event, service_time):
+        event.user = self.remove_user()
+        if self.resource.queue.length > 0:
+            user = self.resource.queue.remove()
+            self.resource.request(user)   
+    
+    def remove_user(self):
+        user = self.user
+        self.user = None
+        self.start_time = None
+        return user
+
+class ResourceQueue(Component):
+    """Represents a limited, real-world entity that provides a service.
+    
+    An object or entity with limited availability that provides some
+    kind of service.
+    
+    **Inherited Classes**
+      * :class:`despy.base.named_object.NamedObject`
+      * :class:`despy.core.component.Component`
+      
+    **Attributes**
+      * :attr:`ResourceQueue.capacity`: The number of entities that can be
+        served simultaneously.
+      * :attr:`ResourceQueue.service_time`: A method that returns the time
+        required by the resource.
+        
+    **Methods**
+      * :meth:`ResourceQueue.get_service_time`: Gets the time needed for a
+        position to complete an activity.
+      * :meth:`ResourceQueue.get_available_resource`: Gets the empty resource
+        position with the lowest number.
+      * :meth:`ResourceQueue.__getitem__`: Allows accessing resource
+        positions with array brackets.
+      * :meth:`ResourceQueue.__setitem__`: Allows setting resource positions
+        with array brackets.
+      * :meth:`ResourceQueue.request`: Request a resource for a user.
+      * :meth:`ResourceQueue.start_service: Commence servicing a user at the
+        index position.
+    """
+    
+    def __init__(self, model, name, capacity):
+        super().__init__(model, name)
+        self._queue = Queue(model, name + "-Queue")
+        self._resources = {}
     
     @property
     def queue(self):
@@ -102,43 +193,46 @@ class Resource(Component):
         self._queue = queue
         
     @property
-    def activity_time(self):
-        """A method that returns the time required by the resource.
-        
-        *Returns:* A Python method.
-        """
-        return self._activity_time
+    def num_resources(self):
+        return len(self._resources)
     
-    @activity_time.setter
-    def activity_time(self, time_function):
-        """A method that returns the time required by the resource.
+    def __getitem__(self, index):
+        """Allows accessing resource positions with array brackets.
+        
+        A Python magic method that makes a ResourceQueue object act like an
+        array. It allows users to specify a resource position index in
+        square brackets on a ResourceQueue object.
+        
+        *Returns*: :class:`despy.core.resource.ResourceQueue.Resource`
+        """
+        return self._resources[index]
+    
+    def __setitem__(self, index, item):
+        """Allows setting resource positions with array brackets.
         
         *Arguments*
-            ``time_function`` (Python function)
-                Python function that returns the time required for a
-                resource position to complete an activity.
-        """
-        self._activity_time = time_function
-
-    def get_activity_time(self):
-        """Gets the time needed for a position to complete an activity.
+            ``index``
+                An integer ranging from 1 to ``ResourceQueue.capacity``.
+                The ``index`` argument is specified inside square
+                brackets.
+            ``item``
+                An instance of
+                :class:`despy.core.resource.ResourceQueue.Resource`. The
+                ``item`` object is assigned with an equals sign::
+                
+                    ResourceQueue[index] = item
         
-        *Arguments*
-            None
-            
-        *Raises*
-            ``NotImplementedError``: Raised if user has not set the
-            ``Resource.activity_time`` property to a function.
         """
-        if self.activity_time is None:
-            raise NotImplementedError
-        else:
-            return self.activity_time()
+        self._resources[index] = item
+        
+    def add_resource(self, resource):
+        index = self.num_resources + 1
+        self[index] = resource        
     
-    def get_empty_position(self):
+    def get_available_resource(self):
         """Gets the empty resource position with the lowest number.
         
-        *Returns:* An integer ranging from 1 to ``Resource.capacity``,
+        *Returns:* An integer ranging from 1 to ``ResourceQueue.capacity``,
         or returns ``False`` if no positions are available.
         
         """
@@ -146,92 +240,45 @@ class Resource(Component):
             if self[index].user is None:
                 return index
         return False
-    
-    def __getitem__(self, index):
-        """Allows accessing resource positions with array brackets.
-        
-        A Python magic method that makes a Resource object act like an
-        array. It allows users to specify a resource position index in
-        square brackets on a Resource object.
-        
-        *Returns*: :class:`despy.core.resource.Resource.Position`
-        """
-        return self._positions[index]
-    
-    def __setitem__(self, index, item):
-        """Allows setting resource positions with array brackets.
-        
-        *Arguments*
-            ``index``
-                An integer ranging from 1 to ``Resource.capacity``.
-                The ``index`` argument is specified inside square
-                brackets.
-            ``item``
-                An instance of
-                :class:`despy.core.resource.Resource.Position`. The
-                ``item`` object is assigned with an equals sign::
-                
-                    Resource[index] = item
-        
-        """
-        self._positions[index] = item
 
     def request(self, user):
-        index = self.get_empty_position()
+        """Request a resource for a user.
+        
+        Checks if a resource position is available. If so, starts
+        serving the user and returns the index of the resource position.
+        Otherwise returns False and adds the user to the resource queue.
+        
+        *Arguments*
+            ``user``
+                The entity that will be serviced by the resource.
+                
+        *Returns:* If a resource position is available, returns the
+        index value of the resource that will serve the user. Otherwise
+        returns False.
+        """
+        index = self.get_available_resource()
+
         if index:
+            #ResourceQueue position is available
+            assert(self[index].user == None) #Resource is open
             self[index].user = user
             self[index].start_time = self.sim.now
-            self.start_activity(index)
+            self[index].start_service()
             return index
         else:
+            #Resources all busy
             if self.queue is not None:
                 self.queue.add(user)
-            return False
-        
-    def start_activity(self, index):
-        fields = OrderedDict()
-        fields['Server'] = self[index]
-        fields['Customer'] = self[index].user
-        message = "Starting Activity"
-        self.sim.gen.trace.add_message(message, fields)
-        
-        service_time = self.get_activity_time()
-
-        finish_event = ResourceFinishActivityEvent(\
-            self, "Finished Activity", index, service_time)
-        self.model.schedule(finish_event, service_time)
-        
-    def finish_activity(self, event, index, service_time):
-        event.user = self.remove_user(index)
-        if self.queue.length > 0:
-            user = self.queue.remove()
-            self.request(user)             
-        
-    def remove_user(self, index):
-        user = self[index].user
-        self[index].user = None
-        self[index].start_time = None
-        return user
+            return False         
     
-    class Position():
-        def __init__(self, index, name):
-            self.name = "{0} #{1}".format(name, index)
-            self.user = None
-            self.start_time = None
-        
-        def __str__(self):
-            return self.name
-            
-    
-class ResourceFinishActivityEvent(Event):
+class ResourceFinishServiceEvent(Event):
     def check_resource_queue(self):
-        self._resource.finish_activity(self, self.index, self.service_time)
+        self.position.finish_service(self, self.service_time)
     
-    def __init__(self, resource, name, index, service_time):
-        self._resource = resource
-        super().__init__(resource.model, name)
+    def __init__(self, position, name, service_time):
+        super().__init__(position.model, name)
         self.append_callback(self.check_resource_queue)
-        self.index = index
+        self.position = position
         self.service_time = service_time
         self.user = None
         
