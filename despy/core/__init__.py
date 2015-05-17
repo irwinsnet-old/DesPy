@@ -65,3 +65,4 @@ from despy.core.process import Process
 from despy.core.queue import Queue
 from despy.core.entity import Entity
 from despy.core.resource import ResourceQueue
+from despy.core.resource import Resource

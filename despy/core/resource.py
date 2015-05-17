@@ -11,7 +11,8 @@ despy.core.resource
     Represents a limited, real-world, entity that provides a service.
 """
 
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
+from scipy.stats import randint
 from despy.core.component import Component
 from despy.core.event import Event
 from despy.core.queue import Queue
@@ -19,17 +20,16 @@ from despy.core.queue import Queue
 # TODO: Add different options for selection of empty resources, either
 # prioritization by number, random selection, or equal loading.
 
-#TODO: Revise get activity time to allow parameters.
-
 class Resource(Component):
-#    def __init__(self, model, resource, index, name):
-#        super().__init__(model, "{0} #{1}".format(name, index))
     def __init__(self, model, name, capacity = 1, time_function = None):
         super().__init__(model, name)
         self.capacity = capacity
         self.service_time = time_function
-        self._res_Queue = None
-        self.user = None
+        self._res_queue = None
+
+        self.Station_tuple = namedtuple('Station', ['user', 'start_time'])
+        empty_station = self.Station_tuple(user = None, start_time = None)
+        self.stations = [empty_station] * self.capacity
         self.start_time = None
 
     @property
@@ -56,10 +56,7 @@ class Resource(Component):
         *Returns:* a :class:`despy.core.resource.ResourceQueue` object.
         """
         return self._res_queue
-    
-    def __str__(self):
-        return self.name
-    
+
     @property
     def service_time(self):
         """A method that returns the time required by the resource.
@@ -78,8 +75,75 @@ class Resource(Component):
                 resource position to complete the service.
         """
         self._service_time = time_function
+    
+    def __str__(self):
+        """Magic method that converts the resource object to a string.
+        
+        *Returns:* The name property of the resource object.
+        """
+        return self.name
+    
+    def __getitem__(self, index):
+        return self.stations[index]
+    
+    def __setitem__(self, index, user):
+        self.stations[index] = user
+        
 
-    def get_service_time(self, user = None, **arguments):
+    def get_available_station(self, random = False):
+        """Returns the index of an empty station.
+        
+        *Arguments*
+            ``random`` (Boolean)
+                If set to True, randomly chooses the index of an empty
+                station. Otherwise, returns the index of the empty
+                station with the lowest index value.
+                
+        *Returns:* A positive integer representing the index number of
+        the station. ``None`` if no stations are empty.
+        """
+        empty_stations = []
+        for index in range(self.capacity):
+            if self.stations[index].user == None:
+                empty_stations.append(index)
+        
+        if len(empty_stations) == 0:
+            return None
+        elif not random:
+            return empty_stations[0]
+        else:
+            return empty_stations[randint(0, len(empty_stations) - 1)]        
+
+    def request(self, user, random = False):
+        """Request a resource for a user.
+        
+        Checks if a resource position is available. If so, starts
+        serving the user and returns the index of the resource position.
+        Otherwise returns False and adds the user to the resource queue.
+        
+        *Arguments*
+            ``user``
+                The entity that will be serviced by the resource.
+                
+        *Returns:* If a resource position is available, returns the
+        index value of the resource that will serve the user. Otherwise
+        returns False.
+        """
+            
+        index = self.get_available_station()
+
+        if index is not None:
+            #ResourceQueue position is available
+            assert(self.stations[index].user == None) #Resource is open
+            self.start_service(index, user)
+            return index
+        else:
+            #Resources all busy
+            if self.res_queue is not None:
+                self.res_queue.queue.add(user)
+            return False 
+
+    def get_service_time(self, index):
         """Gets the time needed for a position to complete an activity.
         
         *Arguments*
@@ -93,12 +157,15 @@ class Resource(Component):
             ``NotImplementedError``: Raised if user has not set the
             ``ResourceQueue.service_time`` property to a function.
         """
-        if self.service_time is None:
-            raise NotImplementedError
-        else:
-            return self.service_time(user, *arguments)
+        try:
+            return self.service_time(index)
+        except:
+            if self.service_time is None:
+                raise NotImplementedError  
+        
+#TODO: Fix bug with inherited service time functions.
     
-    def start_service(self):
+    def start_service(self, index, user):
         """Commence servicing a user at the index position.
         
         *Arguments*
@@ -106,30 +173,64 @@ class Resource(Component):
                 The index number of the resource position that will
                 be servicing the user.
         """
+
+        #Assign user to station
+        self.stations[index] = self.Station_tuple(user, self.sim.now)
+        
         #Create trace record for starting the service.
         fields = OrderedDict()
-        fields['Server'] = self
-        fields['Customer'] = self.user
+        fields['Resource'] = self.name + '-' + str(index)
+        fields['User'] = self.stations[index].user
         message = "Starting Service"
         self.sim.gen.trace.add_message(message, fields)
         
         #Get service time and schedule end of service on FEL.
-        service_time = self.resource.get_service_time(self.user, self.index)
+        service_time = self.get_service_time(index)
         finish_event = ResourceFinishServiceEvent(\
-            self, "Finished Service", service_time)
+            self, index, service_time)
         self.model.schedule(finish_event, service_time)
         
-    def finish_service(self, event, service_time):
-        event.user = self.remove_user()
-        if self.resource.queue.length > 0:
-            user = self.resource.queue.remove()
-            self.resource.request(user)   
+    def finish_service(self, index):
+        self.stations[index] = self.Station_tuple(None, None)
+        if self.res_queue:
+            if self.res_queue.queue.length > 0:
+                user = self.res_queue.queue.remove()
+                self.start_service(index, user)   
     
-    def remove_user(self):
-        user = self.user
-        self.user = None
-        self.start_time = None
+    def remove_user(self, index):
+        """Remove user from a resource station.
+        
+        *Arguments*
+            ``index``
+                The index number of the station from which the user will
+                be removed.
+        
+        *Returns:* The user that was being serviced by the resource.
+        """
+        user = self.stations[index].user
+        self.stations[index].user = None
+        self.stations[index].start_time = None
         return user
+
+
+class ResourceFinishServiceEvent(Event):
+    def check_resource_queue(self):
+        self.resource.finish_service(self.station_index)
+    
+    def __init__(self, resource, station_index, service_time):
+        super().__init__(resource.model, "Finished Service")
+        self.resource = resource
+        self.station_index = station_index
+        self.service_time = service_time
+        self.append_callback(self.check_resource_queue)
+        
+    def _update_trace_record(self, trace_record):
+        trace_record['entity'] = \
+                self.resource.stations[self.station_index].user
+        trace_record['duration_label'] = 'Service Time:'
+        trace_record['duration_field'] = self.service_time
+        return trace_record
+
 
 class ResourceQueue(Component):
     """Represents a limited, real-world entity that provides a service.
@@ -161,7 +262,7 @@ class ResourceQueue(Component):
         index position.
     """
     
-    def __init__(self, model, name, capacity):
+    def __init__(self, model, name):
         super().__init__(model, name)
         self._queue = Queue(model, name + "-Queue")
         self._resources = {}
@@ -226,22 +327,44 @@ class ResourceQueue(Component):
         self._resources[index] = item
         
     def add_resource(self, resource):
-        index = self.num_resources + 1
-        self[index] = resource        
-    
-    def get_available_resource(self):
-        """Gets the empty resource position with the lowest number.
+        """Append a resource to the resourceQueue object.
         
-        *Returns:* An integer ranging from 1 to ``ResourceQueue.capacity``,
-        or returns ``False`` if no positions are available.
+        *Arguments*
+            ``resource``
+                A :class:`despy.core.resource.Resource object that will
+                be appended to the ResourceQueue object.
+        """
+        index = self.num_resources
+        self[index] = resource
+        resource._res_queue = self
+    
+    def get_available_resource(self, random = False):
+        """Gets an available resource.
+        
+        *Arguments*
+            ``random`` (Boolean)
+                If set to True, randomly chooses the index of an
+                available resource. Otherwise, returns the index of the
+                available resource with the lowest index value.
+                
+        *Returns:* A positive integer representing the index number of
+        the resource. ``None`` if all resources are busy.
         
         """
-        for index in range(1, self.capacity + 1):
-            if self[index].user is None:
-                return index
-        return False
+    
+        empty_resources = []
+        for index in range(self.num_resources):
+            if self[index].get_available_station:
+                empty_resources.append(index)
+        
+        if len(empty_resources) == 0:
+            return None
+        elif not random:
+            return empty_resources[0]
+        else:
+            return empty_resources[randint(0, len(empty_resources) - 1)] 
 
-    def request(self, user):
+    def request(self, user, random = False):
         """Request a resource for a user.
         
         Checks if a resource position is available. If so, starts
@@ -255,15 +378,13 @@ class ResourceQueue(Component):
         *Returns:* If a resource position is available, returns the
         index value of the resource that will serve the user. Otherwise
         returns False.
-        """
-        index = self.get_available_resource()
+        """    
+        
+        index = self.get_available_resource(random)
 
-        if index:
+        if index is not None:
             #ResourceQueue position is available
-            assert(self[index].user == None) #Resource is open
-            self[index].user = user
-            self[index].start_time = self.sim.now
-            self[index].start_service()
+            self[index].request(user, random)
             return index
         else:
             #Resources all busy
@@ -271,20 +392,5 @@ class ResourceQueue(Component):
                 self.queue.add(user)
             return False         
     
-class ResourceFinishServiceEvent(Event):
-    def check_resource_queue(self):
-        self.position.finish_service(self, self.service_time)
-    
-    def __init__(self, position, name, service_time):
-        super().__init__(position.model, name)
-        self.append_callback(self.check_resource_queue)
-        self.position = position
-        self.service_time = service_time
-        self.user = None
-        
-    def _update_trace_record(self, trace_record):
-        trace_record['entity'] = self.user
-        trace_record['duration_label'] = 'Service Time:'
-        trace_record['duration_field'] = self.service_time
-        return trace_record
+
         
