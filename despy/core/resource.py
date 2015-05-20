@@ -140,7 +140,7 @@ class Resource(Component):
         else:
             #Resources all busy
             if self.res_queue is not None:
-                self.res_queue.queue.add(user)
+                self.res_queue.add(user)
             return False 
 
     def get_service_time(self, index):
@@ -162,8 +162,6 @@ class Resource(Component):
         except:
             if self.service_time is None:
                 raise NotImplementedError  
-        
-#TODO: Fix bug with inherited service time functions.
     
     def start_service(self, index, user):
         """Commence servicing a user at the index position.
@@ -193,8 +191,8 @@ class Resource(Component):
     def finish_service(self, index):
         self.stations[index] = self.Station_tuple(None, None)
         if self.res_queue:
-            if self.res_queue.queue.length > 0:
-                user = self.res_queue.queue.remove()
+            if self.res_queue.length > 0:
+                user = self.res_queue.remove()
                 self.start_service(index, user)   
     
     def remove_user(self, index):
@@ -232,7 +230,7 @@ class ResourceFinishServiceEvent(Event):
         return trace_record
 
 
-class ResourceQueue(Component):
+class ResourceQueue(Queue):
     """Represents a limited, real-world entity that provides a service.
     
     An object or entity with limited availability that provides some
@@ -264,35 +262,8 @@ class ResourceQueue(Component):
     
     def __init__(self, model, name):
         super().__init__(model, name)
-        self._queue = Queue(model, name + "-Queue")
         self._resources = {}
-    
-    @property
-    def queue(self):
-        """Entities wait in a queue when the resource is busy.
-        
-        An instance of :class:`despy.core.queue.Queue`, which is a
-        first-in, first-out group. Users of the resource are placed in
-        the queue when the all resource positions are busy serving other
-        entities. The resource removes items from the queue when a
-        resource position becomes available by finishing service on an
-        entity.
-        
-        *Returns:* An instance of :class:`despy.core.queue.Queue`.
-        """
-        return self._queue
-
-    @queue.setter
-    def queue(self, queue):
-        """Entities wait in a queue when the resource is busy.
          
-        *Arguments*
-            ``queue``
-                *Returns:* An instance of
-                :class:`despy.core.queue.Queue`.
-        """
-        self._queue = queue
-        
     @property
     def num_resources(self):
         return len(self._resources)
@@ -388,8 +359,7 @@ class ResourceQueue(Component):
             return index
         else:
             #Resources all busy
-            if self.queue is not None:
-                self.queue.add(user)
+            self.add(user)
             return False         
     
 
