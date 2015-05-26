@@ -17,6 +17,11 @@ __init__
 **********
 Attributes
 **********
+..  autoattribute:: Resource.capacity
+..  autoattribute:: Resource.res_queue
+..  autoattribute:: Resource.service_time
+..  autoattribute:: Resource.Station_tuple
+..  autoattribute:: Resource.stations
 
 ********************
 Inherited Attributes
@@ -39,14 +44,15 @@ Inherited Attributes
 *******
 Methods
 *******
-..  automethod:: Resource.get_activity_time
-    :noindex:
-..  automethod:: Resource.get_empty_position
-    :noindex:
+..  automethod:: Resource.__str__
 ..  automethod:: Resource.__getitem__
-    :noindex:
 ..  automethod:: Resource.__setitem__
-    :noindex:
+..  automethod:: Resource.get_available_station
+..  automethod:: Resource.request
+..  automethod:: Resource.get_service_time
+..  automethod:: Resource.start_service
+..  automethod:: Resource.finish_service
+..  automethod:: Resource.remove_entity
 
 *****************
 Inherited Methods
@@ -59,7 +65,3 @@ Inherited Methods
     :noindex:
 ..  automethod:: despy.core.component.Component.set_counter
     :noindex:
-
-****************
-Internal Methods
-****************

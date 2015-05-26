@@ -58,7 +58,10 @@
   <ul>
 <li><a class="reference internal" href="#">Despy Modules</a><ul>
 <li><a class="reference internal" href="#module-despy.base.named_object">named_object</a><ul>
+<li><a class="reference internal" href="#despy-core-model">despy.core.model</a></li>
 <li><a class="reference internal" href="#despy-core-simulation">despy.core.simulation</a></li>
+<li><a class="reference internal" href="#despy-core-event">despy.core.event</a></li>
+<li><a class="reference internal" href="#despy-core-resource">despy.core.resource</a></li>
 </ul>
 </li>
 </ul>
@@ -111,6 +114,20 @@ subclasses.</p>
 <a class="reference internal" href="base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">NamedObject</span></code></a> provides a name attribute, a description
 attribute, and other helper methods.</dd>
 </dl>
+<span class="target" id="module-despy.core.component"></span><dl class="docutils">
+<dt><a class="reference internal" href="core/component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">Component</span></code></a></dt>
+<dd>A portion of a Despy model. Components represent an element of the
+system that is being simulated.</dd>
+</dl>
+<div class="section" id="despy-core-model">
+<h3>despy.core.model<a class="headerlink" href="#despy-core-model" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><a class="reference internal" href="core/model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a>: </dt>
+<dd>The model represents the real-world system that is being simulated.
+The user will generally build their model by sub-classing the
+<code class="docutils literal"><span class="pre">Model</span></code> class.</dd>
+</dl>
+</div>
 <div class="section" id="despy-core-simulation">
 <h3>despy.core.simulation<a class="headerlink" href="#despy-core-simulation" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
@@ -120,6 +137,21 @@ attribute, and other helper methods.</dd>
 <dd>A named tuple that represents a scheduled event.</dd>
 <dt><code class="xref py py-class docutils literal"><span class="pre">NoEventsRemaining</span></code></dt>
 <dd>Raised by despy.core.simulation&#8217;s step method when FEL is empty.</dd>
+</dl>
+</div>
+<div class="section" id="despy-core-event">
+<h3>despy.core.event<a class="headerlink" href="#despy-core-event" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><a class="reference internal" href="core/event.html#despy.core.event.Event" title="despy.core.event.Event"><code class="xref py py-class docutils literal"><span class="pre">Event</span></code></a>:</dt>
+<dd>An event object represents an occurrence within the system being
+simulated.</dd>
+</dl>
+</div>
+<div class="section" id="despy-core-resource">
+<h3>despy.core.resource<a class="headerlink" href="#despy-core-resource" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><code class="xref py py-class docutils literal"><span class="pre">ResourceQueue</span></code></dt>
+<dd>Represents a limited, real-world, entity that provides a service.</dd>
 </dl>
 </div>
 </div>

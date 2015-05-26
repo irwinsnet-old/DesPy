@@ -26,8 +26,8 @@ class testResource(unittest.TestCase):
         self.assertEqual(len(server.stations), 2)
         self.assertEqual(server.capacity, 2)
          
-        self.assertTrue(server[0].user is None)
-        self.assertTrue(server[1].user is None)
+        self.assertTrue(server[0].entity is None)
+        self.assertTrue(server[1].entity is None)
         self.assertEqual(server[0].start_time, None)
         self.assertEqual(server[1].start_time, None)
          
@@ -42,9 +42,9 @@ class testResource(unittest.TestCase):
         #   Check request(user)
         position = server.request(ents[0])
         self.assertEqual(position, 0)
-        self.assertTrue(server[position].user is not None)
+        self.assertTrue(server[position].entity is not None)
         self.assertTrue(server[position].start_time is not None)
-        self.assertTrue(server[1].user is None)
+        self.assertTrue(server[1].entity is None)
          
     class ResModel(dp.Model):
         class Customer(dp.Entity):
@@ -58,7 +58,7 @@ class testResource(unittest.TestCase):
         class CustServiceResource(dp.ResourceQueue):
             def __init__(self, model, capacity):
                 super().__init__(model, "ServerQueue")
-                self.add_resource(dp.Resource(model, "Server",
+                self.assign_resource(dp.Resource(model, "Server",
                                               capacity,
                                               self.get_service_time))
              

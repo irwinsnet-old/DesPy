@@ -79,25 +79,27 @@
 <span class="sd">despy.core.resource</span>
 <span class="sd">*******************</span>
 
-<span class="sd">:class:`Resource`</span>
+<span class="sd">:class:`ResourceQueue`</span>
 <span class="sd">    Represents a limited, real-world, entity that provides a service.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">randint</span>
 <span class="kn">from</span> <span class="nn">despy.core.component</span> <span class="kn">import</span> <span class="n">Component</span>
 <span class="kn">from</span> <span class="nn">despy.core.event</span> <span class="kn">import</span> <span class="n">Event</span>
 <span class="kn">from</span> <span class="nn">despy.core.queue</span> <span class="kn">import</span> <span class="n">Queue</span>
 
-<span class="c"># TODO: Add different options for selection of empty resources, either</span>
+<span class="c"># TODO: Test different options for selection of empty resources, either</span>
 <span class="c"># prioritization by number, random selection, or equal loading.</span>
 
-<span class="c">#TODO: Revise get activity time to allow parameters.</span>
+<span class="c"># TODO: Fix trace report. Label the interarrival time state on which</span>
+<span class="c"># customer service was finished.</span>
 
 <div class="viewcode-block" id="Resource"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource">[docs]</a><span class="k">class</span> <span class="nc">Resource</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Represents a limited, real-world entity that provides a service.</span>
 <span class="sd">    </span>
-<span class="sd">    Generally an object or entity with limited availability that</span>
-<span class="sd">    provides some kind of service.</span>
+<span class="sd">    An object or entity with limited availability that provides some</span>
+<span class="sd">    kind of service.</span>
 <span class="sd">    </span>
 <span class="sd">    **Inherited Classes**</span>
 <span class="sd">      * :class:`despy.base.named_object.NamedObject`</span>
@@ -106,212 +108,514 @@
 <span class="sd">    **Attributes**</span>
 <span class="sd">      * :attr:`Resource.capacity`: The number of entities that can be</span>
 <span class="sd">        served simultaneously.</span>
-<span class="sd">      * :attr:`Resource.activity_time`: A method that returns the time</span>
-<span class="sd">        required by the resource.</span>
+<span class="sd">      * :attr:`Resource.res_queue`: The resourceQueue that contains the</span>
+<span class="sd">        queue of incoming users.</span>
+<span class="sd">      * :attr:`Resource.service_time`: A method that returns the</span>
+<span class="sd">        time required by the resource.</span>
+<span class="sd">      * :attr:`Resource.Station_tuple`: A Python namedtuple with an</span>
+<span class="sd">        &#39;entity&#39; field and a &#39;start_time&#39; field.</span>
+<span class="sd">      * :attr:`Resource.stations`: A list of resource stations</span>
+<span class="sd">        with length = Resource.capacity. </span>
 <span class="sd">        </span>
 <span class="sd">    **Methods**</span>
-<span class="sd">      * :meth:`Resource.get_activity_time`: Gets the time needed for a</span>
-<span class="sd">        position to complete an activity.</span>
-<span class="sd">      * :meth:`Resource.get_empty_position`: Gets the empty resource</span>
-<span class="sd">        position with the lowest number.</span>
+<span class="sd">      * :meth:`Resource.__str__`: Magic method that converts the</span>
+<span class="sd">        resource object to a string.</span>
 <span class="sd">      * :meth:`Resource.__getitem__`: Allows accessing resource</span>
-<span class="sd">        positions with array brackets.</span>
-<span class="sd">      * :meth:`Resource.__setitem__`: Allows setting resource positions</span>
+<span class="sd">        stations with array brackets.</span>
+<span class="sd">      * :meth:`Resource.__setitem__`: Allows setting resource stations</span>
 <span class="sd">        with array brackets.</span>
+<span class="sd">      * :meth:`Resource.get_available_station`: Gets the empty resource</span>
+<span class="sd">        position with the lowest number.</span>
+<span class="sd">      * :meth:`Resource.request`: Request a resource for a entity.        </span>
+<span class="sd">      * :meth:`Resource.get_service_time`: Gets the time needed for a</span>
+<span class="sd">        position to complete an activity.</span>
+<span class="sd">      * :meth:`Resource.start_service`: Commence servicing a entity at the</span>
+<span class="sd">        index position.</span>
+<span class="sd">      * :meth:`Resource.finish_service`:</span>
+<span class="sd">      * :meth:`Resource.remove_entity`: Remove entity from a resource</span>
+<span class="sd">        station.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-<div class="viewcode-block" id="Resource.__init__"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capacity</span><span class="p">):</span>
+    
+<div class="viewcode-block" id="Resource.__init__"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capacity</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">time_function</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a Resource object.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            ``model`` (:class:`despy.core.model.Model`)</span>
+<span class="sd">                The Resource must be assigned to a Model object.</span>
+<span class="sd">            ``name`` (String)</span>
+<span class="sd">                A short descriptive name for the Resource object.</span>
+<span class="sd">            ``capacity`` (Integer)</span>
+<span class="sd">                Optional, defaults to 1. The number of stations that the</span>
+<span class="sd">                Resource object contains. Each station can service one</span>
+<span class="sd">                object.</span>
+<span class="sd">            ``time_function`` (Python function object)</span>
+<span class="sd">                Optional, defaults to None. A function that returns the</span>
+<span class="sd">                time required to service an entity.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        
+        <span class="c">#Instance Attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_capacity</span> <span class="o">=</span> <span class="n">capacity</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_positions</span> <span class="o">=</span> <span class="p">{</span><span class="n">index</span><span class="p">:</span> <span class="n">Resource</span><span class="o">.</span><span class="n">Position</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> \
-                           <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)}</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&quot;-Queue&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_activity_time</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_res_queue</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_service_time</span> <span class="o">=</span> <span class="n">time_function</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Station_tuple</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;Station&#39;</span><span class="p">,</span>
+                                        <span class="p">[</span><span class="s">&#39;entity&#39;</span><span class="p">,</span> <span class="s">&#39;start_time&#39;</span><span class="p">])</span>
+    
+        <span class="n">empty_station</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Station_tuple</span><span class="p">(</span><span class="n">entity</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                                           <span class="n">start_time</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stations</span> <span class="o">=</span> <span class="p">[</span><span class="n">empty_station</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span>
+        <span class="sd">&quot;&quot;&quot;  &quot;&quot;&quot;</span>
         </div>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The number of entities that can be served simultaneously.</span>
 <span class="sd">        </span>
-<span class="sd">        *Returns:* A positive integer.</span>
+<span class="sd">        *Type:* Integer</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_capacity</span>
     
     <span class="nd">@capacity.setter</span>
     <span class="k">def</span> <span class="nf">capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The number of entities that can be served simultaneously.</span>
-<span class="sd">        </span>
-<span class="sd">        *Arguments*</span>
-<span class="sd">            ``capacity`` (Integer)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_capacity</span> <span class="o">=</span> <span class="n">capacity</span>
+        
+    <span class="nd">@property</span>    
+    <span class="k">def</span> <span class="nf">res_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The resourceQueue that contains the queue of incoming users.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type:* :class:`despy.core.resource.ResourceQueue`, read-only</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_res_queue</span>
     
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Entities wait in a queue when the resource is busy.</span>
+    <span class="k">def</span> <span class="nf">service_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Property that contains a service time function object.</span>
 <span class="sd">        </span>
-<span class="sd">        An instance of :class:`despy.core.queue.Queue`, which is a</span>
-<span class="sd">        first-in, first-out group. Users of the resource are placed in</span>
-<span class="sd">        the queue when the all resource positions are busy serving other</span>
-<span class="sd">        entities. The resource removes items from the queue when a</span>
-<span class="sd">        resource position becomes available by finishing service on an</span>
-<span class="sd">        entity.</span>
+<span class="sd">        Designers can customize the resource&#39;s method for determining</span>
+<span class="sd">        the time required for service by setting this property to a</span>
+<span class="sd">        function object. The function should accept the resource class</span>
+<span class="sd">        and the station index as parameters and return a positive</span>
+<span class="sd">        integer.</span>
 <span class="sd">        </span>
-<span class="sd">        *Returns:* An instance of :class:`despy.core.queue.Queue`.</span>
+<span class="sd">        *Type:* Function object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span>
-
-    <span class="nd">@queue.setter</span>
-    <span class="k">def</span> <span class="nf">queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queue</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Entities wait in a queue when the resource is busy.</span>
-<span class="sd">         </span>
-<span class="sd">        *Arguments*</span>
-<span class="sd">            ``queue``</span>
-<span class="sd">                *Returns:* An instance of</span>
-<span class="sd">                :class:`despy.core.queue.Queue`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">queue</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_service_time</span>
+    
+    <span class="nd">@service_time.setter</span>
+    <span class="k">def</span> <span class="nf">service_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_function</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_service_time</span> <span class="o">=</span> <span class="n">time_function</span>
         
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">activity_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;A method that returns the time required by the resource.</span>
+    <span class="k">def</span> <span class="nf">Station_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A Python namedtuple with &#39;entity&#39; and &#39;start_time&#39; fields.</span>
 <span class="sd">        </span>
-<span class="sd">        *Returns:* A Python method.</span>
+<span class="sd">        *Type:* :class:`collections.namedtuple`, read-only</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_activity_time</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Station_tuple</span>
     
-    <span class="nd">@activity_time.setter</span>
-    <span class="k">def</span> <span class="nf">activity_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_function</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;A method that returns the time required by the resource.</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">stations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A list of resource stations with length = Resource.capacity.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type:* :class:`Resource.Station_tuple`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stations</span>
+    
+<div class="viewcode-block" id="Resource.__str__"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Magic method that converts the resource object to a string.</span>
+<span class="sd">        </span>
+<span class="sd">        *Returns:* The name property of the resource object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+    </div>
+<div class="viewcode-block" id="Resource.__getitem__"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Allows using array brackets to access resource stations.</span>
+<span class="sd">        </span>
+<span class="sd">        A Python magic method that allows using array brackets to get</span>
+<span class="sd">        a resource station.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments:*</span>
+<span class="sd">            ``index`` (Integer)</span>
+<span class="sd">                The index number of the resource station.</span>
+<span class="sd">                </span>
+<span class="sd">        *Returns:* (ResourceStation tuple)</span>
+<span class="sd">            A ResourceStation namedtuple object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+    </div>
+<div class="viewcode-block" id="Resource.__setitem__"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Allows setting resource stations with array brackets.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments:*</span>
+<span class="sd">            ``index`` (Integer)</span>
+<span class="sd">                The index number of the resource station.</span>
+<span class="sd">            ``entity`` (ResourceStation namedtuple)</span>
+<span class="sd">                A ResourceStation namedtuple object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity</span>
+</div>
+<div class="viewcode-block" id="Resource.get_available_station"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.get_available_station">[docs]</a>    <span class="k">def</span> <span class="nf">get_available_station</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">random</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the index of an empty station.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
-<span class="sd">            ``time_function`` (Python function)</span>
-<span class="sd">                Python function that returns the time required for a</span>
-<span class="sd">                resource position to complete an activity.</span>
+<span class="sd">            ``random`` (Boolean)</span>
+<span class="sd">                If set to True, randomly chooses the index of an empty</span>
+<span class="sd">                station. Otherwise, returns the index of the empty</span>
+<span class="sd">                station with the lowest index value.</span>
+<span class="sd">                </span>
+<span class="sd">        *Returns:* A positive integer representing the index number of</span>
+<span class="sd">        the station. ``None`` if no stations are empty.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_activity_time</span> <span class="o">=</span> <span class="n">time_function</span>
+        <span class="n">empty_stations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">entity</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">empty_stations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">empty_stations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">random</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">empty_stations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">empty_stations</span><span class="p">[</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">empty_stations</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>        
+</div>
+<div class="viewcode-block" id="Resource.request"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.request">[docs]</a>    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">random</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Request a resource for a entity.</span>
+<span class="sd">        </span>
+<span class="sd">        Checks if a resource position is available. If so, starts</span>
+<span class="sd">        serving the entity and returns the index of the resource position.</span>
+<span class="sd">        Otherwise returns False and adds the entity to the resource queue.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            ``entity``</span>
+<span class="sd">                The entity that will be serviced by the resource.</span>
+<span class="sd">                </span>
+<span class="sd">        *Returns:* If a resource position is available, returns the</span>
+<span class="sd">        index value of the resource that will serve the entity. Otherwise</span>
+<span class="sd">        returns False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+            
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_station</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Resource.get_activity_time"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.get_activity_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_activity_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c">#ResourceQueue position is available</span>
+            <span class="k">assert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">entity</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span> <span class="c">#Resource is open</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_service</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">index</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c">#Resources all busy</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">res_queue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">res_queue</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span> 
+</div>
+<div class="viewcode-block" id="Resource.get_service_time"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.get_service_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_service_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">station_index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gets the time needed for a position to complete an activity.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
-<span class="sd">            None</span>
+<span class="sd">            ``station_index``</span>
+<span class="sd">                The index of the applicable resource station.</span>
 <span class="sd">            </span>
 <span class="sd">        *Raises*</span>
-<span class="sd">            ``NotImplementedError``: Raised if user has not set the</span>
-<span class="sd">            ``Resource.activity_time`` property to a function.</span>
+<span class="sd">            ``NotImplementedError``: Raised if entity has not set the</span>
+<span class="sd">            ``ResourceQueue.service_time`` property to a function.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activity_time</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">activity_time</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_time</span><span class="p">(</span><span class="n">station_index</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_time</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span>  
     </div>
-<div class="viewcode-block" id="Resource.get_empty_position"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.get_empty_position">[docs]</a>    <span class="k">def</span> <span class="nf">get_empty_position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the empty resource position with the lowest number.</span>
+<div class="viewcode-block" id="Resource.start_service"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.start_service">[docs]</a>    <span class="k">def</span> <span class="nf">start_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Commence servicing a entity at the index position.</span>
 <span class="sd">        </span>
-<span class="sd">        *Returns:* An integer ranging from 1 to ``Resource.capacity``,</span>
-<span class="sd">        or returns ``False`` if no positions are available.</span>
-<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            ``index``</span>
+<span class="sd">                The index number of the resource position that will</span>
+<span class="sd">                be servicing the entity.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">user</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">index</span>
-        <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="c">#Assign entity to station</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Station_tuple</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
+        
+        <span class="c">#Create trace record for starting the service.</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s">&#39;Resource&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s">&#39;User&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">entity</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;Starting Service&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
+        
+        <span class="c">#Get service time and schedule end of service on FEL.</span>
+        <span class="n">service_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_service_time</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">finish_event</span> <span class="o">=</span> <span class="n">ResourceFinishServiceEvent</span><span class="p">(</span>\
+            <span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">service_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">finish_event</span><span class="p">,</span> <span class="n">service_time</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="Resource.finish_service"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.finish_service">[docs]</a>    <span class="k">def</span> <span class="nf">finish_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove entity from a resource station.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments:*</span>
+<span class="sd">            ``index``: (Integer)</span>
+<span class="sd">                The index number of the resource station.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Station_tuple</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">res_queue</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">res_queue</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">res_queue</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">start_service</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span>   
     </div>
-<div class="viewcode-block" id="Resource.__getitem__"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<div class="viewcode-block" id="Resource.remove_entity"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.remove_entity">[docs]</a>    <span class="k">def</span> <span class="nf">remove_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove entity from a resource station.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            ``index``</span>
+<span class="sd">                The index number of the station from which the entity will</span>
+<span class="sd">                be removed.</span>
+<span class="sd">        </span>
+<span class="sd">        *Returns:* The entity that was being serviced by the resource.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">entity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="n">entity</span>
+
+</div></div>
+<div class="viewcode-block" id="ResourceFinishServiceEvent"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent">[docs]</a><span class="k">class</span> <span class="nc">ResourceFinishServiceEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Event that is called when the resource completes it&#39;s service.</span>
+<span class="sd">    </span>
+<span class="sd">    **Inherited Classes**</span>
+<span class="sd">      * :class:`despy.base.named_object.NamedObject`</span>
+<span class="sd">      * :class:`despy.core.component.Component`</span>
+<span class="sd">      * :class:`despy.core.event.Event`</span>
+<span class="sd">      </span>
+<span class="sd">    The ResourceFinishServiceEvent object occurs when the resource</span>
+<span class="sd">    finishes servicing the assigned entity (after the designated</span>
+<span class="sd">    service time has elapsed). </span>
+<span class="sd">    </span>
+<span class="sd">    **Attributes**</span>
+<span class="sd">      * :attr:`ResourceFinishServiceEvent.resource`: The applicable</span>
+<span class="sd">        :class:`despy.core.resource.Resource` object.</span>
+<span class="sd">      * :attr:`ResourceFinishServiceEvent.station_index`: The index</span>
+<span class="sd">        number of the station that is finishing it&#39;s service.</span>
+<span class="sd">      * :attr:`ResourceFinishServiceEvent.service_time`: The elapsed</span>
+<span class="sd">        service time.</span>
+<span class="sd">        </span>
+<span class="sd">    **Methods**</span>
+<span class="sd">      * :meth:`ResourceFinishServiceEvent.check_resource_queue`: The</span>
+<span class="sd">        event&#39;s callback method that checks the queue for a waiting</span>
+<span class="sd">        entity.</span>
+<span class="sd">      * :meth:`ResourceFinishServiceEvent._update_trace_record`: Adds</span>
+<span class="sd">        the entity name and service time to the trace report.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    
+<div class="viewcode-block" id="ResourceFinishServiceEvent.__init__"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">,</span> <span class="n">station_index</span><span class="p">,</span> <span class="n">service_time</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a ResourceFinishServiceEvent object.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments:*</span>
+<span class="sd">            ``resource`` (:class:`Resource`)</span>
+<span class="sd">                The Resource that will complete the service.</span>
+<span class="sd">            ``station_index`` (Integer)</span>
+<span class="sd">                The index number of the resource station.</span>
+<span class="sd">            ``service_time`` (Integer)</span>
+<span class="sd">                The time required to complete the service.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="s">&quot;Finished Service&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resource</span> <span class="o">=</span> <span class="n">resource</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_station_index</span> <span class="o">=</span> <span class="n">station_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_service_time</span> <span class="o">=</span> <span class="n">service_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">append_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_resource_queue</span><span class="p">)</span>
+        </div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">resource</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The applicable Resource object.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type*: class:`despy.core.resource.Resource`, read-only</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resource</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">station_index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Index number of the station that is finishing service.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type:* Integer, read-only</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_station_index</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">service_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The elapsed service time.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type:* Integer, read-only</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_service_time</span>
+        
+<div class="viewcode-block" id="ResourceFinishServiceEvent.check_resource_queue"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent.check_resource_queue">[docs]</a>    <span class="k">def</span> <span class="nf">check_resource_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The event&#39;s callback method that checks the queue for a</span>
+<span class="sd">        waiting entity.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">finish_service</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">station_index</span><span class="p">)</span>        
+        </div>
+<div class="viewcode-block" id="ResourceFinishServiceEvent._update_trace_record"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent._update_trace_record">[docs]</a>    <span class="k">def</span> <span class="nf">_update_trace_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_record</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds the entity name and service time to the trace report.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;entity&#39;</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">station_index</span><span class="p">]</span><span class="o">.</span><span class="n">entity</span>
+        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;duration_label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Service Time:&#39;</span>
+        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;duration_field&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_time</span>
+        <span class="k">return</span> <span class="n">trace_record</span>
+
+</div></div>
+<span class="k">class</span> <span class="nc">ResourceQueue</span><span class="p">(</span><span class="n">Queue</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A queue that provides entities to a resource object.</span>
+<span class="sd">    </span>
+<span class="sd">    A specialized queue that provides entities to one or more resource</span>
+<span class="sd">    objects.</span>
+<span class="sd">    </span>
+<span class="sd">    **Inherited Classes**</span>
+<span class="sd">      * :class:`despy.base.named_object.NamedObject`</span>
+<span class="sd">      * :class:`despy.core.component.Component`</span>
+<span class="sd">      * :class:`despy.core.queue.Queue`</span>
+<span class="sd">      </span>
+<span class="sd">    **Attributes**</span>
+<span class="sd">      * :attr:`num_resources`: The number of resources added to the</span>
+<span class="sd">      resourceQueue object.</span>
+<span class="sd">        </span>
+<span class="sd">    **Methods**</span>
+<span class="sd">      * :meth:`ResourceQueue.get_available_resource`: Gets the empty</span>
+<span class="sd">        resource position with the lowest number.</span>
+<span class="sd">      * :meth:`ResourceQueue.__getitem__`: Allows accessing resource</span>
+<span class="sd">        positions with array brackets.</span>
+<span class="sd">      * :meth:`ResourceQueue.__setitem__`: Allows setting resource</span>
+<span class="sd">        positions with array brackets.</span>
+<span class="sd">      * :meth:`ResourceQueue.assign_resource`: Assign a resource to the</span>
+<span class="sd">        resourceQueue object.</span>
+<span class="sd">      * :meth:`ResourceQueue.get_available_resource`: Gets the index</span>
+<span class="sd">        number of an available resource.</span>
+<span class="sd">      * :meth:`ResourceQueue.request`: Request a resource for a entity.</span>
+<span class="sd">      * :meth:`ResourceQueue.start_service: Commence servicing a entity</span>
+<span class="sd">        at the index position.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instantiates a resourceQueue object.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            ``model``</span>
+<span class="sd">                Every :class:`despy.core.component.Component` must be</span>
+<span class="sd">                assigned to a `despy.core.model.Model`.</span>
+<span class="sd">            ``name`` (String)</span>
+<span class="sd">                The name of the resourceQueue.</span>
+<span class="sd">                </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span> <span class="o">=</span> <span class="p">{}</span>
+         
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The number of resources added to the resourceQueue object.</span>
+<span class="sd">        </span>
+<span class="sd">        The number of resources that have been added to the</span>
+<span class="sd">        resourceQueue object with the :meth:`.assign_resource` method.</span>
+<span class="sd">        (Integer)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Allows accessing resource positions with array brackets.</span>
 <span class="sd">        </span>
-<span class="sd">        A Python magic method that makes a Resource object act like an</span>
+<span class="sd">        A Python magic method that makes a ResourceQueue object act like an</span>
 <span class="sd">        array. It allows users to specify a resource position index in</span>
-<span class="sd">        square brackets on a Resource object.</span>
+<span class="sd">        square brackets on a ResourceQueue object.</span>
 <span class="sd">        </span>
-<span class="sd">        *Returns*: :class:`despy.core.resource.Resource.Position`</span>
+<span class="sd">        *Returns*: :class:`despy.core.resource.ResourceQueue.Resource`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_positions</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-    </div>
-<div class="viewcode-block" id="Resource.__setitem__"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Allows setting resource positions with array brackets.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
 <span class="sd">            ``index``</span>
-<span class="sd">                An integer ranging from 1 to ``Resource.capacity``.</span>
+<span class="sd">                An integer ranging from 1 to ``ResourceQueue.capacity``.</span>
 <span class="sd">                The ``index`` argument is specified inside square</span>
 <span class="sd">                brackets.</span>
 <span class="sd">            ``item``</span>
 <span class="sd">                An instance of</span>
-<span class="sd">                :class:`despy.core.resource.Resource.Position`. The</span>
+<span class="sd">                :class:`despy.core.resource.ResourceQueue.Resource`. The</span>
 <span class="sd">                ``item`` object is assigned with an equals sign::</span>
 <span class="sd">                </span>
-<span class="sd">                    Resource[index] = item</span>
+<span class="sd">                    ResourceQueue[index] = item</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_positions</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
-</div>
-    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
-        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_empty_position</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">index</span><span class="p">:</span>
-            <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
-            <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">start_activity</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+        
+    <span class="k">def</span> <span class="nf">assign_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Assign a resource to the resourceQueue object.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            ``resource``</span>
+<span class="sd">                A :class:`despy.core.resource.Resource object that will</span>
+<span class="sd">                be appended to the ResourceQueue object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_resources</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">resource</span>
+        <span class="n">resource</span><span class="o">.</span><span class="n">_res_queue</span> <span class="o">=</span> <span class="bp">self</span>
+    
+    <span class="k">def</span> <span class="nf">get_available_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">random</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the index number of an available resource.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            ``random`` (Boolean)</span>
+<span class="sd">                If set to True, randomly chooses the index of an</span>
+<span class="sd">                available resource. Otherwise, returns the index of the</span>
+<span class="sd">                available resource with the lowest index value.</span>
+<span class="sd">                </span>
+<span class="sd">        *Returns:* A positive integer representing the index number of</span>
+<span class="sd">        the resource. ``None`` if all resources are busy.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="n">empty_resources</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_resources</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">get_available_station</span><span class="p">:</span>
+                <span class="n">empty_resources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">empty_resources</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">random</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">empty_resources</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">empty_resources</span><span class="p">[</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">empty_resources</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> 
+
+    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">random</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Request a resource for a entity.</span>
+<span class="sd">        </span>
+<span class="sd">        Checks if a resource position is available. If so, starts</span>
+<span class="sd">        serving the entity and returns the index of the resource position.</span>
+<span class="sd">        Otherwise returns False and adds the entity to the resource queue.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            ``entity``</span>
+<span class="sd">                The entity that will be serviced by the resource.</span>
+<span class="sd">                </span>
+<span class="sd">        *Returns:* If a resource position is available, returns the</span>
+<span class="sd">        index value of the resource that will serve the entity. Otherwise</span>
+<span class="sd">        returns False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>    
+        
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_resource</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c">#ResourceQueue position is available</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">random</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">index</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        
-    <span class="k">def</span> <span class="nf">start_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-        <span class="n">fields</span><span class="p">[</span><span class="s">&#39;Server&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-        <span class="n">fields</span><span class="p">[</span><span class="s">&#39;Customer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">user</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;Starting Activity&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
-        
-        <span class="n">service_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_activity_time</span><span class="p">()</span>
+            <span class="c">#Resources all busy</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>         
+    
 
-        <span class="n">finish_event</span> <span class="o">=</span> <span class="n">ResourceFinishActivityEvent</span><span class="p">(</span>\
-            <span class="bp">self</span><span class="p">,</span> <span class="s">&quot;Finished Activity&quot;</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">service_time</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">finish_event</span><span class="p">,</span> <span class="n">service_time</span><span class="p">)</span>
-        
-    <span class="k">def</span> <span class="nf">finish_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">service_time</span><span class="p">):</span>
-        <span class="n">event</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_user</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>             
-        
-    <span class="k">def</span> <span class="nf">remove_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">user</span>
-        <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="k">return</span> <span class="n">user</span>
-    
-    <span class="k">class</span> <span class="nc">Position</span><span class="p">():</span>
-        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;{0} #{1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="bp">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="bp">None</span>
-        
-        <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
-            
-    </div>
-<span class="k">class</span> <span class="nc">ResourceFinishActivityEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">check_resource_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_resource</span><span class="o">.</span><span class="n">finish_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_time</span><span class="p">)</span>
-    
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">service_time</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_resource</span> <span class="o">=</span> <span class="n">resource</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">append_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_resource_queue</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">service_time</span> <span class="o">=</span> <span class="n">service_time</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="bp">None</span>
-        
-    <span class="k">def</span> <span class="nf">_update_trace_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_record</span><span class="p">):</span>
-        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;entity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span>
-        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;duration_label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Service Time:&#39;</span>
-        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;duration_field&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_time</span>
-        <span class="k">return</span> <span class="n">trace_record</span>
         
 </pre></div>
 

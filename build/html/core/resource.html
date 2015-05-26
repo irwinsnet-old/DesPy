@@ -61,7 +61,6 @@
 <li><a class="reference internal" href="#inherited-attributes">Inherited Attributes</a></li>
 <li><a class="reference internal" href="#methods">Methods</a></li>
 <li><a class="reference internal" href="#inherited-methods">Inherited Methods</a></li>
-<li><a class="reference internal" href="#internal-methods">Internal Methods</a></li>
 </ul>
 </li>
 </ul>
@@ -103,10 +102,10 @@
 <h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="despy.core.resource.Resource">
-<em class="property">class </em><code class="descclassname">despy.core.resource.</code><code class="descname">Resource</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>capacity</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">despy.core.resource.</code><code class="descname">Resource</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>capacity=1</em>, <em>time_function=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a limited, real-world entity that provides a service.</p>
-<p>Generally an object or entity with limited availability that
-provides some kind of service.</p>
+<p>An object or entity with limited availability that provides some
+kind of service.</p>
 <dl class="docutils">
 <dt><strong>Inherited Classes</strong></dt>
 <dd><ul class="first last simple">
@@ -116,22 +115,36 @@ provides some kind of service.</p>
 </dd>
 <dt><strong>Attributes</strong></dt>
 <dd><ul class="first last simple">
-<li><code class="xref py py-attr docutils literal"><span class="pre">Resource.capacity</span></code>: The number of entities that can be
+<li><a class="reference internal" href="#despy.core.resource.Resource.capacity" title="despy.core.resource.Resource.capacity"><code class="xref py py-attr docutils literal"><span class="pre">Resource.capacity</span></code></a>: The number of entities that can be
 served simultaneously.</li>
-<li><code class="xref py py-attr docutils literal"><span class="pre">Resource.activity_time</span></code>: A method that returns the time
-required by the resource.</li>
+<li><a class="reference internal" href="#despy.core.resource.Resource.res_queue" title="despy.core.resource.Resource.res_queue"><code class="xref py py-attr docutils literal"><span class="pre">Resource.res_queue</span></code></a>: The resourceQueue that contains the
+queue of incoming users.</li>
+<li><a class="reference internal" href="#despy.core.resource.Resource.service_time" title="despy.core.resource.Resource.service_time"><code class="xref py py-attr docutils literal"><span class="pre">Resource.service_time</span></code></a>: A method that returns the
+time required by the resource.</li>
+<li><a class="reference internal" href="#despy.core.resource.Resource.Station_tuple" title="despy.core.resource.Resource.Station_tuple"><code class="xref py py-attr docutils literal"><span class="pre">Resource.Station_tuple</span></code></a>: A Python namedtuple with an
+&#8216;entity&#8217; field and a &#8216;start_time&#8217; field.</li>
+<li><a class="reference internal" href="#despy.core.resource.Resource.stations" title="despy.core.resource.Resource.stations"><code class="xref py py-attr docutils literal"><span class="pre">Resource.stations</span></code></a>: A list of resource stations
+with length = Resource.capacity.</li>
 </ul>
 </dd>
 <dt><strong>Methods</strong></dt>
 <dd><ul class="first last simple">
-<li><code class="xref py py-meth docutils literal"><span class="pre">Resource.get_activity_time()</span></code>: Gets the time needed for a
-position to complete an activity.</li>
-<li><code class="xref py py-meth docutils literal"><span class="pre">Resource.get_empty_position()</span></code>: Gets the empty resource
-position with the lowest number.</li>
-<li><code class="xref py py-meth docutils literal"><span class="pre">Resource.__getitem__()</span></code>: Allows accessing resource
-positions with array brackets.</li>
-<li><code class="xref py py-meth docutils literal"><span class="pre">Resource.__setitem__()</span></code>: Allows setting resource positions
+<li><a class="reference internal" href="#despy.core.resource.Resource.__str__" title="despy.core.resource.Resource.__str__"><code class="xref py py-meth docutils literal"><span class="pre">Resource.__str__()</span></code></a>: Magic method that converts the
+resource object to a string.</li>
+<li><a class="reference internal" href="#despy.core.resource.Resource.__getitem__" title="despy.core.resource.Resource.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">Resource.__getitem__()</span></code></a>: Allows accessing resource
+stations with array brackets.</li>
+<li><a class="reference internal" href="#despy.core.resource.Resource.__setitem__" title="despy.core.resource.Resource.__setitem__"><code class="xref py py-meth docutils literal"><span class="pre">Resource.__setitem__()</span></code></a>: Allows setting resource stations
 with array brackets.</li>
+<li><a class="reference internal" href="#despy.core.resource.Resource.get_available_station" title="despy.core.resource.Resource.get_available_station"><code class="xref py py-meth docutils literal"><span class="pre">Resource.get_available_station()</span></code></a>: Gets the empty resource
+position with the lowest number.</li>
+<li><a class="reference internal" href="#despy.core.resource.Resource.request" title="despy.core.resource.Resource.request"><code class="xref py py-meth docutils literal"><span class="pre">Resource.request()</span></code></a>: Request a resource for a entity.</li>
+<li><a class="reference internal" href="#despy.core.resource.Resource.get_service_time" title="despy.core.resource.Resource.get_service_time"><code class="xref py py-meth docutils literal"><span class="pre">Resource.get_service_time()</span></code></a>: Gets the time needed for a
+position to complete an activity.</li>
+<li><a class="reference internal" href="#despy.core.resource.Resource.start_service" title="despy.core.resource.Resource.start_service"><code class="xref py py-meth docutils literal"><span class="pre">Resource.start_service()</span></code></a>: Commence servicing a entity at the
+index position.</li>
+<li><a class="reference internal" href="#despy.core.resource.Resource.finish_service" title="despy.core.resource.Resource.finish_service"><code class="xref py py-meth docutils literal"><span class="pre">Resource.finish_service()</span></code></a>:</li>
+<li><a class="reference internal" href="#despy.core.resource.Resource.remove_entity" title="despy.core.resource.Resource.remove_entity"><code class="xref py py-meth docutils literal"><span class="pre">Resource.remove_entity()</span></code></a>: Remove entity from a resource
+station.</li>
 </ul>
 </dd>
 </dl>
@@ -142,12 +155,70 @@ with array brackets.</li>
 <h2>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="despy.core.resource.Resource.__init__">
-<code class="descclassname">Resource.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>capacity</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descclassname">Resource.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>capacity=1</em>, <em>time_function=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Resource object.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">model</span></code> (<a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a>)</dt>
+<dd>The Resource must be assigned to a Model object.</dd>
+<dt><code class="docutils literal"><span class="pre">name</span></code> (String)</dt>
+<dd>A short descriptive name for the Resource object.</dd>
+<dt><code class="docutils literal"><span class="pre">capacity</span></code> (Integer)</dt>
+<dd>Optional, defaults to 1. The number of stations that the
+Resource object contains. Each station can service one
+object.</dd>
+<dt><code class="docutils literal"><span class="pre">time_function</span></code> (Python function object)</dt>
+<dd>Optional, defaults to None. A function that returns the
+time required to service an entity.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="despy.core.resource.Resource.capacity">
+<code class="descclassname">Resource.</code><code class="descname">capacity</code><a class="headerlink" href="#despy.core.resource.Resource.capacity" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of entities that can be served simultaneously.</p>
+<p><em>Type:</em> Integer</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.resource.Resource.res_queue">
+<code class="descclassname">Resource.</code><code class="descname">res_queue</code><a class="headerlink" href="#despy.core.resource.Resource.res_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>The resourceQueue that contains the queue of incoming users.</p>
+<p><em>Type:</em> <code class="xref py py-class docutils literal"><span class="pre">despy.core.resource.ResourceQueue</span></code>, read-only</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.resource.Resource.service_time">
+<code class="descclassname">Resource.</code><code class="descname">service_time</code><a class="headerlink" href="#despy.core.resource.Resource.service_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property that contains a service time function object.</p>
+<p>Designers can customize the resource&#8217;s method for determining
+the time required for service by setting this property to a
+function object. The function should accept the resource class
+and the station index as parameters and return a positive
+integer.</p>
+<p><em>Type:</em> Function object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.resource.Resource.Station_tuple">
+<code class="descclassname">Resource.</code><code class="descname">Station_tuple</code><a class="headerlink" href="#despy.core.resource.Resource.Station_tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Python namedtuple with &#8216;entity&#8217; and &#8216;start_time&#8217; fields.</p>
+<p><em>Type:</em> <code class="xref py py-class docutils literal"><span class="pre">collections.namedtuple</span></code>, read-only</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.resource.Resource.stations">
+<code class="descclassname">Resource.</code><code class="descname">stations</code><a class="headerlink" href="#despy.core.resource.Resource.stations" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of resource stations with length = Resource.capacity.</p>
+<p><em>Type:</em> <a class="reference internal" href="#despy.core.resource.Resource.Station_tuple" title="despy.core.resource.Resource.Station_tuple"><code class="xref py py-class docutils literal"><span class="pre">Resource.Station_tuple</span></code></a></p>
+</dd></dl>
+
 </div>
 <div class="section" id="inherited-attributes">
 <h2>Inherited Attributes<a class="headerlink" href="#inherited-attributes" title="Permalink to this headline">¶</a></h2>
@@ -229,58 +300,144 @@ suitable for creating file names.</p>
 <div class="section" id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
-<dt>
-<code class="descclassname">Resource.</code><code class="descname">get_activity_time</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.get_activity_time"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Gets the time needed for a position to complete an activity.</p>
+<dt id="despy.core.resource.Resource.__str__">
+<code class="descclassname">Resource.</code><code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Magic method that converts the resource object to a string.</p>
+<p><em>Returns:</em> The name property of the resource object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.resource.Resource.__getitem__">
+<code class="descclassname">Resource.</code><code class="descname">__getitem__</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows using array brackets to access resource stations.</p>
+<p>A Python magic method that allows using array brackets to get
+a resource station.</p>
 <dl class="docutils">
-<dt><em>Arguments</em></dt>
-<dd>None</dd>
-<dt><em>Raises</em></dt>
-<dd><code class="docutils literal"><span class="pre">NotImplementedError</span></code>: Raised if user has not set the
-<code class="docutils literal"><span class="pre">Resource.activity_time</span></code> property to a function.</dd>
+<dt><em>Arguments:</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">index</span></code> (Integer)</dt>
+<dd>The index number of the resource station.</dd>
+</dl>
+</dd>
+<dt><em>Returns:</em> (ResourceStation tuple)</dt>
+<dd>A ResourceStation namedtuple object.</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt>
-<code class="descclassname">Resource.</code><code class="descname">get_empty_position</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.get_empty_position"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Gets the empty resource position with the lowest number.</p>
-<p><em>Returns:</em> An integer ranging from 1 to <code class="docutils literal"><span class="pre">Resource.capacity</span></code>,
-or returns <code class="docutils literal"><span class="pre">False</span></code> if no positions are available.</p>
+<dt id="despy.core.resource.Resource.__setitem__">
+<code class="descclassname">Resource.</code><code class="descname">__setitem__</code><span class="sig-paren">(</span><em>index</em>, <em>entity</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.__setitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows setting resource stations with array brackets.</p>
+<dl class="docutils">
+<dt><em>Arguments:</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">index</span></code> (Integer)</dt>
+<dd>The index number of the resource station.</dd>
+<dt><code class="docutils literal"><span class="pre">entity</span></code> (ResourceStation namedtuple)</dt>
+<dd>A ResourceStation namedtuple object.</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
-<dt>
-<code class="descclassname">Resource.</code><code class="descname">__getitem__</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.__getitem__"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Allows accessing resource positions with array brackets.</p>
-<p>A Python magic method that makes a Resource object act like an
-array. It allows users to specify a resource position index in
-square brackets on a Resource object.</p>
-<p><em>Returns</em>: <code class="xref py py-class docutils literal"><span class="pre">despy.core.resource.Resource.Position</span></code></p>
+<dt id="despy.core.resource.Resource.get_available_station">
+<code class="descclassname">Resource.</code><code class="descname">get_available_station</code><span class="sig-paren">(</span><em>random=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.get_available_station"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource.get_available_station" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the index of an empty station.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">random</span></code> (Boolean)</dt>
+<dd>If set to True, randomly chooses the index of an empty
+station. Otherwise, returns the index of the empty
+station with the lowest index value.</dd>
+</dl>
+</dd>
+</dl>
+<p><em>Returns:</em> A positive integer representing the index number of
+the station. <code class="docutils literal"><span class="pre">None</span></code> if no stations are empty.</p>
 </dd></dl>
 
 <dl class="method">
-<dt>
-<code class="descclassname">Resource.</code><code class="descname">__setitem__</code><span class="sig-paren">(</span><em>index</em>, <em>item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.__setitem__"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Allows setting resource positions with array brackets.</p>
+<dt id="despy.core.resource.Resource.request">
+<code class="descclassname">Resource.</code><code class="descname">request</code><span class="sig-paren">(</span><em>entity</em>, <em>random=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request a resource for a entity.</p>
+<p>Checks if a resource position is available. If so, starts
+serving the entity and returns the index of the resource position.
+Otherwise returns False and adds the entity to the resource queue.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">entity</span></code></dt>
+<dd>The entity that will be serviced by the resource.</dd>
+</dl>
+</dd>
+</dl>
+<p><em>Returns:</em> If a resource position is available, returns the
+index value of the resource that will serve the entity. Otherwise
+returns False.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.resource.Resource.get_service_time">
+<code class="descclassname">Resource.</code><code class="descname">get_service_time</code><span class="sig-paren">(</span><em>station_index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.get_service_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource.get_service_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the time needed for a position to complete an activity.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">station_index</span></code></dt>
+<dd>The index of the applicable resource station.</dd>
+</dl>
+</dd>
+<dt><em>Raises</em></dt>
+<dd><code class="docutils literal"><span class="pre">NotImplementedError</span></code>: Raised if entity has not set the
+<code class="docutils literal"><span class="pre">ResourceQueue.service_time</span></code> property to a function.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.resource.Resource.start_service">
+<code class="descclassname">Resource.</code><code class="descname">start_service</code><span class="sig-paren">(</span><em>index</em>, <em>entity</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.start_service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource.start_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Commence servicing a entity at the index position.</p>
 <dl class="docutils">
 <dt><em>Arguments</em></dt>
 <dd><dl class="first last docutils">
 <dt><code class="docutils literal"><span class="pre">index</span></code></dt>
-<dd>An integer ranging from 1 to <code class="docutils literal"><span class="pre">Resource.capacity</span></code>.
-The <code class="docutils literal"><span class="pre">index</span></code> argument is specified inside square
-brackets.</dd>
-<dt><code class="docutils literal"><span class="pre">item</span></code></dt>
-<dd><p class="first">An instance of
-<code class="xref py py-class docutils literal"><span class="pre">despy.core.resource.Resource.Position</span></code>. The
-<code class="docutils literal"><span class="pre">item</span></code> object is assigned with an equals sign:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="n">Resource</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
-</pre></div>
-</div>
-</dd>
+<dd>The index number of the resource position that will
+be servicing the entity.</dd>
 </dl>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.resource.Resource.finish_service">
+<code class="descclassname">Resource.</code><code class="descname">finish_service</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.finish_service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource.finish_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove entity from a resource station.</p>
+<dl class="docutils">
+<dt><em>Arguments:</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">index</span></code>: (Integer)</dt>
+<dd>The index number of the resource station.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.resource.Resource.remove_entity">
+<code class="descclassname">Resource.</code><code class="descname">remove_entity</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.remove_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource.remove_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove entity from a resource station.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">index</span></code></dt>
+<dd>The index number of the station from which the entity will
+be removed.</dd>
+</dl>
+</dd>
+</dl>
+<p><em>Returns:</em> The entity that was being serviced by the resource.</p>
 </dd></dl>
 
 </div>
@@ -368,9 +525,6 @@ method <em>set_counter()</em> on a subclass. The subclass&#8217;s number
 attributes will be the unbroken sequence 1, 2, 3, ...</p>
 </dd></dl>
 
-</div>
-<div class="section" id="internal-methods">
-<h2>Internal Methods<a class="headerlink" href="#internal-methods" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 

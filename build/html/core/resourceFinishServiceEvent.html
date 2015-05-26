@@ -1,0 +1,354 @@
+
+
+<!doctype html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>despy.core.resource.ResourceFinishServiceEvent &mdash; Despy 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="../index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">despy.core.resource.ResourceFinishServiceEvent</a><ul>
+<li><a class="reference internal" href="#class-description">Class Description</a></li>
+<li><a class="reference internal" href="#init">__init__</a></li>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#inherited-attributes">Inherited Attributes</a></li>
+<li><a class="reference internal" href="#methods">Methods</a></li>
+<li><a class="reference internal" href="#inherited-methods">Inherited Methods</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/core/resourceFinishServiceEvent.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="despy-core-resource-resourcefinishserviceevent">
+<h1>despy.core.resource.ResourceFinishServiceEvent<a class="headerlink" href="#despy-core-resource-resourcefinishserviceevent" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="class-description">
+<h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="despy.core.resource.ResourceFinishServiceEvent">
+<em class="property">class </em><code class="descclassname">despy.core.resource.</code><code class="descname">ResourceFinishServiceEvent</code><span class="sig-paren">(</span><em>resource</em>, <em>station_index</em>, <em>service_time</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#ResourceFinishServiceEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.ResourceFinishServiceEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event that is called when the resource completes it&#8217;s service.</p>
+<dl class="docutils">
+<dt><strong>Inherited Classes</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a></li>
+<li><a class="reference internal" href="component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a></li>
+<li><a class="reference internal" href="event.html#despy.core.event.Event" title="despy.core.event.Event"><code class="xref py py-class docutils literal"><span class="pre">despy.core.event.Event</span></code></a></li>
+</ul>
+</dd>
+</dl>
+<p>The ResourceFinishServiceEvent object occurs when the resource
+finishes servicing the assigned entity (after the designated
+service time has elapsed).</p>
+<dl class="docutils">
+<dt><strong>Attributes</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.resource" title="despy.core.resource.ResourceFinishServiceEvent.resource"><code class="xref py py-attr docutils literal"><span class="pre">ResourceFinishServiceEvent.resource</span></code></a>: The applicable
+<a class="reference internal" href="resource.html#despy.core.resource.Resource" title="despy.core.resource.Resource"><code class="xref py py-class docutils literal"><span class="pre">despy.core.resource.Resource</span></code></a> object.</li>
+<li><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.station_index" title="despy.core.resource.ResourceFinishServiceEvent.station_index"><code class="xref py py-attr docutils literal"><span class="pre">ResourceFinishServiceEvent.station_index</span></code></a>: The index
+number of the station that is finishing it&#8217;s service.</li>
+<li><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.service_time" title="despy.core.resource.ResourceFinishServiceEvent.service_time"><code class="xref py py-attr docutils literal"><span class="pre">ResourceFinishServiceEvent.service_time</span></code></a>: The elapsed
+service time.</li>
+</ul>
+</dd>
+<dt><strong>Methods</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.check_resource_queue" title="despy.core.resource.ResourceFinishServiceEvent.check_resource_queue"><code class="xref py py-meth docutils literal"><span class="pre">ResourceFinishServiceEvent.check_resource_queue()</span></code></a>: The
+event&#8217;s callback method that checks the queue for a waiting
+entity.</li>
+<li><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent._update_trace_record" title="despy.core.resource.ResourceFinishServiceEvent._update_trace_record"><code class="xref py py-meth docutils literal"><span class="pre">ResourceFinishServiceEvent._update_trace_record()</span></code></a>: Adds
+the entity name and service time to the trace report.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="init">
+<h2>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="despy.core.resource.ResourceFinishServiceEvent.__init__">
+<code class="descclassname">ResourceFinishServiceEvent.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>resource</em>, <em>station_index</em>, <em>service_time</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#ResourceFinishServiceEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.ResourceFinishServiceEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a ResourceFinishServiceEvent object.</p>
+<dl class="docutils">
+<dt><em>Arguments:</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">resource</span></code> (<a class="reference internal" href="resource.html#despy.core.resource.Resource" title="despy.core.resource.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>)</dt>
+<dd>The Resource that will complete the service.</dd>
+<dt><code class="docutils literal"><span class="pre">station_index</span></code> (Integer)</dt>
+<dd>The index number of the resource station.</dd>
+<dt><code class="docutils literal"><span class="pre">service_time</span></code> (Integer)</dt>
+<dd>The time required to complete the service.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="despy.core.resource.ResourceFinishServiceEvent.resource">
+<code class="descclassname">ResourceFinishServiceEvent.</code><code class="descname">resource</code><a class="headerlink" href="#despy.core.resource.ResourceFinishServiceEvent.resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>The applicable Resource object.</p>
+<p><em>Type</em>: class:<cite>despy.core.resource.Resource</cite>, read-only</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.resource.ResourceFinishServiceEvent.station_index">
+<code class="descclassname">ResourceFinishServiceEvent.</code><code class="descname">station_index</code><a class="headerlink" href="#despy.core.resource.ResourceFinishServiceEvent.station_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index number of the station that is finishing service.</p>
+<p><em>Type:</em> Integer, read-only</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.resource.ResourceFinishServiceEvent.service_time">
+<code class="descclassname">ResourceFinishServiceEvent.</code><code class="descname">service_time</code><a class="headerlink" href="#despy.core.resource.ResourceFinishServiceEvent.service_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>The elapsed service time.</p>
+<p><em>Type:</em> Integer, read-only</p>
+</dd></dl>
+
+</div>
+<div class="section" id="inherited-attributes">
+<h2>Inherited Attributes<a class="headerlink" href="#inherited-attributes" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">name</code></dt>
+<dd><p>The name of the object.</p>
+<p>A short phrase, such as &#8220;Customer&#8221; or &#8220;Server Queue&#8221; that
+identifies the object.  Using title case and spaces will result
+in pleasant formatting in output reports and trace files.</p>
+<p><em>Returns:</em> String</p>
+<dl class="docutils">
+<dt><em>Raises:</em></dt>
+<dd><code class="docutils literal"><span class="pre">TypeError</span></code> if name is not a string.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">description</code></dt>
+<dd><p>Gets a description of the model.</p>
+<p>One or more paragraphs that describes the purpose and behavior
+of the object.  The description will be included in output
+reports as html paragraphs (or equivalent for other output
+formats).</p>
+<p><em>Returns:</em> string</p>
+<p><em>Raises:</em> <code class="docutils literal"><span class="pre">TypeError</span></code> if description is not a string or type
+<code class="docutils literal"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">NamedObject.</code><code class="descname">slug</code></dt>
+<dd><p>Returns a modified version of the name attribute.</p>
+<p>Spaces and all characters not allowed in Windows filenames
+([]&lt;&gt;/*?:|#!&#8221;) are replaced with underscores.</p>
+<p><em>Returns:</em> str</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">model</code></dt>
+<dd><p>A link to the component&#8217;s model object.</p>
+<p>This read-only attribute is set by the <code class="docutils literal"><span class="pre">Model.__init__</span></code>
+method.</p>
+<p><em>Returns</em> <a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">sim</code></dt>
+<dd><p>A link to the model&#8217;s simulation attribute.</p>
+<p>This read-only attribute is provided for convenience.</p>
+<p><em>Returns:</em> <a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">number</code></dt>
+<dd><p>An integer that uniquely identifies the <em>Component</em> instance.</p>
+<p>This attribute is read only.</p>
+<p><em>Returns</em> integer</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Component.</code><code class="descname">id</code></dt>
+<dd><p>A string that uniquely identifies the component instance.</p>
+<p>The id attribute is of the format
+&#8220;&lt;model.slug&gt;.&lt;component.slug&gt;.&lt;component.number&gt;&#8221;. The
+<code class="xref py py-meth docutils literal"><span class="pre">slug()</span></code> attribute is inherited from
+<a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a>. The slug is the
+name attribute with spaces and characters that are not allowed
+in Windows replaced by underscores. The <em>id</em> attribute is
+suitable for creating file names.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Event.</code><code class="descname">trace_fields</code></dt>
+<dd><p>An ordered dictionary containing custom trace data.</p>
+<p><em>Returns:</em> An instance of <code class="docutils literal"><span class="pre">OrderedDict</span></code> with custom trace data
+stored as key: value pairs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descclassname">Event.</code><code class="descname">trace_records</code></dt>
+<dd><p>A list of trace records for completed events.</p>
+<p>A single event object can be reused by rescheduling it on the
+FEL. The <code class="docutils literal"><span class="pre">trace_records</span></code> attribute is a list of all
+trace records that have been completed for the <code class="docutils literal"><span class="pre">Event</span></code> object.</p>
+<p><em>Returns:</em> A list of <code class="xref py py-class docutils literal"><span class="pre">despy.output.trace.TraceRecord</span></code>
+objects.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="despy.core.resource.ResourceFinishServiceEvent.check_resource_queue">
+<code class="descclassname">ResourceFinishServiceEvent.</code><code class="descname">check_resource_queue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#ResourceFinishServiceEvent.check_resource_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.ResourceFinishServiceEvent.check_resource_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>The event&#8217;s callback method that checks the queue for a
+waiting entity.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.core.resource.ResourceFinishServiceEvent._update_trace_record">
+<code class="descclassname">ResourceFinishServiceEvent.</code><code class="descname">_update_trace_record</code><span class="sig-paren">(</span><em>trace_record</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#ResourceFinishServiceEvent._update_trace_record"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.ResourceFinishServiceEvent._update_trace_record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the entity name and service time to the trace report.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="inherited-methods">
+<h2>Inherited Methods<a class="headerlink" href="#inherited-methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt>
+<code class="descclassname">Event.</code><code class="descname">append_callback</code><span class="sig-paren">(</span><em>callback</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/event.html#Event.append_callback"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Appends a function to the event&#8217;s callback list.</p>
+<p>The function will be called when the event is removed from the
+FEL and executed.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt>callback (function):</dt>
+<dd>A variable that represents a class method or function.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descclassname">Event.</code><code class="descname">add_trace_field</code><span class="sig-paren">(</span><em>key</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/event.html#Event.add_trace_field"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Add custom fields to the event&#8217;s trace record.</p>
+<p>This method is typically called from an event&#8217;s callback method.
+It adds <code class="docutils literal"><span class="pre">value</span></code> to the event&#8217;s trace record, labeled with the
+text in <code class="docutils literal"><span class="pre">key</span></code>.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">key</span></code> (String)</dt>
+<dd>A text label that describes the data in <code class="docutils literal"><span class="pre">value</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">value</span></code> (String or Number)</dt>
+<dd>A number, string, or other text-convertible value.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Stacy Irwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
