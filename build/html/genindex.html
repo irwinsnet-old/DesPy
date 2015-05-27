@@ -83,9 +83,11 @@
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
@@ -103,6 +105,10 @@
   <dt><a href="core/resource.html#despy.core.resource.Resource.__getitem__">(despy.core.resource.Resource method)</a>
   </dt>
 
+        
+  <dt><a href="core/resourceQueue.html#despy.core.resource.ResourceQueue.__getitem__">(despy.core.resource.ResourceQueue method)</a>
+  </dt>
+
       </dl></dd>
       
   <dt><a href="core/event.html#despy.core.event.Event.__gt__">__gt__() (despy.core.event.Event method)</a>
@@ -118,11 +124,19 @@
   </dt>
 
         
+  <dt><a href="core/queue.html#despy.core.queue.Queue.__init__">(despy.core.queue.Queue method)</a>
+  </dt>
+
+        
   <dt><a href="core/resource.html#despy.core.resource.Resource.__init__">(despy.core.resource.Resource method)</a>
   </dt>
 
         
   <dt><a href="core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent.__init__">(despy.core.resource.ResourceFinishServiceEvent method)</a>
+  </dt>
+
+        
+  <dt><a href="core/resourceQueue.html#despy.core.resource.ResourceQueue.__init__">(despy.core.resource.ResourceQueue method)</a>
   </dt>
 
         
@@ -141,6 +155,10 @@
       <dd><dl>
         
   <dt><a href="core/resource.html#despy.core.resource.Resource.__setitem__">(despy.core.resource.Resource method)</a>
+  </dt>
+
+        
+  <dt><a href="core/resourceQueue.html#despy.core.resource.ResourceQueue.__setitem__">(despy.core.resource.ResourceQueue method)</a>
   </dt>
 
       </dl></dd>
@@ -185,6 +203,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="core/queue.html#despy.core.queue.Queue.add">add() (despy.core.queue.Queue method)</a>
+  </dt>
+
+      
   <dt><a href="core/event.html#despy.core.event.Event.add_trace_field">add_trace_field() (despy.core.event.Event method)</a>
   </dt>
 
@@ -196,6 +218,10 @@
   <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="core/simulation.html#despy.core.simulation.Simulation.append_model">append_model() (despy.core.simulation.Simulation method)</a>
+  </dt>
+
+      
+  <dt><a href="core/resourceQueue.html#despy.core.resource.ResourceQueue.assign_resource">assign_resource() (despy.core.resource.ResourceQueue method)</a>
   </dt>
 
   </dl></td>
@@ -232,18 +258,10 @@
   <dt><a href="base/namedobject.html#despy.base.named_object.NamedObject.description">description (despy.base.named_object.NamedObject attribute)</a>
   </dt>
 
-      
-  <dt><a href="modules.html#module-despy.base.named_object">despy.base.named_object (module)</a>
-  </dt>
-
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="packages.html#module-despy.core.__init__.py">despy.core.__init__.py (module)</a>
-  </dt>
-
-      
-  <dt><a href="modules.html#module-despy.core.component">despy.core.component (module)</a>, <a href="packages.html#module-despy.core.component">[1]</a>
   </dt>
 
   </dl></td>
@@ -289,15 +307,25 @@
   </dt>
 
       
+  <dt><a href="core/resourceQueue.html#despy.core.resource.ResourceQueue.get_available_resource">get_available_resource() (despy.core.resource.ResourceQueue method)</a>, <a href="core/resourceQueue.html#despy.core.resource.ResourceQueue.get_available_resource">[1]</a>
+  </dt>
+
+      
   <dt><a href="core/resource.html#despy.core.resource.Resource.get_available_station">get_available_station() (despy.core.resource.Resource method)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="core/simulation.html#despy.core.simulation.Simulation.get_data">get_data() (despy.core.simulation.Simulation method)</a>
+  <dt><a href="core/queue.html#despy.core.queue.Queue.get_data">get_data() (despy.core.queue.Queue method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="core/simulation.html#despy.core.simulation.Simulation.get_data">(despy.core.simulation.Simulation method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="core/resource.html#despy.core.resource.Resource.get_service_time">get_service_time() (despy.core.resource.Resource method)</a>
   </dt>
@@ -320,6 +348,16 @@
   <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="core/model.html#despy.core.model.Model.initialize">initialize() (despy.core.model.Model method)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="core/queue.html#despy.core.queue.Queue.length">length (despy.core.queue.Queue attribute)</a>
   </dt>
 
   </dl></td>
@@ -367,6 +405,10 @@
   </dt>
 
       
+  <dt><a href="core/resourceQueue.html#despy.core.resource.ResourceQueue.num_resources">num_resources (despy.core.resource.ResourceQueue attribute)</a>
+  </dt>
+
+      
   <dt><a href="core/component.html#despy.core.component.Component.number">number (despy.core.component.Component attribute)</a>
   </dt>
 
@@ -383,9 +425,23 @@
   </dl></td>
 </tr></table>
 
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="core/queue.html#despy.core.queue.Queue">Queue (class in despy.core.queue)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="core/queue.html#despy.core.queue.Queue.remove">remove() (despy.core.queue.Queue method)</a>
+  </dt>
+
       
   <dt><a href="core/resource.html#despy.core.resource.Resource.remove_entity">remove_entity() (despy.core.resource.Resource method)</a>
   </dt>
@@ -394,6 +450,12 @@
   <dt><a href="core/resource.html#despy.core.resource.Resource.request">request() (despy.core.resource.Resource method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="core/resourceQueue.html#despy.core.resource.ResourceQueue.request">(despy.core.resource.ResourceQueue method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="core/resource.html#despy.core.resource.Resource.res_queue">res_queue (despy.core.resource.Resource attribute)</a>
   </dt>
@@ -414,6 +476,10 @@
 
       
   <dt><a href="core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent">ResourceFinishServiceEvent (class in despy.core.resource)</a>
+  </dt>
+
+      
+  <dt><a href="core/resourceQueue.html#despy.core.resource.ResourceQueue">ResourceQueue (class in despy.core.resource)</a>
   </dt>
 
       
@@ -508,6 +574,10 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="core/queue.html#despy.core.queue.Queue.times_in_queue">times_in_queue (despy.core.queue.Queue attribute)</a>
+  </dt>
+
       
   <dt><a href="core/event.html#despy.core.event.Event.trace_fields">trace_fields (despy.core.event.Event attribute)</a>
   </dt>

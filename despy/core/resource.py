@@ -7,8 +7,12 @@
 despy.core.resource
 *******************
 
-:class:`ResourceQueue`
+:class:`Resource`
     Represents a limited, real-world, entity that provides a service.
+:class:`ResourceFinishServiceEvent`
+    Event that is called when the resource completes it's service.
+:class:`ResourceQueue`
+    A queue that provides entities to a resource object.
 """
 
 from collections import OrderedDict, namedtuple
@@ -407,7 +411,7 @@ class ResourceQueue(Queue):
       
     **Attributes**
       * :attr:`num_resources`: The number of resources added to the
-      resourceQueue object.
+        resourceQueue object.
         
     **Methods**
       * :meth:`ResourceQueue.get_available_resource`: Gets the empty
@@ -421,8 +425,6 @@ class ResourceQueue(Queue):
       * :meth:`ResourceQueue.get_available_resource`: Gets the index
         number of an available resource.
       * :meth:`ResourceQueue.request`: Request a resource for a entity.
-      * :meth:`ResourceQueue.start_service: Commence servicing a entity
-        at the index position.
     """
     
     def __init__(self, model, name):
@@ -483,7 +485,7 @@ class ResourceQueue(Queue):
         
         *Arguments*
             ``resource``
-                A :class:`despy.core.resource.Resource object that will
+                A :class:`despy.core.resource.Resource` object that will
                 be appended to the ResourceQueue object.
         """
         index = self.num_resources
@@ -530,7 +532,7 @@ class ResourceQueue(Queue):
         *Returns:* If a resource position is available, returns the
         index value of the resource that will serve the entity. Otherwise
         returns False.
-        """    
+        """  
         
         index = self.get_available_resource(random)
 

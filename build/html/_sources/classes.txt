@@ -12,6 +12,8 @@ Despy Classes
    core/model
    core/event
    core/NoEventsRemainingError
+   core/queue
    core/resource
+   core/resourceQueue
    core/resourceFinishServiceEvent
    

@@ -4,15 +4,11 @@
 #   Copyright (c) 2015, Stacy Irwin
 
 """
-..  module:: despy.base.named_object
-
-A base class that provides name and description attributes to
-subclasses.
-
-**NamedObject**
-    Inherited directly or indirectly by all Despy classes.
-    :class:`.NamedObject` provides a name attribute, a description
-    attribute, and other helper methods.
+***********************
+despy.base.named_object
+***********************
+:class:`NamedObject`
+    A base class that provides name and description fields.
 """
 
 import re

@@ -3,11 +3,12 @@
 #   Released under the MIT License (MIT)
 #   Copyright (c) 2015, Stacy Irwin
 """
-..  module:: despy.core.component
+********************
+despy.base.component
+********************
 
 :class:`.Component`
-    A portion of a Despy model. Components represent an element of the
-    system that is being simulated.
+    A base class that provides object counters and other attributes.
 """
 from itertools import count
 

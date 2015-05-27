@@ -1,8 +1,27 @@
-#!/usr/bin/env python3
+#   Despy: A discrete event simulation framework for Python
+#   Version 0.1
+#   Released under the MIT License (MIT)
+#   Copyright (c) 2015, Stacy Irwin
+"""
+****************
+despy.core.queue
+****************
+
+:class:`Queue_item`
+    
+:class:`Queue`
+    Represents a limited, real-world, entity that provides a service.
+"""
+
+#TODO: Refactor Queue_item into the Queue class.
+#TODO: Refactor so folder parameter doesn't need to be passed to the
+# get data method.
+#TODO: Add property and output for total items entering the queue
+#TODO: Add property and output for total items leaving the queue.
+#TODO: Add properties and output for max and min items in queue.
 
 from collections import deque, namedtuple
 import numpy as np
-
 from despy.core.component import Component
 from despy.output.datatype import Datatype
 import despy.output.plot as plot
@@ -10,33 +29,105 @@ import despy.output.plot as plot
 Queue_item = namedtuple('Queue_item', ['item_fld', 'time_in_fld'])
 
 class Queue(Component):
-    """A component that represents a real world queue, such as a line
-    of customers waiting for a server, or a group of products waiting
-    for a machine.
+    """A component that represents a real world queue.
+    
+    A Queue object represents a real-world queue, such as a line of
+    customers waiting for a server, or a line of products waiting for a
+    machine.
+    
+    **Inherited Classes**
+      * :class:`despy.base.named_object.NamedObject`
+      * :class:`despy.core.component.Component`
+      
+    **Attributes**
+      * :attr:`Queue.length`: The number of entities in the queue at the
+        current time.
+      * :attr:`Queue.times_in_queue`: List of times (integers) that
+        entities spent in the queue.
+
+    **Methods**
+      * :meth:`Queue.add`: Add an item to the end of the queue.
+      * :meth:`Queue.remove`: Remove an item from the beginning of the
+        queue.
+      * :meth:`Queue.get_data`: Creates charts and adds data to final
+        report.        
     """
 
     def __init__(self, model, name, max_length = None):
+        """Create a Queue object.
+        
+        *Arguments*
+            ``model`` (:class:`despy.core.model.Model`)
+                The Queue must be assigned to a Model object.
+            ``name`` (String)
+                A short descriptive name for the Queue object.
+            ``max_length`` (Integer)
+                If ``None`` (default value), then the Queue length can
+                grow indefinitely. If set to an integer, the Queue will
+                be limited to ``max_length``.
+        """
+        
         super().__init__(model, name)
         if isinstance(max_length, int):
             self._queue = deque(max_length)
         else:
             self._queue = deque()
-        self.times_in_queue = []
+        self._times_in_queue = []
+
+    @property
+    def length(self):
+        """The number of entities in the queue at the current time.
+        
+        *Type:* Integer, read-only.
+        """
+        return len(self._queue)
+
+    @property
+    def times_in_queue(self):
+        """List of times (integers) that entities spent in the queue.
+        
+        *Type:* List of integers, read-only.
+        
+        The first element of the list is the time that the first entity
+        to leave the queue spent in the queue, the second element is for
+        the second entity to leave the queue, etc.
+        """
+        return self._times_in_queue
 
     def add(self, item):
+        """Add an item to the end of the queue.
+        
+        *Arguments*
+            ``item``
+                The item that will be added to the queue.
+        """
         self._queue.append(Queue_item(item_fld = item, \
                                       time_in_fld = self.sim.now))
     
     def remove(self):
+        """Remove an item from the beginning of the queue.
+        
+        *Arguments*
+            ``item``
+                The item that will be removed from the queue.
+                
+        *Returns:* The item that was removed from the queue.
+        """
         item = self._queue.popleft()
         self.times_in_queue.append(self.sim.now - item.time_in_fld)
         return item.item_fld
     
-    @property
-    def length(self):
-        return len(self._queue)
-    
     def get_data(self, folder):
+        """Creates charts and adds data to final report.
+        
+        *Arguments*
+            ``folder`` (String)
+                All charts will be saved to the location denoted by
+                'folder'.
+                
+        *Returns:* A despy.core.output.Datatype formatted list
+        containing data for the final report.
+        """
         # Create Time in Queue Histogram
         qtimes = np.array(self.times_in_queue, np.int32)
         qtime_filename = '{0}_time_in_q.png'.format(self.id)
@@ -55,7 +146,3 @@ class Queue(Component):
                  (Datatype.image, qtime_filename)]
      
         return output
-        
-
-    
-        

@@ -79,8 +79,12 @@
 <span class="sd">despy.core.resource</span>
 <span class="sd">*******************</span>
 
-<span class="sd">:class:`ResourceQueue`</span>
+<span class="sd">:class:`Resource`</span>
 <span class="sd">    Represents a limited, real-world, entity that provides a service.</span>
+<span class="sd">:class:`ResourceFinishServiceEvent`</span>
+<span class="sd">    Event that is called when the resource completes it&#39;s service.</span>
+<span class="sd">:class:`ResourceQueue`</span>
+<span class="sd">    A queue that provides entities to a resource object.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="n">namedtuple</span>
@@ -466,7 +470,7 @@
         <span class="k">return</span> <span class="n">trace_record</span>
 
 </div></div>
-<span class="k">class</span> <span class="nc">ResourceQueue</span><span class="p">(</span><span class="n">Queue</span><span class="p">):</span>
+<div class="viewcode-block" id="ResourceQueue"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.resource.ResourceQueue">[docs]</a><span class="k">class</span> <span class="nc">ResourceQueue</span><span class="p">(</span><span class="n">Queue</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A queue that provides entities to a resource object.</span>
 <span class="sd">    </span>
 <span class="sd">    A specialized queue that provides entities to one or more resource</span>
@@ -479,7 +483,7 @@
 <span class="sd">      </span>
 <span class="sd">    **Attributes**</span>
 <span class="sd">      * :attr:`num_resources`: The number of resources added to the</span>
-<span class="sd">      resourceQueue object.</span>
+<span class="sd">        resourceQueue object.</span>
 <span class="sd">        </span>
 <span class="sd">    **Methods**</span>
 <span class="sd">      * :meth:`ResourceQueue.get_available_resource`: Gets the empty</span>
@@ -493,11 +497,9 @@
 <span class="sd">      * :meth:`ResourceQueue.get_available_resource`: Gets the index</span>
 <span class="sd">        number of an available resource.</span>
 <span class="sd">      * :meth:`ResourceQueue.request`: Request a resource for a entity.</span>
-<span class="sd">      * :meth:`ResourceQueue.start_service: Commence servicing a entity</span>
-<span class="sd">        at the index position.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="ResourceQueue.__init__"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.resource.ResourceQueue.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Instantiates a resourceQueue object.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
@@ -510,7 +512,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span> <span class="o">=</span> <span class="p">{}</span>
-         
+         </div>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">num_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The number of resources added to the resourceQueue object.</span>
@@ -521,7 +523,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">)</span>
     
-    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<div class="viewcode-block" id="ResourceQueue.__getitem__"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.resource.ResourceQueue.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Allows accessing resource positions with array brackets.</span>
 <span class="sd">        </span>
 <span class="sd">        A Python magic method that makes a ResourceQueue object act like an</span>
@@ -531,8 +533,8 @@
 <span class="sd">        *Returns*: :class:`despy.core.resource.ResourceQueue.Resource`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-    
-    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+    </div>
+<div class="viewcode-block" id="ResourceQueue.__setitem__"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.resource.ResourceQueue.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Allows setting resource positions with array brackets.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
@@ -549,20 +551,20 @@
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
-        
-    <span class="k">def</span> <span class="nf">assign_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">):</span>
+        </div>
+<div class="viewcode-block" id="ResourceQueue.assign_resource"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.resource.ResourceQueue.assign_resource">[docs]</a>    <span class="k">def</span> <span class="nf">assign_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Assign a resource to the resourceQueue object.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
 <span class="sd">            ``resource``</span>
-<span class="sd">                A :class:`despy.core.resource.Resource object that will</span>
+<span class="sd">                A :class:`despy.core.resource.Resource` object that will</span>
 <span class="sd">                be appended to the ResourceQueue object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_resources</span>
         <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">resource</span>
         <span class="n">resource</span><span class="o">.</span><span class="n">_res_queue</span> <span class="o">=</span> <span class="bp">self</span>
-    
-    <span class="k">def</span> <span class="nf">get_available_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">random</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+    </div>
+<div class="viewcode-block" id="ResourceQueue.get_available_resource"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.resource.ResourceQueue.get_available_resource">[docs]</a>    <span class="k">def</span> <span class="nf">get_available_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">random</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gets the index number of an available resource.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
@@ -587,8 +589,8 @@
             <span class="k">return</span> <span class="n">empty_resources</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">empty_resources</span><span class="p">[</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">empty_resources</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> 
-
-    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">random</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="ResourceQueue.request"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.resource.ResourceQueue.request">[docs]</a>    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">random</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Request a resource for a entity.</span>
 <span class="sd">        </span>
 <span class="sd">        Checks if a resource position is available. If so, starts</span>
@@ -602,7 +604,7 @@
 <span class="sd">        *Returns:* If a resource position is available, returns the</span>
 <span class="sd">        index value of the resource that will serve the entity. Otherwise</span>
 <span class="sd">        returns False.</span>
-<span class="sd">        &quot;&quot;&quot;</span>    
+<span class="sd">        &quot;&quot;&quot;</span>  
         
         <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_resource</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
@@ -616,7 +618,7 @@
             <span class="k">return</span> <span class="bp">False</span>         
     
 
-        
+        </div></div>
 </pre></div>
 
           </div>

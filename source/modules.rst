@@ -1,10 +1,6 @@
 *************
 Despy Modules
 *************
-
-named_object
-============
-
 ..  automodule:: despy.base.named_object
     :noindex:
     
@@ -21,4 +17,7 @@ named_object
     :noindex:
     
 ..  automodule:: despy.core.resource
+    :noindex:
+    
+..  automodule:: despy.core.queue
     :noindex:
