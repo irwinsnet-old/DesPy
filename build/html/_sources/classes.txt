@@ -10,6 +10,7 @@ Despy Classes
    core/simulation
    core/felitem
    core/model
+   core/entity
    core/event
    core/NoEventsRemainingError
    core/queue

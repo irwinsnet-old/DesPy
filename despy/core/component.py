@@ -9,11 +9,15 @@ despy.base.component
 
 :class:`.Component`
     A base class that provides object counters and other attributes.
+
+..  todo
+
+    Figure out how to test the __init__ classes model parameter to
+    ensure it is a Model class.
 """
 from itertools import count
 
 from despy.base.named_object import NamedObject
-from despy.base.named_object_types import is_model
 
 class Component(NamedObject):
     """A base class that provides object counters and other attributes.
@@ -47,8 +51,8 @@ class Component(NamedObject):
         initialize the component prior to running the simulation.
       * :meth:`.finalize`: Subclasses should override this method to
         delete unneeded objects or execute other post-simulation code.
-      * :meth:`.get_data`: Subclasses should override this method to
-        provide output data to the simulation report.
+      * :meth:`~Component.get_data`: Subclasses should override this
+        method to provide output data to the simulation report.
       * :meth:`__str__`: Returns a string that uniquely identifies the
         component.
       * :meth:`.set_counter`: A class method that resets the internal
@@ -57,7 +61,7 @@ class Component(NamedObject):
         next unused number from the number counter.
     
     **Inherits**
-        * :class:`despy.core.base.NamedObject`
+        * :class:`despy.base.named_object.NamedObject`
         
     **Superclass**
         * :class:`despy.core.entity.Entity`
@@ -74,31 +78,23 @@ class Component(NamedObject):
         Except for the simulation and model classes, all members of the
         despy.core package inherit from the *Component* class.
         
-        **Arguments**
-          * *model:* The model that contains the component. Required.
-            Type: :class:`despy.core.model.Model`
-          * *name:* The str that will be assigned to the component's
-            name attribute (inherited from
-            :class:`despy.base.named_object.NamedObject`). Required.
-            Type: str.
-          * *description:* The str that will be assigned to the
-            component's description attribute (inherited from
-            :class:`despy.base.named_object.NamedObject`). Required.
-            Type: str.
+        *Arguments*
+            ``model`` (:class:`despy.core.model.Model`)
+                The model that represents the system that the component
+                belongs to.
+            ``name`` (String)
+                A descriptive short name that will appear in the trace
+                and output reports.
+            ``description`` (String)
+                A descriptive paragraph. Optional.
         
-        **Raises**
-            *TypeError:* if name is not a string, or if
+        *Raises*
+            ``TypeError:`` if name is not a string, or if
             model is not a :class:`despy.core.model.Model`
         """
         super().__init__(name, description)
         
-        if is_model(model):
-            self._model = model
-        else:
-            message = "{0} passed to model ".format(model.__class__) + \
-                    "argument. Should be a despy.core.model.Model " + \
-                    "or subclass"
-            raise TypeError(message)
+        self._model = model
         self._sim = model.sim
         
         # Assigns an unused counter if this is the first component

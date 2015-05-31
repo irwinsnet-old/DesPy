@@ -216,8 +216,8 @@ class ProcessTimeOutEvent(Event):
     """Restarts a process after a specified time interval has elapsed.
     
     The callback method for a ProcessTimeOutEvent calls the process
-    objects iterator method.
-    
+    object's iterator method.
+
     **Inherited Classes**
       * :class:`despy.base.named_object.NamedObject`
       * :class:`despy.core.component.Component`
@@ -256,8 +256,8 @@ class ProcessTimeOutEvent(Event):
         """Can be sub-classed to modify event trace record.
         
         *Arguments*
-        ``trace_record`` (Python dictionary)
-            The default trace record that is created by the trace
-            object.
+            ``trace_record`` (Python dictionary)
+                The default trace record that is created by the trace
+                object.
         """
         return super()._update_trace_record(trace_record)
