@@ -6,14 +6,11 @@
 ****************
 despy.core.queue
 ****************
-
-:class:`Queue_item`
-    
+   
 :class:`Queue`
     Represents a limited, real-world, entity that provides a service.
 """
 
-#TODO: Refactor Queue_item into the Queue class.
 #TODO: Refactor so folder parameter doesn't need to be passed to the
 # get data method.
 #TODO: Add property and output for total items entering the queue
@@ -25,8 +22,6 @@ import numpy as np
 from despy.core.component import Component
 from despy.output.datatype import Datatype
 import despy.output.plot as plot
-
-Queue_item = namedtuple('Queue_item', ['item_fld', 'time_in_fld'])
 
 class Queue(Component):
     """A component that represents a real world queue.
@@ -40,6 +35,8 @@ class Queue(Component):
       * :class:`despy.core.component.Component`
       
     **Attributes**
+      * :attr:`Queue.Item`: (Class Attribute) A named tuple that
+        contains an item added to the queue.
       * :attr:`Queue.length`: The number of entities in the queue at the
         current time.
       * :attr:`Queue.times_in_queue`: List of times (integers) that
@@ -73,6 +70,16 @@ class Queue(Component):
         else:
             self._queue = deque()
         self._times_in_queue = []
+        
+    Item = namedtuple('Item', ['item_fld', 'time_in_fld'])
+    """(Class) A named tuple that contains an item added to the queue.
+    
+    *Attributes*
+        ``item_fld``
+            An object that is added to the queue.
+        ``time_in_fld``
+            The time the object was added to the queue.
+    """
 
     @property
     def length(self):
@@ -101,7 +108,7 @@ class Queue(Component):
             ``item``
                 The item that will be added to the queue.
         """
-        self._queue.append(Queue_item(item_fld = item, \
+        self._queue.append(Queue.Item(item_fld = item, \
                                       time_in_fld = self.sim.now))
     
     def remove(self):

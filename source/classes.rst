@@ -13,6 +13,9 @@ Despy Classes
    core/event
    core/NoEventsRemainingError
    core/queue
+   core/process
+   core/processTimeOutEvent
+   core/queue
    core/resource
    core/resourceQueue
    core/resourceFinishServiceEvent

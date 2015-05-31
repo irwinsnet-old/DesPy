@@ -17,6 +17,7 @@ __init__
 **********
 Attributes
 **********
+..  autoattribute:: Queue.Item
 ..  autoattribute:: Queue.length
 ..  autoattribute:: Queue.times_in_queue
 

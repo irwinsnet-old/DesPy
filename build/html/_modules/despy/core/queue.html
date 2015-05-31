@@ -78,14 +78,11 @@
 <span class="sd">****************</span>
 <span class="sd">despy.core.queue</span>
 <span class="sd">****************</span>
-
-<span class="sd">:class:`Queue_item`</span>
-<span class="sd">    </span>
+<span class="sd">   </span>
 <span class="sd">:class:`Queue`</span>
 <span class="sd">    Represents a limited, real-world, entity that provides a service.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="c">#TODO: Refactor Queue_item into the Queue class.</span>
 <span class="c">#TODO: Refactor so folder parameter doesn&#39;t need to be passed to the</span>
 <span class="c"># get data method.</span>
 <span class="c">#TODO: Add property and output for total items entering the queue</span>
@@ -97,8 +94,6 @@
 <span class="kn">from</span> <span class="nn">despy.core.component</span> <span class="kn">import</span> <span class="n">Component</span>
 <span class="kn">from</span> <span class="nn">despy.output.datatype</span> <span class="kn">import</span> <span class="n">Datatype</span>
 <span class="kn">import</span> <span class="nn">despy.output.plot</span> <span class="kn">as</span> <span class="nn">plot</span>
-
-<span class="n">Queue_item</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;Queue_item&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;item_fld&#39;</span><span class="p">,</span> <span class="s">&#39;time_in_fld&#39;</span><span class="p">])</span>
 
 <div class="viewcode-block" id="Queue"><a class="viewcode-back" href="../../../core/queue.html#despy.core.queue.Queue">[docs]</a><span class="k">class</span> <span class="nc">Queue</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A component that represents a real world queue.</span>
@@ -112,6 +107,8 @@
 <span class="sd">      * :class:`despy.core.component.Component`</span>
 <span class="sd">      </span>
 <span class="sd">    **Attributes**</span>
+<span class="sd">      * :attr:`Queue.Item`: (Class Attribute) A named tuple that</span>
+<span class="sd">        contains an item added to the queue.</span>
 <span class="sd">      * :attr:`Queue.length`: The number of entities in the queue at the</span>
 <span class="sd">        current time.</span>
 <span class="sd">      * :attr:`Queue.times_in_queue`: List of times (integers) that</span>
@@ -145,7 +142,17 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_times_in_queue</span> <span class="o">=</span> <span class="p">[]</span>
-</div>
+        </div>
+    <span class="n">Item</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;Item&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;item_fld&#39;</span><span class="p">,</span> <span class="s">&#39;time_in_fld&#39;</span><span class="p">])</span>
+    <span class="sd">&quot;&quot;&quot;(Class) A named tuple that contains an item added to the queue.</span>
+<span class="sd">    </span>
+<span class="sd">    *Attributes*</span>
+<span class="sd">        ``item_fld``</span>
+<span class="sd">            An object that is added to the queue.</span>
+<span class="sd">        ``time_in_fld``</span>
+<span class="sd">            The time the object was added to the queue.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The number of entities in the queue at the current time.</span>
@@ -173,7 +180,7 @@
 <span class="sd">            ``item``</span>
 <span class="sd">                The item that will be added to the queue.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Queue_item</span><span class="p">(</span><span class="n">item_fld</span> <span class="o">=</span> <span class="n">item</span><span class="p">,</span> \
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Queue</span><span class="o">.</span><span class="n">Item</span><span class="p">(</span><span class="n">item_fld</span> <span class="o">=</span> <span class="n">item</span><span class="p">,</span> \
                                       <span class="n">time_in_fld</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">))</span>
     </div>
 <div class="viewcode-block" id="Queue.remove"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.queue.Queue.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

@@ -48,6 +48,7 @@ Contents:
    packages
    modules
    classes
+   todo
 
 **Conventions**
 # Methods and attributes that begin with an underscore (_) are internal

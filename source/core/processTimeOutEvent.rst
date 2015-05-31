@@ -1,25 +1,23 @@
-..  currentmodule:: despy.core.queue
+..  currentmodule:: despy.core.process
 
-######################
-despy.core.queue.Queue
-######################
+######################################
+despy.core.process.ProcessTimeOutEvent
+######################################
 
 *****************
 Class Description
 *****************
-..  autoclass:: Queue
+..  autoclass:: ProcessTimeOutEvent
 
 ********
 __init__
 ********
-..  automethod:: Queue.__init__
+..  automethod:: ProcessTimeOutEvent.__init__
 
 **********
 Attributes
 **********
-..  autoattribute:: Queue.Item
-..  autoattribute:: Queue.length
-..  autoattribute:: Queue.times_in_queue
+..  autoattribute:: ProcessTimeOutEvent.process
 
 ********************
 Inherited Attributes
@@ -38,22 +36,21 @@ Inherited Attributes
     :noindex:
 ..  autoattribute:: despy.core.component.Component.id
     :noindex:
+..  autoattribute:: despy.core.event.Event.trace_fields
+    :noindex:
+..  autoattribute:: despy.core.event.Event.trace_records
+    :noindex:
 
 *******
 Methods
 *******
-..  automethod:: Queue.add
-..  automethod:: Queue.remove
-..  automethod:: Queue.get_data
+..  automethod:: ProcessTimeOutEvent.process_callback
+..  automethod:: ProcessTimeOutEvent._update_trace_record
 
 *****************
 Inherited Methods
 *****************
-..  automethod:: despy.core.component.Component.initialize
+..  automethod:: despy.core.event.Event.append_callback
     :noindex:
-..  automethod:: despy.core.component.Component.finalize
-    :noindex:
-..  automethod:: despy.core.component.Component.get_data
-    :noindex:
-..  automethod:: despy.core.component.Component.set_counter
+..  automethod:: despy.core.event.Event.add_trace_field
     :noindex:

@@ -1,25 +1,24 @@
-..  currentmodule:: despy.core.queue
+..  currentmodule:: despy.core.process
 
-######################
-despy.core.queue.Queue
-######################
+##########################
+despy.core.process.Process
+##########################
 
 *****************
 Class Description
 *****************
-..  autoclass:: Queue
+..  autoclass:: Process
 
 ********
 __init__
 ********
-..  automethod:: Queue.__init__
+..  automethod:: Process.__init__
 
 **********
 Attributes
 **********
-..  autoattribute:: Queue.Item
-..  autoattribute:: Queue.length
-..  autoattribute:: Queue.times_in_queue
+..  autoattribute:: Process.awake
+..  autoattribute:: Process.generator
 
 ********************
 Inherited Attributes
@@ -42,9 +41,13 @@ Inherited Attributes
 *******
 Methods
 *******
-..  automethod:: Queue.add
-..  automethod:: Queue.remove
-..  automethod:: Queue.get_data
+..  automethod:: Process.start
+..  automethod:: Process.call
+..  automethod:: Process.schedule_timeout
+..  automethod:: Process.sleep
+..  automethod:: Process.wake
+..  automethod:: Process.reset_process
+
 
 *****************
 Inherited Methods
