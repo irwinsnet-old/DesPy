@@ -9,15 +9,11 @@ despy.base.component
 
 :class:`.Component`
     A base class that provides object counters and other attributes.
-
-..  todo
-
-    Figure out how to test the __init__ classes model parameter to
-    ensure it is a Model class.
 """
 from itertools import count
 
 from despy.base.named_object import NamedObject
+from despy.core.model import Model
 
 class Component(NamedObject):
     """A base class that provides object counters and other attributes.
@@ -94,7 +90,12 @@ class Component(NamedObject):
         """
         super().__init__(name, description)
         
-        self._model = model
+        if isinstance(model, Model):
+            self._model = model
+        else:
+                raise TypeError("Object passed to model argument " +\
+                    "must be instance of despy.core.model.Model")
+                
         self._sim = model.sim
         
         # Assigns an unused counter if this is the first component
