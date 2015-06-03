@@ -85,8 +85,8 @@ class Component(NamedObject):
                 A descriptive paragraph. Optional.
         
         *Raises*
-            ``TypeError:`` if name is not a string, or if
-            model is not a :class:`despy.core.model.Model`
+            ``TypeError:`` if model is not an instance of
+            :class:`despy.core.model.Model`
         """
         super().__init__(name, description)
         

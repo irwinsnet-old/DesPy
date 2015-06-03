@@ -1,35 +1,155 @@
-#!/usr/bin/env python3
+#   Despy: A discrete event simulation framework for Python
+#   Version 0.1
+#   Released under the MIT License (MIT)
+#   Copyright (c) 2015, Stacy Irwin
+"""
+******************
+despy.output.trace
+******************
+   
+:class:`TraceRecord`
+    Single record in a trace report containing multiple data fields.
+    
+:class:`Trace`
+    
+..  todo::
+"""
 from collections import OrderedDict
 import csv
 from despy.output.datatype import Datatype
         
 class TraceRecord():
-    def __init__(self, number, time, priority, record_type, name):
-        self.records = OrderedDict()
-        self.records['number'] = number
-        self.records['time'] = time
-        self.records['priority'] = priority
-        self.records['record_type'] = record_type
-        self.records['name'] = name
-        
-    def __getitem__(self, key):
-        return self.records[key]
+    """Single record in a trace report containing multiple data fields.
     
-    def __setitem__(self, key, value):
-        self.records[key] = value
+    A TraceRecord object represents a single occurrence that
+    happens during the simulation. By default, TraceRecord objects
+    contain the following fields:
+    
+    1. ``number:`` Every TraceRecord is assigned a unique sequential
+    integer starting at 0.
+    2. ``time:`` The simulation time at which the TraceRecord occurred.
+    3. ``priority:`` The priority of the event associated with the
+    TraceRecord.
+    4. ``record_type:`` A string that describes the type of TraceRecord.
+    5. ``name:`` The name of the event or occurrence associated with
+    the TraceRecord.
+    
+    Individual TraceRecord fields can be access with the following
+    syntax:::
+    
+        time = traceRecord_instance['time']
         
-    def __delitem__(self, key):
-        del self.records[key]
+    **Attributes**
+      * :attr:`TraceRecord.fields`: OrderedDict object containing
+        TraceRecord key value pairs.
+    
+    **Methods**
+        * :meth:`TraceRecord.__getitem__`: Allows using square brackets
+          to access TraceRecord fields.
+        * :meth:`TraceRecord.__setitem__`: Allows using square brackets
+          to set TraceRecord fields.
+        * :meth:`TraceRecord.__delitem__`: Removes a field from a
+          TraceRecord object.
+        * :meth:`TraceRecord.__iter__`: Allows iteration over the
+          TraceRecord object.
+        * :meth:`TraceRecord.items`: Returns an ordered view of the
+          TraceRecord's key-value pairs.
+        * :meth:`TraceRecord.add_fields`: Adds a custom data field to
+          the TraceRecord object.
+    """
+    def __init__(self, number, time, priority, record_type, name):
+        """Construct a TraceRecord object.
+        
+        *Arguments*
+            ``number`` (Integer)
+                The TraceRecord number. Starts at zero.
+            ``time`` (Integer)
+                The simulation time associated with the TraceRecord.
+            ``priority`` (Integer from -4 to 4)
+                The priority of the event associated with the
+                TraceRecord.
+            ``record_type`` (String)
+                A string that describes the type of TraceRecord.
+            ``name``
+                The name of the event or occurrence associated with
+                the TraceRecord.
+        """
+        self._fields = OrderedDict()
+        self._fields['number'] = number
+        self._fields['time'] = time
+        self._fields['priority'] = priority
+        self._fields['record_type'] = record_type
+        self._fields['name'] = name
+        
+    @property
+    def fields(self):
+        """OrderedDict object containing TraceRecord label-data pairs.
+        
+        *Type:* Python OrderedDict Object.
+        """
+        return self._fields
+        
+    def __getitem__(self, label):
+        """Allows using square brackets to access TraceRecord fields.
+        
+        *Arguments*
+            ``label`` (String)
+                TraceRecord field label.
+                
+        *Returns:* Data from TraceRecord field.
+        """
+        return self._fields[label]
+    
+    def __setitem__(self, label, data):
+        """Allows using square brackets to set TraceRecord fields.
+        
+        *Arguments*
+            ``label`` (String)
+                TraceRecord field label.
+            ``data``
+                Value of TraceRecord field.
+        """
+        self._fields[label] = data
+        
+    def __delitem__(self, label):
+        """Removes a field from a TraceRecord object.
+        
+        *Arguments*
+            ``label`` (String)
+                TraceRecord field label
+        """
+        del self._fields[label]
         
     def __iter__(self):
-        return iter(self.records)
+        """Allows iteration over the TraceRecord object.
+        
+        When iterated, TraceRecord will return fields in order, starting
+        with 'number', then 'time', 'priority', 'record_type', 'name',
+        and then on to custom fields added by the designer. The custom
+        fields will be returned in the order they were added to the
+        TraceRecord.
+        
+        *Returns:* A collections.OrderedDict object containing the
+        TraceRecord object's data fields.
+        """
+        return iter(self._fields)
     
     def items(self):
-        return self.records.items()
+        """Returns ordered view of the TraceRecord's label-data pairs.
+        
+        *Returns:* The collections.OrderedDict's items() view.
+        """
+        return self._fields.items()
     
     def add_fields(self, fields):
-        for key, value in fields.items():
-            self.records[key] = value
+        """Adds a custom data field to the TraceRecord object.
+        
+        *Arguments*
+            ``fields`` (dict or collections.OrderedDict object)
+                A custom label and data field.
+        """
+        for label, data in fields.items():
+            self._fields[label] = data
 
 class Trace(object):
     

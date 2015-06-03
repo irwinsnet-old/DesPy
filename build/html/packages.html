@@ -57,17 +57,24 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Despy Packages</a><ul>
-<li><a class="reference internal" href="#module-despy.core.__init__.py">despy.core</a><ul>
+<li><a class="reference internal" href="#module-despy.base.__init__">despy.base</a><ul>
+<li><a class="reference internal" href="#despy-base-named-object">despy.base.named_object</a><ul>
+<li><a class="reference internal" href="#id1">despy.base.named_object</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-despy.core.__init__">despy.core</a><ul>
 <li><a class="reference internal" href="#despy-core-simulation">despy.core.simulation</a><ul>
-<li><a class="reference internal" href="#id1">despy.core.simulation</a></li>
+<li><a class="reference internal" href="#id2">despy.core.simulation</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#despy-core-event">despy.core.event</a><ul>
-<li><a class="reference internal" href="#id2">despy.core.event</a></li>
+<li><a class="reference internal" href="#id3">despy.core.event</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#despy-core-model">despy.core.model</a><ul>
-<li><a class="reference internal" href="#id3">despy.core.model</a></li>
+<li><a class="reference internal" href="#id4">despy.core.model</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#despy-core-component">despy.core.component</a><ul>
@@ -75,23 +82,24 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#despy-core-entity">despy.core.entity</a><ul>
-<li><a class="reference internal" href="#id4">despy.core.entity</a></li>
+<li><a class="reference internal" href="#id5">despy.core.entity</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#despy-core-resource">despy.core.resource</a><ul>
-<li><a class="reference internal" href="#id5">despy.core.resource</a></li>
+<li><a class="reference internal" href="#id6">despy.core.resource</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id6">despy.core.resource</a><ul>
-<li><a class="reference internal" href="#despy-core-process">despy.core.process</a></li>
+<li><a class="reference internal" href="#despy-core-process">despy.core.process</a><ul>
+<li><a class="reference internal" href="#id7">despy.core.process</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#despy-core-queue">despy.core.queue</a><ul>
-<li><a class="reference internal" href="#id7">despy.core.queue</a></li>
+<li><a class="reference internal" href="#id8">despy.core.queue</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li><a class="reference internal" href="#despy-output">despy.output</a></li>
 </ul>
 </li>
 </ul>
@@ -132,8 +140,21 @@
             
   <div class="section" id="despy-packages">
 <h1>Despy Packages<a class="headerlink" href="#despy-packages" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-despy.core.__init__.py">
-<span id="despy-core"></span><h2>despy.core<a class="headerlink" href="#module-despy.core.__init__.py" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-despy.base.__init__">
+<span id="despy-base"></span><h2>despy.base<a class="headerlink" href="#module-despy.base.__init__" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="despy-base-named-object">
+<h3>despy.base.named_object<a class="headerlink" href="#despy-base-named-object" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h4>despy.base.named_object<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt><a class="reference internal" href="base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">NamedObject</span></code></a></dt>
+<dd>A base class that provides name and description fields.</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="section" id="module-despy.core.__init__">
+<span id="despy-core"></span><h2>despy.core<a class="headerlink" href="#module-despy.core.__init__" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal"><span class="pre">despy.core</span></code> package includes classes that are essential for any
 Despy simulation.</p>
 <p>The __init__.py module for the despy.core package imports all
@@ -145,8 +166,8 @@ core modules under the <code class="docutils literal"><span class="pre">dp</span
 </div>
 <div class="section" id="despy-core-simulation">
 <h3>despy.core.simulation<a class="headerlink" href="#despy-core-simulation" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="id1">
-<h4>despy.core.simulation<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id2">
+<h4>despy.core.simulation<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
 <dl class="docutils">
 <dt><a class="reference internal" href="core/simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">Simulation</span></code></a></dt>
 <dd>Schedule events and manage the future event list (FEL).</dd>
@@ -159,8 +180,8 @@ core modules under the <code class="docutils literal"><span class="pre">dp</span
 </div>
 <div class="section" id="despy-core-event">
 <h3>despy.core.event<a class="headerlink" href="#despy-core-event" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="id2">
-<h4>despy.core.event<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id3">
+<h4>despy.core.event<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
 <dl class="docutils">
 <dt><a class="reference internal" href="core/event.html#despy.core.event.Event" title="despy.core.event.Event"><code class="xref py py-class docutils literal"><span class="pre">Event</span></code></a>:</dt>
 <dd>An event object represents an occurrence within the system being
@@ -170,8 +191,8 @@ simulated.</dd>
 </div>
 <div class="section" id="despy-core-model">
 <h3>despy.core.model<a class="headerlink" href="#despy-core-model" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="id3">
-<h4>despy.core.model<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id4">
+<h4>despy.core.model<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
 <dl class="docutils">
 <dt><a class="reference internal" href="core/model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a>: </dt>
 <dd>The model represents the real-world system that is being simulated.
@@ -192,8 +213,8 @@ The user will generally build their model by sub-classing the
 </div>
 <div class="section" id="despy-core-entity">
 <h3>despy.core.entity<a class="headerlink" href="#despy-core-entity" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="id4">
-<h4>despy.core.entity<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id5">
+<h4>despy.core.entity<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
 <dl class="docutils">
 <dt><a class="reference internal" href="core/entity.html#despy.core.entity.Entity" title="despy.core.entity.Entity"><code class="xref py py-class docutils literal"><span class="pre">Entity</span></code></a></dt>
 <dd>Represents a real world object that moves through a system.</dd>
@@ -202,8 +223,8 @@ The user will generally build their model by sub-classing the
 </div>
 <div class="section" id="despy-core-resource">
 <h3>despy.core.resource<a class="headerlink" href="#despy-core-resource" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="id5">
-<h4>despy.core.resource<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id6">
+<h4>despy.core.resource<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
 <dl class="docutils">
 <dt><a class="reference internal" href="core/resource.html#despy.core.resource.Resource" title="despy.core.resource.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a></dt>
 <dd>Represents a limited, real-world, entity that provides a service.</dd>
@@ -214,10 +235,10 @@ The user will generally build their model by sub-classing the
 </dl>
 </div>
 </div>
-<div class="section" id="id6">
-<h3>despy.core.resource<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="despy-core-process">
-<h4>despy.core.process<a class="headerlink" href="#despy-core-process" title="Permalink to this headline">¶</a></h4>
+<h3>despy.core.process<a class="headerlink" href="#despy-core-process" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h4>despy.core.process<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
 <dl class="docutils">
 <dt><a class="reference internal" href="core/process.html#despy.core.process.Process" title="despy.core.process.Process"><code class="xref py py-class docutils literal"><span class="pre">Process</span></code></a></dt>
 <dd>Portion of a real-world system, including events and parameters.</dd>
@@ -236,14 +257,17 @@ function.</p>
 </div>
 <div class="section" id="despy-core-queue">
 <h3>despy.core.queue<a class="headerlink" href="#despy-core-queue" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="id7">
-<h4>despy.core.queue<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id8">
+<h4>despy.core.queue<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
 <dl class="docutils">
 <dt><a class="reference internal" href="core/queue.html#despy.core.queue.Queue" title="despy.core.queue.Queue"><code class="xref py py-class docutils literal"><span class="pre">Queue</span></code></a></dt>
 <dd>Represents a limited, real-world, entity that provides a service.</dd>
 </dl>
 </div>
 </div>
+</div>
+<div class="section" id="despy-output">
+<h2>despy.output<a class="headerlink" href="#despy-output" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 

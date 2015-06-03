@@ -50,7 +50,6 @@ class Process(Component):
       * :attr:`Process.generator`: The generator function that defines
         the process.
 
-
     **Methods**
         * :meth:`Process.start`: Schedules a process start event on
           the FEL.

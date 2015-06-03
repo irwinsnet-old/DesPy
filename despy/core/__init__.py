@@ -4,7 +4,7 @@
 #   Copyright (c) 2015, Stacy Irwin
 
 """
-..  module:: despy.core.__init__.py
+..  module:: despy.core.__init__
 
 The ``despy.core`` package includes classes that are essential for any
 Despy simulation.
@@ -46,7 +46,7 @@ despy.core.resource
 ..  automodule:: despy.core.resource
     :noindex:
     
-despy.core.resource
+despy.core.process
 ===================
 ..  automodule:: despy.core.process
     :noindex:
