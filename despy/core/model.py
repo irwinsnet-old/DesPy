@@ -37,7 +37,7 @@ class Model(NamedObject):
       * :attr:`.initial_events_scheduled`: Returns ``False`` if the model
         and it's components have not yet been initialized. Otherwise
         returns true.
-      * :attr:`.sim`: The corresponding instance of the
+      * :attr:`._sim`: The corresponding instance of the
         :class:`despy.core.simulation.Simulation` class.
         
     **Methods**
@@ -98,8 +98,8 @@ class Model(NamedObject):
         self._initialize = None
         
         # Convenience Attributes
-        self.gen = self.sim.gen
-        self.trace = self.sim.gen.trace
+        self.gen = self._sim.gen
+        self.trace = self._sim.gen.trace
 
     @property
     def initial_events_scheduled(self):
@@ -224,4 +224,4 @@ class Model(NamedObject):
                 that the event will occur.
 
         """
-        self.sim.schedule(event, delay, priority)
+        self._sim.schedule(event, delay, priority)

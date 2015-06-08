@@ -246,7 +246,7 @@ method.</p>
 <code class="descclassname">Component.</code><code class="descname">id</code></dt>
 <dd><p>A string that uniquely identifies the component instance.</p>
 <p>The id attribute is of the format
-&#8220;&lt;model.slug&gt;.&lt;component.slug&gt;.&lt;component.number&gt;&#8221;. The
+&#8220;&lt;model.slug&gt;.&lt;component.slug&gt;.&lt;component._number&gt;&#8221;. The
 <code class="xref py py-meth docutils literal"><span class="pre">slug()</span></code> attribute is inherited from
 <a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a>. The slug is the
 name attribute with spaces and characters that are not allowed
@@ -440,17 +440,17 @@ method. Here is an example of the output from the
 <dt>
 <em class="property">classmethod </em><code class="descclassname">Component.</code><code class="descname">set_counter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component.set_counter"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>A class method that resets the <em>Component&#8217;s</em> or subclass&#8217;s
-number counter back to 1.</p>
+_number counter back to 1.</p>
 <p>By default, the <em>Component</em> class and all subclasses of
-<em>Component</em> use the same static number counter. For example,
-the first <em>Component</em> to be instantiated is number 1, regardless
+<em>Component</em> use the same static _number counter. For example,
+the first <em>Component</em> to be instantiated is _number 1, regardless
 of whether it&#8217;s type <em>Component</em> or a subclass like <em>Event</em> or
-<em>Queue</em>. The __init__ method assigns number 2 to the second
+<em>Queue</em>. The __init__ method assigns _number 2 to the second
 instantiated <em>Component</em> or subclass, regardless of type, and
 so on.</p>
 <p>The simulation designer can assign a separate static counter
 object to a subclass of <em>Component</em> by calling the static
-method <em>set_counter()</em> on a subclass. The subclass&#8217;s number
+method <em>set_counter()</em> on a subclass. The subclass&#8217;s _number
 attributes will be the unbroken sequence 1, 2, 3, ...</p>
 </dd></dl>
 

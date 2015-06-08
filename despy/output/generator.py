@@ -46,7 +46,7 @@ class Generator(object):
         self._console_output = output
             
     def __init__(self, simulation):
-        self.sim = simulation
+        self._sim = simulation
         self.trace = Trace(self)
         self.timestamp = None
         self.path = None
@@ -55,7 +55,7 @@ class Generator(object):
         
     def set_folder(self, path):
         self.path = path
-        self.timestamp = self.sim.run_stop_time.strftime('_%y_%j_%H_%M_%S')
+        self.timestamp = self._sim.run_stop_time.strftime('_%y_%j_%H_%M_%S')
         self.folder = self.path + '/Run' + self.timestamp
         if not os.path.exists(self.folder):
             os.makedirs(self.folder)             
@@ -64,8 +64,8 @@ class Generator(object):
         self.set_folder(path)
         self.trace.write_csv(self.folder)
         
-        for model in self.sim.models:
-            self.report.append_output(self.sim.get_data())
+        for model in self._sim.models:
+            self.report.append_output(self._sim.get_data())
             
             for _, component in model.components.items():
                 output = component.get_data(self.folder)

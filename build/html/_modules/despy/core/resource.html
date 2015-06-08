@@ -330,7 +330,7 @@
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span>  
     </div>
 <div class="viewcode-block" id="Resource.start_service"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.start_service">[docs]</a>    <span class="k">def</span> <span class="nf">start_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Commence servicing a entity at the index position.</span>
+        <span class="sd">&quot;&quot;&quot;Commence servicing an entity at the index position.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
 <span class="sd">            ``index``</span>
@@ -339,14 +339,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c">#Assign entity to station</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Station_tuple</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Station_tuple</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
         
         <span class="c">#Create trace record for starting the service.</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-        <span class="n">fields</span><span class="p">[</span><span class="s">&#39;Resource&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-        <span class="n">fields</span><span class="p">[</span><span class="s">&#39;User&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">entity</span>
+        <span class="n">fields</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39; station&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s">&#39;Entity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">entity</span>
         <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;Starting Service&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
         
         <span class="c">#Get service time and schedule end of service on FEL.</span>
         <span class="n">service_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_service_time</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
@@ -402,6 +402,8 @@
 <span class="sd">        number of the station that is finishing it&#39;s service.</span>
 <span class="sd">      * :attr:`ResourceFinishServiceEvent.service_time`: The elapsed</span>
 <span class="sd">        service time.</span>
+<span class="sd">      * :attr:`ResourceFinishServiceEvent.entity`: The entity that is</span>
+<span class="sd">        the target of the activity.</span>
 <span class="sd">        </span>
 <span class="sd">    **Methods**</span>
 <span class="sd">      * :meth:`ResourceFinishServiceEvent.check_resource_queue`: The</span>
@@ -428,6 +430,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_resource</span> <span class="o">=</span> <span class="n">resource</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_station_index</span> <span class="o">=</span> <span class="n">station_index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_service_time</span> <span class="o">=</span> <span class="n">service_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">station_index</span><span class="p">]</span><span class="o">.</span><span class="n">entity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">append_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_resource_queue</span><span class="p">)</span>
         </div>
     <span class="nd">@property</span>
@@ -453,6 +456,14 @@
 <span class="sd">        *Type:* Integer, read-only</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_service_time</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">entity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The entity that is the target of the activity.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type:* :class:`despy.core.entity.Entity`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span>
         
 <div class="viewcode-block" id="ResourceFinishServiceEvent.check_resource_queue"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent.check_resource_queue">[docs]</a>    <span class="k">def</span> <span class="nf">check_resource_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The event&#39;s callback method that checks the queue for a</span>
@@ -463,10 +474,8 @@
 <div class="viewcode-block" id="ResourceFinishServiceEvent._update_trace_record"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent._update_trace_record">[docs]</a>    <span class="k">def</span> <span class="nf">_update_trace_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_record</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Adds the entity name and service time to the trace report.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;entity&#39;</span><span class="p">]</span> <span class="o">=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">station_index</span><span class="p">]</span><span class="o">.</span><span class="n">entity</span>
-        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;duration_label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Service Time:&#39;</span>
-        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;duration_field&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_time</span>
+        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;duration_field&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_time</span>        
+        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;Entity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span>
         <span class="k">return</span> <span class="n">trace_record</span>
 
 </div></div>

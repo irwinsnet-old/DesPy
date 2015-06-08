@@ -21,6 +21,7 @@ Class Attributes
 ..  autoattribute:: Simulation.models
 ..  autoattribute:: Simulation.seed
 ..  autoattribute:: Simulation.now
+..  autoattribute:: Simulation.pri
 ..  autoattribute:: Simulation.evt
 ..  autoattribute:: Simulation.run_start_time
 ..  autoattribute:: Simulation.run_stop_time

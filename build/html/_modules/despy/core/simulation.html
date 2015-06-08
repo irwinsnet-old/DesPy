@@ -170,6 +170,8 @@
 <span class="sd">        this integer prior to running the simulation.</span>
 <span class="sd">      * :attr:`.now`: An integer representing the current simulation</span>
 <span class="sd">        time. Type: integer (non-negative).</span>
+<span class="sd">      * :attr:`.pri`: The priority of the current or most recently</span>
+<span class="sd">        completed event.</span>
 <span class="sd">      * :attr:`.evt`: Returns the :class:`despy.core.event.Event` object</span>
 <span class="sd">        that is currently being executed. If no event is being executed,</span>
 <span class="sd">        returns ``None``. Read-only.</span>
@@ -305,6 +307,14 @@
     <span class="nd">@now.setter</span>
     <span class="k">def</span> <span class="nf">now</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_now</span> <span class="o">=</span> <span class="n">time</span> <span class="o">*</span> <span class="mi">10</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The priority of the current or most recently completed event.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type:* Integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pri</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">evt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -454,6 +464,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">now</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">fel_item</span><span class="o">.</span><span class="n">time_fld</span> <span class="o">-</span> \
                     <span class="n">fel_item</span><span class="o">.</span><span class="n">priority_fld</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pri</span> <span class="o">=</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">priority_fld</span>
 
         <span class="c"># Run event</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_evt</span> <span class="o">=</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span>
@@ -565,6 +576,7 @@
 <span class="sd">            specified in ``initial_time``. Defaults to zero.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_now</span> <span class="o">=</span> <span class="n">initial_time</span> <span class="o">*</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pri</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_run_start_time</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_run_stop_time</span> <span class="o">=</span> <span class="bp">None</span>

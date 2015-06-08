@@ -128,7 +128,7 @@ the component belongs to.</li>
 object that the component&#8217;s model belongs to.</li>
 <li><a class="reference internal" href="#despy.core.component.Component.number" title="despy.core.component.Component.number"><code class="xref py py-attr docutils literal"><span class="pre">number</span></code></a>: A unique integer that is assigned to each
 instance of a component.  The first component instantiated by
-the model will be assigned number 1, followed by number 2 for
+the model will be assigned _number 1, followed by _number 2 for
 the next component, and so on.</li>
 <li><a class="reference internal" href="#despy.core.component.Component.id" title="despy.core.component.Component.id"><code class="xref py py-attr docutils literal"><span class="pre">id</span></code></a>: A string that uniquely identifies the component
 instance.</li>
@@ -146,9 +146,9 @@ method to provide output data to the simulation report.</li>
 <li><a class="reference internal" href="#despy.core.component.Component.__str__" title="despy.core.component.Component.__str__"><code class="xref py py-meth docutils literal"><span class="pre">__str__()</span></code></a>: Returns a string that uniquely identifies the
 component.</li>
 <li><a class="reference internal" href="#despy.core.component.Component.set_counter" title="despy.core.component.Component.set_counter"><code class="xref py py-meth docutils literal"><span class="pre">set_counter()</span></code></a>: A class method that resets the internal
-number counter to 1.</li>
+_number counter to 1.</li>
 <li><a class="reference internal" href="#despy.core.component.Component._get_next_number" title="despy.core.component.Component._get_next_number"><code class="xref py py-meth docutils literal"><span class="pre">_get_next_number()</span></code></a>: A private class method that gets the
-next unused number from the number counter.</li>
+next unused _number from the _number counter.</li>
 </ul>
 </dd>
 <dt><strong>Inherits</strong></dt>
@@ -229,7 +229,7 @@ method.</p>
 <code class="descclassname">Component.</code><code class="descname">id</code><a class="headerlink" href="#despy.core.component.Component.id" title="Permalink to this definition">¶</a></dt>
 <dd><p>A string that uniquely identifies the component instance.</p>
 <p>The id attribute is of the format
-&#8220;&lt;model.slug&gt;.&lt;component.slug&gt;.&lt;component.number&gt;&#8221;. The
+&#8220;&lt;model.slug&gt;.&lt;component.slug&gt;.&lt;component._number&gt;&#8221;. The
 <code class="xref py py-meth docutils literal"><span class="pre">slug()</span></code> attribute is inherited from
 <a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a>. The slug is the
 name attribute with spaces and characters that are not allowed
@@ -349,7 +349,7 @@ method. Here is an example of the output from the
 <dd><p>Returns a string that uniquely identifies every <em>Component</em>
 instance.</p>
 <p>The format of the return value is
-&lt;model.name&gt;:&lt;component.name&gt;#&lt;component.number&gt;</p>
+&lt;model.name&gt;:&lt;component.name&gt;#&lt;component._number&gt;</p>
 <p><em>Returns</em> str</p>
 </dd></dl>
 
@@ -357,17 +357,17 @@ instance.</p>
 <dt id="despy.core.component.Component.set_counter">
 <em class="property">classmethod </em><code class="descclassname">Component.</code><code class="descname">set_counter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component.set_counter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.component.Component.set_counter" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class method that resets the <em>Component&#8217;s</em> or subclass&#8217;s
-number counter back to 1.</p>
+_number counter back to 1.</p>
 <p>By default, the <em>Component</em> class and all subclasses of
-<em>Component</em> use the same static number counter. For example,
-the first <em>Component</em> to be instantiated is number 1, regardless
+<em>Component</em> use the same static _number counter. For example,
+the first <em>Component</em> to be instantiated is _number 1, regardless
 of whether it&#8217;s type <em>Component</em> or a subclass like <em>Event</em> or
-<em>Queue</em>. The __init__ method assigns number 2 to the second
+<em>Queue</em>. The __init__ method assigns _number 2 to the second
 instantiated <em>Component</em> or subclass, regardless of type, and
 so on.</p>
 <p>The simulation designer can assign a separate static counter
 object to a subclass of <em>Component</em> by calling the static
-method <em>set_counter()</em> on a subclass. The subclass&#8217;s number
+method <em>set_counter()</em> on a subclass. The subclass&#8217;s _number
 attributes will be the unbroken sequence 1, 2, 3, ...</p>
 </dd></dl>
 
@@ -375,7 +375,7 @@ attributes will be the unbroken sequence 1, 2, 3, ...</p>
 <dt id="despy.core.component.Component._get_next_number">
 <em class="property">classmethod </em><code class="descclassname">Component.</code><code class="descname">_get_next_number</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component._get_next_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.component.Component._get_next_number" title="Permalink to this definition">¶</a></dt>
 <dd><p>A private method called from the <em>__init__()</em> method that
-gets the next unused number.</p>
+gets the next unused _number.</p>
 <p><em>Returns</em> integer</p>
 </dd></dl>
 

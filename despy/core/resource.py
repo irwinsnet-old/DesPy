@@ -258,7 +258,7 @@ class Resource(Component):
                 raise NotImplementedError  
     
     def start_service(self, index, entity):
-        """Commence servicing a entity at the index position.
+        """Commence servicing an entity at the index position.
         
         *Arguments*
             ``index``
@@ -267,14 +267,14 @@ class Resource(Component):
         """
 
         #Assign entity to station
-        self.stations[index] = self.Station_tuple(entity, self.sim.now)
+        self.stations[index] = self.Station_tuple(entity, self._sim.now)
         
         #Create trace record for starting the service.
         fields = OrderedDict()
-        fields['Resource'] = self.name + '-' + str(index)
-        fields['User'] = self.stations[index].entity
+        fields[self.name + ' station'] = str(index)
+        fields['Entity'] = self.stations[index].entity
         message = "Starting Service"
-        self.sim.gen.trace.add_message(message, fields)
+        self._sim.gen.trace.add_message(message, fields)
         
         #Get service time and schedule end of service on FEL.
         service_time = self.get_service_time(index)
@@ -330,6 +330,8 @@ class ResourceFinishServiceEvent(Event):
         number of the station that is finishing it's service.
       * :attr:`ResourceFinishServiceEvent.service_time`: The elapsed
         service time.
+      * :attr:`ResourceFinishServiceEvent.entity`: The entity that is
+        the target of the activity.
         
     **Methods**
       * :meth:`ResourceFinishServiceEvent.check_resource_queue`: The
@@ -356,6 +358,7 @@ class ResourceFinishServiceEvent(Event):
         self._resource = resource
         self._station_index = station_index
         self._service_time = service_time
+        self._entity = self.resource.stations[self.station_index].entity
         self.append_callback(self.check_resource_queue)
         
     @property
@@ -381,6 +384,14 @@ class ResourceFinishServiceEvent(Event):
         *Type:* Integer, read-only
         """
         return self._service_time
+    
+    @property
+    def entity(self):
+        """The entity that is the target of the activity.
+        
+        *Type:* :class:`despy.core.entity.Entity`
+        """
+        return self._entity
         
     def check_resource_queue(self):
         """The event's callback method that checks the queue for a
@@ -391,10 +402,8 @@ class ResourceFinishServiceEvent(Event):
     def _update_trace_record(self, trace_record):
         """Adds the entity name and service time to the trace report.
         """
-        trace_record['entity'] = \
-                self.resource.stations[self.station_index].entity
-        trace_record['duration_label'] = 'Service Time:'
-        trace_record['duration_field'] = self.service_time
+        trace_record['duration_field'] = self.service_time        
+        trace_record['Entity'] = self.entity
         return trace_record
 
 

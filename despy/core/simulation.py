@@ -98,6 +98,8 @@ class Simulation(NamedObject):
         this integer prior to running the simulation.
       * :attr:`.now`: An integer representing the current simulation
         time. Type: integer (non-negative).
+      * :attr:`.pri`: The priority of the current or most recently
+        completed event.
       * :attr:`.evt`: Returns the :class:`despy.core.event.Event` object
         that is currently being executed. If no event is being executed,
         returns ``None``. Read-only.
@@ -233,6 +235,14 @@ class Simulation(NamedObject):
     @now.setter
     def now(self, time):
         self._now = time * 10
+        
+    @property
+    def pri(self):
+        """The priority of the current or most recently completed event.
+        
+        *Type:* Integer
+        """
+        return self._pri
 
     @property
     def evt(self):
@@ -382,6 +392,7 @@ class Simulation(NamedObject):
         else:
             self.now = int((fel_item.time_fld - \
                     fel_item.priority_fld) / 10)
+            self._pri = fel_item.priority_fld
 
         # Run event
         self._evt = fel_item.event_fld
@@ -493,6 +504,7 @@ class Simulation(NamedObject):
             specified in ``initial_time``. Defaults to zero.
         """
         self._now = initial_time * 10
+        self._pri = 0
         self._futureEventList = []
         self._run_start_time = None
         self._run_stop_time = None

@@ -20,6 +20,7 @@ Attributes
 ..  autoattribute:: ResourceFinishServiceEvent.resource
 ..  autoattribute:: ResourceFinishServiceEvent.station_index
 ..  autoattribute:: ResourceFinishServiceEvent.service_time
+..  autoattribute:: ResourceFinishServiceEvent.entity
 
 ********************
 Inherited Attributes

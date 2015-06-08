@@ -181,7 +181,7 @@
 <span class="sd">                The item that will be added to the queue.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Queue</span><span class="o">.</span><span class="n">Item</span><span class="p">(</span><span class="n">item_fld</span> <span class="o">=</span> <span class="n">item</span><span class="p">,</span> \
-                                      <span class="n">time_in_fld</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">))</span>
+                                      <span class="n">time_in_fld</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">now</span><span class="p">))</span>
     </div>
 <div class="viewcode-block" id="Queue.remove"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.queue.Queue.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove an item from the beginning of the queue.</span>
@@ -193,7 +193,7 @@
 <span class="sd">        *Returns:* The item that was removed from the queue.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">times_in_queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span> <span class="o">-</span> <span class="n">item</span><span class="o">.</span><span class="n">time_in_fld</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">times_in_queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">now</span> <span class="o">-</span> <span class="n">item</span><span class="o">.</span><span class="n">time_in_fld</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">item_fld</span>
     </div>
 <div class="viewcode-block" id="Queue.get_data"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.queue.Queue.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>

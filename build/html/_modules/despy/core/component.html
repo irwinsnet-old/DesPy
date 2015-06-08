@@ -109,7 +109,7 @@
 <span class="sd">        object that the component&#39;s model belongs to.</span>
 <span class="sd">      * :attr:`.number`: A unique integer that is assigned to each</span>
 <span class="sd">        instance of a component.  The first component instantiated by</span>
-<span class="sd">        the model will be assigned number 1, followed by number 2 for</span>
+<span class="sd">        the model will be assigned _number 1, followed by _number 2 for</span>
 <span class="sd">        the next component, and so on.</span>
 <span class="sd">      * :attr:`.id`: A string that uniquely identifies the component</span>
 <span class="sd">        instance.</span>
@@ -124,9 +124,9 @@
 <span class="sd">      * :meth:`__str__`: Returns a string that uniquely identifies the</span>
 <span class="sd">        component.</span>
 <span class="sd">      * :meth:`.set_counter`: A class method that resets the internal</span>
-<span class="sd">        number counter to 1.</span>
+<span class="sd">        _number counter to 1.</span>
 <span class="sd">      * :meth:`._get_next_number`: A private class method that gets the</span>
-<span class="sd">        next unused number from the number counter.</span>
+<span class="sd">        next unused _number from the _number counter.</span>
 <span class="sd">    </span>
 <span class="sd">    **Inherits**</span>
 <span class="sd">        * :class:`despy.base.named_object.NamedObject`</span>
@@ -216,31 +216,31 @@
         <span class="sd">&quot;&quot;&quot;A string that uniquely identifies the component instance.</span>
 <span class="sd">        </span>
 <span class="sd">        The id attribute is of the format</span>
-<span class="sd">        &quot;&lt;model.slug&gt;.&lt;component.slug&gt;.&lt;component.number&gt;&quot;. The</span>
+<span class="sd">        &quot;&lt;model.slug&gt;.&lt;component.slug&gt;.&lt;component._number&gt;&quot;. The</span>
 <span class="sd">        :meth:`.slug` attribute is inherited from</span>
 <span class="sd">        :class:`despy.base.named_object.NamedObject`. The slug is the</span>
 <span class="sd">        name attribute with spaces and characters that are not allowed</span>
 <span class="sd">        in Windows replaced by underscores. The *id* attribute is</span>
 <span class="sd">        suitable for creating file names.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s">&quot;{0}.{1}.{2}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">&quot;{0}.{1}.{2}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number</span><span class="p">)</span>
     
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Component.set_counter"><a class="viewcode-back" href="../../../core/process.html#despy.core.component.Component.set_counter">[docs]</a>    <span class="k">def</span> <span class="nf">set_counter</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+<div class="viewcode-block" id="Component.set_counter"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.component.Component.set_counter">[docs]</a>    <span class="k">def</span> <span class="nf">set_counter</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A class method that resets the *Component&#39;s* or subclass&#39;s</span>
-<span class="sd">        number counter back to 1.</span>
+<span class="sd">        _number counter back to 1.</span>
 <span class="sd">        </span>
 <span class="sd">        By default, the *Component* class and all subclasses of</span>
-<span class="sd">        *Component* use the same static number counter. For example,</span>
-<span class="sd">        the first *Component* to be instantiated is number 1, regardless</span>
+<span class="sd">        *Component* use the same static _number counter. For example,</span>
+<span class="sd">        the first *Component* to be instantiated is _number 1, regardless</span>
 <span class="sd">        of whether it&#39;s type *Component* or a subclass like *Event* or</span>
-<span class="sd">        *Queue*. The __init__ method assigns number 2 to the second</span>
+<span class="sd">        *Queue*. The __init__ method assigns _number 2 to the second</span>
 <span class="sd">        instantiated *Component* or subclass, regardless of type, and</span>
 <span class="sd">        so on.</span>
 <span class="sd">        </span>
 <span class="sd">        The simulation designer can assign a separate static counter</span>
 <span class="sd">        object to a subclass of *Component* by calling the static</span>
-<span class="sd">        method *set_counter()* on a subclass. The subclass&#39;s number</span>
+<span class="sd">        method *set_counter()* on a subclass. The subclass&#39;s _number</span>
 <span class="sd">        attributes will be the unbroken sequence 1, 2, 3, ...</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cls</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="n">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -248,7 +248,7 @@
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="Component._get_next_number"><a class="viewcode-back" href="../../../core/component.html#despy.core.component.Component._get_next_number">[docs]</a>    <span class="k">def</span> <span class="nf">_get_next_number</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A private method called from the *__init__()* method that</span>
-<span class="sd">        gets the next unused number.</span>
+<span class="sd">        gets the next unused _number.</span>
 <span class="sd">        </span>
 <span class="sd">        *Returns* integer</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -259,26 +259,26 @@
 <span class="sd">        instance.</span>
 <span class="sd">        </span>
 <span class="sd">        The format of the return value is</span>
-<span class="sd">        &lt;model.name&gt;:&lt;component.name&gt;#&lt;component.number&gt;</span>
+<span class="sd">        &lt;model.name&gt;:&lt;component.name&gt;#&lt;component._number&gt;</span>
 <span class="sd">        </span>
 <span class="sd">        *Returns* str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s">&quot;{0}:{1}#{2}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">&quot;{0}:{1}#{2}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number</span><span class="p">)</span>
     </div>
-<div class="viewcode-block" id="Component.initialize"><a class="viewcode-back" href="../../../core/process.html#despy.core.component.Component.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Component.initialize"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.component.Component.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Subclasses should override this method with initialization</span>
 <span class="sd">        code that will be executed prior to any events on the future</span>
 <span class="sd">        event list (FEL).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
     </div>
-<div class="viewcode-block" id="Component.finalize"><a class="viewcode-back" href="../../../core/process.html#despy.core.component.Component.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Component.finalize"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.component.Component.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Subclasses should override this method with cleanup or other</span>
 <span class="sd">        code that will be executed after all events on the FEL.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
     </div>
-<div class="viewcode-block" id="Component.get_data"><a class="viewcode-back" href="../../../core/process.html#despy.core.component.Component.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+<div class="viewcode-block" id="Component.get_data"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.component.Component.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Subclasses should override this method to provide simulation</span>
 <span class="sd">        output that will be included in the output report.</span>
 <span class="sd">        </span>

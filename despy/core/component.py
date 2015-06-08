@@ -37,7 +37,7 @@ class Component(NamedObject):
         object that the component's model belongs to.
       * :attr:`.number`: A unique integer that is assigned to each
         instance of a component.  The first component instantiated by
-        the model will be assigned number 1, followed by number 2 for
+        the model will be assigned _number 1, followed by _number 2 for
         the next component, and so on.
       * :attr:`.id`: A string that uniquely identifies the component
         instance.
@@ -52,9 +52,9 @@ class Component(NamedObject):
       * :meth:`__str__`: Returns a string that uniquely identifies the
         component.
       * :meth:`.set_counter`: A class method that resets the internal
-        number counter to 1.
+        _number counter to 1.
       * :meth:`._get_next_number`: A private class method that gets the
-        next unused number from the number counter.
+        next unused _number from the _number counter.
     
     **Inherits**
         * :class:`despy.base.named_object.NamedObject`
@@ -144,31 +144,31 @@ class Component(NamedObject):
         """A string that uniquely identifies the component instance.
         
         The id attribute is of the format
-        "<model.slug>.<component.slug>.<component.number>". The
+        "<model.slug>.<component.slug>.<component._number>". The
         :meth:`.slug` attribute is inherited from
         :class:`despy.base.named_object.NamedObject`. The slug is the
         name attribute with spaces and characters that are not allowed
         in Windows replaced by underscores. The *id* attribute is
         suitable for creating file names.
         """
-        return "{0}.{1}.{2}".format(self.model.slug, self.slug, self.number)
+        return "{0}.{1}.{2}".format(self.model.slug, self.slug, self._number)
     
     @classmethod
     def set_counter(cls):
         """A class method that resets the *Component's* or subclass's
-        number counter back to 1.
+        _number counter back to 1.
         
         By default, the *Component* class and all subclasses of
-        *Component* use the same static number counter. For example,
-        the first *Component* to be instantiated is number 1, regardless
+        *Component* use the same static _number counter. For example,
+        the first *Component* to be instantiated is _number 1, regardless
         of whether it's type *Component* or a subclass like *Event* or
-        *Queue*. The __init__ method assigns number 2 to the second
+        *Queue*. The __init__ method assigns _number 2 to the second
         instantiated *Component* or subclass, regardless of type, and
         so on.
         
         The simulation designer can assign a separate static counter
         object to a subclass of *Component* by calling the static
-        method *set_counter()* on a subclass. The subclass's number
+        method *set_counter()* on a subclass. The subclass's _number
         attributes will be the unbroken sequence 1, 2, 3, ...
         """
         cls._count = count(1)
@@ -176,7 +176,7 @@ class Component(NamedObject):
     @classmethod
     def _get_next_number(cls):
         """A private method called from the *__init__()* method that
-        gets the next unused number.
+        gets the next unused _number.
         
         *Returns* integer
         """
@@ -187,11 +187,11 @@ class Component(NamedObject):
         instance.
         
         The format of the return value is
-        <model.name>:<component.name>#<component.number>
+        <model.name>:<component.name>#<component._number>
         
         *Returns* str
         """
-        return "{0}:{1}#{2}".format(self.model, self.name, self.number)
+        return "{0}:{1}#{2}".format(self.model, self.name, self._number)
     
     def initialize(self):
         """Subclasses should override this method with initialization

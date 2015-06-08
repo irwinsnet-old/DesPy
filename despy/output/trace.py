@@ -11,21 +11,28 @@ despy.output.trace
     Single record in a trace report containing multiple data fields.
     
 :class:`Trace`
+    List of messages and events that occurred during the simulation.
     
 ..  todo::
+
+    Modify other classes to return length through a property, not a
+    callable method.
+    
+    Modify trace report order so main event message comes first,
+    event related messages second.
 """
 from collections import OrderedDict
 import csv
 from despy.output.datatype import Datatype
         
-class TraceRecord():
+class TraceRecord(OrderedDict):
     """Single record in a trace report containing multiple data fields.
     
     A TraceRecord object represents a single occurrence that
     happens during the simulation. By default, TraceRecord objects
     contain the following fields:
     
-    1. ``number:`` Every TraceRecord is assigned a unique sequential
+    1. ``_number:`` Every TraceRecord is assigned a unique sequential
     integer starting at 0.
     2. ``time:`` The simulation time at which the TraceRecord occurred.
     3. ``priority:`` The priority of the event associated with the
@@ -34,26 +41,15 @@ class TraceRecord():
     5. ``name:`` The name of the event or occurrence associated with
     the TraceRecord.
     
-    Individual TraceRecord fields can be access with the following
-    syntax:::
-    
-        time = traceRecord_instance['time']
+    TraceRecord inherits from collections.OrderedDict, so all
+    dictionary and ordered dictionary methods and attributes are
+    available.
         
     **Attributes**
       * :attr:`TraceRecord.fields`: OrderedDict object containing
         TraceRecord key value pairs.
     
     **Methods**
-        * :meth:`TraceRecord.__getitem__`: Allows using square brackets
-          to access TraceRecord fields.
-        * :meth:`TraceRecord.__setitem__`: Allows using square brackets
-          to set TraceRecord fields.
-        * :meth:`TraceRecord.__delitem__`: Removes a field from a
-          TraceRecord object.
-        * :meth:`TraceRecord.__iter__`: Allows iteration over the
-          TraceRecord object.
-        * :meth:`TraceRecord.items`: Returns an ordered view of the
-          TraceRecord's key-value pairs.
         * :meth:`TraceRecord.add_fields`: Adds a custom data field to
           the TraceRecord object.
     """
@@ -61,8 +57,8 @@ class TraceRecord():
         """Construct a TraceRecord object.
         
         *Arguments*
-            ``number`` (Integer)
-                The TraceRecord number. Starts at zero.
+            ``_number`` (Integer)
+                The TraceRecord _number. Starts at zero.
             ``time`` (Integer)
                 The simulation time associated with the TraceRecord.
             ``priority`` (Integer from -4 to 4)
@@ -74,73 +70,46 @@ class TraceRecord():
                 The name of the event or occurrence associated with
                 the TraceRecord.
         """
-        self._fields = OrderedDict()
-        self._fields['number'] = number
-        self._fields['time'] = time
-        self._fields['priority'] = priority
-        self._fields['record_type'] = record_type
-        self._fields['name'] = name
+        super().__init__()
         
+        self['number'] = number
+        self['time'] = time
+        self['priority'] = priority
+        self['record_type'] = record_type
+        self['name'] = name
+        self._standard_labels = list(self.keys())
+       
+    def __str__(self):
+        #Format data from default fields
+        tem1 = "{number:4}|{time:5}{priority:+2}| {record_type}| "
+        tem2 = "{name}"
+        template = tem1 + tem2
+        default_fields = template.format(**self)
+        
+        #Format data from custom fields
+        custom_field_list = []
+        for label in self.custom_labels:
+            custom_field_list.append("| {}: {}".format(label,
+                                                   self[label]))
+        custom_fields = "".join(custom_field_list)
+                               
+        return default_fields + custom_fields
+    
     @property
-    def fields(self):
-        """OrderedDict object containing TraceRecord label-data pairs.
-        
-        *Type:* Python OrderedDict Object.
-        """
-        return self._fields
-        
-    def __getitem__(self, label):
-        """Allows using square brackets to access TraceRecord fields.
-        
-        *Arguments*
-            ``label`` (String)
-                TraceRecord field label.
-                
-        *Returns:* Data from TraceRecord field.
-        """
-        return self._fields[label]
+    def standard_labels(self):
+        return self._standard_labels
     
-    def __setitem__(self, label, data):
-        """Allows using square brackets to set TraceRecord fields.
-        
-        *Arguments*
-            ``label`` (String)
-                TraceRecord field label.
-            ``data``
-                Value of TraceRecord field.
-        """
-        self._fields[label] = data
-        
-    def __delitem__(self, label):
-        """Removes a field from a TraceRecord object.
-        
-        *Arguments*
-            ``label`` (String)
-                TraceRecord field label
-        """
-        del self._fields[label]
-        
-    def __iter__(self):
-        """Allows iteration over the TraceRecord object.
-        
-        When iterated, TraceRecord will return fields in order, starting
-        with 'number', then 'time', 'priority', 'record_type', 'name',
-        and then on to custom fields added by the designer. The custom
-        fields will be returned in the order they were added to the
-        TraceRecord.
-        
-        *Returns:* A collections.OrderedDict object containing the
-        TraceRecord object's data fields.
-        """
-        return iter(self._fields)
-    
-    def items(self):
-        """Returns ordered view of the TraceRecord's label-data pairs.
-        
-        *Returns:* The collections.OrderedDict's items() view.
-        """
-        return self._fields.items()
-    
+    @property
+    def custom_labels(self):
+        num_standard_fields = len(self.standard_labels)
+        if len(self) > num_standard_fields:
+            custom_labels = list(self.keys())
+            for _ in range(0, num_standard_fields):
+                del custom_labels[0]
+            return custom_labels
+        else:
+            return []
+
     def add_fields(self, fields):
         """Adds a custom data field to the TraceRecord object.
         
@@ -149,21 +118,77 @@ class TraceRecord():
                 A custom label and data field.
         """
         for label, data in fields.items():
-            self._fields[label] = data
-
-class Trace(object):
-    
-    def __init__(self, output):
-        self.gen = output
-        self.sim = self.gen.sim
-        self._list = []
-        self.number = 0
-        self.start = 0
-        self._stop = 500
-        self.max_length = 1000
+            self[label] = data
+            
+    def get_row(self):
+        trace_row = []
+        for label in self.standard_labels:
+            trace_row.append(self[label])
         
+        for label in self.custom_labels:
+            trace_row.append(label + ":")
+            trace_row.append(self[label])
+            
+        return trace_row
+        
+class Trace(object):
+    """List of messages and events that occurred during the simulation.
+    
+    **Attributes**
+        * :attr:`Trace.start`: Trace will start recording events at this
+          simulation time.
+        * :attr:`Trace.stop`: Trace will stop recording events at this
+          simulation time.
+        * :attr:'Trace.max_length: Maximum number of TraceRecords in
+          Trace object.
+        * :attr:`Trace.length`: Number of records in Trace object.
+          Read-only.
+          
+    **Methods**
+        * :meth:`Trace.__getitem__`: Enables accessing TraceRecord with
+          square brackets and index.
+        * :meth:`Trace.is_active: True if Trace object is currently
+          recording.
+    """
+    
+    
+    def __init__(self, generator):
+        #Public attributes
+        self._start = 0
+        self._stop = 500
+        self._max_length = 1000        
+        
+        #Private attributes
+        self._gen = generator #Associated despy.core.output.generator
+        self._sim = self._gen._sim #Convenient link to simulation object
+        self._record_list = [] #List of TraceRecords
+        self._number = 0
+
+    @property
+    def start(self):
+        """Trace will start recording events at this simulation time.
+        
+        Defaults to simulation time 0.
+        
+        *Type:* Integer
+        """
+        return self._start
+    
+    @start.setter
+    def start(self, start_time):
+        self._start = start_time
+
     @property
     def stop(self):
+        """Trace will stop recording events at this simulation time.
+        
+        Defaults to simulation time 500.
+        If trace.stop < trace.start, then trace.stop will have no
+        effect. The Trace object will record events until reaching
+        trace.max_length or until the simulation ends.
+        
+        *Type: Integer
+        """
         return self._stop
     
     @stop.setter
@@ -173,66 +198,88 @@ class Trace(object):
                 self._stop = round(stop)
         except:
             pass
-    
-    def active(self):
-        now = self.sim.now
-        return (now < self.stop) and (self.number < self.max_length) \
-            and (now >= self.start) 
-    
-    def append(self, item):
-        self._list.append(item)
         
-    def create_trace_record(self, time, priority, record_type, name,
-                         entity = None, duration = None):
-        trace_record = TraceRecord(self.number, time, priority, record_type,
-                                   name)
-        if entity is not None:
-            trace_record['entity'] = entity
-        if duration is not None:
-            trace_record['duration'] = duration
-            
-        return trace_record
+    @property
+    def max_length(self):
+        """Maximum number of TraceRecords in Trace object.
+        
+        Defaults to 500. The Trace object will stop recording once it
+        reaches 500 TraceRecords.
+        """
+        return self._max_length
+    
+    @max_length.setter
+    def max_length(self, max_length):
+        self._max_length = max_length
+        
+    @property
+    def length(self):
+        """Number of records in Trace object. Read-only.
+        
+        *Type:* Integer
+        """
+        return len(self._record_list)
+    
+    def __getitem__(self, index):
+        """Enables accessing TraceRecord with square brackets and index.
+        
+        *Arguments*
+            ``index`` (Integer)
+                The first Record added to the Trace will be at
+                index = 0, the second at index = 1, and so on.
+        """
+        return self._record_list[index]
+    
+    def is_active(self):
+        """True if Trace object is currently recording.
+        
+        True if max_length not reached and current simulation time
+        between Trace.start and Trace.stop. False otherwise.
+        
+        *Returns:* Boolean
+        """
+        now = self._sim.now
+        return (now < self.stop) and (self._number < self.max_length) \
+            and (now >= self.start)
         
     def add(self, trace_records):
-        if self.active():
+        if self.is_active():
             if isinstance(trace_records, TraceRecord):
                 records = [trace_records]
             elif isinstance(trace_records, list):
                 records = trace_records
             for rec in records:
-                self.append(rec)
-                self.number = self.number + 1
+                self._record_list.append(rec)
+                self._number = self._number + 1
                 
-                if self.sim.gen.console_trace:
-                    console_trace = str(rec['time']).rjust(8) + \
-                        ':   ' + rec['name']
-                    print(console_trace)
+                if self._sim.gen.console_trace:
+                    assert isinstance(rec, TraceRecord)
+                    print(rec)
             
     def add_message(self, message, fields = None):
-        trace_record = TraceRecord(self.number, self.sim.now, "N/A", "Msg",
-                                   message)
+        trace_record = TraceRecord(self._number, self._sim.now,
+                                   self._sim.pri, "Msg", message)
         if fields is not None:
             trace_record.add_fields(fields)
-        if self.gen.sim.evt is None:
-            self.add(trace_record)
-        else:
-            self.gen.sim.evt.trace_records.append(trace_record)
+        
+        self.add(trace_record)
+        if self._gen._sim.evt is not None:
+            self._gen._sim.evt.trace_records.append(trace_record)
+            
+#         if self._gen._sim.evt is None:
+#             self.add(trace_record)
+#         else:
+#             self._gen._sim.evt.trace_records.append(trace_record)
     
     def add_event(self, time, priority, event):
-        if self.active():
-            trace_record = TraceRecord(self.number, time, priority, 'Event',
+        if self.is_active():
+            trace_record = TraceRecord(self._number, time, priority, 'Event',
                                        event.name)
             self.add(event._update_trace_record(trace_record))
         
     def clear(self):
-        del self._list[:]
-        self.number = 0
-    
-    def __getitem__(self, index):
-        return self._list[index]
-    
-    def length(self):
-        return len(self._list)
+        del self._record_list[:]
+        self._number = 0
     
     def render_output(self, output, writer):
         for section in output:
@@ -254,14 +301,11 @@ class Trace(object):
             trace_writer = csv.writer(file)
             
             # Write header rows
-            self.render_output(self.sim.get_data(), trace_writer)
+            self.render_output(self._sim.get_data(), trace_writer)
             
             # Write trace table
             trace_writer.writerow(['Record #', 'Time', 'Priority',
-                                   'Record Type', 'Name', 'Target'])
-            for trace_record in self._list:
-                csv_row = []
-                for _, field in trace_record.items():
-                    csv_row.append(field)
-                trace_writer.writerow(csv_row)
+                                   'Record Type', 'Name'])
+            for trace_record in self._record_list:
+                trace_writer.writerow(trace_record.get_row())
             file.close()

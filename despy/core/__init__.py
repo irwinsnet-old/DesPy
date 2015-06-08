@@ -55,6 +55,10 @@ despy.core.queue
 ===================
 ..  automodule:: despy.core.queue
     :noindex:
+
+..  todo
+    
+    Write an entity generator class.
 """
 
 from despy.core.simulation import Simulation

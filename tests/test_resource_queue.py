@@ -74,6 +74,7 @@ class testResource(unittest.TestCase):
             def generator(self):
                 customer = self.model.Customer(self.model)
                 args1 = OrderedDict()
+                args1["Interarrival_Time"] = None
                 args1["Customer"] = customer
                 yield self.schedule_timeout("Customer Arrives", 0,
                                             trace_fields = args1)
@@ -83,8 +84,8 @@ class testResource(unittest.TestCase):
                     delay = round(stats.expon.rvs(scale = 3))
                     customer = self.model.Customer(self.model)
                     args2 = OrderedDict()
+                    args2["Interarrival_Time"] = delay                    
                     args2["Customer"] = customer
-                    args2["Interarrival_Time"] = delay
                     yield self.schedule_timeout("Customer Arrives", delay,
                             trace_fields = args2)
                      
@@ -96,7 +97,7 @@ class testResource(unittest.TestCase):
      
     def test_resource_in_simulation(self):
         print()
-        print("TEST RESOURCE IN EXPERIMENT OUTPUT")
+        print("TEST RESOURCE IN SIMULATION OUTPUT")
         self.ResModel.Customer.set_counter()
         model = self.ResModel("Resource Model")
         simulation = model.sim

@@ -127,6 +127,8 @@ have been assigned to the simulation.</li>
 this integer prior to running the simulation.</li>
 <li><a class="reference internal" href="#despy.core.simulation.Simulation.now" title="despy.core.simulation.Simulation.now"><code class="xref py py-attr docutils literal"><span class="pre">now</span></code></a>: An integer representing the current simulation
 time. Type: integer (non-negative).</li>
+<li><a class="reference internal" href="#despy.core.simulation.Simulation.pri" title="despy.core.simulation.Simulation.pri"><code class="xref py py-attr docutils literal"><span class="pre">pri</span></code></a>: The priority of the current or most recently
+completed event.</li>
 <li><a class="reference internal" href="#despy.core.simulation.Simulation.evt" title="despy.core.simulation.Simulation.evt"><code class="xref py py-attr docutils literal"><span class="pre">evt</span></code></a>: Returns the <a class="reference internal" href="event.html#despy.core.event.Event" title="despy.core.event.Event"><code class="xref py py-class docutils literal"><span class="pre">despy.core.event.Event</span></code></a> object
 that is currently being executed. If no event is being executed,
 returns <code class="docutils literal"><span class="pre">None</span></code>. Read-only.</li>
@@ -251,6 +253,13 @@ occurred at time = 4 in standard reports and output. This
 practice simplifies the routines that run the events because
 events are placed on the FEL in the order that they will
 actually be run, taking assigned priorities into account.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.simulation.Simulation.pri">
+<code class="descclassname">Simulation.</code><code class="descname">pri</code><a class="headerlink" href="#despy.core.simulation.Simulation.pri" title="Permalink to this definition">¶</a></dt>
+<dd><p>The priority of the current or most recently completed event.</p>
+<p><em>Type:</em> Integer</p>
 </dd></dl>
 
 <dl class="attribute">

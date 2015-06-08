@@ -109,7 +109,7 @@ class Queue(Component):
                 The item that will be added to the queue.
         """
         self._queue.append(Queue.Item(item_fld = item, \
-                                      time_in_fld = self.sim.now))
+                                      time_in_fld = self._sim.now))
     
     def remove(self):
         """Remove an item from the beginning of the queue.
@@ -121,7 +121,7 @@ class Queue(Component):
         *Returns:* The item that was removed from the queue.
         """
         item = self._queue.popleft()
-        self.times_in_queue.append(self.sim.now - item.time_in_fld)
+        self.times_in_queue.append(self._sim.now - item.time_in_fld)
         return item.item_fld
     
     def get_data(self, folder):

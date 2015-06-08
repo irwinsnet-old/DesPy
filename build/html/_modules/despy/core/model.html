@@ -109,7 +109,7 @@
 <span class="sd">      * :attr:`.initial_events_scheduled`: Returns ``False`` if the model</span>
 <span class="sd">        and it&#39;s components have not yet been initialized. Otherwise</span>
 <span class="sd">        returns true.</span>
-<span class="sd">      * :attr:`.sim`: The corresponding instance of the</span>
+<span class="sd">      * :attr:`._sim`: The corresponding instance of the</span>
 <span class="sd">        :class:`despy.core.simulation.Simulation` class.</span>
 <span class="sd">        </span>
 <span class="sd">    **Methods**</span>
@@ -170,8 +170,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_initialize</span> <span class="o">=</span> <span class="bp">None</span>
         
         <span class="c"># Convenience Attributes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">gen</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">trace</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">gen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">trace</span>
 </div>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">initial_events_scheduled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -296,7 +296,7 @@
 <span class="sd">                that the event will occur.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">priority</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">priority</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
