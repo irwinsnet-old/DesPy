@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="top" title="Despy 1 documentation" href="index.html" />
-    <link rel="prev" title="despy.core.resource.ResourceFinishServiceEvent" href="core/resourceFinishServiceEvent.html" />
+    <link rel="prev" title="despy.output.trace" href="output/trace.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -43,7 +43,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="core/resourceFinishServiceEvent.html" title="despy.core.resource.ResourceFinishServiceEvent"
+          <a href="output/trace.html" title="despy.output.trace"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li> 
       </ul>
@@ -51,8 +51,8 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="core/resourceFinishServiceEvent.html"
-                        title="previous chapter">despy.core.resource.ResourceFinishServiceEvent</a></p>
+  <p class="topless"><a href="output/trace.html"
+                        title="previous chapter">despy.output.trace</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -85,10 +85,26 @@
 <h1>Todo Items<a class="headerlink" href="#todo-items" title="Permalink to this headline">¶</a></h1>
 <div class="admonition-todo admonition">
 <p class="first admonition-title">Todo</p>
-<p class="last">Refactor processTuple. Make attribute names consistent with
-#felItem class. Make a class attribute.</p>
+<p>Refactor processTuple. Make attribute names consistent with felItem
+class. Make a class attribute.</p>
+<p>Determine if check for function of method type on generator function
+is necessary. Will need to do test with independent generator
+function.</p>
+<p>Test sleep and wake methods.</p>
+<p class="last">Have sleep method write a trace record.</p>
 </div>
 <p class="todo-source">(The <a class="reference internal" href="packages.html#index-0"><em>original entry</em></a> is located in  C:\Projects\despy\despy\core\process.py:docstring of despy.core.process, line 8.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p>Modify other classes to return length through a property, not a
+callable method.</p>
+<p>Modify trace report order so main event message comes first,
+event related messages second.</p>
+<p class="last">Replace get_row with get_standard_fields and get_custom_fields.
+Each method will have a Boolean argument that specifies whether
+returned list will include labels.</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="modules.html#index-0"><em>original entry</em></a> is located in  C:\Projects\despy\despy\output\trace.py:docstring of despy.output.trace, line 11.)</p>
 </div>
 
 
@@ -107,7 +123,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="core/resourceFinishServiceEvent.html" title="despy.core.resource.ResourceFinishServiceEvent"
+          <a href="output/trace.html" title="despy.output.trace"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li> 
       </ul>

@@ -1,0 +1,464 @@
+
+
+<!doctype html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>despy.output.trace &mdash; Despy 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/bizstyle.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for despy.output.trace</h1><div class="highlight"><pre>
+<span class="c">#   Despy: A discrete event simulation framework for Python</span>
+<span class="c">#   Version 0.1</span>
+<span class="c">#   Released under the MIT License (MIT)</span>
+<span class="c">#   Copyright (c) 2015, Stacy Irwin</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">******************</span>
+<span class="sd">despy.output.trace</span>
+<span class="sd">******************</span>
+<span class="sd">   </span>
+<span class="sd">:class:`TraceRecord`</span>
+<span class="sd">    Single record in a trace report containing multiple data fields.</span>
+<span class="sd">    </span>
+<span class="sd">:class:`Trace`</span>
+<span class="sd">    List of messages and events that occurred during the simulation.</span>
+<span class="sd">    </span>
+<span class="sd">..  todo::</span>
+
+<span class="sd">    Modify other classes to return length through a property, not a</span>
+<span class="sd">    callable method.</span>
+<span class="sd">    </span>
+<span class="sd">    Modify trace report order so main event message comes first,</span>
+<span class="sd">    event related messages second.</span>
+<span class="sd">    </span>
+<span class="sd">    Replace get_row with get_standard_fields and get_custom_fields.</span>
+<span class="sd">    Each method will have a Boolean argument that specifies whether</span>
+<span class="sd">    returned list will include labels.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">from</span> <span class="nn">despy.output.datatype</span> <span class="kn">import</span> <span class="n">Datatype</span>
+        
+<div class="viewcode-block" id="TraceRecord"><a class="viewcode-back" href="../../../output/trace.html#despy.output.trace.TraceRecord">[docs]</a><span class="k">class</span> <span class="nc">TraceRecord</span><span class="p">(</span><span class="n">OrderedDict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Single record in a trace report containing multiple data fields.</span>
+<span class="sd">    </span>
+<span class="sd">    A TraceRecord object represents a single occurrence that</span>
+<span class="sd">    happens during the simulation. By default, TraceRecord objects</span>
+<span class="sd">    contain the following fields:</span>
+<span class="sd">    </span>
+<span class="sd">    1. ``_number:`` Every TraceRecord is assigned a unique sequential</span>
+<span class="sd">    integer starting at 0.</span>
+<span class="sd">    2. ``time:`` The simulation time at which the TraceRecord occurred.</span>
+<span class="sd">    3. ``priority:`` The priority of the event associated with the</span>
+<span class="sd">    TraceRecord.</span>
+<span class="sd">    4. ``record_type:`` A string that describes the type of TraceRecord.</span>
+<span class="sd">    5. ``name:`` The name of the event or occurrence associated with</span>
+<span class="sd">    the TraceRecord.</span>
+<span class="sd">    </span>
+<span class="sd">    Each TraceRecord field consists of a descriptive label and the</span>
+<span class="sd">    associate value. TraceRecord inherits from collections.OrderedDict,</span>
+<span class="sd">    so all dictionary and ordered dictionary methods and attributes are</span>
+<span class="sd">    available.</span>
+<span class="sd">        </span>
+<span class="sd">    **Attributes**</span>
+<span class="sd">      * :attr:`TraceRecord.standard_labels`: List of standard field</span>
+<span class="sd">        labels included in every TraceRecord.</span>
+<span class="sd">      * :attr:`TraceRecord.custom_labels`: List of custom field labels</span>
+<span class="sd">        added to TraceRecord by designer.</span>
+<span class="sd">    </span>
+<span class="sd">    **Methods**</span>
+<span class="sd">        * :meth:`TraceRecord.__str__`: Returns a string representation</span>
+<span class="sd">          of the TraceRecord.</span>
+<span class="sd">        * :meth:`TraceRecord.add_fields`: Adds a custom data field to</span>
+<span class="sd">          the TraceRecord object.</span>
+<span class="sd">        * :meth:`TraceRecord.get_row`: Returns a list of TraceRecord</span>
+<span class="sd">          fields.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="TraceRecord.__init__"><a class="viewcode-back" href="../../../output/trace.html#despy.output.trace.TraceRecord.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="n">record_type</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct a TraceRecord object.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            ``_number`` (Integer)</span>
+<span class="sd">                The TraceRecord _number. Starts at zero.</span>
+<span class="sd">            ``time`` (Integer)</span>
+<span class="sd">                The simulation time associated with the TraceRecord.</span>
+<span class="sd">            ``priority`` (Integer from -4 to 4)</span>
+<span class="sd">                The priority of the event associated with the</span>
+<span class="sd">                TraceRecord.</span>
+<span class="sd">            ``record_type`` (String)</span>
+<span class="sd">                A string that describes the type of TraceRecord.</span>
+<span class="sd">            ``name``</span>
+<span class="sd">                The name of the event or occurrence associated with</span>
+<span class="sd">                the TraceRecord.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">number</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;priority&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">priority</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;record_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">record_type</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_standard_labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+       </div>
+<div class="viewcode-block" id="TraceRecord.__str__"><a class="viewcode-back" href="../../../output/trace.html#despy.output.trace.TraceRecord.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a string representation of the TraceRecord.</span>
+<span class="sd">        </span>
+<span class="sd">        Used to generate console trace output. The string consists of</span>
+<span class="sd">        the number, time and priority (-1 for early, 0 for standard, +1</span>
+<span class="sd">        for late), record_type, name, and custom fields, separated by</span>
+<span class="sd">        vertical bars (|). A typical TraceRecord string looks like</span>
+<span class="sd">        this::</span>
+<span class="sd">        </span>
+<span class="sd">            2|    0+0| Event| Customer Arrives| Interarrival_Time: None| Customer: Resource Model:Customer#1</span>
+<span class="sd">            </span>
+<span class="sd">        *Returns:* String</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#Format data from default fields</span>
+        <span class="n">tem1</span> <span class="o">=</span> <span class="s">&quot;{number:4}|{time:5}{priority:+2}| {record_type}| &quot;</span>
+        <span class="n">tem2</span> <span class="o">=</span> <span class="s">&quot;{name}&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">tem1</span> <span class="o">+</span> <span class="n">tem2</span>
+        <span class="n">default_fields</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="p">)</span>
+        
+        <span class="c">#Format data from custom fields</span>
+        <span class="n">custom_field_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_labels</span><span class="p">:</span>
+            <span class="n">custom_field_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;| {}: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label</span><span class="p">,</span>
+                                                   <span class="bp">self</span><span class="p">[</span><span class="n">label</span><span class="p">]))</span>
+        <span class="n">custom_fields</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">custom_field_list</span><span class="p">)</span>
+                               
+        <span class="k">return</span> <span class="n">default_fields</span> <span class="o">+</span> <span class="n">custom_fields</span>
+    </div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">standard_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List of standard field labels included in every TraceRecord.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type:* Python list containing String values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_standard_labels</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">custom_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List of custom field labels added to TraceRecord by designer.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type:* Python list containing String values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_standard_fields</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">standard_labels</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">num_standard_fields</span><span class="p">:</span>
+            <span class="n">custom_labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_standard_fields</span><span class="p">):</span>
+                <span class="k">del</span> <span class="n">custom_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">custom_labels</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="TraceRecord.add_fields"><a class="viewcode-back" href="../../../output/trace.html#despy.output.trace.TraceRecord.add_fields">[docs]</a>    <span class="k">def</span> <span class="nf">add_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds a custom data field to the TraceRecord object.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            ``fields`` (dict or collections.OrderedDict object)</span>
+<span class="sd">                A custom label and data field.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+            </div>
+<div class="viewcode-block" id="TraceRecord.get_row"><a class="viewcode-back" href="../../../output/trace.html#despy.output.trace.TraceRecord.get_row">[docs]</a>    <span class="k">def</span> <span class="nf">get_row</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list of TraceRecord fields.</span>
+<span class="sd">        </span>
+<span class="sd">        The first five items of the list are the standard field values</span>
+<span class="sd">        in order (number, time, priority, record_type, and name). The</span>
+<span class="sd">        standard fields will be followed by a field label and value for</span>
+<span class="sd">        every custom field that was added by the designer. This method</span>
+<span class="sd">        is used by the Trace object to write rows in the csv trace</span>
+<span class="sd">        report.</span>
+<span class="sd">        </span>
+<span class="sd">        *Returns:* Python list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">trace_row</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">standard_labels</span><span class="p">:</span>
+            <span class="n">trace_row</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">label</span><span class="p">])</span>
+        
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_labels</span><span class="p">:</span>
+            <span class="n">trace_row</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span><span class="p">)</span>
+            <span class="n">trace_row</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">label</span><span class="p">])</span>
+            
+        <span class="k">return</span> <span class="n">trace_row</span>
+        </div></div>
+<span class="k">class</span> <span class="nc">Trace</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;List of messages and events that occurred during the simulation.</span>
+<span class="sd">    </span>
+<span class="sd">    **Attributes**</span>
+<span class="sd">        * :attr:`Trace.start`: Trace will start recording events at this</span>
+<span class="sd">          simulation time.</span>
+<span class="sd">        * :attr:`Trace.stop`: Trace will stop recording events at this</span>
+<span class="sd">          simulation time.</span>
+<span class="sd">        * :attr:&#39;Trace.max_length: Maximum number of TraceRecords in</span>
+<span class="sd">          Trace object.</span>
+<span class="sd">        * :attr:`Trace.length`: Number of records in Trace object.</span>
+<span class="sd">          Read-only.</span>
+<span class="sd">          </span>
+<span class="sd">    **Methods**</span>
+<span class="sd">        * :meth:`Trace.__getitem__`: Enables accessing TraceRecord with</span>
+<span class="sd">          square brackets and index.</span>
+<span class="sd">        * :meth:`Trace.is_active`: True if Trace object is currently</span>
+<span class="sd">          recording.</span>
+<span class="sd">        * :meth:`Trace.add`: Adds TraceRecords to Trace class and writes</span>
+<span class="sd">          console output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generator</span><span class="p">):</span>
+        <span class="c">#Public attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="mi">500</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_length</span> <span class="o">=</span> <span class="mi">1000</span>        
+        
+        <span class="c">#Private attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gen</span> <span class="o">=</span> <span class="n">generator</span> <span class="c">#Associated despy.core.output.generator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen</span><span class="o">.</span><span class="n">_sim</span> <span class="c">#Convenient link to simulation object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_record_list</span> <span class="o">=</span> <span class="p">[]</span> <span class="c">#List of TraceRecords</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Trace will start recording events at this simulation time.</span>
+<span class="sd">        </span>
+<span class="sd">        Defaults to simulation time 0.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type:* Integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span>
+    
+    <span class="nd">@start.setter</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start</span> <span class="o">=</span> <span class="n">start_time</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Trace will stop recording events at this simulation time.</span>
+<span class="sd">        </span>
+<span class="sd">        Defaults to simulation time 500.</span>
+<span class="sd">        If trace.stop &lt; trace.start, then trace.stop will have no</span>
+<span class="sd">        effect. The Trace object will record events until reaching</span>
+<span class="sd">        trace.max_length or until the simulation ends.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type: Integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span>
+    
+    <span class="nd">@stop.setter</span>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">stop</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">stop</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">max_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Maximum number of TraceRecords in Trace object.</span>
+<span class="sd">        </span>
+<span class="sd">        Defaults to 500. The Trace object will stop recording once it</span>
+<span class="sd">        reaches 500 TraceRecords.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_length</span>
+    
+    <span class="nd">@max_length.setter</span>
+    <span class="k">def</span> <span class="nf">max_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_length</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_length</span> <span class="o">=</span> <span class="n">max_length</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Number of records in Trace object. Read-only.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type:* Integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_record_list</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enables accessing TraceRecord with square brackets and index.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments*</span>
+<span class="sd">            ``index`` (Integer)</span>
+<span class="sd">                The first Record added to the Trace will be at</span>
+<span class="sd">                index = 0, the second at index = 1, and so on.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_record_list</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;True if Trace object is currently recording.</span>
+<span class="sd">        </span>
+<span class="sd">        True if max_length not reached and current simulation time</span>
+<span class="sd">        between Trace.start and Trace.stop. False otherwise.</span>
+<span class="sd">        </span>
+<span class="sd">        *Returns:* Boolean</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">now</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">now</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_length</span><span class="p">)</span> \
+            <span class="ow">and</span> <span class="p">(</span><span class="n">now</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_records</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds TraceRecords to Trace class and writes console output.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments:*</span>
+<span class="sd">            `trace_records`: :class:`despy.output.trace.TraceRecord`</span>
+<span class="sd">                A single or list of TraceRecord objects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_active</span><span class="p">():</span>
+            
+            <span class="c">#Check if argument is a single TraceRecord or a list.</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">trace_records</span><span class="p">,</span> <span class="n">TraceRecord</span><span class="p">):</span>
+                <span class="n">records</span> <span class="o">=</span> <span class="p">[</span><span class="n">trace_records</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">trace_records</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">records</span> <span class="o">=</span> <span class="n">trace_records</span>
+                
+            <span class="c">#Save each TraceRecord object to the Trace object.</span>
+            <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_record_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number</span> <span class="o">+</span> <span class="mi">1</span>
+                
+                <span class="c">#Write TraceRecord to the console.</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">console_trace</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">TraceRecord</span><span class="p">)</span>
+                    <span class="k">print</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+            
+    <span class="k">def</span> <span class="nf">add_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">fields</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="n">trace_record</span> <span class="o">=</span> <span class="n">TraceRecord</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">now</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">pri</span><span class="p">,</span> <span class="s">&quot;Msg&quot;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">trace_record</span><span class="o">.</span><span class="n">add_fields</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">trace_record</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">evt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gen</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">evt</span><span class="o">.</span><span class="n">trace_records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trace_record</span><span class="p">)</span>
+            
+<span class="c">#         if self._gen._sim.evt is None:</span>
+<span class="c">#             self.add(trace_record)</span>
+<span class="c">#         else:</span>
+<span class="c">#             self._gen._sim.evt.trace_records.append(trace_record)</span>
+    
+    <span class="k">def</span> <span class="nf">add_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_active</span><span class="p">():</span>
+            <span class="n">trace_record</span> <span class="o">=</span> <span class="n">TraceRecord</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="s">&#39;Event&#39;</span><span class="p">,</span>
+                                       <span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">_update_trace_record</span><span class="p">(</span><span class="n">trace_record</span><span class="p">))</span>
+        
+    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_record_list</span><span class="p">[:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">def</span> <span class="nf">render_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">writer</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">render_section</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">writer</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">render_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">writer</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">section</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">Datatype</span><span class="o">.</span><span class="n">title</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">section</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="k">if</span> <span class="n">section</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">Datatype</span><span class="o">.</span><span class="n">param_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">section</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">field</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+    
+    <span class="k">def</span> <span class="nf">write_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
+        <span class="c"># Add time stamp to file name</span>
+        <span class="n">trace_file</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">+</span> <span class="s">&#39;/trace.csv&#39;</span>
+        
+        <span class="c"># Open csv file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">trace_file</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
+            <span class="n">trace_writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+            
+            <span class="c"># Write header rows</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">render_output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">get_data</span><span class="p">(),</span> <span class="n">trace_writer</span><span class="p">)</span>
+            
+            <span class="c"># Write trace table</span>
+            <span class="n">trace_writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s">&#39;Record #&#39;</span><span class="p">,</span> <span class="s">&#39;Time&#39;</span><span class="p">,</span> <span class="s">&#39;Priority&#39;</span><span class="p">,</span>
+                                   <span class="s">&#39;Record Type&#39;</span><span class="p">,</span> <span class="s">&#39;Name&#39;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">trace_record</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_record_list</span><span class="p">:</span>
+                <span class="n">trace_writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">trace_record</span><span class="o">.</span><span class="n">get_row</span><span class="p">())</span>
+            <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Stacy Irwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

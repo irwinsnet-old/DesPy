@@ -21,3 +21,6 @@ Despy Modules
     
 ..  automodule:: despy.core.queue
     :noindex:
+    
+..  automodule:: despy.output.trace
+    :noindex:

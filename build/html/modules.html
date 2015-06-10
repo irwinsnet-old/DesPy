@@ -64,6 +64,7 @@
 <li><a class="reference internal" href="#despy-core-event">despy.core.event</a></li>
 <li><a class="reference internal" href="#despy-core-resource">despy.core.resource</a></li>
 <li><a class="reference internal" href="#despy-core-queue">despy.core.queue</a></li>
+<li><a class="reference internal" href="#despy-output-trace">despy.output.trace</a></li>
 </ul>
 </li>
 </ul>
@@ -163,6 +164,25 @@ simulated.</dd>
 <dt><a class="reference internal" href="core/queue.html#despy.core.queue.Queue" title="despy.core.queue.Queue"><code class="xref py py-class docutils literal"><span class="pre">Queue</span></code></a></dt>
 <dd>Represents a limited, real-world, entity that provides a service.</dd>
 </dl>
+</div>
+<div class="section" id="despy-output-trace">
+<h2>despy.output.trace<a class="headerlink" href="#despy-output-trace" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><a class="reference internal" href="output/trace.html#despy.output.trace.TraceRecord" title="despy.output.trace.TraceRecord"><code class="xref py py-class docutils literal"><span class="pre">TraceRecord</span></code></a></dt>
+<dd>Single record in a trace report containing multiple data fields.</dd>
+<dt><code class="xref py py-class docutils literal"><span class="pre">Trace</span></code></dt>
+<dd>List of messages and events that occurred during the simulation.</dd>
+</dl>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p>Modify other classes to return length through a property, not a
+callable method.</p>
+<p>Modify trace report order so main event message comes first,
+event related messages second.</p>
+<p class="last">Replace get_row with get_standard_fields and get_custom_fields.
+Each method will have a Boolean argument that specifies whether
+returned list will include labels.</p>
+</div>
 </div>
 </div>
 

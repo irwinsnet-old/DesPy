@@ -20,6 +20,10 @@ despy.output.trace
     
     Modify trace report order so main event message comes first,
     event related messages second.
+    
+    Replace get_row with get_standard_fields and get_custom_fields.
+    Each method will have a Boolean argument that specifies whether
+    returned list will include labels.
 """
 from collections import OrderedDict
 import csv
@@ -41,17 +45,24 @@ class TraceRecord(OrderedDict):
     5. ``name:`` The name of the event or occurrence associated with
     the TraceRecord.
     
-    TraceRecord inherits from collections.OrderedDict, so all
-    dictionary and ordered dictionary methods and attributes are
+    Each TraceRecord field consists of a descriptive label and the
+    associate value. TraceRecord inherits from collections.OrderedDict,
+    so all dictionary and ordered dictionary methods and attributes are
     available.
         
     **Attributes**
-      * :attr:`TraceRecord.fields`: OrderedDict object containing
-        TraceRecord key value pairs.
+      * :attr:`TraceRecord.standard_labels`: List of standard field
+        labels included in every TraceRecord.
+      * :attr:`TraceRecord.custom_labels`: List of custom field labels
+        added to TraceRecord by designer.
     
     **Methods**
+        * :meth:`TraceRecord.__str__`: Returns a string representation
+          of the TraceRecord.
         * :meth:`TraceRecord.add_fields`: Adds a custom data field to
           the TraceRecord object.
+        * :meth:`TraceRecord.get_row`: Returns a list of TraceRecord
+          fields.
     """
     def __init__(self, number, time, priority, record_type, name):
         """Construct a TraceRecord object.
@@ -80,6 +91,18 @@ class TraceRecord(OrderedDict):
         self._standard_labels = list(self.keys())
        
     def __str__(self):
+        """Returns a string representation of the TraceRecord.
+        
+        Used to generate console trace output. The string consists of
+        the number, time and priority (-1 for early, 0 for standard, +1
+        for late), record_type, name, and custom fields, separated by
+        vertical bars (|). A typical TraceRecord string looks like
+        this::
+        
+            2|    0+0| Event| Customer Arrives| Interarrival_Time: None| Customer: Resource Model:Customer#1
+            
+        *Returns:* String
+        """
         #Format data from default fields
         tem1 = "{number:4}|{time:5}{priority:+2}| {record_type}| "
         tem2 = "{name}"
@@ -97,10 +120,18 @@ class TraceRecord(OrderedDict):
     
     @property
     def standard_labels(self):
+        """List of standard field labels included in every TraceRecord.
+        
+        *Type:* Python list containing String values.
+        """
         return self._standard_labels
     
     @property
     def custom_labels(self):
+        """List of custom field labels added to TraceRecord by designer.
+        
+        *Type:* Python list containing String values.
+        """
         num_standard_fields = len(self.standard_labels)
         if len(self) > num_standard_fields:
             custom_labels = list(self.keys())
@@ -121,6 +152,17 @@ class TraceRecord(OrderedDict):
             self[label] = data
             
     def get_row(self):
+        """Returns a list of TraceRecord fields.
+        
+        The first five items of the list are the standard field values
+        in order (number, time, priority, record_type, and name). The
+        standard fields will be followed by a field label and value for
+        every custom field that was added by the designer. This method
+        is used by the Trace object to write rows in the csv trace
+        report.
+        
+        *Returns:* Python list
+        """
         trace_row = []
         for label in self.standard_labels:
             trace_row.append(self[label])
@@ -147,8 +189,10 @@ class Trace(object):
     **Methods**
         * :meth:`Trace.__getitem__`: Enables accessing TraceRecord with
           square brackets and index.
-        * :meth:`Trace.is_active: True if Trace object is currently
+        * :meth:`Trace.is_active`: True if Trace object is currently
           recording.
+        * :meth:`Trace.add`: Adds TraceRecords to Trace class and writes
+          console output.
     """
     
     
@@ -243,15 +287,26 @@ class Trace(object):
             and (now >= self.start)
         
     def add(self, trace_records):
+        """Adds TraceRecords to Trace class and writes console output.
+        
+        *Arguments:*
+            `trace_records`: :class:`despy.output.trace.TraceRecord`
+                A single or list of TraceRecord objects
+        """
         if self.is_active():
+            
+            #Check if argument is a single TraceRecord or a list.
             if isinstance(trace_records, TraceRecord):
                 records = [trace_records]
             elif isinstance(trace_records, list):
                 records = trace_records
+                
+            #Save each TraceRecord object to the Trace object.
             for rec in records:
                 self._record_list.append(rec)
                 self._number = self._number + 1
                 
+                #Write TraceRecord to the console.
                 if self._sim.gen.console_trace:
                     assert isinstance(rec, TraceRecord)
                     print(rec)
