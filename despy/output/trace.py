@@ -13,6 +13,9 @@ despy.output.trace
 :class:`Trace`
     List of messages and events that occurred during the simulation.
     
+:class:`CSV_file`
+    A CSV file containing that contains all trace records.
+    
 ..  todo::
 
     Modify other classes to return length through a property, not a
@@ -311,56 +314,88 @@ class Trace(object):
                     assert isinstance(rec, TraceRecord)
                     print(rec)
             
+    def add_event(self, time, priority, event):
+        """Record an event on the Trace report.
+        
+        *Arguments:*
+            `time` (Integer)
+                Simulation time at which the event occurs.
+            `priority` (Integer)
+                Priority at which the event was scheduled.
+            `event` (:class:`despy.core.event.Event)
+                Event object that is being recorded.
+        """
+        if self.is_active():
+            trace_record = TraceRecord(self._number, time, priority,
+                                       'Event', event.name)
+            self.add(event._update_trace_record(trace_record))
+
     def add_message(self, message, fields = None):
+        """Creates a message TraceRecord and adds it to the Trace.
+        
+        *Arguments:*
+            `message` (String)
+                A short message that will be saved to the Trace.
+            `fields` (Python dictionary)
+                Custom fields that will be added to the TraceRecord.
+                Optional. Defaults to None.
+        """
         trace_record = TraceRecord(self._number, self._sim.now,
                                    self._sim.pri, "Msg", message)
         if fields is not None:
             trace_record.add_fields(fields)
         
+        #Record message in event trace records.
         self.add(trace_record)
         if self._gen._sim.evt is not None:
             self._gen._sim.evt.trace_records.append(trace_record)
             
-#         if self._gen._sim.evt is None:
-#             self.add(trace_record)
-#         else:
-#             self._gen._sim.evt.trace_records.append(trace_record)
-    
-    def add_event(self, time, priority, event):
-        if self.is_active():
-            trace_record = TraceRecord(self._number, time, priority, 'Event',
-                                       event.name)
-            self.add(event._update_trace_record(trace_record))
+    def write_csv(self, directory):
+        """Create a CSV file containing all trace data.
+        
+        *Arguments:*
+            ``directory`` (String)
+                The full path to the folder that will contain the csv
+                file.
+        """
+        file = CSV_file(self)
+        file.write(directory)
         
     def clear(self):
+        """Remove all TraceRecords from Trace object.
+        """
         del self._record_list[:]
         self._number = 0
-    
-    def render_output(self, output, writer):
-        for section in output:
-            self.render_section(section, writer)
-    
-    def render_section(self, section, writer):
-        if section[0] == Datatype.title:
-            writer.writerow([section[1]])
-        if section[0] == Datatype.param_list:
-            for field in section[1]:
-                writer.writerow([field[0], field[1]])
-    
-    def write_csv(self, directory):
+        
+        
+class CSV_file(object):
+    def __init__(self, trace):
+        self.trace = trace
+        self._writer = None
+        
+    def write(self, directory):
         # Add time stamp to file name
         trace_file = directory + '/trace.csv'
         
         # Open csv file
         with open(trace_file, 'w', newline='') as file:
-            trace_writer = csv.writer(file)
+            self._writer = csv.writer(file)
             
             # Write header rows
-            self.render_output(self._sim.get_data(), trace_writer)
+            self.write_sim_header_data(self.trace._sim.get_data())
             
             # Write trace table
-            trace_writer.writerow(['Record #', 'Time', 'Priority',
+            self._writer.writerow(['Record #', 'Time', 'Priority',
                                    'Record Type', 'Name'])
-            for trace_record in self._record_list:
-                trace_writer.writerow(trace_record.get_row())
+            for trace_record in self.trace._record_list:
+                self._writer.writerow(trace_record.get_row())
             file.close()
+            
+    def write_sim_header_data(self, output):
+        for section in output:
+            if section[0] == Datatype.title:
+                self._writer.writerow([section[1]])
+            if section[0] == Datatype.param_list:
+                for field in section[1]:
+                    self._writer.writerow([field[0], field[1]])
+                    

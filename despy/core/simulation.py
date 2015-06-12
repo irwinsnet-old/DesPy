@@ -394,14 +394,14 @@ class Simulation(NamedObject):
                     fel_item.priority_fld) / 10)
             self._pri = fel_item.priority_fld
 
+        # Record event in trace report        
+        self.gen.trace.add_event(self.now, fel_item.priority_fld,
+                                 fel_item.event_fld)
+
         # Run event
         self._evt = fel_item.event_fld
         fel_item.event_fld._do_event()
         self._evt = None
-
-        # Record event in trace report        
-        self.gen.trace.add_event(self.now, fel_item.priority_fld,
-                                 fel_item.event_fld)
         
         # Reset the event in case it is called again.
         fel_item.event_fld._reset()
