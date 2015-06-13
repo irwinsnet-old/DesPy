@@ -1,28 +1,30 @@
 ..  currentmodule:: despy.output.trace
 
-##################
-despy.output.trace
-##################
+########################
+despy.output.trace.Trace
+########################
 
 *****************
 Class Description
 *****************
-..  autoclass:: TraceRecord
+..  autoclass:: Trace
 
 ********
 __init__
 ********
-..  automethod:: TraceRecord.__init__
+..  automethod:: Trace.__init__
 
 **********
 Attributes
 **********
-..  autoattribute:: TraceRecord.standard_labels
-..  autoattribute:: TraceRecord.custom_labels
+..  autoattribute:: Trace.start
+..  autoattribute:: Trace.stop
+..  autoattribute:: Trace.max_length
+..  autoattribute:: Trace.length
 
 *******
 Methods
 *******
-..  automethod:: TraceRecord.__str__
-..  automethod:: TraceRecord.add_fields
-..  automethod:: TraceRecord.get_row
+..  automethod:: Trace.__getitem__
+..  automethod:: Trace.is_active
+..  automethod:: Trace.add

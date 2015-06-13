@@ -1,0 +1,276 @@
+
+
+<!doctype html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>despy.output.trace.TraceRecord &mdash; Despy 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="../index.html" />
+    <link rel="up" title="Despy Classes" href="../classes.html" />
+    <link rel="next" title="despy.output.trace.Trace" href="trace.html" />
+    <link rel="prev" title="despy.core.resource.ResourceFinishServiceEvent" href="../core/resourceFinishServiceEvent.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="trace.html" title="despy.output.trace.Trace"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../core/resourceFinishServiceEvent.html" title="despy.core.resource.ResourceFinishServiceEvent"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">despy.output.trace.TraceRecord</a><ul>
+<li><a class="reference internal" href="#class-description">Class Description</a></li>
+<li><a class="reference internal" href="#init">__init__</a></li>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../core/resourceFinishServiceEvent.html"
+                        title="previous chapter">despy.core.resource.ResourceFinishServiceEvent</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="trace.html"
+                        title="next chapter">despy.output.trace.Trace</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/output/traceRecord.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="despy-output-trace-tracerecord">
+<h1>despy.output.trace.TraceRecord<a class="headerlink" href="#despy-output-trace-tracerecord" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="class-description">
+<h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="despy.output.trace.TraceRecord">
+<em class="property">class </em><code class="descclassname">despy.output.trace.</code><code class="descname">TraceRecord</code><span class="sig-paren">(</span><em>number</em>, <em>time</em>, <em>priority</em>, <em>record_type</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/output/trace.html#TraceRecord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.trace.TraceRecord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Single record in a trace report containing multiple data fields.</p>
+<p>A TraceRecord object represents a single occurrence that
+happens during the simulation. By default, TraceRecord objects
+contain the following fields:</p>
+<p>1. <code class="docutils literal"><span class="pre">_number:</span></code> Every TraceRecord is assigned a unique sequential
+integer starting at 0.
+2. <code class="docutils literal"><span class="pre">time:</span></code> The simulation time at which the TraceRecord occurred.
+3. <code class="docutils literal"><span class="pre">priority:</span></code> The priority of the event associated with the
+TraceRecord.
+4. <code class="docutils literal"><span class="pre">record_type:</span></code> A string that describes the type of TraceRecord.
+5. <code class="docutils literal"><span class="pre">name:</span></code> The name of the event or occurrence associated with
+the TraceRecord.</p>
+<p>Each TraceRecord field consists of a descriptive label and the
+associate value. TraceRecord inherits from collections.OrderedDict,
+so all dictionary and ordered dictionary methods and attributes are
+available.</p>
+<dl class="docutils">
+<dt><strong>Attributes</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#despy.output.trace.TraceRecord.standard_labels" title="despy.output.trace.TraceRecord.standard_labels"><code class="xref py py-attr docutils literal"><span class="pre">TraceRecord.standard_labels</span></code></a>: List of standard field
+labels included in every TraceRecord.</li>
+<li><a class="reference internal" href="#despy.output.trace.TraceRecord.custom_labels" title="despy.output.trace.TraceRecord.custom_labels"><code class="xref py py-attr docutils literal"><span class="pre">TraceRecord.custom_labels</span></code></a>: List of custom field labels
+added to TraceRecord by designer.</li>
+</ul>
+</dd>
+<dt><strong>Methods</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#despy.output.trace.TraceRecord.__str__" title="despy.output.trace.TraceRecord.__str__"><code class="xref py py-meth docutils literal"><span class="pre">TraceRecord.__str__()</span></code></a>: Returns a string representation
+of the TraceRecord.</li>
+<li><a class="reference internal" href="#despy.output.trace.TraceRecord.add_fields" title="despy.output.trace.TraceRecord.add_fields"><code class="xref py py-meth docutils literal"><span class="pre">TraceRecord.add_fields()</span></code></a>: Adds a custom data field to
+the TraceRecord object.</li>
+<li><a class="reference internal" href="#despy.output.trace.TraceRecord.get_row" title="despy.output.trace.TraceRecord.get_row"><code class="xref py py-meth docutils literal"><span class="pre">TraceRecord.get_row()</span></code></a>: Returns a list of TraceRecord
+fields.</li>
+</ul>
+</dd>
+<dt><strong>Python Library Dependencies</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3.4/library/collections.html#collections.OrderedDict" title="(in Python v3.4)"><code class="xref py py-class docutils literal"><span class="pre">collections.OrderedDict</span></code></a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="init">
+<h2>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="despy.output.trace.TraceRecord.__init__">
+<code class="descclassname">TraceRecord.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>number</em>, <em>time</em>, <em>priority</em>, <em>record_type</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/output/trace.html#TraceRecord.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.trace.TraceRecord.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a TraceRecord object.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">_number</span></code> (Integer)</dt>
+<dd>The TraceRecord _number. Starts at zero.</dd>
+<dt><code class="docutils literal"><span class="pre">time</span></code> (Integer)</dt>
+<dd>The simulation time associated with the TraceRecord.</dd>
+<dt><code class="docutils literal"><span class="pre">priority</span></code> (Integer from -4 to 4)</dt>
+<dd>The priority of the event associated with the
+TraceRecord.</dd>
+<dt><code class="docutils literal"><span class="pre">record_type</span></code> (String)</dt>
+<dd>A string that describes the type of TraceRecord.</dd>
+<dt><code class="docutils literal"><span class="pre">name</span></code></dt>
+<dd>The name of the event or occurrence associated with
+the TraceRecord.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="despy.output.trace.TraceRecord.standard_labels">
+<code class="descclassname">TraceRecord.</code><code class="descname">standard_labels</code><a class="headerlink" href="#despy.output.trace.TraceRecord.standard_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of standard field labels included in every TraceRecord.</p>
+<p><em>Type:</em> Python list containing String values.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.output.trace.TraceRecord.custom_labels">
+<code class="descclassname">TraceRecord.</code><code class="descname">custom_labels</code><a class="headerlink" href="#despy.output.trace.TraceRecord.custom_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of custom field labels added to TraceRecord by designer.</p>
+<p><em>Type:</em> Python list containing String values.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="despy.output.trace.TraceRecord.__str__">
+<code class="descclassname">TraceRecord.</code><code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/output/trace.html#TraceRecord.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.trace.TraceRecord.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string representation of the TraceRecord.</p>
+<p>Used to generate console trace output. The string consists of
+the number, time and priority (-1 for early, 0 for standard, +1
+for late), record_type, name, and custom fields, separated by
+vertical bars (|). A typical TraceRecord string looks like
+this:</p>
+<div class="highlight-python"><div class="highlight"><pre>2|    0+0| Event| Customer Arrives| Interarrival_Time: None| Customer: Resource Model:Customer#1
+</pre></div>
+</div>
+<p><em>Returns:</em> String</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.output.trace.TraceRecord.add_fields">
+<code class="descclassname">TraceRecord.</code><code class="descname">add_fields</code><span class="sig-paren">(</span><em>fields</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/output/trace.html#TraceRecord.add_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.trace.TraceRecord.add_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a custom data field to the TraceRecord object.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">fields</span></code> (dict or collections.OrderedDict object)</dt>
+<dd>A custom label and data field.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.output.trace.TraceRecord.get_row">
+<code class="descclassname">TraceRecord.</code><code class="descname">get_row</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/output/trace.html#TraceRecord.get_row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.trace.TraceRecord.get_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of TraceRecord fields.</p>
+<p>The first five items of the list are the standard field values
+in order (number, time, priority, record_type, and name). The
+standard fields will be followed by a field label and value for
+every custom field that was added by the designer. This method
+is used by the Trace object to write rows in the csv trace
+report.</p>
+<p><em>Returns:</em> Python list</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="trace.html" title="despy.output.trace.Trace"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../core/resourceFinishServiceEvent.html" title="despy.core.resource.ResourceFinishServiceEvent"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" >Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Stacy Irwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

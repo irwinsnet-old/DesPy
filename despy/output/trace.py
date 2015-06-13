@@ -14,7 +14,7 @@ despy.output.trace
     List of messages and events that occurred during the simulation.
     
 :class:`CSV_file`
-    A CSV file containing that contains all trace records.
+    A CSV file_name containing that contains all trace records.
     
 ..  todo::
 
@@ -27,6 +27,8 @@ despy.output.trace
     Replace get_row with get_standard_fields and get_custom_fields.
     Each method will have a Boolean argument that specifies whether
     returned list will include labels.
+    
+    Add external dependencies to all class docstrings. Use intersphinx.
 """
 from collections import OrderedDict
 import csv
@@ -66,6 +68,9 @@ class TraceRecord(OrderedDict):
           the TraceRecord object.
         * :meth:`TraceRecord.get_row`: Returns a list of TraceRecord
           fields.
+          
+    **Python Library Dependencies**
+        * :class:`collections.OrderedDict`
     """
     def __init__(self, number, time, priority, record_type, name):
         """Construct a TraceRecord object.
@@ -234,7 +239,7 @@ class Trace(object):
         effect. The Trace object will record events until reaching
         trace.max_length or until the simulation ends.
         
-        *Type: Integer
+        *Type:* Integer
         """
         return self._stop
     
@@ -351,15 +356,16 @@ class Trace(object):
             self._gen._sim.evt.trace_records.append(trace_record)
             
     def write_csv(self, directory):
-        """Create a CSV file containing all trace data.
+        """Create a CSV file_name containing all trace data.
         
         *Arguments:*
             ``directory`` (String)
                 The full path to the folder that will contain the csv
-                file.
+                file_name.
         """
-        file = CSV_file(self)
-        file.write(directory)
+        file = CSV_file(self, directory)
+        file.write()
+        return file
         
     def clear(self):
         """Remove all TraceRecords from Trace object.
@@ -369,16 +375,67 @@ class Trace(object):
         
         
 class CSV_file(object):
-    def __init__(self, trace):
-        self.trace = trace
+    """A comma separated values file that displays the trace report.
+    
+    **Attributes**
+        * :attr:`CSV_file.file_name`: The full name, including the path,
+          of the CSV file.
+        * :attr:`CSV_file.trace`: The CSV_file will display this Trace
+          object.
+          
+    **Methods**
+        * :meth:`CSV_file.write`: Writes self.trace to CSV file at
+          location self.file_name.
+          
+    **Python Library Dependencies**
+        * :mod:`csv`
+    """
+    def __init__(self, trace, directory):
+        """Construct a CSV_file object.
+        
+        *Arguments*
+            ``trace`` :class:`despy.core.trace.Trace`
+                The CSV_file will display this Trace object.
+            ``directory``
+                The full path to the location of the CSV file. The CSV
+                file will be named "trace.csv".
+        """
+        #Public attributes
+        self._trace = trace
+        self._file_name = directory + '/trace.csv'
+        
+        #Private attributes
         self._writer = None
         
-    def write(self, directory):
-        # Add time stamp to file name
-        trace_file = directory + '/trace.csv'
+    @property
+    def file_name(self):
+        """The full name, including the path, of the CSV file.
         
+        *Type:* String
+        """
+        return self._file_name
+    
+    @file_name.setter
+    def file_name(self, file_name):
+        self.file__name = file_name
+        
+    @property
+    def trace(self):
+        """The CSV_file will display this Trace object.
+        
+        *Type:* :class:`despy.core.trace.Trace`
+        """
+        return self._trace
+    
+    @trace.setter
+    def trace(self, trace):
+        self._trace = trace
+        
+    def write(self):
+        """Writes self.trace to CSV file at location self.file_name.
+        """  
         # Open csv file
-        with open(trace_file, 'w', newline='') as file:
+        with open(self.file_name, 'w', newline='') as file:
             self._writer = csv.writer(file)
             
             # Write header rows
@@ -392,6 +449,8 @@ class CSV_file(object):
             file.close()
             
     def write_sim_header_data(self, output):
+        """Convert output list to CSV rows and write to file.
+        """
         for section in output:
             if section[0] == Datatype.title:
                 self._writer.writerow([section[1]])

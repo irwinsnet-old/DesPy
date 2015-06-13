@@ -466,14 +466,14 @@
                     <span class="n">fel_item</span><span class="o">.</span><span class="n">priority_fld</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_pri</span> <span class="o">=</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">priority_fld</span>
 
+        <span class="c"># Record event in trace report        </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">now</span><span class="p">,</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">priority_fld</span><span class="p">,</span>
+                                 <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="p">)</span>
+
         <span class="c"># Run event</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_evt</span> <span class="o">=</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span>
         <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="o">.</span><span class="n">_do_event</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_evt</span> <span class="o">=</span> <span class="bp">None</span>
-
-        <span class="c"># Record event in trace report        </span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">now</span><span class="p">,</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">priority_fld</span><span class="p">,</span>
-                                 <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="p">)</span>
         
         <span class="c"># Reset the event in case it is called again.</span>
         <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>

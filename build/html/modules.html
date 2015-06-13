@@ -168,10 +168,12 @@ simulated.</dd>
 <div class="section" id="despy-output-trace">
 <h2>despy.output.trace<a class="headerlink" href="#despy-output-trace" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
-<dt><a class="reference internal" href="output/trace.html#despy.output.trace.TraceRecord" title="despy.output.trace.TraceRecord"><code class="xref py py-class docutils literal"><span class="pre">TraceRecord</span></code></a></dt>
+<dt><a class="reference internal" href="output/traceRecord.html#despy.output.trace.TraceRecord" title="despy.output.trace.TraceRecord"><code class="xref py py-class docutils literal"><span class="pre">TraceRecord</span></code></a></dt>
 <dd>Single record in a trace report containing multiple data fields.</dd>
-<dt><code class="xref py py-class docutils literal"><span class="pre">Trace</span></code></dt>
+<dt><a class="reference internal" href="output/trace.html#despy.output.trace.Trace" title="despy.output.trace.Trace"><code class="xref py py-class docutils literal"><span class="pre">Trace</span></code></a></dt>
 <dd>List of messages and events that occurred during the simulation.</dd>
+<dt><a class="reference internal" href="output/CSV_file.html#despy.output.trace.CSV_file" title="despy.output.trace.CSV_file"><code class="xref py py-class docutils literal"><span class="pre">CSV_file</span></code></a></dt>
+<dd>A CSV file_name containing that contains all trace records.</dd>
 </dl>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
@@ -179,9 +181,10 @@ simulated.</dd>
 callable method.</p>
 <p>Modify trace report order so main event message comes first,
 event related messages second.</p>
-<p class="last">Replace get_row with get_standard_fields and get_custom_fields.
+<p>Replace get_row with get_standard_fields and get_custom_fields.
 Each method will have a Boolean argument that specifies whether
 returned list will include labels.</p>
+<p class="last">Add external dependencies to all class docstrings. Use intersphinx.</p>
 </div>
 </div>
 </div>
