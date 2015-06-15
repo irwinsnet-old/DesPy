@@ -101,6 +101,11 @@
 <span class="sd">    returned list will include labels.</span>
 <span class="sd">    </span>
 <span class="sd">    Add external dependencies to all class docstrings. Use intersphinx.</span>
+<span class="sd">    </span>
+<span class="sd">    Add assert statements to verify correct data types for input.</span>
+<span class="sd">    </span>
+<span class="sd">    Refactor to remove use of &quot;_&quot; for private attributes. Only use for</span>
+<span class="sd">    read-only attributes.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 <span class="kn">import</span> <span class="nn">csv</span>
@@ -280,11 +285,10 @@
         <span class="c">#Public attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_start</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="mi">500</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_max_length</span> <span class="o">=</span> <span class="mi">1000</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_length</span> <span class="o">=</span> <span class="mi">1000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gen</span> <span class="o">=</span> <span class="n">generator</span> <span class="c">#Associated despy.core.output.generator  </span>
         
         <span class="c">#Private attributes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gen</span> <span class="o">=</span> <span class="n">generator</span> <span class="c">#Associated despy.core.output.generator</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen</span><span class="o">.</span><span class="n">_sim</span> <span class="c">#Convenient link to simulation object</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_record_list</span> <span class="o">=</span> <span class="p">[]</span> <span class="c">#List of TraceRecords</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_number</span> <span class="o">=</span> <span class="mi">0</span>
 </div>
@@ -343,6 +347,12 @@
 <span class="sd">        *Type:* Integer</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_record_list</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The corresponding Generator object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen</span>
     
 <div class="viewcode-block" id="Trace.__getitem__"><a class="viewcode-back" href="../../../output/trace.html#despy.output.trace.Trace.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Enables accessing TraceRecord with square brackets and index.</span>
@@ -362,7 +372,7 @@
 <span class="sd">        </span>
 <span class="sd">        *Returns:* Boolean</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">now</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">now</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">now</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_length</span><span class="p">)</span> \
             <span class="ow">and</span> <span class="p">(</span><span class="n">now</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
         </div>
@@ -387,7 +397,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number</span> <span class="o">+</span> <span class="mi">1</span>
                 
                 <span class="c">#Write TraceRecord to the console.</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">console_trace</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">console_trace</span><span class="p">:</span>
                     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">TraceRecord</span><span class="p">)</span>
                     <span class="k">print</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
             </div>
@@ -417,15 +427,15 @@
 <span class="sd">                Custom fields that will be added to the TraceRecord.</span>
 <span class="sd">                Optional. Defaults to None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">trace_record</span> <span class="o">=</span> <span class="n">TraceRecord</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">now</span><span class="p">,</span>
-                                   <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">pri</span><span class="p">,</span> <span class="s">&quot;Msg&quot;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="n">trace_record</span> <span class="o">=</span> <span class="n">TraceRecord</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">pri</span><span class="p">,</span> <span class="s">&quot;Msg&quot;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">trace_record</span><span class="o">.</span><span class="n">add_fields</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
         
         <span class="c">#Record message in event trace records.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">trace_record</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">evt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_gen</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">evt</span><span class="o">.</span><span class="n">trace_records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trace_record</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">evt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">evt</span><span class="o">.</span><span class="n">trace_records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trace_record</span><span class="p">)</span>
             
     <span class="k">def</span> <span class="nf">write_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a CSV file_name containing all trace data.</span>
@@ -511,7 +521,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
             
             <span class="c"># Write header rows</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">write_sim_header_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_sim_header_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
             
             <span class="c"># Write trace table</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s">&#39;Record #&#39;</span><span class="p">,</span> <span class="s">&#39;Time&#39;</span><span class="p">,</span> <span class="s">&#39;Priority&#39;</span><span class="p">,</span>

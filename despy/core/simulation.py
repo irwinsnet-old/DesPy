@@ -166,9 +166,9 @@ class Simulation(NamedObject):
         self._evt = None
         self._run_start_time = None
         self._run_stop_time = None
-        self.gen = Generator(self)
+        self._gen = Generator(self)
         self.gen.console_trace = True
-        self.gen.output_folder = None
+        self.gen.folder_basename = None
         
         self.reset(initial_time)
 
@@ -291,8 +291,8 @@ class Simulation(NamedObject):
         return self._gen
     
     @gen.setter
-    def gen(self, output):
-        self._gen = output
+    def gen(self, generator):
+        self._gen = generator
     
     def append_model(self, model):
         """ Append a model object to the simulation.
@@ -455,8 +455,7 @@ class Simulation(NamedObject):
         
         # Record stop time and write output files
         self._run_stop_time = datetime.datetime.today()
-        if self.gen.output_folder is not None:
-            self.gen.write_files(self.gen.output_folder)
+        self.gen.write_files()
             
     def get_data(self):
         """ Get a Python list with simulation parameters and results.
@@ -478,7 +477,7 @@ class Simulation(NamedObject):
         output = [(Datatype.title, "Simulation: " + self.name),
                   (Datatype.paragraph, self.description),
                   (Datatype.param_list,
-                    [('Generator Folder', self.gen.output_folder),
+                    [('Generator Folder', self.gen.folder_basename),
                      ('Seed', self.seed),
                      ('Start Time', self.run_start_time),
                      ('Stop Time', self.run_stop_time),

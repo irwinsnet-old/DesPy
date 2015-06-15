@@ -24,6 +24,4 @@ Despy Classes
    output/traceRecord
    output/trace
    output/CSV_file
-   
-   
-   
+   output/generator

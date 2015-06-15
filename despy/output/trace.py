@@ -29,6 +29,11 @@ despy.output.trace
     returned list will include labels.
     
     Add external dependencies to all class docstrings. Use intersphinx.
+    
+    Add assert statements to verify correct data types for input.
+    
+    Refactor to remove use of "_" for private attributes. Only use for
+    read-only attributes.
 """
 from collections import OrderedDict
 import csv
@@ -208,11 +213,10 @@ class Trace(object):
         #Public attributes
         self._start = 0
         self._stop = 500
-        self._max_length = 1000        
+        self._max_length = 1000
+        self._gen = generator #Associated despy.core.output.generator  
         
         #Private attributes
-        self._gen = generator #Associated despy.core.output.generator
-        self._sim = self._gen._sim #Convenient link to simulation object
         self._record_list = [] #List of TraceRecords
         self._number = 0
 
@@ -271,6 +275,12 @@ class Trace(object):
         *Type:* Integer
         """
         return len(self._record_list)
+
+    @property
+    def gen(self):
+        """The corresponding Generator object.
+        """
+        return self._gen
     
     def __getitem__(self, index):
         """Enables accessing TraceRecord with square brackets and index.
@@ -290,7 +300,7 @@ class Trace(object):
         
         *Returns:* Boolean
         """
-        now = self._sim.now
+        now = self.gen.sim.now
         return (now < self.stop) and (self._number < self.max_length) \
             and (now >= self.start)
         
@@ -315,7 +325,7 @@ class Trace(object):
                 self._number = self._number + 1
                 
                 #Write TraceRecord to the console.
-                if self._sim.gen.console_trace:
+                if self.gen.console_trace:
                     assert isinstance(rec, TraceRecord)
                     print(rec)
             
@@ -345,15 +355,15 @@ class Trace(object):
                 Custom fields that will be added to the TraceRecord.
                 Optional. Defaults to None.
         """
-        trace_record = TraceRecord(self._number, self._sim.now,
-                                   self._sim.pri, "Msg", message)
+        trace_record = TraceRecord(self._number, self.gen.sim.now,
+                                   self.gen.sim.pri, "Msg", message)
         if fields is not None:
             trace_record.add_fields(fields)
         
         #Record message in event trace records.
         self.add(trace_record)
-        if self._gen._sim.evt is not None:
-            self._gen._sim.evt.trace_records.append(trace_record)
+        if self.gen.sim.evt is not None:
+            self.gen.sim.evt.trace_records.append(trace_record)
             
     def write_csv(self, directory):
         """Create a CSV file_name containing all trace data.
@@ -439,7 +449,7 @@ class CSV_file(object):
             self._writer = csv.writer(file)
             
             # Write header rows
-            self.write_sim_header_data(self.trace._sim.get_data())
+            self.write_sim_header_data(self.trace.gen.sim.get_data())
             
             # Write trace table
             self._writer.writerow(['Record #', 'Time', 'Priority',
