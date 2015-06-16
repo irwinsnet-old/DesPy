@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
+from enum import Enum
 import xml.etree.ElementTree as ET
-from despy.output.datatype import Datatype
 
 class HtmlReport():
     
@@ -42,4 +42,11 @@ class HtmlReport():
         self.render_report()
         ET.ElementTree(self.root).write(folder + '/report.html',
                                         method = 'html')
+
+class Datatype(Enum):
+    title = 1
+    paragraph = 2
+    param_list = 3
+    image = 4
+
         

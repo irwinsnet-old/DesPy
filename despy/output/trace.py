@@ -37,7 +37,7 @@ despy.output.trace
 """
 from collections import OrderedDict
 import csv
-from despy.output.datatype import Datatype
+from despy.output.report import Datatype
         
 class TraceRecord(OrderedDict):
     """Single record in a trace report containing multiple data fields.

@@ -20,7 +20,7 @@ despy.core.queue
 from collections import deque, namedtuple
 import numpy as np
 from despy.core.component import Component
-from despy.output.datatype import Datatype
+from despy.output.report import Datatype
 import despy.output.plot as plot
 
 class Queue(Component):

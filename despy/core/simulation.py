@@ -21,7 +21,7 @@ from collections import namedtuple
 import datetime
 import numpy as np
 from despy.output.generator import Generator
-from despy.output.datatype import Datatype
+from despy.output.report import Datatype
 from despy.base.named_object import NamedObject
 
 class FelItem(namedtuple('FelItemTuple',
