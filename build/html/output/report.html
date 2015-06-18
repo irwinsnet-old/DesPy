@@ -1,0 +1,250 @@
+
+
+<!doctype html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>despy.output.report.HtmlReport &mdash; Despy 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="../index.html" />
+    <link rel="up" title="Despy Classes" href="../classes.html" />
+    <link rel="next" title="despy.output.report.Datatype" href="datatype.html" />
+    <link rel="prev" title="despy.output.generator.Generator" href="generator.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datatype.html" title="despy.output.report.Datatype"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generator.html" title="despy.output.generator.Generator"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">despy.output.report.HtmlReport</a><ul>
+<li><a class="reference internal" href="#class-description">Class Description</a></li>
+<li><a class="reference internal" href="#init">__init__</a></li>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generator.html"
+                        title="previous chapter">despy.output.generator.Generator</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="datatype.html"
+                        title="next chapter">despy.output.report.Datatype</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/output/report.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="despy-output-report-htmlreport">
+<h1>despy.output.report.HtmlReport<a class="headerlink" href="#despy-output-report-htmlreport" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="class-description">
+<h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="despy.output.report.HtmlReport">
+<em class="property">class </em><code class="descclassname">despy.output.report.</code><code class="descname">HtmlReport</code><a class="reference internal" href="../_modules/despy/output/report.html#HtmlReport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.report.HtmlReport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders an HTML report containing simulation results.</p>
+<dl class="docutils">
+<dt><strong>Attributes</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#despy.output.report.HtmlReport.root" title="despy.output.report.HtmlReport.root"><code class="xref py py-attr docutils literal"><span class="pre">HtmlReport.root</span></code></a>: The root &lt;html&gt; element of the
+HtmlReport. Read-only.</li>
+<li><a class="reference internal" href="#despy.output.report.HtmlReport.head" title="despy.output.report.HtmlReport.head"><code class="xref py py-attr docutils literal"><span class="pre">HtmlReport.head</span></code></a>: The &lt;head&gt; element of the HtmlReport.
+Read-only.</li>
+<li><a class="reference internal" href="#despy.output.report.HtmlReport.body" title="despy.output.report.HtmlReport.body"><code class="xref py py-attr docutils literal"><span class="pre">HtmlReport.body</span></code></a>: The &lt;body&gt; element of the HtmlReport.
+Read-only.</li>
+<li><a class="reference internal" href="#despy.output.report.HtmlReport.divisions" title="despy.output.report.HtmlReport.divisions"><code class="xref py py-attr docutils literal"><span class="pre">HtmlReport.divisions</span></code></a>: Python list containing
+simulation output. Read-only.</li>
+</ul>
+</dd>
+<dt><strong>Methods</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#despy.output.report.HtmlReport.append_output" title="despy.output.report.HtmlReport.append_output"><code class="xref py py-meth docutils literal"><span class="pre">HtmlReport.append_output()</span></code></a>: Appends a section of output
+to the HtmlReport.divisions list.</li>
+<li><a class="reference internal" href="#despy.output.report.HtmlReport.write_report" title="despy.output.report.HtmlReport.write_report"><code class="xref py py-meth docutils literal"><span class="pre">HtmlReport.write_report()</span></code></a>: Write HTML report file based
+on data in HtmlReport.divisions.</li>
+</ul>
+</dd>
+<dt><strong>Python Library Dependencies</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3.4/library/xml.etree.elementtree.html#module-xml.etree.ElementTree" title="(in Python v3.4)"><code class="xref py py-mod docutils literal"><span class="pre">xml.etree.ElementTree</span></code></a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="init">
+<h2>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="despy.output.report.HtmlReport.__init__">
+<code class="descclassname">HtmlReport.</code><code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/output/report.html#HtmlReport.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.report.HtmlReport.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs an HtmlReport object.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="despy.output.report.HtmlReport.root">
+<code class="descclassname">HtmlReport.</code><code class="descname">root</code><a class="headerlink" href="#despy.output.report.HtmlReport.root" title="Permalink to this definition">¶</a></dt>
+<dd><p>The root &lt;html&gt; element of the HtmlReport. Read-only.</p>
+<p><em>Type:</em> <a class="reference external" href="https://docs.python.org/3.4/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.4)"><code class="xref py py-class docutils literal"><span class="pre">xml.etree.ElementTree.Element</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.output.report.HtmlReport.head">
+<code class="descclassname">HtmlReport.</code><code class="descname">head</code><a class="headerlink" href="#despy.output.report.HtmlReport.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>The &lt;head&gt; element of the HtmlReport. Read-only.</p>
+<p><em>Type:</em> <a class="reference external" href="https://docs.python.org/3.4/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.4)"><code class="xref py py-class docutils literal"><span class="pre">xml.etree.ElementTree.Element</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.output.report.HtmlReport.body">
+<code class="descclassname">HtmlReport.</code><code class="descname">body</code><a class="headerlink" href="#despy.output.report.HtmlReport.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>The &lt;body&gt; element of the HtmlReport. Read-only.</p>
+<p><em>Type:</em> <a class="reference external" href="https://docs.python.org/3.4/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.4)"><code class="xref py py-class docutils literal"><span class="pre">xml.etree.ElementTree.Element</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.output.report.HtmlReport.divisions">
+<code class="descclassname">HtmlReport.</code><code class="descname">divisions</code><a class="headerlink" href="#despy.output.report.HtmlReport.divisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python list containing simulation output. Read-only.</p>
+<p>Each section of simulation output will be rendered as an HTML
+&lt;div&gt; element. The list can be appended to or have items
+deleted from it. Because it is read-only, it cannot be replaced
+with another list.</p>
+<p><em>Type:</em> Python List of Datatype formatted tuples.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="despy.output.report.HtmlReport.append_output">
+<code class="descclassname">HtmlReport.</code><code class="descname">append_output</code><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/output/report.html#HtmlReport.append_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.report.HtmlReport.append_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a section of output to the HtmlReport.divisions list.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">output</span></code> (List of report.Datatype formatted tuples.)</dt>
+<dd>A section of output that will be rendered as it&#8217;s own
+division in the HTML report.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="despy.output.report.HtmlReport.write_report">
+<code class="descclassname">HtmlReport.</code><code class="descname">write_report</code><span class="sig-paren">(</span><em>folder</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/output/report.html#HtmlReport.write_report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.report.HtmlReport.write_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write HTML report file based on data in HtmlReport.divisions.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">folder</span></code> (String)</dt>
+<dd>Full path to folder where HTML report will be saved.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datatype.html" title="despy.output.report.Datatype"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generator.html" title="despy.output.generator.Generator"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" >Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Stacy Irwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

@@ -25,3 +25,5 @@ Despy Classes
    output/trace
    output/CSV_file
    output/generator
+   output/report
+   output/datatype

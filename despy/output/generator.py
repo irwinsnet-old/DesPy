@@ -9,6 +9,10 @@ despy.output.generator
 
 :class:`Generator`
     Generates the simulation's output reports and graphs.
+    
+..  todo::
+
+    Make _full_path attribute a documented public attribute.
 """
 import os
 from despy.output.trace import Trace
@@ -128,7 +132,7 @@ class Generator(object):
             self.report.append_output(self.sim.get_data())
             
             for _, component in model.components.items():
-                output = component.get_data(self.folder)
+                output = component.get_data(self._full_path)
                 if output is not None:
                     self.report.append_output(output)
             

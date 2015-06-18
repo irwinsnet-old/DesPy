@@ -138,7 +138,7 @@ class Queue(Component):
         # Create Time in Queue Histogram
         qtimes = np.array(self.times_in_queue, np.int32)
         qtime_filename = '{0}_time_in_q.png'.format(self.id)
-        plot.histogram(self.times_in_queue, folder, qtime_filename,
+        plot.Histogram(self.times_in_queue, folder, qtime_filename,
                        title = self.name,
                        x_label = "Time in Queue",
                        y_label = "Frequency")     

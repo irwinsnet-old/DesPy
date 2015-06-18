@@ -141,7 +141,8 @@ class testDespyb(unittest.TestCase):
             self.schedule(evt1, 5)
         
         model.set_initialize_method(initializeModel)
-        model.sim.gen.output_folder = "C:/Projects/despy_output/append_callback1"
+        model.sim.gen.folder_basename = \
+                "C:/Projects/despy_output/append_callback1"
         model.sim.run()
         
         evtTrace = model.sim.gen.trace
@@ -153,7 +154,8 @@ class testDespyb(unittest.TestCase):
         
         #Test reset method and until parameter
         model.sim.reset()
-        model.sim.gen.output_folder = "C:/Projects/despy_output/append_callback2"
+        model.sim.gen.folder_basename = \
+                "C:/Projects/despy_output/append_callback2"
         model.sim.run(10)
         evtTrace = model.sim.gen.trace
         self.assertEqual(evtTrace.length, 1)

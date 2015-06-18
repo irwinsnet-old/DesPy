@@ -61,10 +61,10 @@ class TraceRecord(OrderedDict):
     available.
         
     **Attributes**
-      * :attr:`TraceRecord.standard_labels`: List of standard field
-        labels included in every TraceRecord.
-      * :attr:`TraceRecord.custom_labels`: List of custom field labels
-        added to TraceRecord by designer.
+        * :attr:`TraceRecord.standard_labels`: List of standard field
+          labels included in every TraceRecord.
+        * :attr:`TraceRecord.custom_labels`: List of custom field labels
+          added to TraceRecord by designer.
     
     **Methods**
         * :meth:`TraceRecord.__str__`: Returns a string representation

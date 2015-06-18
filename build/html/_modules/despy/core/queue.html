@@ -92,7 +92,7 @@
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span><span class="p">,</span> <span class="n">namedtuple</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">despy.core.component</span> <span class="kn">import</span> <span class="n">Component</span>
-<span class="kn">from</span> <span class="nn">despy.output.datatype</span> <span class="kn">import</span> <span class="n">Datatype</span>
+<span class="kn">from</span> <span class="nn">despy.output.report</span> <span class="kn">import</span> <span class="n">Datatype</span>
 <span class="kn">import</span> <span class="nn">despy.output.plot</span> <span class="kn">as</span> <span class="nn">plot</span>
 
 <div class="viewcode-block" id="Queue"><a class="viewcode-back" href="../../../core/queue.html#despy.core.queue.Queue">[docs]</a><span class="k">class</span> <span class="nc">Queue</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
@@ -210,7 +210,7 @@
         <span class="c"># Create Time in Queue Histogram</span>
         <span class="n">qtimes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times_in_queue</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
         <span class="n">qtime_filename</span> <span class="o">=</span> <span class="s">&#39;{0}_time_in_q.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-        <span class="n">plot</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times_in_queue</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">qtime_filename</span><span class="p">,</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">Histogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times_in_queue</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">qtime_filename</span><span class="p">,</span>
                        <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                        <span class="n">x_label</span> <span class="o">=</span> <span class="s">&quot;Time in Queue&quot;</span><span class="p">,</span>
                        <span class="n">y_label</span> <span class="o">=</span> <span class="s">&quot;Frequency&quot;</span><span class="p">)</span>     
