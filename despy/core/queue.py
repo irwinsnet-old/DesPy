@@ -137,8 +137,9 @@ class Queue(Component):
         """
         # Create Time in Queue Histogram
         qtimes = np.array(self.times_in_queue, np.int32)
-        qtime_filename = '{0}_time_in_q.png'.format(self.id)
-        plot.Histogram(self.times_in_queue, folder, qtime_filename,
+        qtime_filename = '{0}_time_in_q'.format(self.id)
+        full_fname = plot.Histogram(self.times_in_queue, folder,
+                       qtime_filename,
                        title = self.name,
                        x_label = "Time in Queue",
                        y_label = "Frequency")     
@@ -150,6 +151,6 @@ class Queue(Component):
                     [('Maximum Time in Queue', np.amax(qtimes)),
                      ('Minimum Time in Queue', np.amin(qtimes)),
                      ('Mean Time in Queue', np.mean(qtimes))]),
-                 (Datatype.image, qtime_filename)]
+                 (Datatype.image, full_fname)]
      
         return output

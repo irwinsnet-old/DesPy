@@ -24,3 +24,12 @@ Despy Modules
     
 ..  automodule:: despy.output.trace
     :noindex:
+
+.. automodule:: despy.output.report
+   :noindex:
+
+.. automodule:: despy.output.generator
+   :noindex:
+
+.. automodule:: despy.output.plot
+   :noindex:

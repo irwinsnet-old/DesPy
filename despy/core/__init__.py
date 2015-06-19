@@ -5,6 +5,7 @@
 
 """
 ..  module:: despy.core.__init__
+    :noindex:
 
 The ``despy.core`` package includes classes that are essential for any
 Despy simulation.

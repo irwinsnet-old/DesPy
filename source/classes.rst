@@ -27,3 +27,4 @@ Despy Classes
    output/generator
    output/report
    output/datatype
+   output/plot

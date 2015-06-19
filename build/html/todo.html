@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="top" title="Despy 1 documentation" href="index.html" />
-    <link rel="prev" title="despy.output.trace.CSV_File" href="output/CSV_file.html" />
+    <link rel="prev" title="despy.output.report.Datatype" href="output/datatype.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -43,7 +43,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="output/CSV_file.html" title="despy.output.trace.CSV_File"
+          <a href="output/datatype.html" title="despy.output.report.Datatype"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li> 
       </ul>
@@ -51,8 +51,8 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="output/CSV_file.html"
-                        title="previous chapter">despy.output.trace.CSV_File</a></p>
+  <p class="topless"><a href="output/datatype.html"
+                        title="previous chapter">despy.output.report.Datatype</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -89,9 +89,13 @@
 callable method.</p>
 <p>Modify trace report order so main event message comes first,
 event related messages second.</p>
-<p class="last">Replace get_row with get_standard_fields and get_custom_fields.
+<p>Replace get_row with get_standard_fields and get_custom_fields.
 Each method will have a Boolean argument that specifies whether
 returned list will include labels.</p>
+<p>Add external dependencies to all class docstrings. Use intersphinx.</p>
+<p>Add assert statements to verify correct data types for input.</p>
+<p class="last">Refactor to remove use of &#8220;_&#8221; for private attributes. Only use for
+read-only attributes.</p>
 </div>
 <p class="todo-source">(The <a class="reference internal" href="modules.html#index-0"><em>original entry</em></a> is located in  C:\Projects\despy\despy\output\trace.py:docstring of despy.output.trace, line 14.)</p>
 <div class="admonition-todo admonition">
@@ -123,7 +127,7 @@ function.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="output/CSV_file.html" title="despy.output.trace.CSV_File"
+          <a href="output/datatype.html" title="despy.output.report.Datatype"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Despy 1 documentation</a> &raquo;</li> 
       </ul>

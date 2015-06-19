@@ -38,7 +38,10 @@ extensions = [
 ]
 
 todo_include_todos = True
-intersphinx_mapping = {'python': ('https://docs.python.org/3.4', None)}
+intersphinx_mapping = \
+        {'python': ('https://docs.python.org/3.4', None),
+         'numpy': ('http://docs.scipy.org/doc/numpy/', None),
+         'matplotlib':('http://matplotlib.sourceforge.net', None)}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

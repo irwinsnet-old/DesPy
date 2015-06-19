@@ -57,14 +57,14 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Despy Packages</a><ul>
-<li><a class="reference internal" href="#module-despy.base.__init__">despy.base</a><ul>
+<li><a class="reference internal" href="#despy-base">despy.base</a><ul>
 <li><a class="reference internal" href="#despy-base-named-object">despy.base.named_object</a><ul>
 <li><a class="reference internal" href="#id1">despy.base.named_object</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-despy.core.__init__">despy.core</a><ul>
+<li><a class="reference internal" href="#despy-core">despy.core</a><ul>
 <li><a class="reference internal" href="#despy-core-simulation">despy.core.simulation</a><ul>
 <li><a class="reference internal" href="#id2">despy.core.simulation</a></li>
 </ul>
@@ -99,7 +99,25 @@
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#despy-output">despy.output</a></li>
+<li><a class="reference internal" href="#despy-output">despy.output</a><ul>
+<li><a class="reference internal" href="#despy-output-generator">despy.output.generator</a><ul>
+<li><a class="reference internal" href="#id9">despy.output.generator</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#despy-output-trace">despy.output.trace</a><ul>
+<li><a class="reference internal" href="#id10">despy.output.trace</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#despy-output-report">despy.output.report</a><ul>
+<li><a class="reference internal" href="#id11">despy.output.report</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#despy-output-plot">despy.output.plot</a><ul>
+<li><a class="reference internal" href="#id12">despy.output.plot</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -140,8 +158,8 @@
             
   <div class="section" id="despy-packages">
 <h1>Despy Packages<a class="headerlink" href="#despy-packages" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-despy.base.__init__">
-<span id="despy-base"></span><h2>despy.base<a class="headerlink" href="#module-despy.base.__init__" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="despy-base">
+<h2>despy.base<a class="headerlink" href="#despy-base" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="despy-base-named-object">
 <h3>despy.base.named_object<a class="headerlink" href="#despy-base-named-object" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="id1">
@@ -153,8 +171,8 @@
 </div>
 </div>
 </div>
-<div class="section" id="module-despy.core.__init__">
-<span id="despy-core"></span><h2>despy.core<a class="headerlink" href="#module-despy.core.__init__" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="despy-core">
+<h2>despy.core<a class="headerlink" href="#despy-core" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal"><span class="pre">despy.core</span></code> package includes classes that are essential for any
 Despy simulation.</p>
 <p>The __init__.py module for the despy.core package imports all
@@ -268,6 +286,81 @@ function.</p>
 </div>
 <div class="section" id="despy-output">
 <h2>despy.output<a class="headerlink" href="#despy-output" title="Permalink to this headline">¶</a></h2>
+<p>The despy.ouput package contains classes and functions for creating
+plots and reports that display the simulation results.</p>
+<div class="section" id="despy-output-generator">
+<h3>despy.output.generator<a class="headerlink" href="#despy-output-generator" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id9">
+<h4>despy.output.generator<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt><a class="reference internal" href="output/generator.html#despy.output.generator.Generator" title="despy.output.generator.Generator"><code class="xref py py-class docutils literal"><span class="pre">Generator</span></code></a></dt>
+<dd>Generates the simulation&#8217;s output reports and graphs.</dd>
+</dl>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">Make _full_path attribute a documented public attribute.</p>
+</div>
+</div>
+</div>
+<div class="section" id="despy-output-trace">
+<h3>despy.output.trace<a class="headerlink" href="#despy-output-trace" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h4>despy.output.trace<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt><a class="reference internal" href="output/traceRecord.html#despy.output.trace.TraceRecord" title="despy.output.trace.TraceRecord"><code class="xref py py-class docutils literal"><span class="pre">TraceRecord</span></code></a></dt>
+<dd>Single record in a trace report containing multiple data fields.</dd>
+<dt><a class="reference internal" href="output/trace.html#despy.output.trace.Trace" title="despy.output.trace.Trace"><code class="xref py py-class docutils literal"><span class="pre">Trace</span></code></a></dt>
+<dd>List of messages and events that occurred during the simulation.</dd>
+<dt><a class="reference internal" href="output/CSV_file.html#despy.output.trace.CSV_file" title="despy.output.trace.CSV_file"><code class="xref py py-class docutils literal"><span class="pre">CSV_file</span></code></a></dt>
+<dd>A CSV file_name containing that contains all trace records.</dd>
+</dl>
+<div class="admonition-todo admonition" id="index-2">
+<p class="first admonition-title">Todo</p>
+<p>Modify other classes to return length through a property, not a
+callable method.</p>
+<p>Modify trace report order so main event message comes first,
+event related messages second.</p>
+<p>Replace get_row with get_standard_fields and get_custom_fields.
+Each method will have a Boolean argument that specifies whether
+returned list will include labels.</p>
+<p>Add external dependencies to all class docstrings. Use intersphinx.</p>
+<p>Add assert statements to verify correct data types for input.</p>
+<p class="last">Refactor to remove use of &#8220;_&#8221; for private attributes. Only use for
+read-only attributes.</p>
+</div>
+</div>
+</div>
+<div class="section" id="despy-output-report">
+<h3>despy.output.report<a class="headerlink" href="#despy-output-report" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id11">
+<h4>despy.output.report<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt><a class="reference internal" href="output/report.html#despy.output.report.HtmlReport" title="despy.output.report.HtmlReport"><code class="xref py py-class docutils literal"><span class="pre">HtmlReport</span></code></a></dt>
+<dd>Renders an HTML report containing simulation results.</dd>
+</dl>
+<p><a class="reference internal" href="output/datatype.html#despy.output.report.Datatype" title="despy.output.report.Datatype"><code class="xref py py-class docutils literal"><span class="pre">Datatype</span></code></a></p>
+</div>
+</div>
+<div class="section" id="despy-output-plot">
+<h3>despy.output.plot<a class="headerlink" href="#despy-output-plot" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id12">
+<h4>despy.output.plot<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference internal" href="output/plot.html#despy.output.plot.Histogram" title="despy.output.plot.Histogram"><code class="xref py py-func docutils literal"><span class="pre">Histogram()</span></code></a></p>
+<dl class="docutils">
+<dt><strong>Python Library Dependencies</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3.4/library/math.html#module-math" title="(in Python v3.4)"><code class="xref py py-mod docutils literal"><span class="pre">math</span></code></a></li>
+</ul>
+</dd>
+<dt><strong>External Library Dependencies</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/index.html#module-numpy" title="(in NumPy v1.9)"><code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code></a></li>
+<li><a class="reference external" href="http://matplotlib.sourceforge.net/api/pyplot_api.html#module-matplotlib.pyplot" title="(in Matplotlib v1.4.3)"><code class="xref py py-mod docutils literal"><span class="pre">matplotlib.pyplot</span></code></a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
 </div>
 </div>
 

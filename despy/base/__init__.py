@@ -5,6 +5,7 @@
 
 """
 ..  module:: despy.base.__init__
+    :noindex:
 
 despy.base.named_object
 =======================

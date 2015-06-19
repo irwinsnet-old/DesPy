@@ -65,6 +65,9 @@
 <li><a class="reference internal" href="#despy-core-resource">despy.core.resource</a></li>
 <li><a class="reference internal" href="#despy-core-queue">despy.core.queue</a></li>
 <li><a class="reference internal" href="#despy-output-trace">despy.output.trace</a></li>
+<li><a class="reference internal" href="#despy-output-report">despy.output.report</a></li>
+<li><a class="reference internal" href="#despy-output-generator">despy.output.generator</a></li>
+<li><a class="reference internal" href="#despy-output-plot">despy.output.plot</a></li>
 </ul>
 </li>
 </ul>
@@ -189,6 +192,42 @@ returned list will include labels.</p>
 <p class="last">Refactor to remove use of &#8220;_&#8221; for private attributes. Only use for
 read-only attributes.</p>
 </div>
+</div>
+<div class="section" id="despy-output-report">
+<h2>despy.output.report<a class="headerlink" href="#despy-output-report" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><a class="reference internal" href="output/report.html#despy.output.report.HtmlReport" title="despy.output.report.HtmlReport"><code class="xref py py-class docutils literal"><span class="pre">HtmlReport</span></code></a></dt>
+<dd>Renders an HTML report containing simulation results.</dd>
+</dl>
+<p><a class="reference internal" href="output/datatype.html#despy.output.report.Datatype" title="despy.output.report.Datatype"><code class="xref py py-class docutils literal"><span class="pre">Datatype</span></code></a></p>
+</div>
+<div class="section" id="despy-output-generator">
+<h2>despy.output.generator<a class="headerlink" href="#despy-output-generator" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><a class="reference internal" href="output/generator.html#despy.output.generator.Generator" title="despy.output.generator.Generator"><code class="xref py py-class docutils literal"><span class="pre">Generator</span></code></a></dt>
+<dd>Generates the simulation&#8217;s output reports and graphs.</dd>
+</dl>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">Make _full_path attribute a documented public attribute.</p>
+</div>
+</div>
+<div class="section" id="despy-output-plot">
+<h2>despy.output.plot<a class="headerlink" href="#despy-output-plot" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="output/plot.html#despy.output.plot.Histogram" title="despy.output.plot.Histogram"><code class="xref py py-func docutils literal"><span class="pre">Histogram()</span></code></a></p>
+<dl class="docutils">
+<dt><strong>Python Library Dependencies</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3.4/library/math.html#module-math" title="(in Python v3.4)"><code class="xref py py-mod docutils literal"><span class="pre">math</span></code></a></li>
+</ul>
+</dd>
+<dt><strong>External Library Dependencies</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/index.html#module-numpy" title="(in NumPy v1.9)"><code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code></a></li>
+<li><a class="reference external" href="http://matplotlib.sourceforge.net/api/pyplot_api.html#module-matplotlib.pyplot" title="(in Matplotlib v1.4.3)"><code class="xref py py-mod docutils literal"><span class="pre">matplotlib.pyplot</span></code></a></li>
+</ul>
+</dd>
+</dl>
 </div>
 </div>
 

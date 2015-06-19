@@ -209,8 +209,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># Create Time in Queue Histogram</span>
         <span class="n">qtimes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times_in_queue</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
-        <span class="n">qtime_filename</span> <span class="o">=</span> <span class="s">&#39;{0}_time_in_q.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-        <span class="n">plot</span><span class="o">.</span><span class="n">Histogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times_in_queue</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">qtime_filename</span><span class="p">,</span>
+        <span class="n">qtime_filename</span> <span class="o">=</span> <span class="s">&#39;{0}_time_in_q&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">full_fname</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">Histogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times_in_queue</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span>
+                       <span class="n">qtime_filename</span><span class="p">,</span>
                        <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                        <span class="n">x_label</span> <span class="o">=</span> <span class="s">&quot;Time in Queue&quot;</span><span class="p">,</span>
                        <span class="n">y_label</span> <span class="o">=</span> <span class="s">&quot;Frequency&quot;</span><span class="p">)</span>     
@@ -222,7 +223,7 @@
                     <span class="p">[(</span><span class="s">&#39;Maximum Time in Queue&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">qtimes</span><span class="p">)),</span>
                      <span class="p">(</span><span class="s">&#39;Minimum Time in Queue&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">qtimes</span><span class="p">)),</span>
                      <span class="p">(</span><span class="s">&#39;Mean Time in Queue&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">qtimes</span><span class="p">))]),</span>
-                 <span class="p">(</span><span class="n">Datatype</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="n">qtime_filename</span><span class="p">)]</span>
+                 <span class="p">(</span><span class="n">Datatype</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="n">full_fname</span><span class="p">)]</span>
      
         <span class="k">return</span> <span class="n">output</span></div></div>
 </pre></div>
