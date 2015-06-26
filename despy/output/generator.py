@@ -30,7 +30,6 @@ class Generator(object):
         * :attr:`Generator.sim`: Link to Simulation object documented
           by the Generator.         
 
-
     *Methods*
         * :meth:`Generator.write_files`: Creates trace and HTML reports
           in folder_basename location.
@@ -41,7 +40,7 @@ class Generator(object):
         * :mod:`os`
     
     """
-
+    
             
     def __init__(self, simulation):
         """Construct a Generator object.

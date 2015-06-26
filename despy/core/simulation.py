@@ -525,5 +525,3 @@ class NoEventsRemainingError(Exception):
     """
     pass
 
-# TODO: Reorder methods in documentation.
-
