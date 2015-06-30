@@ -85,16 +85,20 @@
 <span class="sd">    A named tuple that represents a scheduled event.</span>
 <span class="sd">:class:`.NoEventsRemaining`</span>
 <span class="sd">    Raised by despy.core.simulation&#39;s step method when FEL is empty.</span>
+<span class="sd">    </span>
+<span class="sd">..  todo</span>
+<span class="sd">    </span>
+<span class="sd">    Update documentation to state that seed can raise a TypeError.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">heapq</span> <span class="kn">import</span> <span class="n">heappush</span><span class="p">,</span> <span class="n">heappop</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">despy.output.generator</span> <span class="kn">import</span> <span class="n">Generator</span>
 <span class="kn">from</span> <span class="nn">despy.output.report</span> <span class="kn">import</span> <span class="n">Datatype</span>
 <span class="kn">from</span> <span class="nn">despy.base.named_object</span> <span class="kn">import</span> <span class="n">NamedObject</span>
+<span class="kn">import</span> <span class="nn">despy.stats.random</span>
 
 <div class="viewcode-block" id="FelItem"><a class="viewcode-back" href="../../../core/felitem.html#despy.core.simulation.FelItem">[docs]</a><span class="k">class</span> <span class="nc">FelItem</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FelItemTuple&#39;</span><span class="p">,</span>
                          <span class="p">[</span><span class="s">&#39;time_fld&#39;</span><span class="p">,</span> <span class="s">&#39;event_fld&#39;</span><span class="p">,</span> <span class="s">&#39;priority_fld&#39;</span><span class="p">])):</span>
@@ -254,11 +258,9 @@
     
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; The np.random.seed method will be seeded with</span>
-<span class="sd">        this integer prior to running the simulation.</span>
+        <span class="sd">&quot;&quot;&quot;Calls seed methods in both numpy and standard random modules. </span>
 <span class="sd">        </span>
-<span class="sd">        Set seed to an integer, an array of integers of any length or to</span>
-<span class="sd">        ``None`` (default).</span>
+<span class="sd">        Set seed to an integer, or to ``None`` (default).</span>
 <span class="sd">        </span>
 <span class="sd">        By default (i.e., when seed is set to None), Despy will use a</span>
 <span class="sd">        different seed, and hence a different random number sequence for</span>
@@ -266,18 +268,13 @@
 <span class="sd">        purposes, it&#39;s often useful to repeatedly run the simulation</span>
 <span class="sd">        with the same sequence of random numbers. This can be</span>
 <span class="sd">        accomplished by setting the seed variable.</span>
-<span class="sd">        </span>
-<span class="sd">        Despy uses the random generator in the SciPy Numpy package to</span>
-<span class="sd">        generate random numbers. Numpy uses a Mersenne twister </span>
-<span class="sd">        algorithm to generate the random numbers.</span>
-<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span>
     
     <span class="nd">@seed.setter</span>
     <span class="k">def</span> <span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span> <span class="o">=</span> <span class="n">seed</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">despy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">now</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -596,8 +593,6 @@
 <span class="sd">    FEL.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span>
-
-<span class="c"># TODO: Reorder methods in documentation.</span>
 </pre></div></div>
 
           </div>

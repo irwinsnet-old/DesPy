@@ -31,6 +31,7 @@ import os
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
     'sphinx.ext.todo',
     'sphinx.ext.pngmath',
     'sphinx.ext.viewcode',
@@ -38,10 +39,14 @@ extensions = [
 ]
 
 todo_include_todos = True
+
 intersphinx_mapping = \
         {'python': ('https://docs.python.org/3.4', None),
          'numpy': ('http://docs.scipy.org/doc/numpy/', None),
-         'matplotlib':('http://matplotlib.sourceforge.net', None)}
+         'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
+         'matplotlib': ('http://matplotlib.sourceforge.net', None)}
+        
+auto_summary_generate = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

@@ -32,30 +32,29 @@ class Event(Component):
       * :class:`despy.core.component.Component`
     
     **Attributes**
-      * :attr:`Event.trace_fields`: Read Only. An ordered dictionary
-        containing custom trace data.
-      * :attr:`Event.trace_records`: Read Only. A list of trace records
-        for completed events.
+    
+    ..  autosummary::
+    
+        trace_fields
+        trace_records
       
     **Methods**
-      * :meth:`Event.append_callback`: Appends a function to the event's
-        callback list.
-      * :meth:`Event.add_trace_field`: Add custom fields to the event's
-        trace record.
-      
-    **Internal Attributes**
-      * attr:`Event._callbacks`: An list of methods that will be called
-        every time the event is executed.
-      
+    
+    ..  autosummary::
+        
+        append_callback
+        add_trace_field
+        
+    
     **Internal Methods**
-      * :meth:`Event._do_event`: Executes an event's callback functions.
-      * :meth:`Event._update_trace_record`: Updates a trace record with
-        custom fields.
-      * :meth:`Event._reset`: Resets the event to it's initial state. *
-      * :meth:`Event.__lt__`: A Python Magic Method that defines how
-        ``Event`` objects respond to less-than operator.
-      * :meth:`Event.__gt__`: A Python Magic Method that defines how
-        ``Event`` objects respond to greater-than operator.
+    
+    ..  autosummary::
+    
+        _do_event
+        _update_trace_record
+        _reset
+        __lt__
+        __gt__
     """
 
 

@@ -101,32 +101,28 @@
 <span class="sd">    Subclasses should include a call to the :meth:`Component.__init()__`</span>
 <span class="sd">    method in the subclass&#39;s ``__init__`` method.</span>
 <span class="sd">    </span>
+<span class="sd">    </span>
 <span class="sd">    **Attributes**</span>
 
-<span class="sd">      * :attr:`.model`: The :class:`despy.core.model.Model` object that</span>
-<span class="sd">        the component belongs to.</span>
-<span class="sd">      * :attr:`.sim`: The :class:`despy.core.simulation.Simulation` </span>
-<span class="sd">        object that the component&#39;s model belongs to.</span>
-<span class="sd">      * :attr:`.number`: A unique integer that is assigned to each</span>
-<span class="sd">        instance of a component.  The first component instantiated by</span>
-<span class="sd">        the model will be assigned _number 1, followed by _number 2 for</span>
-<span class="sd">        the next component, and so on.</span>
-<span class="sd">      * :attr:`.id`: A string that uniquely identifies the component</span>
-<span class="sd">        instance.</span>
+<span class="sd">    ..  autosummary::</span>
+<span class="sd">        </span>
+<span class="sd">        model</span>
+<span class="sd">        sim</span>
+<span class="sd">        number</span>
+<span class="sd">        id</span>
+
 
 <span class="sd">    **Methods**</span>
-<span class="sd">      * :meth:`.initialize`: Subclasses should override this method to</span>
-<span class="sd">        initialize the component prior to running the simulation.</span>
-<span class="sd">      * :meth:`.finalize`: Subclasses should override this method to</span>
-<span class="sd">        delete unneeded objects or execute other post-simulation code.</span>
-<span class="sd">      * :meth:`~Component.get_data`: Subclasses should override this</span>
-<span class="sd">        method to provide output data to the simulation report.</span>
-<span class="sd">      * :meth:`__str__`: Returns a string that uniquely identifies the</span>
-<span class="sd">        component.</span>
-<span class="sd">      * :meth:`.set_counter`: A class method that resets the internal</span>
-<span class="sd">        _number counter to 1.</span>
-<span class="sd">      * :meth:`._get_next_number`: A private class method that gets the</span>
-<span class="sd">        next unused _number from the _number counter.</span>
+<span class="sd">    </span>
+<span class="sd">    ..  autosummary::</span>
+<span class="sd">    </span>
+<span class="sd">        initialize</span>
+<span class="sd">        finalize</span>
+<span class="sd">        get_data</span>
+<span class="sd">        __str__</span>
+<span class="sd">        set_counter</span>
+<span class="sd">        _get_next_number</span>
+<span class="sd">        </span>
 <span class="sd">    </span>
 <span class="sd">    **Inherits**</span>
 <span class="sd">        * :class:`despy.base.named_object.NamedObject`</span>
@@ -226,7 +222,7 @@
         <span class="k">return</span> <span class="s">&quot;{0}.{1}.{2}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number</span><span class="p">)</span>
     
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Component.set_counter"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.component.Component.set_counter">[docs]</a>    <span class="k">def</span> <span class="nf">set_counter</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+<div class="viewcode-block" id="Component.set_counter"><a class="viewcode-back" href="../../../core/event.html#despy.core.component.Component.set_counter">[docs]</a>    <span class="k">def</span> <span class="nf">set_counter</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A class method that resets the *Component&#39;s* or subclass&#39;s</span>
 <span class="sd">        _number counter back to 1.</span>
 <span class="sd">        </span>
@@ -265,20 +261,20 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s">&quot;{0}:{1}#{2}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number</span><span class="p">)</span>
     </div>
-<div class="viewcode-block" id="Component.initialize"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.component.Component.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Component.initialize"><a class="viewcode-back" href="../../../core/event.html#despy.core.component.Component.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Subclasses should override this method with initialization</span>
 <span class="sd">        code that will be executed prior to any events on the future</span>
 <span class="sd">        event list (FEL).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
     </div>
-<div class="viewcode-block" id="Component.finalize"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.component.Component.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Component.finalize"><a class="viewcode-back" href="../../../core/event.html#despy.core.component.Component.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Subclasses should override this method with cleanup or other</span>
 <span class="sd">        code that will be executed after all events on the FEL.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
     </div>
-<div class="viewcode-block" id="Component.get_data"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.component.Component.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+<div class="viewcode-block" id="Component.get_data"><a class="viewcode-back" href="../../../core/event.html#despy.core.component.Component.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Subclasses should override this method to provide simulation</span>
 <span class="sd">        output that will be included in the output report.</span>
 <span class="sd">        </span>

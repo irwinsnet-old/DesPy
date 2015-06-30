@@ -1,8 +1,3 @@
-.. Despy documentation master file, created by
-   sphinx-quickstart on Fri Nov 21 06:43:34 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Despy
 =====
 
@@ -49,7 +44,8 @@ Contents:
    modules
    classes
    todo
-
+   
+   
 **Conventions**
 # Methods and attributes that begin with an underscore (_) are internal
 methods. Internal methods are called by Despy classes, but are not

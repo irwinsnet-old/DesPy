@@ -2,117 +2,66 @@
 #   Version 0.1
 #   Released under the MIT License (MIT)
 #   Copyright (c) 2015, Stacy Irwin
-from boto.rds import statusinfo
 """
-******************
-despy.stats.random
-******************
+Provides a random number seed function and statistical helper functions.
 
-:func:`Poisson`
+..  autosummary::
 
+    seed
+    get_poisson_pmf
+    get_empirical_pmf
+    
 **Python Library Dependencies**
-    * :mod:
+    * :mod:`random`
     
 **External Library Dependencies**
-    * :mod:
-    * :mod:
-
-..  todo
-
-    Fix emperical so it will return more than one value.
+    * :mod:`scipy.stats`
+    * :mod:`numpy.random`
     
-    Extract check_shape feature to subroutine.
+Designers should use the despy.stats.random.seed function when seeding
+the random number generators. While despy will use the numpy random
+number generator instead of the generator built into Python's random
+module, we can't guarantee that Python random module functions won't
+sneak into a custom subclass. The numpy and Python random number
+generators use different random number sequences, so it's necessary to
+seed both generators to ensure a consistent random number sequence
+thoughout the simulation.
+
+Using the other functions in this module is optional. Designers who are
+familiar with the scipy.stats package are encouraged to use that package
+directly -- it's more than sufficient. However, the documentation for
+the scipy.stats package can be challenging for new users, so I've
+included helper functions to steer new simulation designers in the
+right direction.
+
+The get_..._pmf and get_..._cdf functions return frozen scipy.stats
+probability distributions. Each distribution can generate random
+variables, calculate expected means, medians, and variances, and much
+more. 
+    
 """
-import random as rnd
-from enum import Enum
+
 import scipy.stats as stats
 import numpy as np
+import random
+
+def seed(seed):
+    """Seed random number generators in numpy and Python random module.
+    """
+    np.random.seed(seed)
+    random.seed(seed)
+
+def get_poisson_pmf(mu):
+    """Return Scipy.stats Poisson PMF class with lambda = mu.
+    """
+    return stats.poisson(mu)
+
+def get_empirical_pmf(values, probabilities, name="Empirical PMF"):
+    """Return custom Scipy.stats discrete PMF.
+    """
+    return stats.rv_discrete(values=(values, probabilities), name=name)
 
 
-class errorCode(Enum):
-    notSequence = 0
-    invalidPMFProb = 1
-    invalidPMFOrder = 2
-    invalidPMFSum = 3
-    invalidFinalProb = 4   
-
-def Poisson(average, num=1):
-    result = stats.poisson.rvs(average, size=num)
-    if len(result) == 1:
-        return np.asscalar(result)
-    else:
-        return result
-        
-class EmpericalGenerator(object):
-    def __init__(self, pmf, cumulative = False):
-        self.cumulative = cumulative
-        total = 0
-        for index in range(0, len(pmf)):
-            if len(pmf[index]) < 2:
-                raise StatsError(errorCode.notSequence)
-            if not 0 < pmf[index][0] <= 1:
-                    raise StatsError(errorCode.invalidPMFProb)
-            if self.cumulative and index == (len(pmf) - 1):
-                if pmf[-1][0] != 1:
-                    raise StatsError(errorCode.invalidFinalProb)
-            elif self.cumulative:
-                if pmf[index][0] >= pmf[index+1][0]:
-                    raise StatsError(errorCode.invalidPMFOrder)
-            elif not self.cumulative:
-                total += pmf[index][0]
-        if not cumulative and total != 1:
-            raise StatsError(errorCode.invalidPMFSum)
-                
-        self.pmf = pmf
-        
-    def get(self, num = 1):
-        results = []
-        for _ in range(0, num):
-            rNum = rnd.random()
-            limit = 0            
-            for index in range(0, len(self.pmf)):
-                if self.cumulative:
-                    limit = self.pmf[index][0]
-                else:
-                    limit += self.pmf[index][0]
-                if rNum < limit:
-                    results.append(self.pmf[index][1])
-                    break
-        
-        if len(results) == 1:
-            return results[0]
-        else:
-            return results
-        
-class StatsError(Exception):
-    def __init__(self, code):
-        self.code = code   
-
-    messages = [None for _ in range(len(errorCode))]
-
-    messages[errorCode.notSequence.value] = \
-        "Every PMF item must be sequence with at least two items."
-    messages[errorCode.invalidPMFOrder.value] = \
-        "Cumulative PMF probabilities must be ordered low to high."   
-    messages[errorCode.invalidPMFProb.value] = \
-        "PMF probability must be between 0 and 1."
-    messages[errorCode.invalidPMFSum.value] = \
-        "Non-cumulative PMF probabilities must sum to 1."
-    messages[errorCode.invalidFinalProb.value] = \
-        "Final cumulative PMF probability muse equal 1."
-    
-    @property
-    def message(self):
-        try:
-            return self.messages[self.code]
-        except IndexError:
-            return "Invalid error code."
-        
-    def __str__(self):
-        return self.message
-    
-
-        
 
             
         

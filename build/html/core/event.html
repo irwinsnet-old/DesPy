@@ -124,41 +124,61 @@ removed from the FEL.</p>
 <li><a class="reference internal" href="component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a></li>
 </ul>
 </dd>
-<dt><strong>Attributes</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.core.event.Event.trace_fields" title="despy.core.event.Event.trace_fields"><code class="xref py py-attr docutils literal"><span class="pre">Event.trace_fields</span></code></a>: Read Only. An ordered dictionary
-containing custom trace data.</li>
-<li><a class="reference internal" href="#despy.core.event.Event.trace_records" title="despy.core.event.Event.trace_records"><code class="xref py py-attr docutils literal"><span class="pre">Event.trace_records</span></code></a>: Read Only. A list of trace records
-for completed events.</li>
-</ul>
-</dd>
-<dt><strong>Methods</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.core.event.Event.append_callback" title="despy.core.event.Event.append_callback"><code class="xref py py-meth docutils literal"><span class="pre">Event.append_callback()</span></code></a>: Appends a function to the event&#8217;s
-callback list.</li>
-<li><a class="reference internal" href="#despy.core.event.Event.add_trace_field" title="despy.core.event.Event.add_trace_field"><code class="xref py py-meth docutils literal"><span class="pre">Event.add_trace_field()</span></code></a>: Add custom fields to the event&#8217;s
-trace record.</li>
-</ul>
-</dd>
-<dt><strong>Internal Attributes</strong></dt>
-<dd><ul class="first last simple">
-<li>attr:<cite>Event._callbacks</cite>: An list of methods that will be called
-every time the event is executed.</li>
-</ul>
-</dd>
-<dt><strong>Internal Methods</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.core.event.Event._do_event" title="despy.core.event.Event._do_event"><code class="xref py py-meth docutils literal"><span class="pre">Event._do_event()</span></code></a>: Executes an event&#8217;s callback functions.</li>
-<li><a class="reference internal" href="#despy.core.event.Event._update_trace_record" title="despy.core.event.Event._update_trace_record"><code class="xref py py-meth docutils literal"><span class="pre">Event._update_trace_record()</span></code></a>: Updates a trace record with
-custom fields.</li>
-<li><a class="reference internal" href="#despy.core.event.Event._reset" title="despy.core.event.Event._reset"><code class="xref py py-meth docutils literal"><span class="pre">Event._reset()</span></code></a>: Resets the event to it&#8217;s initial state. *</li>
-<li><a class="reference internal" href="#despy.core.event.Event.__lt__" title="despy.core.event.Event.__lt__"><code class="xref py py-meth docutils literal"><span class="pre">Event.__lt__()</span></code></a>: A Python Magic Method that defines how
-<code class="docutils literal"><span class="pre">Event</span></code> objects respond to less-than operator.</li>
-<li><a class="reference internal" href="#despy.core.event.Event.__gt__" title="despy.core.event.Event.__gt__"><code class="xref py py-meth docutils literal"><span class="pre">Event.__gt__()</span></code></a>: A Python Magic Method that defines how
-<code class="docutils literal"><span class="pre">Event</span></code> objects respond to greater-than operator.</li>
-</ul>
-</dd>
 </dl>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.event.Event.trace_fields" title="despy.core.event.Event.trace_fields"><code class="xref py py-obj docutils literal"><span class="pre">trace_fields</span></code></a></td>
+<td>An ordered dictionary containing custom trace data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.event.Event.trace_records" title="despy.core.event.Event.trace_records"><code class="xref py py-obj docutils literal"><span class="pre">trace_records</span></code></a></td>
+<td>A list of trace records for completed events.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.event.Event.append_callback" title="despy.core.event.Event.append_callback"><code class="xref py py-obj docutils literal"><span class="pre">append_callback</span></code></a>(callback)</td>
+<td>Appends a function to the event&#8217;s callback list.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.event.Event.add_trace_field" title="despy.core.event.Event.add_trace_field"><code class="xref py py-obj docutils literal"><span class="pre">add_trace_field</span></code></a>(key,&nbsp;value)</td>
+<td>Add custom fields to the event&#8217;s trace record.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Internal Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.event.Event._do_event" title="despy.core.event.Event._do_event"><code class="xref py py-obj docutils literal"><span class="pre">_do_event</span></code></a>()</td>
+<td>Executes an event&#8217;s callback functions.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.event.Event._update_trace_record" title="despy.core.event.Event._update_trace_record"><code class="xref py py-obj docutils literal"><span class="pre">_update_trace_record</span></code></a>(trace_record)</td>
+<td>Updates a trace record with custom fields.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.event.Event._reset" title="despy.core.event.Event._reset"><code class="xref py py-obj docutils literal"><span class="pre">_reset</span></code></a>()</td>
+<td>Resets the event to it&#8217;s initial state.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.event.Event.__lt__" title="despy.core.event.Event.__lt__"><code class="xref py py-obj docutils literal"><span class="pre">__lt__</span></code></a>(y)</td>
+<td>Defines how <code class="docutils literal"><span class="pre">Event</span></code> objects respond to less-than operator.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.event.Event.__gt__" title="despy.core.event.Event.__gt__"><code class="xref py py-obj docutils literal"><span class="pre">__gt__</span></code></a>(y)</td>
+<td>Defines how <code class="docutils literal"><span class="pre">Event</span></code> objects respond to &#8216;&gt;&#8217; operator.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

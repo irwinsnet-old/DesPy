@@ -13,16 +13,20 @@ despy.core.simulation
     A named tuple that represents a scheduled event.
 :class:`.NoEventsRemaining`
     Raised by despy.core.simulation's step method when FEL is empty.
+    
+..  todo
+    
+    Update documentation to state that seed can raise a TypeError.
 """
 
 from heapq import heappush, heappop
 from itertools import count
 from collections import namedtuple
 import datetime
-import numpy as np
 from despy.output.generator import Generator
 from despy.output.report import Datatype
 from despy.base.named_object import NamedObject
+import despy.stats.random
 
 class FelItem(namedtuple('FelItemTuple',
                          ['time_fld', 'event_fld', 'priority_fld'])):
@@ -182,11 +186,9 @@ class Simulation(NamedObject):
     
     @property
     def seed(self):
-        """ The np.random.seed method will be seeded with
-        this integer prior to running the simulation.
+        """Calls seed methods in both numpy and standard random modules. 
         
-        Set seed to an integer, an array of integers of any length or to
-        ``None`` (default).
+        Set seed to an integer, or to ``None`` (default).
         
         By default (i.e., when seed is set to None), Despy will use a
         different seed, and hence a different random number sequence for
@@ -194,18 +196,13 @@ class Simulation(NamedObject):
         purposes, it's often useful to repeatedly run the simulation
         with the same sequence of random numbers. This can be
         accomplished by setting the seed variable.
-        
-        Despy uses the random generator in the SciPy Numpy package to
-        generate random numbers. Numpy uses a Mersenne twister 
-        algorithm to generate the random numbers.
-        
         """
         return self._seed
     
     @seed.setter
     def seed(self, seed):
         self._seed = seed
-        np.random.seed(seed)
+        despy.stats.random.seed(seed)
 
     @property
     def now(self):

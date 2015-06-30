@@ -4,7 +4,7 @@ Despy Classes
 
 .. toctree::
    :maxdepth: 2
-   
+
    base/namedobject
    core/component
    core/simulation
@@ -28,3 +28,5 @@ Despy Classes
    output/report
    output/datatype
    output/plot
+   
+   stats/random

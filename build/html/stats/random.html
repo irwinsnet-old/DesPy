@@ -1,0 +1,194 @@
+
+
+<!doctype html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>despy.stats.random &mdash; Despy 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="../index.html" />
+    <link rel="up" title="Despy Classes" href="../classes.html" />
+    <link rel="next" title="Todo Items" href="../todo.html" />
+    <link rel="prev" title="despy.output.plot" href="../output/plot.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../todo.html" title="Todo Items"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../output/plot.html" title="despy.output.plot"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../output/plot.html"
+                        title="previous chapter">despy.output.plot</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../todo.html"
+                        title="next chapter">Todo Items</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/stats/random.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-despy.stats.random">
+<span id="despy-stats-random"></span><h1>despy.stats.random<a class="headerlink" href="#module-despy.stats.random" title="Permalink to this headline">¶</a></h1>
+<p>Provides a random number seed function and statistical helper functions.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#despy.stats.random.seed" title="despy.stats.random.seed"><code class="xref py py-obj docutils literal"><span class="pre">seed</span></code></a>(seed)</td>
+<td>Seed random number generators in numpy and Python random module.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.stats.random.get_poisson_pmf" title="despy.stats.random.get_poisson_pmf"><code class="xref py py-obj docutils literal"><span class="pre">get_poisson_pmf</span></code></a>(mu)</td>
+<td>Return Scipy.stats Poisson PMF class with lambda = mu.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.stats.random.get_empirical_pmf" title="despy.stats.random.get_empirical_pmf"><code class="xref py py-obj docutils literal"><span class="pre">get_empirical_pmf</span></code></a>(values,&nbsp;probabilities[,&nbsp;name])</td>
+<td>Return custom Scipy.stats discrete PMF.</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Python Library Dependencies</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3.4/library/random.html#module-random" title="(in Python v3.4)"><code class="xref py py-mod docutils literal"><span class="pre">random</span></code></a></li>
+</ul>
+</dd>
+<dt><strong>External Library Dependencies</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/stats.html#module-scipy.stats" title="(in SciPy v0.15.1)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.stats</span></code></a></li>
+<li><code class="xref py py-mod docutils literal"><span class="pre">numpy.random</span></code></li>
+</ul>
+</dd>
+</dl>
+<p>Designers should use the despy.stats.random.seed function when seeding
+the random number generators. While despy will use the numpy random
+number generator instead of the generator built into Python&#8217;s random
+module, we can&#8217;t guarantee that Python random module functions won&#8217;t
+sneak into a custom subclass. The numpy and Python random number
+generators use different random number sequences, so it&#8217;s necessary to
+seed both generators to ensure a consistent random number sequence
+thoughout the simulation.</p>
+<p>Using the other functions in this module is optional. Designers who are
+familiar with the scipy.stats package are encouraged to use that package
+directly &#8211; it&#8217;s more than sufficient. However, the documentation for
+the scipy.stats package can be challenging for new users, so I&#8217;ve
+included helper functions to steer new simulation designers in the
+right direction.</p>
+<p>The <a href="#id1"><span class="problematic" id="id2">get_</span></a>..._pmf and <a href="#id3"><span class="problematic" id="id4">get_</span></a>..._cdf functions return frozen scipy.stats
+probability distributions. Each distribution can generate random
+variables, calculate expected means, medians, and variances, and much
+more.</p>
+<dl class="function">
+<dt id="despy.stats.random.get_empirical_pmf">
+<code class="descclassname">despy.stats.random.</code><code class="descname">get_empirical_pmf</code><span class="sig-paren">(</span><em>values</em>, <em>probabilities</em>, <em>name='Empirical PMF'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/stats/random.html#get_empirical_pmf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.stats.random.get_empirical_pmf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return custom Scipy.stats discrete PMF.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="despy.stats.random.get_poisson_pmf">
+<code class="descclassname">despy.stats.random.</code><code class="descname">get_poisson_pmf</code><span class="sig-paren">(</span><em>mu</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/stats/random.html#get_poisson_pmf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.stats.random.get_poisson_pmf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return Scipy.stats Poisson PMF class with lambda = mu.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="despy.stats.random.seed">
+<code class="descclassname">despy.stats.random.</code><code class="descname">seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/stats/random.html#seed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.stats.random.seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Seed random number generators in numpy and Python random module.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../todo.html" title="Todo Items"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../output/plot.html" title="despy.output.plot"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" >Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Stacy Irwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

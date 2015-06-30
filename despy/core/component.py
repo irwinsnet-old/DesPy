@@ -29,32 +29,28 @@ class Component(NamedObject):
     Subclasses should include a call to the :meth:`Component.__init()__`
     method in the subclass's ``__init__`` method.
     
+    
     **Attributes**
 
-      * :attr:`.model`: The :class:`despy.core.model.Model` object that
-        the component belongs to.
-      * :attr:`.sim`: The :class:`despy.core.simulation.Simulation` 
-        object that the component's model belongs to.
-      * :attr:`.number`: A unique integer that is assigned to each
-        instance of a component.  The first component instantiated by
-        the model will be assigned _number 1, followed by _number 2 for
-        the next component, and so on.
-      * :attr:`.id`: A string that uniquely identifies the component
-        instance.
+    ..  autosummary::
+        
+        model
+        sim
+        number
+        id
+
 
     **Methods**
-      * :meth:`.initialize`: Subclasses should override this method to
-        initialize the component prior to running the simulation.
-      * :meth:`.finalize`: Subclasses should override this method to
-        delete unneeded objects or execute other post-simulation code.
-      * :meth:`~Component.get_data`: Subclasses should override this
-        method to provide output data to the simulation report.
-      * :meth:`__str__`: Returns a string that uniquely identifies the
-        component.
-      * :meth:`.set_counter`: A class method that resets the internal
-        _number counter to 1.
-      * :meth:`._get_next_number`: A private class method that gets the
-        next unused _number from the _number counter.
+    
+    ..  autosummary::
+    
+        initialize
+        finalize
+        get_data
+        __str__
+        set_counter
+        _get_next_number
+        
     
     **Inherits**
         * :class:`despy.base.named_object.NamedObject`

@@ -120,37 +120,54 @@ inheriting from the Component class.</p>
 <p>Subclasses should include a call to the <code class="xref py py-meth docutils literal"><span class="pre">Component.__init()__()</span></code>
 method in the subclass&#8217;s <code class="docutils literal"><span class="pre">__init__</span></code> method.</p>
 <p><strong>Attributes</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li><a class="reference internal" href="#despy.core.component.Component.model" title="despy.core.component.Component.model"><code class="xref py py-attr docutils literal"><span class="pre">model</span></code></a>: The <a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a> object that
-the component belongs to.</li>
-<li><a class="reference internal" href="#despy.core.component.Component.sim" title="despy.core.component.Component.sim"><code class="xref py py-attr docutils literal"><span class="pre">sim</span></code></a>: The <a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a> 
-object that the component&#8217;s model belongs to.</li>
-<li><a class="reference internal" href="#despy.core.component.Component.number" title="despy.core.component.Component.number"><code class="xref py py-attr docutils literal"><span class="pre">number</span></code></a>: A unique integer that is assigned to each
-instance of a component.  The first component instantiated by
-the model will be assigned _number 1, followed by _number 2 for
-the next component, and so on.</li>
-<li><a class="reference internal" href="#despy.core.component.Component.id" title="despy.core.component.Component.id"><code class="xref py py-attr docutils literal"><span class="pre">id</span></code></a>: A string that uniquely identifies the component
-instance.</li>
-</ul>
-</div></blockquote>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.component.Component.model" title="despy.core.component.Component.model"><code class="xref py py-obj docutils literal"><span class="pre">model</span></code></a></td>
+<td>A link to the component&#8217;s model object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.component.Component.sim" title="despy.core.component.Component.sim"><code class="xref py py-obj docutils literal"><span class="pre">sim</span></code></a></td>
+<td>A link to the model&#8217;s simulation attribute.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.component.Component.number" title="despy.core.component.Component.number"><code class="xref py py-obj docutils literal"><span class="pre">number</span></code></a></td>
+<td>An integer that uniquely identifies the <em>Component</em> instance.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.component.Component.id" title="despy.core.component.Component.id"><code class="xref py py-obj docutils literal"><span class="pre">id</span></code></a></td>
+<td>A string that uniquely identifies the component instance.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.component.Component.initialize" title="despy.core.component.Component.initialize"><code class="xref py py-obj docutils literal"><span class="pre">initialize</span></code></a>()</td>
+<td>Subclasses should override this method with initialization code that will be executed prior to any events on the future event list (FEL).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.component.Component.finalize" title="despy.core.component.Component.finalize"><code class="xref py py-obj docutils literal"><span class="pre">finalize</span></code></a>()</td>
+<td>Subclasses should override this method with cleanup or other code that will be executed after all events on the FEL.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.component.Component.get_data" title="despy.core.component.Component.get_data"><code class="xref py py-obj docutils literal"><span class="pre">get_data</span></code></a>(folder)</td>
+<td>Subclasses should override this method to provide simulation output that will be included in the output report.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.component.Component.__str__" title="despy.core.component.Component.__str__"><code class="xref py py-obj docutils literal"><span class="pre">__str__</span></code></a>()</td>
+<td>Returns a string that uniquely identifies every <em>Component</em> instance.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.component.Component.set_counter" title="despy.core.component.Component.set_counter"><code class="xref py py-obj docutils literal"><span class="pre">set_counter</span></code></a>()</td>
+<td>A class method that resets the <em>Component&#8217;s</em> or subclass&#8217;s _number counter back to 1.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.component.Component._get_next_number" title="despy.core.component.Component._get_next_number"><code class="xref py py-obj docutils literal"><span class="pre">_get_next_number</span></code></a>()</td>
+<td>A private method called from the <em>__init__()</em> method that gets the next unused _number.</td>
+</tr>
+</tbody>
+</table>
 <dl class="docutils">
-<dt><strong>Methods</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.core.component.Component.initialize" title="despy.core.component.Component.initialize"><code class="xref py py-meth docutils literal"><span class="pre">initialize()</span></code></a>: Subclasses should override this method to
-initialize the component prior to running the simulation.</li>
-<li><a class="reference internal" href="#despy.core.component.Component.finalize" title="despy.core.component.Component.finalize"><code class="xref py py-meth docutils literal"><span class="pre">finalize()</span></code></a>: Subclasses should override this method to
-delete unneeded objects or execute other post-simulation code.</li>
-<li><a class="reference internal" href="#despy.core.component.Component.get_data" title="despy.core.component.Component.get_data"><code class="xref py py-meth docutils literal"><span class="pre">get_data()</span></code></a>: Subclasses should override this
-method to provide output data to the simulation report.</li>
-<li><a class="reference internal" href="#despy.core.component.Component.__str__" title="despy.core.component.Component.__str__"><code class="xref py py-meth docutils literal"><span class="pre">__str__()</span></code></a>: Returns a string that uniquely identifies the
-component.</li>
-<li><a class="reference internal" href="#despy.core.component.Component.set_counter" title="despy.core.component.Component.set_counter"><code class="xref py py-meth docutils literal"><span class="pre">set_counter()</span></code></a>: A class method that resets the internal
-_number counter to 1.</li>
-<li><a class="reference internal" href="#despy.core.component.Component._get_next_number" title="despy.core.component.Component._get_next_number"><code class="xref py py-meth docutils literal"><span class="pre">_get_next_number()</span></code></a>: A private class method that gets the
-next unused _number from the _number counter.</li>
-</ul>
-</dd>
 <dt><strong>Inherits</strong></dt>
 <dd><ul class="first last simple">
 <li><a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a></li>

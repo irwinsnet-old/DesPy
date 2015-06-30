@@ -218,19 +218,14 @@ formats).</p>
 <dl class="attribute">
 <dt id="despy.core.simulation.Simulation.seed">
 <code class="descclassname">Simulation.</code><code class="descname">seed</code><a class="headerlink" href="#despy.core.simulation.Simulation.seed" title="Permalink to this definition">¶</a></dt>
-<dd><p>The np.random.seed method will be seeded with
-this integer prior to running the simulation.</p>
-<p>Set seed to an integer, an array of integers of any length or to
-<code class="docutils literal"><span class="pre">None</span></code> (default).</p>
+<dd><p>Calls seed methods in both numpy and standard random modules.</p>
+<p>Set seed to an integer, or to <code class="docutils literal"><span class="pre">None</span></code> (default).</p>
 <p>By default (i.e., when seed is set to None), Despy will use a
 different seed, and hence a different random number sequence for
 each run of the simulation. For troubleshooting or testing
 purposes, it&#8217;s often useful to repeatedly run the simulation
 with the same sequence of random numbers. This can be
 accomplished by setting the seed variable.</p>
-<p>Despy uses the random generator in the SciPy Numpy package to
-generate random numbers. Numpy uses a Mersenne twister 
-algorithm to generate the random numbers.</p>
 </dd></dl>
 
 <dl class="attribute">
