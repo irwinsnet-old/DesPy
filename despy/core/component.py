@@ -30,7 +30,7 @@ class Component(NamedObject):
     method in the subclass's ``__init__`` method.
     
     
-    **Attributes**
+    **Members**
 
     ..  autosummary::
         
@@ -38,12 +38,6 @@ class Component(NamedObject):
         sim
         number
         id
-
-
-    **Methods**
-    
-    ..  autosummary::
-    
         initialize
         finalize
         get_data

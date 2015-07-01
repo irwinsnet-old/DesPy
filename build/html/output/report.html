@@ -109,27 +109,34 @@
 <dt id="despy.output.report.HtmlReport">
 <em class="property">class </em><code class="descclassname">despy.output.report.</code><code class="descname">HtmlReport</code><a class="reference internal" href="../_modules/despy/output/report.html#HtmlReport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.report.HtmlReport" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders an HTML report containing simulation results.</p>
+<p><strong>Members</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#despy.output.report.HtmlReport.root" title="despy.output.report.HtmlReport.root"><code class="xref py py-obj docutils literal"><span class="pre">root</span></code></a></td>
+<td>The root &lt;html&gt; element of the HtmlReport.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.output.report.HtmlReport.head" title="despy.output.report.HtmlReport.head"><code class="xref py py-obj docutils literal"><span class="pre">head</span></code></a></td>
+<td>The &lt;head&gt; element of the HtmlReport.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.output.report.HtmlReport.body" title="despy.output.report.HtmlReport.body"><code class="xref py py-obj docutils literal"><span class="pre">body</span></code></a></td>
+<td>The &lt;body&gt; element of the HtmlReport.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.output.report.HtmlReport.divisions" title="despy.output.report.HtmlReport.divisions"><code class="xref py py-obj docutils literal"><span class="pre">divisions</span></code></a></td>
+<td>Python list containing simulation output.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.output.report.HtmlReport.append_output" title="despy.output.report.HtmlReport.append_output"><code class="xref py py-obj docutils literal"><span class="pre">append_output</span></code></a>(output)</td>
+<td>Appends a section of output to the HtmlReport.divisions list.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.output.report.HtmlReport.write_report" title="despy.output.report.HtmlReport.write_report"><code class="xref py py-obj docutils literal"><span class="pre">write_report</span></code></a>(folder)</td>
+<td>Write HTML report file based on data in HtmlReport.divisions.</td>
+</tr>
+</tbody>
+</table>
 <dl class="docutils">
-<dt><strong>Attributes</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.output.report.HtmlReport.root" title="despy.output.report.HtmlReport.root"><code class="xref py py-attr docutils literal"><span class="pre">HtmlReport.root</span></code></a>: The root &lt;html&gt; element of the
-HtmlReport. Read-only.</li>
-<li><a class="reference internal" href="#despy.output.report.HtmlReport.head" title="despy.output.report.HtmlReport.head"><code class="xref py py-attr docutils literal"><span class="pre">HtmlReport.head</span></code></a>: The &lt;head&gt; element of the HtmlReport.
-Read-only.</li>
-<li><a class="reference internal" href="#despy.output.report.HtmlReport.body" title="despy.output.report.HtmlReport.body"><code class="xref py py-attr docutils literal"><span class="pre">HtmlReport.body</span></code></a>: The &lt;body&gt; element of the HtmlReport.
-Read-only.</li>
-<li><a class="reference internal" href="#despy.output.report.HtmlReport.divisions" title="despy.output.report.HtmlReport.divisions"><code class="xref py py-attr docutils literal"><span class="pre">HtmlReport.divisions</span></code></a>: Python list containing
-simulation output. Read-only.</li>
-</ul>
-</dd>
-<dt><strong>Methods</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.output.report.HtmlReport.append_output" title="despy.output.report.HtmlReport.append_output"><code class="xref py py-meth docutils literal"><span class="pre">HtmlReport.append_output()</span></code></a>: Appends a section of output
-to the HtmlReport.divisions list.</li>
-<li><a class="reference internal" href="#despy.output.report.HtmlReport.write_report" title="despy.output.report.HtmlReport.write_report"><code class="xref py py-meth docutils literal"><span class="pre">HtmlReport.write_report()</span></code></a>: Write HTML report file based
-on data in HtmlReport.divisions.</li>
-</ul>
-</dd>
 <dt><strong>Python Library Dependencies</strong></dt>
 <dd><ul class="first last simple">
 <li><a class="reference external" href="https://docs.python.org/3.4/library/xml.etree.elementtree.html#module-xml.etree.ElementTree" title="(in Python v3.4)"><code class="xref py py-mod docutils literal"><span class="pre">xml.etree.ElementTree</span></code></a></li>

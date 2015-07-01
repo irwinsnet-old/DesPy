@@ -103,25 +103,14 @@
 <span class="sd">      * :class:`despy.base.named_object.NamedObject`</span>
 <span class="sd">      * :class:`despy.core.component.Component`</span>
 <span class="sd">    </span>
-<span class="sd">    **Attributes**</span>
+<span class="sd">    **Members**</span>
 <span class="sd">    </span>
 <span class="sd">    ..  autosummary::</span>
 <span class="sd">    </span>
 <span class="sd">        trace_fields</span>
 <span class="sd">        trace_records</span>
-<span class="sd">      </span>
-<span class="sd">    **Methods**</span>
-<span class="sd">    </span>
-<span class="sd">    ..  autosummary::</span>
-<span class="sd">        </span>
 <span class="sd">        append_callback</span>
 <span class="sd">        add_trace_field</span>
-<span class="sd">        </span>
-<span class="sd">    </span>
-<span class="sd">    **Internal Methods**</span>
-<span class="sd">    </span>
-<span class="sd">    ..  autosummary::</span>
-<span class="sd">    </span>
 <span class="sd">        _do_event</span>
 <span class="sd">        _update_trace_record</span>
 <span class="sd">        _reset</span>
@@ -176,7 +165,7 @@
         
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trace_records</span>
     
-<div class="viewcode-block" id="Event.append_callback"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.event.Event.append_callback">[docs]</a>    <span class="k">def</span> <span class="nf">append_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
+<div class="viewcode-block" id="Event.append_callback"><a class="viewcode-back" href="../../../core/processTimeOutEvent.html#despy.core.event.Event.append_callback">[docs]</a>    <span class="k">def</span> <span class="nf">append_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Appends a function to the event&#39;s callback list.</span>
 <span class="sd">        </span>
 <span class="sd">        The function will be called when the event is removed from the</span>
@@ -189,7 +178,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_callbacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
     </div>
-<div class="viewcode-block" id="Event.add_trace_field"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.event.Event.add_trace_field">[docs]</a>    <span class="k">def</span> <span class="nf">add_trace_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="Event.add_trace_field"><a class="viewcode-back" href="../../../core/processTimeOutEvent.html#despy.core.event.Event.add_trace_field">[docs]</a>    <span class="k">def</span> <span class="nf">add_trace_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add custom fields to the event&#39;s trace record.</span>
 <span class="sd">        </span>
 <span class="sd">        This method is typically called from an event&#39;s callback method.</span>

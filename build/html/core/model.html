@@ -115,40 +115,46 @@ processes, and queues.</p>
 using dictionary notation and rely on the model&#8217;s default behavior.
 For more complex simulations, users will most likely create their
 own model class by sub-classing this class.</p>
+<p><strong>Members</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></td>
+<td>The name of the object.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">description</span></code></td>
+<td>Gets a description of the model.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.model.Model.initial_events_scheduled" title="despy.core.model.Model.initial_events_scheduled"><code class="xref py py-obj docutils literal"><span class="pre">initial_events_scheduled</span></code></a></td>
+<td>Return True of the model&#8217;s initialize method has been executed.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.model.Model.sim" title="despy.core.model.Model.sim"><code class="xref py py-obj docutils literal"><span class="pre">sim</span></code></a></td>
+<td>Gets the simulation object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.model.Model.__setitem__" title="despy.core.model.Model.__setitem__"><code class="xref py py-obj docutils literal"><span class="pre">__setitem__</span></code></a>(key,&nbsp;item)</td>
+<td>Assign a component to the model using dictionary notation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.model.Model.__getitem__" title="despy.core.model.Model.__getitem__"><code class="xref py py-obj docutils literal"><span class="pre">__getitem__</span></code></a>(key)</td>
+<td>Access a component using a dictionary key.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.model.Model.delete_component" title="despy.core.model.Model.delete_component"><code class="xref py py-obj docutils literal"><span class="pre">delete_component</span></code></a>(key)</td>
+<td>Remove a component from the model.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.model.Model.set_initialize_method" title="despy.core.model.Model.set_initialize_method"><code class="xref py py-obj docutils literal"><span class="pre">set_initialize_method</span></code></a>(initialize_method)</td>
+<td>Assign an initialize method to the model.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.model.Model.initialize" title="despy.core.model.Model.initialize"><code class="xref py py-obj docutils literal"><span class="pre">initialize</span></code></a>()</td>
+<td>Initialize the model and all components.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.model.Model.schedule" title="despy.core.model.Model.schedule"><code class="xref py py-obj docutils literal"><span class="pre">schedule</span></code></a>(event[,&nbsp;delay,&nbsp;priority])</td>
+<td>Call the Simulation object&#8217;s schedule() method.</td>
+</tr>
+</tbody>
+</table>
 <dl class="docutils">
-<dt><strong>Attributes</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject.name" title="despy.base.named_object.NamedObject.name"><code class="xref py py-attr docutils literal"><span class="pre">name</span></code></a>: Model object&#8217;s name. Inherited from
-<a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a>. Type: string.</li>
-<li><a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject.description" title="despy.base.named_object.NamedObject.description"><code class="xref py py-attr docutils literal"><span class="pre">description</span></code></a>: One or more paragraphs that describes the
-Model. Inherited from
-<a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a> Type: string.</li>
-<li><a class="reference internal" href="#despy.core.model.Model.initial_events_scheduled" title="despy.core.model.Model.initial_events_scheduled"><code class="xref py py-attr docutils literal"><span class="pre">initial_events_scheduled</span></code></a>: Returns <code class="docutils literal"><span class="pre">False</span></code> if the model
-and it&#8217;s components have not yet been initialized. Otherwise
-returns true.</li>
-<li><code class="xref py py-attr docutils literal"><span class="pre">_sim</span></code>: The corresponding instance of the
-<a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a> class.</li>
-</ul>
-</dd>
-<dt><strong>Methods</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.core.model.Model.__setitem__" title="despy.core.model.Model.__setitem__"><code class="xref py py-meth docutils literal"><span class="pre">__setitem__()</span></code></a>: This Python magic method allows users to
-add components to the model using dictionary (i.e., &#8216;[]&#8217;)
-notation.</li>
-<li><a class="reference internal" href="#despy.core.model.Model.__getitem__" title="despy.core.model.Model.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></code></a>: This Python magic method allows users to
-access model components using dictionary notation.</li>
-<li><a class="reference internal" href="#despy.core.model.Model.delete_component" title="despy.core.model.Model.delete_component"><code class="xref py py-meth docutils literal"><span class="pre">delete_component()</span></code></a>: Remove a component from the model.</li>
-<li><a class="reference internal" href="#despy.core.model.Model.set_initialize_method" title="despy.core.model.Model.set_initialize_method"><code class="xref py py-meth docutils literal"><span class="pre">set_initialize_method()</span></code></a> Set the model&#8217;s initialize
-method to a function provided as a method argument.
-Not used if user includes a custom initialize method in a model
-subclass.</li>
-<li><a class="reference internal" href="#despy.core.model.Model.initialize" title="despy.core.model.Model.initialize"><code class="xref py py-meth docutils literal"><span class="pre">initialize()</span></code></a>: The default initialize method. Calls the
-<code class="docutils literal"><span class="pre">initialize</span></code> method on all model components.</li>
-<li><a class="reference internal" href="#despy.core.model.Model.schedule" title="despy.core.model.Model.schedule"><code class="xref py py-meth docutils literal"><span class="pre">schedule()</span></code></a>: A convenience method. Calls the
-<a class="reference internal" href="simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a> class&#8217;s <code class="docutils literal"><span class="pre">schedule</span></code>
-method.</li>
-</ul>
-</dd>
 <dt><strong>Inherits</strong></dt>
 <dd><ul class="first last simple">
 <li><a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a></li>

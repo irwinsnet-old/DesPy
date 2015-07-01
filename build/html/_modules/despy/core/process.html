@@ -116,24 +116,19 @@
 <span class="sd">      * :class:`despy.base.named_object.NamedObject`</span>
 <span class="sd">      * :class:`despy.core.component.Component`</span>
 <span class="sd">    </span>
-<span class="sd">    **Attributes**</span>
-<span class="sd">      * :attr:`Process.awake`: True if process is executing, False</span>
-<span class="sd">        otherwise. Read only.</span>
-<span class="sd">      * :attr:`Process.generator`: The generator function that defines</span>
-<span class="sd">        the process.</span>
+<span class="sd">    **Members**</span>
+<span class="sd">    </span>
+<span class="sd">    .. autosummary::</span>
+<span class="sd">    </span>
+<span class="sd">        awake</span>
+<span class="sd">        generator</span>
+<span class="sd">        start</span>
+<span class="sd">        call</span>
+<span class="sd">        schedule_timeout</span>
+<span class="sd">        sleep</span>
+<span class="sd">        wake</span>
+<span class="sd">        reset_process</span>
 
-<span class="sd">    **Methods**</span>
-<span class="sd">        * :meth:`Process.start`: Schedules a process start event on</span>
-<span class="sd">          the FEL.</span>
-<span class="sd">        * :meth:`Process.call`: Calls the iterator and schedules</span>
-<span class="sd">          resulting event on FEL.</span>
-<span class="sd">        * :meth:`Process.schedule_timeout`: Returns a</span>
-<span class="sd">          ProcessTimeOutEvent.</span>
-<span class="sd">        * :meth:`Process.sleep`: Stops the process and sets</span>
-<span class="sd">          Process.awake attribute to False.</span>
-<span class="sd">        * :meth:`Process.wake`: Restarts a sleeping processes.</span>
-<span class="sd">        * :meth:`Process.reset`: Returns process to initial conditions</span>
-<span class="sd">          by replacing iterator.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Process.__init__"><a class="viewcode-back" href="../../../core/process.html#despy.core.process.Process.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">generator_function</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>

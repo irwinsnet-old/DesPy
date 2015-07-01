@@ -137,7 +137,7 @@ directly &#8211; it&#8217;s more than sufficient. However, the documentation for
 the scipy.stats package can be challenging for new users, so I&#8217;ve
 included helper functions to steer new simulation designers in the
 right direction.</p>
-<p>The <a href="#id1"><span class="problematic" id="id2">get_</span></a>..._pmf and <a href="#id3"><span class="problematic" id="id4">get_</span></a>..._cdf functions return frozen scipy.stats
+<p>The get...pmf and get...cdf functions return frozen scipy.stats
 probability distributions. Each distribution can generate random
 variables, calculate expected means, medians, and variances, and much
 more.</p>
@@ -145,18 +145,55 @@ more.</p>
 <dt id="despy.stats.random.get_empirical_pmf">
 <code class="descclassname">despy.stats.random.</code><code class="descname">get_empirical_pmf</code><span class="sig-paren">(</span><em>values</em>, <em>probabilities</em>, <em>name='Empirical PMF'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/stats/random.html#get_empirical_pmf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.stats.random.get_empirical_pmf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return custom Scipy.stats discrete PMF.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">values</span></code> [Integer]</dt>
+<dd>The random variable represented by the emperical pmf can
+assume the values in this Python list of integers.</dd>
+<dt><code class="docutils literal"><span class="pre">probabilities</span></code> [float]</dt>
+<dd>This Python list of positive floats should be the same
+length as <code class="docutils literal"><span class="pre">values.</span></code> The floats should be between zero and
+one. Each float is the probability that the corresponding
+(i.e., has same index) item in the <code class="docutils literal"><span class="pre">values</span></code> list will
+occur.</dd>
+<dt><code class="docutils literal"><span class="pre">name</span></code> String, optional</dt>
+<dd>Assign <code class="docutils literal"><span class="pre">name</span></code> to the emperical_pmf. Default value is
+&#8216;Empirical PMF`.</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="despy.stats.random.get_poisson_pmf">
 <code class="descclassname">despy.stats.random.</code><code class="descname">get_poisson_pmf</code><span class="sig-paren">(</span><em>mu</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/stats/random.html#get_poisson_pmf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.stats.random.get_poisson_pmf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return Scipy.stats Poisson PMF class with lambda = mu.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">mu</span></code> Integer or float, positive</dt>
+<dd>Poisson distribution average and variance will equal mu.
+This parameter is often written as lambda in statistics
+texts.</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="despy.stats.random.seed">
 <code class="descclassname">despy.stats.random.</code><code class="descname">seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/stats/random.html#seed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.stats.random.seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Seed random number generators in numpy and Python random module.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">seed</span></code> Integer or None</dt>
+<dd>Pass to np.random.seed and random.seed. If None, seed
+random number generators with an internal value.</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

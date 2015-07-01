@@ -28,34 +28,20 @@ class Model(NamedObject):
     For more complex simulations, users will most likely create their
     own model class by sub-classing this class.
 
-    **Attributes**
-      * :attr:`.name`: Model object's name. Inherited from
-        :class:`despy.base.named_object.NamedObject`. Type: string.
-      * :attr:`.description`: One or more paragraphs that describes the
-        Model. Inherited from
-        :class:`despy.base.named_object.NamedObject` Type: string.
-      * :attr:`.initial_events_scheduled`: Returns ``False`` if the model
-        and it's components have not yet been initialized. Otherwise
-        returns true.
-      * :attr:`._sim`: The corresponding instance of the
-        :class:`despy.core.simulation.Simulation` class.
-        
-    **Methods**
-      * :meth:`.__setitem__`: This Python magic method allows users to
-        add components to the model using dictionary (i.e., '[]')
-        notation.
-      * :meth:`.__getitem__`: This Python magic method allows users to
-        access model components using dictionary notation.
-      * :meth:`.delete_component`: Remove a component from the model.
-      * :meth:`.set_initialize_method` Set the model's initialize
-        method to a function provided as a method argument.
-        Not used if user includes a custom initialize method in a model
-        subclass.
-      * :meth:`.initialize`: The default initialize method. Calls the
-        ``initialize`` method on all model components.
-      * :meth:`.schedule`: A convenience method. Calls the
-        :class:`despy.core.simulation.Simulation` class's ``schedule``
-        method.
+    **Members**
+    
+    ..  autosummary::
+    
+        name
+        description
+        initial_events_scheduled
+        sim
+        __setitem__
+        __getitem__
+        delete_component
+        set_initialize_method
+        initialize
+        schedule
         
     **Inherits**
       * :class:`despy.base.named_object.NamedObject`

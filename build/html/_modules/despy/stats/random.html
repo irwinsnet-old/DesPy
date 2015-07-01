@@ -106,7 +106,7 @@
 <span class="sd">included helper functions to steer new simulation designers in the</span>
 <span class="sd">right direction.</span>
 
-<span class="sd">The get_..._pmf and get_..._cdf functions return frozen scipy.stats</span>
+<span class="sd">The get...pmf and get...cdf functions return frozen scipy.stats</span>
 <span class="sd">probability distributions. Each distribution can generate random</span>
 <span class="sd">variables, calculate expected means, medians, and variances, and much</span>
 <span class="sd">more. </span>
@@ -119,17 +119,43 @@
 
 <div class="viewcode-block" id="seed"><a class="viewcode-back" href="../../../stats/random.html#despy.stats.random.seed">[docs]</a><span class="k">def</span> <span class="nf">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Seed random number generators in numpy and Python random module.</span>
+<span class="sd">    </span>
+<span class="sd">    *Arguments*</span>
+<span class="sd">        ``seed`` Integer or None</span>
+<span class="sd">            Pass to np.random.seed and random.seed. If None, seed</span>
+<span class="sd">            random number generators with an internal value.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
     <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="get_poisson_pmf"><a class="viewcode-back" href="../../../stats/random.html#despy.stats.random.get_poisson_pmf">[docs]</a><span class="k">def</span> <span class="nf">get_poisson_pmf</span><span class="p">(</span><span class="n">mu</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return Scipy.stats Poisson PMF class with lambda = mu.</span>
+<span class="sd">    </span>
+<span class="sd">    *Arguments*</span>
+<span class="sd">        ``mu`` Integer or float, positive</span>
+<span class="sd">            Poisson distribution average and variance will equal mu.</span>
+<span class="sd">            This parameter is often written as lambda in statistics</span>
+<span class="sd">            texts. </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="get_empirical_pmf"><a class="viewcode-back" href="../../../stats/random.html#despy.stats.random.get_empirical_pmf">[docs]</a><span class="k">def</span> <span class="nf">get_empirical_pmf</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">probabilities</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;Empirical PMF&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return custom Scipy.stats discrete PMF.</span>
+<span class="sd">    </span>
+<span class="sd">    *Arguments*</span>
+<span class="sd">        ``values`` [Integer]</span>
+<span class="sd">            The random variable represented by the emperical pmf can</span>
+<span class="sd">            assume the values in this Python list of integers.</span>
+<span class="sd">        ``probabilities`` [float]</span>
+<span class="sd">            This Python list of positive floats should be the same</span>
+<span class="sd">            length as ``values.`` The floats should be between zero and</span>
+<span class="sd">            one. Each float is the probability that the corresponding</span>
+<span class="sd">            (i.e., has same index) item in the ``values`` list will</span>
+<span class="sd">            occur.</span>
+<span class="sd">        ``name`` String, optional</span>
+<span class="sd">            Assign ``name`` to the emperical_pmf. Default value is</span>
+<span class="sd">            &#39;Empirical PMF`.</span>
+<span class="sd">            </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">stats</span><span class="o">.</span><span class="n">rv_discrete</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">probabilities</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
 

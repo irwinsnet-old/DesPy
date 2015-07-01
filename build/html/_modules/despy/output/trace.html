@@ -132,19 +132,15 @@
 <span class="sd">    so all dictionary and ordered dictionary methods and attributes are</span>
 <span class="sd">    available.</span>
 <span class="sd">        </span>
-<span class="sd">    **Attributes**</span>
-<span class="sd">        * :attr:`TraceRecord.standard_labels`: List of standard field</span>
-<span class="sd">          labels included in every TraceRecord.</span>
-<span class="sd">        * :attr:`TraceRecord.custom_labels`: List of custom field labels</span>
-<span class="sd">          added to TraceRecord by designer.</span>
+<span class="sd">    **Members**</span>
 <span class="sd">    </span>
-<span class="sd">    **Methods**</span>
-<span class="sd">        * :meth:`TraceRecord.__str__`: Returns a string representation</span>
-<span class="sd">          of the TraceRecord.</span>
-<span class="sd">        * :meth:`TraceRecord.add_fields`: Adds a custom data field to</span>
-<span class="sd">          the TraceRecord object.</span>
-<span class="sd">        * :meth:`TraceRecord.get_row`: Returns a list of TraceRecord</span>
-<span class="sd">          fields.</span>
+<span class="sd">    ..  autosummary::</span>
+<span class="sd">    </span>
+<span class="sd">        standard_labels</span>
+<span class="sd">        custom_labels</span>
+<span class="sd">        __str__</span>
+<span class="sd">        add_fields</span>
+<span class="sd">        get_row</span>
 <span class="sd">          </span>
 <span class="sd">    **Python Library Dependencies**</span>
 <span class="sd">        * :class:`collections.OrderedDict`</span>
@@ -261,23 +257,17 @@
 <div class="viewcode-block" id="Trace"><a class="viewcode-back" href="../../../output/trace.html#despy.output.trace.Trace">[docs]</a><span class="k">class</span> <span class="nc">Trace</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;List of messages and events that occurred during the simulation.</span>
 <span class="sd">    </span>
-<span class="sd">    **Attributes**</span>
-<span class="sd">        * :attr:`Trace.start`: Trace will start recording events at this</span>
-<span class="sd">          simulation time.</span>
-<span class="sd">        * :attr:`Trace.stop`: Trace will stop recording events at this</span>
-<span class="sd">          simulation time.</span>
-<span class="sd">        * :attr:&#39;Trace.max_length: Maximum number of TraceRecords in</span>
-<span class="sd">          Trace object.</span>
-<span class="sd">        * :attr:`Trace.length`: Number of records in Trace object.</span>
-<span class="sd">          Read-only.</span>
-<span class="sd">          </span>
-<span class="sd">    **Methods**</span>
-<span class="sd">        * :meth:`Trace.__getitem__`: Enables accessing TraceRecord with</span>
-<span class="sd">          square brackets and index.</span>
-<span class="sd">        * :meth:`Trace.is_active`: True if Trace object is currently</span>
-<span class="sd">          recording.</span>
-<span class="sd">        * :meth:`Trace.add`: Adds TraceRecords to Trace class and writes</span>
-<span class="sd">          console output.</span>
+<span class="sd">    **Members**</span>
+<span class="sd">    </span>
+<span class="sd">    ..  autosummary::</span>
+<span class="sd">    </span>
+<span class="sd">        start</span>
+<span class="sd">        stop</span>
+<span class="sd">        max_length</span>
+<span class="sd">        length</span>
+<span class="sd">        __getitem__</span>
+<span class="sd">        is_active</span>
+<span class="sd">        add</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     
@@ -459,13 +449,11 @@
 <div class="viewcode-block" id="CSV_file"><a class="viewcode-back" href="../../../output/CSV_file.html#despy.output.trace.CSV_file">[docs]</a><span class="k">class</span> <span class="nc">CSV_file</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A comma separated values file that displays the trace report.</span>
 <span class="sd">    </span>
-<span class="sd">    **Attributes**</span>
+<span class="sd">    **Members**</span>
 <span class="sd">        * :attr:`CSV_file.file_name`: The full name, including the path,</span>
 <span class="sd">          of the CSV file.</span>
 <span class="sd">        * :attr:`CSV_file.trace`: The CSV_file will display this Trace</span>
 <span class="sd">          object.</span>
-<span class="sd">          </span>
-<span class="sd">    **Methods**</span>
 <span class="sd">        * :meth:`CSV_file.write`: Writes self.trace to CSV file at</span>
 <span class="sd">          location self.file_name.</span>
 <span class="sd">          </span>

@@ -37,35 +37,25 @@ class Resource(Component):
       * :class:`despy.base.named_object.NamedObject`
       * :class:`despy.core.component.Component`
       
-    **Attributes**
-      * :attr:`Resource.capacity`: The number of entities that can be
-        served simultaneously.
-      * :attr:`Resource.res_queue`: The resourceQueue that contains the
-        queue of incoming users.
-      * :attr:`Resource.service_time`: A method that returns the
-        time required by the resource.
-      * :attr:`Resource.Station_tuple`: A Python namedtuple with an
-        'entity' field and a 'start_time' field.
-      * :attr:`Resource.stations`: A list of resource stations
-        with length = Resource.capacity. 
-        
-    **Methods**
-      * :meth:`Resource.__str__`: Magic method that converts the
-        resource object to a string.
-      * :meth:`Resource.__getitem__`: Allows accessing resource
-        stations with array brackets.
-      * :meth:`Resource.__setitem__`: Allows setting resource stations
-        with array brackets.
-      * :meth:`Resource.get_available_station`: Gets the empty resource
-        position with the lowest number.
-      * :meth:`Resource.request`: Request a resource for a entity.        
-      * :meth:`Resource.get_service_time`: Gets the time needed for a
-        position to complete an activity.
-      * :meth:`Resource.start_service`: Commence servicing a entity at the
-        index position.
-      * :meth:`Resource.finish_service`:
-      * :meth:`Resource.remove_entity`: Remove entity from a resource
-        station.
+    **Members**
+    
+    ..  autosummary::
+    
+        capacity
+        res_queue
+        service_time
+        Station_tuple
+        stations
+        __str__
+        __getitem__
+        __setitem__
+        get_available_station
+        request
+        get_service_time
+        start_service
+        finish_service
+        remove_entity
+
     """
     
     
@@ -323,22 +313,17 @@ class ResourceFinishServiceEvent(Event):
     finishes servicing the assigned entity (after the designated
     service time has elapsed). 
     
-    **Attributes**
-      * :attr:`ResourceFinishServiceEvent.resource`: The applicable
-        :class:`despy.core.resource.Resource` object.
-      * :attr:`ResourceFinishServiceEvent.station_index`: The index
-        number of the station that is finishing it's service.
-      * :attr:`ResourceFinishServiceEvent.service_time`: The elapsed
-        service time.
-      * :attr:`ResourceFinishServiceEvent.entity`: The entity that is
-        the target of the activity.
-        
-    **Methods**
-      * :meth:`ResourceFinishServiceEvent.check_resource_queue`: The
-        event's callback method that checks the queue for a waiting
-        entity.
-      * :meth:`ResourceFinishServiceEvent._update_trace_record`: Adds
-        the entity name and service time to the trace report.
+    **Members**
+    
+    ..  autosummary::
+    
+        resource
+        station_index
+        service_time
+        entity
+        check_resource_queue
+        _update_trace_record
+
     """
     
     

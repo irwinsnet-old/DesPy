@@ -123,29 +123,33 @@
 <p>The ResourceFinishServiceEvent object occurs when the resource
 finishes servicing the assigned entity (after the designated
 service time has elapsed).</p>
-<dl class="docutils">
-<dt><strong>Attributes</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.resource" title="despy.core.resource.ResourceFinishServiceEvent.resource"><code class="xref py py-attr docutils literal"><span class="pre">ResourceFinishServiceEvent.resource</span></code></a>: The applicable
-<a class="reference internal" href="resource.html#despy.core.resource.Resource" title="despy.core.resource.Resource"><code class="xref py py-class docutils literal"><span class="pre">despy.core.resource.Resource</span></code></a> object.</li>
-<li><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.station_index" title="despy.core.resource.ResourceFinishServiceEvent.station_index"><code class="xref py py-attr docutils literal"><span class="pre">ResourceFinishServiceEvent.station_index</span></code></a>: The index
-number of the station that is finishing it&#8217;s service.</li>
-<li><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.service_time" title="despy.core.resource.ResourceFinishServiceEvent.service_time"><code class="xref py py-attr docutils literal"><span class="pre">ResourceFinishServiceEvent.service_time</span></code></a>: The elapsed
-service time.</li>
-<li><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.entity" title="despy.core.resource.ResourceFinishServiceEvent.entity"><code class="xref py py-attr docutils literal"><span class="pre">ResourceFinishServiceEvent.entity</span></code></a>: The entity that is
-the target of the activity.</li>
-</ul>
-</dd>
-<dt><strong>Methods</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.check_resource_queue" title="despy.core.resource.ResourceFinishServiceEvent.check_resource_queue"><code class="xref py py-meth docutils literal"><span class="pre">ResourceFinishServiceEvent.check_resource_queue()</span></code></a>: The
-event&#8217;s callback method that checks the queue for a waiting
-entity.</li>
-<li><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent._update_trace_record" title="despy.core.resource.ResourceFinishServiceEvent._update_trace_record"><code class="xref py py-meth docutils literal"><span class="pre">ResourceFinishServiceEvent._update_trace_record()</span></code></a>: Adds
-the entity name and service time to the trace report.</li>
-</ul>
-</dd>
-</dl>
+<p><strong>Members</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.resource" title="despy.core.resource.ResourceFinishServiceEvent.resource"><code class="xref py py-obj docutils literal"><span class="pre">resource</span></code></a></td>
+<td>The applicable Resource object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.station_index" title="despy.core.resource.ResourceFinishServiceEvent.station_index"><code class="xref py py-obj docutils literal"><span class="pre">station_index</span></code></a></td>
+<td>Index number of the station that is finishing service.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.service_time" title="despy.core.resource.ResourceFinishServiceEvent.service_time"><code class="xref py py-obj docutils literal"><span class="pre">service_time</span></code></a></td>
+<td>The elapsed service time.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.entity" title="despy.core.resource.ResourceFinishServiceEvent.entity"><code class="xref py py-obj docutils literal"><span class="pre">entity</span></code></a></td>
+<td>The entity that is the target of the activity.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent.check_resource_queue" title="despy.core.resource.ResourceFinishServiceEvent.check_resource_queue"><code class="xref py py-obj docutils literal"><span class="pre">check_resource_queue</span></code></a>()</td>
+<td>The event&#8217;s callback method that checks the queue for a waiting entity.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.resource.ResourceFinishServiceEvent._update_trace_record" title="despy.core.resource.ResourceFinishServiceEvent._update_trace_record"><code class="xref py py-obj docutils literal"><span class="pre">_update_trace_record</span></code></a>(trace_record)</td>
+<td>Adds the entity name and service time to the trace report.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

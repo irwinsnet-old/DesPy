@@ -31,25 +31,14 @@ class Event(Component):
       * :class:`despy.base.named_object.NamedObject`
       * :class:`despy.core.component.Component`
     
-    **Attributes**
+    **Members**
     
     ..  autosummary::
     
         trace_fields
         trace_records
-      
-    **Methods**
-    
-    ..  autosummary::
-        
         append_callback
         add_trace_field
-        
-    
-    **Internal Methods**
-    
-    ..  autosummary::
-    
         _do_event
         _update_trace_record
         _reset

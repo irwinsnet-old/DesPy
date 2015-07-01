@@ -34,20 +34,17 @@ class Queue(Component):
       * :class:`despy.base.named_object.NamedObject`
       * :class:`despy.core.component.Component`
       
-    **Attributes**
-      * :attr:`Queue.Item`: (Class Attribute) A named tuple that
-        contains an item added to the queue.
-      * :attr:`Queue.length`: The number of entities in the queue at the
-        current time.
-      * :attr:`Queue.times_in_queue`: List of times (integers) that
-        entities spent in the queue.
-
-    **Methods**
-      * :meth:`Queue.add`: Add an item to the end of the queue.
-      * :meth:`Queue.remove`: Remove an item from the beginning of the
-        queue.
-      * :meth:`Queue.get_data`: Creates charts and adds data to final
-        report.        
+    **Members**
+    
+    ..  autosummary::
+    
+        Item
+        length
+        times_in_queue
+        add
+        remove
+        get_data
+      
     """
 
     def __init__(self, model, name, max_length = None):

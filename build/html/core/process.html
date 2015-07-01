@@ -124,30 +124,40 @@ of an entity or portion of the system.</p>
 <li><a class="reference internal" href="component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a></li>
 </ul>
 </dd>
-<dt><strong>Attributes</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.core.process.Process.awake" title="despy.core.process.Process.awake"><code class="xref py py-attr docutils literal"><span class="pre">Process.awake</span></code></a>: True if process is executing, False
-otherwise. Read only.</li>
-<li><a class="reference internal" href="#despy.core.process.Process.generator" title="despy.core.process.Process.generator"><code class="xref py py-attr docutils literal"><span class="pre">Process.generator</span></code></a>: The generator function that defines
-the process.</li>
-</ul>
-</dd>
-<dt><strong>Methods</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.core.process.Process.start" title="despy.core.process.Process.start"><code class="xref py py-meth docutils literal"><span class="pre">Process.start()</span></code></a>: Schedules a process start event on
-the FEL.</li>
-<li><a class="reference internal" href="#despy.core.process.Process.call" title="despy.core.process.Process.call"><code class="xref py py-meth docutils literal"><span class="pre">Process.call()</span></code></a>: Calls the iterator and schedules
-resulting event on FEL.</li>
-<li><a class="reference internal" href="#despy.core.process.Process.schedule_timeout" title="despy.core.process.Process.schedule_timeout"><code class="xref py py-meth docutils literal"><span class="pre">Process.schedule_timeout()</span></code></a>: Returns a
-ProcessTimeOutEvent.</li>
-<li><a class="reference internal" href="#despy.core.process.Process.sleep" title="despy.core.process.Process.sleep"><code class="xref py py-meth docutils literal"><span class="pre">Process.sleep()</span></code></a>: Stops the process and sets
-Process.awake attribute to False.</li>
-<li><a class="reference internal" href="#despy.core.process.Process.wake" title="despy.core.process.Process.wake"><code class="xref py py-meth docutils literal"><span class="pre">Process.wake()</span></code></a>: Restarts a sleeping processes.</li>
-<li><code class="xref py py-meth docutils literal"><span class="pre">Process.reset()</span></code>: Returns process to initial conditions
-by replacing iterator.</li>
-</ul>
-</dd>
 </dl>
+<p><strong>Members</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.process.Process.awake" title="despy.core.process.Process.awake"><code class="xref py py-obj docutils literal"><span class="pre">awake</span></code></a></td>
+<td>True if process is active, False otherwise.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.process.Process.generator" title="despy.core.process.Process.generator"><code class="xref py py-obj docutils literal"><span class="pre">generator</span></code></a></td>
+<td>The generator function that defines the process.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.process.Process.start" title="despy.core.process.Process.start"><code class="xref py py-obj docutils literal"><span class="pre">start</span></code></a>([delay,&nbsp;priority])</td>
+<td>Schedules a process start event on the FEL.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.process.Process.call" title="despy.core.process.Process.call"><code class="xref py py-obj docutils literal"><span class="pre">call</span></code></a>()</td>
+<td>Calls the iterator and schedules resulting event on FEL.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.process.Process.schedule_timeout" title="despy.core.process.Process.schedule_timeout"><code class="xref py py-obj docutils literal"><span class="pre">schedule_timeout</span></code></a>(name[,&nbsp;delay,&nbsp;priority,&nbsp;...])</td>
+<td>Returns a ProcessTimeOutEvent.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.process.Process.sleep" title="despy.core.process.Process.sleep"><code class="xref py py-obj docutils literal"><span class="pre">sleep</span></code></a>()</td>
+<td>Stops the process and sets Process.awake attribute to False.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.process.Process.wake" title="despy.core.process.Process.wake"><code class="xref py py-obj docutils literal"><span class="pre">wake</span></code></a>([delay,&nbsp;priority])</td>
+<td>Restarts a sleeping processes.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.process.Process.reset_process" title="despy.core.process.Process.reset_process"><code class="xref py py-obj docutils literal"><span class="pre">reset_process</span></code></a>()</td>
+<td>Returns process to initial conditions by replacing iterator.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

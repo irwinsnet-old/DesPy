@@ -120,41 +120,58 @@ kind of service.</p>
 <li><a class="reference internal" href="component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a></li>
 </ul>
 </dd>
-<dt><strong>Attributes</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.core.resource.Resource.capacity" title="despy.core.resource.Resource.capacity"><code class="xref py py-attr docutils literal"><span class="pre">Resource.capacity</span></code></a>: The number of entities that can be
-served simultaneously.</li>
-<li><a class="reference internal" href="#despy.core.resource.Resource.res_queue" title="despy.core.resource.Resource.res_queue"><code class="xref py py-attr docutils literal"><span class="pre">Resource.res_queue</span></code></a>: The resourceQueue that contains the
-queue of incoming users.</li>
-<li><a class="reference internal" href="#despy.core.resource.Resource.service_time" title="despy.core.resource.Resource.service_time"><code class="xref py py-attr docutils literal"><span class="pre">Resource.service_time</span></code></a>: A method that returns the
-time required by the resource.</li>
-<li><a class="reference internal" href="#despy.core.resource.Resource.Station_tuple" title="despy.core.resource.Resource.Station_tuple"><code class="xref py py-attr docutils literal"><span class="pre">Resource.Station_tuple</span></code></a>: A Python namedtuple with an
-&#8216;entity&#8217; field and a &#8216;start_time&#8217; field.</li>
-<li><a class="reference internal" href="#despy.core.resource.Resource.stations" title="despy.core.resource.Resource.stations"><code class="xref py py-attr docutils literal"><span class="pre">Resource.stations</span></code></a>: A list of resource stations
-with length = Resource.capacity.</li>
-</ul>
-</dd>
-<dt><strong>Methods</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.core.resource.Resource.__str__" title="despy.core.resource.Resource.__str__"><code class="xref py py-meth docutils literal"><span class="pre">Resource.__str__()</span></code></a>: Magic method that converts the
-resource object to a string.</li>
-<li><a class="reference internal" href="#despy.core.resource.Resource.__getitem__" title="despy.core.resource.Resource.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">Resource.__getitem__()</span></code></a>: Allows accessing resource
-stations with array brackets.</li>
-<li><a class="reference internal" href="#despy.core.resource.Resource.__setitem__" title="despy.core.resource.Resource.__setitem__"><code class="xref py py-meth docutils literal"><span class="pre">Resource.__setitem__()</span></code></a>: Allows setting resource stations
-with array brackets.</li>
-<li><a class="reference internal" href="#despy.core.resource.Resource.get_available_station" title="despy.core.resource.Resource.get_available_station"><code class="xref py py-meth docutils literal"><span class="pre">Resource.get_available_station()</span></code></a>: Gets the empty resource
-position with the lowest number.</li>
-<li><a class="reference internal" href="#despy.core.resource.Resource.request" title="despy.core.resource.Resource.request"><code class="xref py py-meth docutils literal"><span class="pre">Resource.request()</span></code></a>: Request a resource for a entity.</li>
-<li><a class="reference internal" href="#despy.core.resource.Resource.get_service_time" title="despy.core.resource.Resource.get_service_time"><code class="xref py py-meth docutils literal"><span class="pre">Resource.get_service_time()</span></code></a>: Gets the time needed for a
-position to complete an activity.</li>
-<li><a class="reference internal" href="#despy.core.resource.Resource.start_service" title="despy.core.resource.Resource.start_service"><code class="xref py py-meth docutils literal"><span class="pre">Resource.start_service()</span></code></a>: Commence servicing a entity at the
-index position.</li>
-<li><a class="reference internal" href="#despy.core.resource.Resource.finish_service" title="despy.core.resource.Resource.finish_service"><code class="xref py py-meth docutils literal"><span class="pre">Resource.finish_service()</span></code></a>:</li>
-<li><a class="reference internal" href="#despy.core.resource.Resource.remove_entity" title="despy.core.resource.Resource.remove_entity"><code class="xref py py-meth docutils literal"><span class="pre">Resource.remove_entity()</span></code></a>: Remove entity from a resource
-station.</li>
-</ul>
-</dd>
 </dl>
+<p><strong>Members</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.resource.Resource.capacity" title="despy.core.resource.Resource.capacity"><code class="xref py py-obj docutils literal"><span class="pre">capacity</span></code></a></td>
+<td>The number of entities that can be served simultaneously.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.resource.Resource.res_queue" title="despy.core.resource.Resource.res_queue"><code class="xref py py-obj docutils literal"><span class="pre">res_queue</span></code></a></td>
+<td>The resourceQueue that contains the queue of incoming users.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.resource.Resource.service_time" title="despy.core.resource.Resource.service_time"><code class="xref py py-obj docutils literal"><span class="pre">service_time</span></code></a></td>
+<td>Property that contains a service time function object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.resource.Resource.Station_tuple" title="despy.core.resource.Resource.Station_tuple"><code class="xref py py-obj docutils literal"><span class="pre">Station_tuple</span></code></a></td>
+<td>A Python namedtuple with &#8216;entity&#8217; and &#8216;start_time&#8217; fields.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.resource.Resource.stations" title="despy.core.resource.Resource.stations"><code class="xref py py-obj docutils literal"><span class="pre">stations</span></code></a></td>
+<td>A list of resource stations with length = Resource.capacity.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.resource.Resource.__str__" title="despy.core.resource.Resource.__str__"><code class="xref py py-obj docutils literal"><span class="pre">__str__</span></code></a>()</td>
+<td>Magic method that converts the resource object to a string.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.resource.Resource.__getitem__" title="despy.core.resource.Resource.__getitem__"><code class="xref py py-obj docutils literal"><span class="pre">__getitem__</span></code></a>(index)</td>
+<td>Allows using array brackets to access resource stations.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.resource.Resource.__setitem__" title="despy.core.resource.Resource.__setitem__"><code class="xref py py-obj docutils literal"><span class="pre">__setitem__</span></code></a>(index,&nbsp;entity)</td>
+<td>Allows setting resource stations with array brackets.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.resource.Resource.get_available_station" title="despy.core.resource.Resource.get_available_station"><code class="xref py py-obj docutils literal"><span class="pre">get_available_station</span></code></a>([random])</td>
+<td>Returns the index of an empty station.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.resource.Resource.request" title="despy.core.resource.Resource.request"><code class="xref py py-obj docutils literal"><span class="pre">request</span></code></a>(entity[,&nbsp;random])</td>
+<td>Request a resource for a entity.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.resource.Resource.get_service_time" title="despy.core.resource.Resource.get_service_time"><code class="xref py py-obj docutils literal"><span class="pre">get_service_time</span></code></a>(station_index)</td>
+<td>Gets the time needed for a position to complete an activity.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.resource.Resource.start_service" title="despy.core.resource.Resource.start_service"><code class="xref py py-obj docutils literal"><span class="pre">start_service</span></code></a>(index,&nbsp;entity)</td>
+<td>Commence servicing an entity at the index position.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.resource.Resource.finish_service" title="despy.core.resource.Resource.finish_service"><code class="xref py py-obj docutils literal"><span class="pre">finish_service</span></code></a>(index)</td>
+<td>Remove entity from a resource station.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.resource.Resource.remove_entity" title="despy.core.resource.Resource.remove_entity"><code class="xref py py-obj docutils literal"><span class="pre">remove_entity</span></code></a>(index)</td>
+<td>Remove entity from a resource station.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

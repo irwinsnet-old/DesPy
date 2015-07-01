@@ -44,24 +44,19 @@ class Process(Component):
       * :class:`despy.base.named_object.NamedObject`
       * :class:`despy.core.component.Component`
     
-    **Attributes**
-      * :attr:`Process.awake`: True if process is executing, False
-        otherwise. Read only.
-      * :attr:`Process.generator`: The generator function that defines
-        the process.
+    **Members**
+    
+    .. autosummary::
+    
+        awake
+        generator
+        start
+        call
+        schedule_timeout
+        sleep
+        wake
+        reset_process
 
-    **Methods**
-        * :meth:`Process.start`: Schedules a process start event on
-          the FEL.
-        * :meth:`Process.call`: Calls the iterator and schedules
-          resulting event on FEL.
-        * :meth:`Process.schedule_timeout`: Returns a
-          ProcessTimeOutEvent.
-        * :meth:`Process.sleep`: Stops the process and sets
-          Process.awake attribute to False.
-        * :meth:`Process.wake`: Restarts a sleeping processes.
-        * :meth:`Process.reset`: Returns process to initial conditions
-          by replacing iterator.
     """
 
     def __init__(self, model, name, generator_function = None):

@@ -124,25 +124,31 @@ the TraceRecord.</p>
 associate value. TraceRecord inherits from collections.OrderedDict,
 so all dictionary and ordered dictionary methods and attributes are
 available.</p>
+<p><strong>Members</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#despy.output.trace.TraceRecord.standard_labels" title="despy.output.trace.TraceRecord.standard_labels"><code class="xref py py-obj docutils literal"><span class="pre">standard_labels</span></code></a></td>
+<td>List of standard field labels included in every TraceRecord.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.output.trace.TraceRecord.custom_labels" title="despy.output.trace.TraceRecord.custom_labels"><code class="xref py py-obj docutils literal"><span class="pre">custom_labels</span></code></a></td>
+<td>List of custom field labels added to TraceRecord by designer.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.output.trace.TraceRecord.__str__" title="despy.output.trace.TraceRecord.__str__"><code class="xref py py-obj docutils literal"><span class="pre">__str__</span></code></a>()</td>
+<td>Returns a string representation of the TraceRecord.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.output.trace.TraceRecord.add_fields" title="despy.output.trace.TraceRecord.add_fields"><code class="xref py py-obj docutils literal"><span class="pre">add_fields</span></code></a>(fields)</td>
+<td>Adds a custom data field to the TraceRecord object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.output.trace.TraceRecord.get_row" title="despy.output.trace.TraceRecord.get_row"><code class="xref py py-obj docutils literal"><span class="pre">get_row</span></code></a>()</td>
+<td>Returns a list of TraceRecord fields.</td>
+</tr>
+</tbody>
+</table>
 <dl class="docutils">
-<dt><strong>Attributes</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.output.trace.TraceRecord.standard_labels" title="despy.output.trace.TraceRecord.standard_labels"><code class="xref py py-attr docutils literal"><span class="pre">TraceRecord.standard_labels</span></code></a>: List of standard field
-labels included in every TraceRecord.</li>
-<li><a class="reference internal" href="#despy.output.trace.TraceRecord.custom_labels" title="despy.output.trace.TraceRecord.custom_labels"><code class="xref py py-attr docutils literal"><span class="pre">TraceRecord.custom_labels</span></code></a>: List of custom field labels
-added to TraceRecord by designer.</li>
-</ul>
-</dd>
-<dt><strong>Methods</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference internal" href="#despy.output.trace.TraceRecord.__str__" title="despy.output.trace.TraceRecord.__str__"><code class="xref py py-meth docutils literal"><span class="pre">TraceRecord.__str__()</span></code></a>: Returns a string representation
-of the TraceRecord.</li>
-<li><a class="reference internal" href="#despy.output.trace.TraceRecord.add_fields" title="despy.output.trace.TraceRecord.add_fields"><code class="xref py py-meth docutils literal"><span class="pre">TraceRecord.add_fields()</span></code></a>: Adds a custom data field to
-the TraceRecord object.</li>
-<li><a class="reference internal" href="#despy.output.trace.TraceRecord.get_row" title="despy.output.trace.TraceRecord.get_row"><code class="xref py py-meth docutils literal"><span class="pre">TraceRecord.get_row()</span></code></a>: Returns a list of TraceRecord
-fields.</li>
-</ul>
-</dd>
 <dt><strong>Python Library Dependencies</strong></dt>
 <dd><ul class="first last simple">
 <li><a class="reference external" href="https://docs.python.org/3.4/library/collections.html#collections.OrderedDict" title="(in Python v3.4)"><code class="xref py py-class docutils literal"><span class="pre">collections.OrderedDict</span></code></a></li>

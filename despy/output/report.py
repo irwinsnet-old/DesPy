@@ -20,21 +20,16 @@ import xml.etree.ElementTree as ET
 class HtmlReport():
     """Renders an HTML report containing simulation results.
     
-    **Attributes**
-        * :attr:`HtmlReport.root`: The root <html> element of the
-          HtmlReport. Read-only.
-        * :attr:`HtmlReport.head`: The <head> element of the HtmlReport.
-          Read-only.
-        * :attr:`HtmlReport.body`: The <body> element of the HtmlReport.
-          Read-only.
-        * :attr:`HtmlReport.divisions`: Python list containing
-          simulation output. Read-only.
-          
-    **Methods**
-        * :meth:`HtmlReport.append_output`: Appends a section of output
-          to the HtmlReport.divisions list.
-        * :meth:`HtmlReport.write_report`: Write HTML report file based
-          on data in HtmlReport.divisions.
+    **Members**
+    
+    ..  autosummary::
+    
+        root
+        head
+        body
+        divisions
+        append_output
+        write_report
 
     **Python Library Dependencies**
         * :mod:`xml.etree.ElementTree`

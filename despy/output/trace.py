@@ -60,19 +60,15 @@ class TraceRecord(OrderedDict):
     so all dictionary and ordered dictionary methods and attributes are
     available.
         
-    **Attributes**
-        * :attr:`TraceRecord.standard_labels`: List of standard field
-          labels included in every TraceRecord.
-        * :attr:`TraceRecord.custom_labels`: List of custom field labels
-          added to TraceRecord by designer.
+    **Members**
     
-    **Methods**
-        * :meth:`TraceRecord.__str__`: Returns a string representation
-          of the TraceRecord.
-        * :meth:`TraceRecord.add_fields`: Adds a custom data field to
-          the TraceRecord object.
-        * :meth:`TraceRecord.get_row`: Returns a list of TraceRecord
-          fields.
+    ..  autosummary::
+    
+        standard_labels
+        custom_labels
+        __str__
+        add_fields
+        get_row
           
     **Python Library Dependencies**
         * :class:`collections.OrderedDict`
@@ -189,23 +185,17 @@ class TraceRecord(OrderedDict):
 class Trace(object):
     """List of messages and events that occurred during the simulation.
     
-    **Attributes**
-        * :attr:`Trace.start`: Trace will start recording events at this
-          simulation time.
-        * :attr:`Trace.stop`: Trace will stop recording events at this
-          simulation time.
-        * :attr:'Trace.max_length: Maximum number of TraceRecords in
-          Trace object.
-        * :attr:`Trace.length`: Number of records in Trace object.
-          Read-only.
-          
-    **Methods**
-        * :meth:`Trace.__getitem__`: Enables accessing TraceRecord with
-          square brackets and index.
-        * :meth:`Trace.is_active`: True if Trace object is currently
-          recording.
-        * :meth:`Trace.add`: Adds TraceRecords to Trace class and writes
-          console output.
+    **Members**
+    
+    ..  autosummary::
+    
+        start
+        stop
+        max_length
+        length
+        __getitem__
+        is_active
+        add
     """
     
     
@@ -387,13 +377,11 @@ class Trace(object):
 class CSV_file(object):
     """A comma separated values file that displays the trace report.
     
-    **Attributes**
+    **Members**
         * :attr:`CSV_file.file_name`: The full name, including the path,
           of the CSV file.
         * :attr:`CSV_file.trace`: The CSV_file will display this Trace
           object.
-          
-    **Methods**
         * :meth:`CSV_file.write`: Writes self.trace to CSV file at
           location self.file_name.
           

@@ -109,35 +109,25 @@
 <span class="sd">      * :class:`despy.base.named_object.NamedObject`</span>
 <span class="sd">      * :class:`despy.core.component.Component`</span>
 <span class="sd">      </span>
-<span class="sd">    **Attributes**</span>
-<span class="sd">      * :attr:`Resource.capacity`: The number of entities that can be</span>
-<span class="sd">        served simultaneously.</span>
-<span class="sd">      * :attr:`Resource.res_queue`: The resourceQueue that contains the</span>
-<span class="sd">        queue of incoming users.</span>
-<span class="sd">      * :attr:`Resource.service_time`: A method that returns the</span>
-<span class="sd">        time required by the resource.</span>
-<span class="sd">      * :attr:`Resource.Station_tuple`: A Python namedtuple with an</span>
-<span class="sd">        &#39;entity&#39; field and a &#39;start_time&#39; field.</span>
-<span class="sd">      * :attr:`Resource.stations`: A list of resource stations</span>
-<span class="sd">        with length = Resource.capacity. </span>
-<span class="sd">        </span>
-<span class="sd">    **Methods**</span>
-<span class="sd">      * :meth:`Resource.__str__`: Magic method that converts the</span>
-<span class="sd">        resource object to a string.</span>
-<span class="sd">      * :meth:`Resource.__getitem__`: Allows accessing resource</span>
-<span class="sd">        stations with array brackets.</span>
-<span class="sd">      * :meth:`Resource.__setitem__`: Allows setting resource stations</span>
-<span class="sd">        with array brackets.</span>
-<span class="sd">      * :meth:`Resource.get_available_station`: Gets the empty resource</span>
-<span class="sd">        position with the lowest number.</span>
-<span class="sd">      * :meth:`Resource.request`: Request a resource for a entity.        </span>
-<span class="sd">      * :meth:`Resource.get_service_time`: Gets the time needed for a</span>
-<span class="sd">        position to complete an activity.</span>
-<span class="sd">      * :meth:`Resource.start_service`: Commence servicing a entity at the</span>
-<span class="sd">        index position.</span>
-<span class="sd">      * :meth:`Resource.finish_service`:</span>
-<span class="sd">      * :meth:`Resource.remove_entity`: Remove entity from a resource</span>
-<span class="sd">        station.</span>
+<span class="sd">    **Members**</span>
+<span class="sd">    </span>
+<span class="sd">    ..  autosummary::</span>
+<span class="sd">    </span>
+<span class="sd">        capacity</span>
+<span class="sd">        res_queue</span>
+<span class="sd">        service_time</span>
+<span class="sd">        Station_tuple</span>
+<span class="sd">        stations</span>
+<span class="sd">        __str__</span>
+<span class="sd">        __getitem__</span>
+<span class="sd">        __setitem__</span>
+<span class="sd">        get_available_station</span>
+<span class="sd">        request</span>
+<span class="sd">        get_service_time</span>
+<span class="sd">        start_service</span>
+<span class="sd">        finish_service</span>
+<span class="sd">        remove_entity</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     
     
@@ -395,22 +385,17 @@
 <span class="sd">    finishes servicing the assigned entity (after the designated</span>
 <span class="sd">    service time has elapsed). </span>
 <span class="sd">    </span>
-<span class="sd">    **Attributes**</span>
-<span class="sd">      * :attr:`ResourceFinishServiceEvent.resource`: The applicable</span>
-<span class="sd">        :class:`despy.core.resource.Resource` object.</span>
-<span class="sd">      * :attr:`ResourceFinishServiceEvent.station_index`: The index</span>
-<span class="sd">        number of the station that is finishing it&#39;s service.</span>
-<span class="sd">      * :attr:`ResourceFinishServiceEvent.service_time`: The elapsed</span>
-<span class="sd">        service time.</span>
-<span class="sd">      * :attr:`ResourceFinishServiceEvent.entity`: The entity that is</span>
-<span class="sd">        the target of the activity.</span>
-<span class="sd">        </span>
-<span class="sd">    **Methods**</span>
-<span class="sd">      * :meth:`ResourceFinishServiceEvent.check_resource_queue`: The</span>
-<span class="sd">        event&#39;s callback method that checks the queue for a waiting</span>
-<span class="sd">        entity.</span>
-<span class="sd">      * :meth:`ResourceFinishServiceEvent._update_trace_record`: Adds</span>
-<span class="sd">        the entity name and service time to the trace report.</span>
+<span class="sd">    **Members**</span>
+<span class="sd">    </span>
+<span class="sd">    ..  autosummary::</span>
+<span class="sd">    </span>
+<span class="sd">        resource</span>
+<span class="sd">        station_index</span>
+<span class="sd">        service_time</span>
+<span class="sd">        entity</span>
+<span class="sd">        check_resource_queue</span>
+<span class="sd">        _update_trace_record</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     
     

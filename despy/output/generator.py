@@ -21,20 +21,15 @@ from despy.output.report import HtmlReport
 class Generator(object):
     """Generates the simulation's output reports and graphs.
     
-    *Attributes*
-        * :attr:`Generator.console_trace`: If True, send Trace object
-          data to standard console output.
-        * :attr:`Generator.folder_basename`: If ``None`` (the default
-          value), the simulation will not generate any output or
-          trace files.
-        * :attr:`Generator.sim`: Link to Simulation object documented
-          by the Generator.         
-
-    *Methods*
-        * :meth:`Generator.write_files`: Creates trace and HTML reports
-          in folder_basename location.
-        * :meth:`Generator.set_full_path`: Adds time-stamp to end of
-          Generator.folder_basename.
+    **Members**
+    
+    ..  autosummary
+    
+        console_trace
+        folder_basename
+        sim
+        write_files
+        set_full_path
             
     **Python Library Dependencies**
         * :mod:`os`

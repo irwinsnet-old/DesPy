@@ -113,62 +113,63 @@
 <code class="docutils literal"><span class="pre">Simulation</span></code> class. The <code class="docutils literal"><span class="pre">Simulation</span></code> class initializes the
 top-level model and its components, manages the simulation
 clock and FEL, and executes events.</p>
-<p><strong>Attributes</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li><a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject.name" title="despy.base.named_object.NamedObject.name"><code class="xref py py-attr docutils literal"><span class="pre">name</span></code></a>: Simulation object&#8217;s name. Inherited from
-<a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a>. Type: string.</li>
-<li><a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject.description" title="despy.base.named_object.NamedObject.description"><code class="xref py py-attr docutils literal"><span class="pre">description</span></code></a>: One or more paragraphs that describes the
-simulation. Inherited from
-<a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a> Type: string.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.models" title="despy.core.simulation.Simulation.models"><code class="xref py py-attr docutils literal"><span class="pre">models</span></code></a>: A list of all <a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> objects that
-have been assigned to the simulation.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.seed" title="despy.core.simulation.Simulation.seed"><code class="xref py py-attr docutils literal"><span class="pre">seed</span></code></a>: The np.random.seed method will be seeded with
-this integer prior to running the simulation.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.now" title="despy.core.simulation.Simulation.now"><code class="xref py py-attr docutils literal"><span class="pre">now</span></code></a>: An integer representing the current simulation
-time. Type: integer (non-negative).</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.pri" title="despy.core.simulation.Simulation.pri"><code class="xref py py-attr docutils literal"><span class="pre">pri</span></code></a>: The priority of the current or most recently
-completed event.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.evt" title="despy.core.simulation.Simulation.evt"><code class="xref py py-attr docutils literal"><span class="pre">evt</span></code></a>: Returns the <a class="reference internal" href="event.html#despy.core.event.Event" title="despy.core.event.Event"><code class="xref py py-class docutils literal"><span class="pre">despy.core.event.Event</span></code></a> object
-that is currently being executed. If no event is being executed,
-returns <code class="docutils literal"><span class="pre">None</span></code>. Read-only.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.run_start_time" title="despy.core.simulation.Simulation.run_start_time"><code class="xref py py-attr docutils literal"><span class="pre">run_start_time</span></code></a>: The real-world start time for the
-simulation. Type: datetime.datetime, or <code class="docutils literal"><span class="pre">None</span></code> if the simulation
-has not yet been run. Read-only.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.run_stop_time" title="despy.core.simulation.Simulation.run_stop_time"><code class="xref py py-attr docutils literal"><span class="pre">run_stop_time</span></code></a>: The real-world stop time for the
-simulation. Type: datetime.datetime, or <code class="docutils literal"><span class="pre">None</span></code> if the simulation
-has not yet been run. Read-only.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.gen" title="despy.core.simulation.Simulation.gen"><code class="xref py py-attr docutils literal"><span class="pre">gen</span></code></a>: A <code class="xref py py-class docutils literal"><span class="pre">despy.output.generator</span></code> object that will
-generate all output files.</li>
-</ul>
-</div></blockquote>
-<p><strong>Methods</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.append_model" title="despy.core.simulation.Simulation.append_model"><code class="xref py py-meth docutils literal"><span class="pre">append_model()</span></code></a>: Appends a <a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a>
-object to the Simulation object. A Despy simulation can run
-multiple models simultaneously.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.schedule" title="despy.core.simulation.Simulation.schedule"><code class="xref py py-meth docutils literal"><span class="pre">despy.core.simulation.Simulation.schedule()</span></code></a>: Schedules an
-event on the FEL.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.peek" title="despy.core.simulation.Simulation.peek"><code class="xref py py-meth docutils literal"><span class="pre">peek()</span></code></a>: Gets the time of the next scheduled event, but
-leaves the event on the FEL.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.step" title="despy.core.simulation.Simulation.step"><code class="xref py py-meth docutils literal"><span class="pre">step()</span></code></a>: Executes the next event on the FEL.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.run" title="despy.core.simulation.Simulation.run"><code class="xref py py-meth docutils literal"><span class="pre">run()</span></code></a>: Executes the remaining events on the FEL in order,
-until no events remain, or until the time specified in the
-until parameter is reached.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.get_data" title="despy.core.simulation.Simulation.get_data"><code class="xref py py-meth docutils literal"><span class="pre">get_data()</span></code></a>: Gets a Python list that contains 
-simulation parameters, such as name, run time, etc.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation.reset" title="despy.core.simulation.Simulation.reset"><code class="xref py py-meth docutils literal"><span class="pre">reset()</span></code></a>: Resets the simulation time to the beginning of
-the simulation and resets the model and its components to their
-initial state.</li>
-<li><a class="reference internal" href="#despy.core.simulation.Simulation._initialize_models" title="despy.core.simulation.Simulation._initialize_models"><code class="xref py py-meth docutils literal"><span class="pre">_initialize_models()</span></code></a>: Calls the
-<a class="reference internal" href="model.html#despy.core.model.Model.initialize" title="despy.core.model.Model.initialize"><code class="xref py py-meth docutils literal"><span class="pre">despy.core.model.Model.initialize()</span></code></a> method for every model
-assigned to the Simulation object. This method is marked as
-private and is not intended to be called by the DES designer
-or user. The Simulation calls this object before executing any
-events from the FEL.</li>
-</ul>
-</div></blockquote>
+<p><strong>Members</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.simulation.Simulation.models" title="despy.core.simulation.Simulation.models"><code class="xref py py-obj docutils literal"><span class="pre">models</span></code></a></td>
+<td>Get a list of all models attached to the simulation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.simulation.Simulation.seed" title="despy.core.simulation.Simulation.seed"><code class="xref py py-obj docutils literal"><span class="pre">seed</span></code></a></td>
+<td>Calls seed methods in both numpy and standard random modules.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.simulation.Simulation.now" title="despy.core.simulation.Simulation.now"><code class="xref py py-obj docutils literal"><span class="pre">now</span></code></a></td>
+<td>The current time of the simulation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.simulation.Simulation.pri" title="despy.core.simulation.Simulation.pri"><code class="xref py py-obj docutils literal"><span class="pre">pri</span></code></a></td>
+<td>The priority of the current or most recently completed event.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.simulation.Simulation.evt" title="despy.core.simulation.Simulation.evt"><code class="xref py py-obj docutils literal"><span class="pre">evt</span></code></a></td>
+<td>The event that is currently being executed by the simulation at time = <code class="docutils literal"><span class="pre">self.now</span></code> (read only).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.simulation.Simulation.run_start_time" title="despy.core.simulation.Simulation.run_start_time"><code class="xref py py-obj docutils literal"><span class="pre">run_start_time</span></code></a></td>
+<td>The real-world time (i.e., date, hours, minutes, etc.) at which the simulation starts (read only).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.simulation.Simulation.run_stop_time" title="despy.core.simulation.Simulation.run_stop_time"><code class="xref py py-obj docutils literal"><span class="pre">run_stop_time</span></code></a></td>
+<td>The real-world stop time (i.e., date, hours, minutes, etc.) for the simulation (read only).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.simulation.Simulation.gen" title="despy.core.simulation.Simulation.gen"><code class="xref py py-obj docutils literal"><span class="pre">gen</span></code></a></td>
+<td>A <code class="xref py py-class docutils literal"><span class="pre">despy.output.generator</span></code> object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.simulation.Simulation.append_model" title="despy.core.simulation.Simulation.append_model"><code class="xref py py-obj docutils literal"><span class="pre">append_model</span></code></a>(model)</td>
+<td>Append a model object to the simulation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.simulation.Simulation.schedule" title="despy.core.simulation.Simulation.schedule"><code class="xref py py-obj docutils literal"><span class="pre">schedule</span></code></a>(event[,&nbsp;delay,&nbsp;priority])</td>
+<td>Add an event to the FEL.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.simulation.Simulation.peek" title="despy.core.simulation.Simulation.peek"><code class="xref py py-obj docutils literal"><span class="pre">peek</span></code></a>([prioritized])</td>
+<td>Return the time of the next scheduled event.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.simulation.Simulation.step" title="despy.core.simulation.Simulation.step"><code class="xref py py-obj docutils literal"><span class="pre">step</span></code></a>()</td>
+<td>Advance simulation time and execute the next event.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.simulation.Simulation.run" title="despy.core.simulation.Simulation.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>([until])</td>
+<td>Execute events on the FEL until reaching a stop condition.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.simulation.Simulation.get_data" title="despy.core.simulation.Simulation.get_data"><code class="xref py py-obj docutils literal"><span class="pre">get_data</span></code></a>()</td>
+<td>Get a Python list with simulation parameters and results.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.simulation.Simulation.reset" title="despy.core.simulation.Simulation.reset"><code class="xref py py-obj docutils literal"><span class="pre">reset</span></code></a>([initial_time])</td>
+<td>Reset the time to zero, allowing the simulation to be rerun.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.simulation.Simulation._initialize_models" title="despy.core.simulation.Simulation._initialize_models"><code class="xref py py-obj docutils literal"><span class="pre">_initialize_models</span></code></a>()</td>
+<td>Run the <code class="docutils literal"><span class="pre">initialize</span></code> method on every attached model.</td>
+</tr>
+</tbody>
+</table>
 <dl class="docutils">
 <dt><strong>Inherits</strong></dt>
 <dd><ul class="first last simple">

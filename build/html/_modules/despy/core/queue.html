@@ -106,20 +106,17 @@
 <span class="sd">      * :class:`despy.base.named_object.NamedObject`</span>
 <span class="sd">      * :class:`despy.core.component.Component`</span>
 <span class="sd">      </span>
-<span class="sd">    **Attributes**</span>
-<span class="sd">      * :attr:`Queue.Item`: (Class Attribute) A named tuple that</span>
-<span class="sd">        contains an item added to the queue.</span>
-<span class="sd">      * :attr:`Queue.length`: The number of entities in the queue at the</span>
-<span class="sd">        current time.</span>
-<span class="sd">      * :attr:`Queue.times_in_queue`: List of times (integers) that</span>
-<span class="sd">        entities spent in the queue.</span>
-
-<span class="sd">    **Methods**</span>
-<span class="sd">      * :meth:`Queue.add`: Add an item to the end of the queue.</span>
-<span class="sd">      * :meth:`Queue.remove`: Remove an item from the beginning of the</span>
-<span class="sd">        queue.</span>
-<span class="sd">      * :meth:`Queue.get_data`: Creates charts and adds data to final</span>
-<span class="sd">        report.        </span>
+<span class="sd">    **Members**</span>
+<span class="sd">    </span>
+<span class="sd">    ..  autosummary::</span>
+<span class="sd">    </span>
+<span class="sd">        Item</span>
+<span class="sd">        length</span>
+<span class="sd">        times_in_queue</span>
+<span class="sd">        add</span>
+<span class="sd">        remove</span>
+<span class="sd">        get_data</span>
+<span class="sd">      </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Queue.__init__"><a class="viewcode-back" href="../../../core/queue.html#despy.core.queue.Queue.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">max_length</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>

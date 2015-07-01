@@ -89,62 +89,29 @@ class Simulation(NamedObject):
     top-level model and its components, manages the simulation
     clock and FEL, and executes events.
     
-    **Attributes**
-
-      * :attr:`.name`: Simulation object's name. Inherited from
-        :class:`despy.base.named_object.NamedObject`. Type: string.
-      * :attr:`.description`: One or more paragraphs that describes the
-        simulation. Inherited from
-        :class:`despy.base.named_object.NamedObject` Type: string.
-      * :attr:`.models`: A list of all :class:`.Model` objects that
-        have been assigned to the simulation.
-      * :attr:`.seed`: The np.random.seed method will be seeded with
-        this integer prior to running the simulation.
-      * :attr:`.now`: An integer representing the current simulation
-        time. Type: integer (non-negative).
-      * :attr:`.pri`: The priority of the current or most recently
-        completed event.
-      * :attr:`.evt`: Returns the :class:`despy.core.event.Event` object
-        that is currently being executed. If no event is being executed,
-        returns ``None``. Read-only.
-      * :attr:`.run_start_time`: The real-world start time for the
-        simulation. Type: datetime.datetime, or ``None`` if the simulation
-        has not yet been run. Read-only.
-      * :attr:`run_stop_time`: The real-world stop time for the
-        simulation. Type: datetime.datetime, or ``None`` if the simulation
-        has not yet been run. Read-only.
-      * :attr:`.gen`: A :class:`despy.output.generator` object that will
-        generate all output files.
-
-
-    **Methods**
-
-      * :meth:`.append_model`: Appends a :class:`despy.core.model.Model`
-        object to the Simulation object. A Despy simulation can run
-        multiple models simultaneously.
-      * :meth:`despy.core.simulation.Simulation.schedule`: Schedules an
-        event on the FEL.
-      * :meth:`.peek`: Gets the time of the next scheduled event, but
-        leaves the event on the FEL.
-      * :meth:`.step`: Executes the next event on the FEL.
-      * :meth:`.run`: Executes the remaining events on the FEL in order,
-        until no events remain, or until the time specified in the
-        until parameter is reached.
-      * :meth:`.get_data`: Gets a Python list that contains 
-        simulation parameters, such as name, run time, etc.
-      * :meth:`.reset`: Resets the simulation time to the beginning of
-        the simulation and resets the model and its components to their
-        initial state.
-      * :meth:`._initialize_models`: Calls the
-        :meth:`despy.core.model.Model.initialize` method for every model
-        assigned to the Simulation object. This method is marked as
-        private and is not intended to be called by the DES designer
-        or user. The Simulation calls this object before executing any
-        events from the FEL.
+    **Members**
+    
+    ..  autosummary::
+    
+        models
+        seed
+        now
+        pri
+        evt
+        run_start_time
+        run_stop_time
+        gen
+        append_model
+        schedule
+        peek
+        step
+        run
+        get_data
+        reset
+        _initialize_models
         
     **Inherits**
       * :class:`despy.core.base.NamedObject`
-      
     """
 
     def __init__(self, initial_time=0, name = "Simulation",
