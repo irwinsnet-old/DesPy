@@ -17,6 +17,9 @@ despy.core.simulation
 ..  todo
     
     Update documentation to state that seed can raise a TypeError.
+    
+    Change seed property to a method to be consistent with numpy and
+    random syntax
 """
 
 from heapq import heappush, heappop

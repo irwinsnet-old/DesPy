@@ -71,3 +71,4 @@ from despy.core.queue import Queue
 from despy.core.entity import Entity
 from despy.core.resource import ResourceQueue
 from despy.core.resource import Resource
+from despy.core.timer import RandomTimer

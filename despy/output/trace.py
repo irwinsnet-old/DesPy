@@ -192,7 +192,7 @@ class Trace(object):
         start
         stop
         max_length
-        length
+        __len__
         __getitem__
         is_active
         add
@@ -271,6 +271,13 @@ class Trace(object):
         """The corresponding Generator object.
         """
         return self._gen
+    
+    def __len__(self):
+        """Built-in len() function will return number of records.
+        
+        *Returns:* Integer
+        """
+        return len(self._record_list)
     
     def __getitem__(self, index):
         """Enables accessing TraceRecord with square brackets and index.

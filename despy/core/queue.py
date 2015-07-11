@@ -47,7 +47,8 @@ class Queue(Component):
       
     """
 
-    def __init__(self, model, name, max_length = None):
+    def __init__(self, model, name, max_length = None,
+                 description = None):
         """Create a Queue object.
         
         *Arguments*
@@ -59,9 +60,11 @@ class Queue(Component):
                 If ``None`` (default value), then the Queue length can
                 grow indefinitely. If set to an integer, the Queue will
                 be limited to ``max_length``.
+            ``description`` (String)
+                Optional. Default is None. 
         """
         
-        super().__init__(model, name)
+        super().__init__(model, name, description = description)
         if isinstance(max_length, int):
             self._queue = deque(max_length)
         else:
