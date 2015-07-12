@@ -109,7 +109,7 @@
 <h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="despy.core.queue.Queue">
-<em class="property">class </em><code class="descclassname">despy.core.queue.</code><code class="descname">Queue</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>max_length=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/queue.html#Queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.queue.Queue" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">despy.core.queue.</code><code class="descname">Queue</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>max_length=None</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/queue.html#Queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.queue.Queue" title="Permalink to this definition">¶</a></dt>
 <dd><p>A component that represents a real world queue.</p>
 <p>A Queue object represents a real-world queue, such as a line of
 customers waiting for a server, or a line of products waiting for a
@@ -156,7 +156,7 @@ machine.</p>
 <h2>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="despy.core.queue.Queue.__init__">
-<code class="descclassname">Queue.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>max_length=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/queue.html#Queue.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.queue.Queue.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Queue.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>max_length=None</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/queue.html#Queue.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.queue.Queue.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a Queue object.</p>
 <dl class="docutils">
 <dt><em>Arguments</em></dt>
@@ -169,6 +169,8 @@ machine.</p>
 <dd>If <code class="docutils literal"><span class="pre">None</span></code> (default value), then the Queue length can
 grow indefinitely. If set to an integer, the Queue will
 be limited to <code class="docutils literal"><span class="pre">max_length</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">description</span></code> (String)</dt>
+<dd>Optional. Default is None.</dd>
 </dl>
 </dd>
 </dl>

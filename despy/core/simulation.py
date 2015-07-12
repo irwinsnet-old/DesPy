@@ -25,11 +25,12 @@ despy.core.simulation
 from heapq import heappush, heappop
 from itertools import count
 from collections import namedtuple
-import datetime
+import datetime, random
 from despy.output.generator import Generator
 from despy.output.report import Datatype
 from despy.base.named_object import NamedObject
-import despy.stats.random
+import numpy as np
+
 
 class FelItem(namedtuple('FelItemTuple',
                          ['time_fld', 'event_fld', 'priority_fld'])):
@@ -166,13 +167,24 @@ class Simulation(NamedObject):
         purposes, it's often useful to repeatedly run the simulation
         with the same sequence of random numbers. This can be
         accomplished by setting the seed variable.
+        
+    
+        Designers should use this seed property when seeding the random
+        number generators. While despy will use the numpy random number
+        generator instead of the generator built into Python's random
+        module, we can't guarantee that Python random module functions
+        won't sneak into a custom subclass. The numpy and Python random
+        number generators use different random number sequences, so it's
+        necessary to seed both generators to ensure a consistent random
+        number sequence thoughout the simulation.
         """
         return self._seed
     
     @seed.setter
     def seed(self, seed):
         self._seed = seed
-        despy.stats.random.seed(seed)
+        np.random.seed(seed)
+        random.seed(seed)
 
     @property
     def now(self):

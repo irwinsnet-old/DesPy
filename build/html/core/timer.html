@@ -1,0 +1,251 @@
+
+
+<!doctype html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>despy.core.timer.RandomTimer &mdash; Despy 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="top" title="Despy 1 documentation" href="../index.html" />
+    <link rel="up" title="Despy Classes" href="../classes.html" />
+    <link rel="next" title="despy.output.trace.TraceRecord" href="../output/traceRecord.html" />
+    <link rel="prev" title="despy.core.resource.ResourceFinishServiceEvent" href="resourceFinishServiceEvent.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../output/traceRecord.html" title="despy.output.trace.TraceRecord"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="resourceFinishServiceEvent.html" title="despy.core.resource.ResourceFinishServiceEvent"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">despy.core.timer.RandomTimer</a><ul>
+<li><a class="reference internal" href="#class-description">Class Description</a></li>
+<li><a class="reference internal" href="#init">__init__</a></li>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="resourceFinishServiceEvent.html"
+                        title="previous chapter">despy.core.resource.ResourceFinishServiceEvent</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../output/traceRecord.html"
+                        title="next chapter">despy.output.trace.TraceRecord</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/core/timer.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="despy-core-timer-randomtimer">
+<h1>despy.core.timer.RandomTimer<a class="headerlink" href="#despy-core-timer-randomtimer" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="class-description">
+<h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="despy.core.timer.RandomTimer">
+<em class="property">class </em><code class="descclassname">despy.core.timer.</code><code class="descname">RandomTimer</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>distribution</em>, <em>callback</em>, <em>immediate=False</em>, <em>priority=0</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/timer.html#RandomTimer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.timer.RandomTimer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Schedules an event to occur repeatedly at a random interval.</p>
+<dl class="docutils">
+<dt><strong>Inherited Classes</strong></dt>
+<dd><ul class="first simple">
+<li><a class="reference internal" href="../base/namedobject.html#despy.base.named_object.NamedObject" title="despy.base.named_object.NamedObject"><code class="xref py py-class docutils literal"><span class="pre">despy.base.named_object.NamedObject</span></code></a></li>
+<li><a class="reference internal" href="component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">despy.core.component.Component</span></code></a></li>
+</ul>
+<p><strong>Members</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.timer.RandomTimer.distribution" title="despy.core.timer.RandomTimer.distribution"><code class="xref py py-obj docutils literal"><span class="pre">distribution</span></code></a></td>
+<td>Intervals are generated from this distribution.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.timer.RandomTimer.callback" title="despy.core.timer.RandomTimer.callback"><code class="xref py py-obj docutils literal"><span class="pre">callback</span></code></a></td>
+<td>TimerEvents include this callback function.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.timer.RandomTimer.immediate" title="despy.core.timer.RandomTimer.immediate"><code class="xref py py-obj docutils literal"><span class="pre">immediate</span></code></a></td>
+<td>If true, first TimerEvent will occur immediately.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#despy.core.timer.RandomTimer.current_interval" title="despy.core.timer.RandomTimer.current_interval"><code class="xref py py-obj docutils literal"><span class="pre">current_interval</span></code></a></td>
+<td>Interval between most recently completed and next event.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.timer.RandomTimer.priority" title="despy.core.timer.RandomTimer.priority"><code class="xref py py-obj docutils literal"><span class="pre">priority</span></code></a></td>
+<td>FelItem priority of TimerEvents.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="init">
+<h2>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="despy.core.timer.RandomTimer.__init__">
+<code class="descclassname">RandomTimer.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>model</em>, <em>name</em>, <em>distribution</em>, <em>callback</em>, <em>immediate=False</em>, <em>priority=0</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/timer.html#RandomTimer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.timer.RandomTimer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiates a RandomTimer object.</p>
+<dl class="docutils">
+<dt><em>Arguments</em></dt>
+<dd><dl class="first last docutils">
+<dt><code class="docutils literal"><span class="pre">model</span></code> (<a class="reference internal" href="model.html#despy.core.model.Model" title="despy.core.model.Model"><code class="xref py py-class docutils literal"><span class="pre">despy.core.model.Model</span></code></a>)</dt>
+<dd>The RandomTimer must be assigned to a Model object.</dd>
+<dt><code class="docutils literal"><span class="pre">name</span></code> (String)</dt>
+<dd>A short descriptive name for the RandomTimer object.</dd>
+<dt><code class="docutils literal"><span class="pre">distribution</span></code> A frozen scipy.stats discrete distribution.</dt>
+<dd>Random intervals will be generated from this
+distribution.</dd>
+<dt><code class="docutils literal"><span class="pre">callback</span></code> Python function or method object</dt>
+<dd>Callback function will be executed at intervals
+generated by RandomTimer object.</dd>
+<dt><code class="docutils literal"><span class="pre">immediate</span></code> Boolean</dt>
+<dd>Optional. If True, first RandomTimerEvent will occur
+immediately. If False (default), first event will occur
+after a random interval.</dd>
+<dt><code class="docutils literal"><span class="pre">priority</span></code> Integer</dt>
+<dd>Optional. Default is FelItem.PRIORITY_STANDARD. 
+RandomTimerEvents will execute with this priority.</dd>
+<dt><code class="docutils literal"><span class="pre">description</span></code> String</dt>
+<dd>Optional. Default is None. A paragraph that describes
+the RandomTimer object.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="despy.core.timer.RandomTimer.distribution">
+<code class="descclassname">RandomTimer.</code><code class="descname">distribution</code><a class="headerlink" href="#despy.core.timer.RandomTimer.distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Intervals are generated from this distribution. Read-only.</p>
+<p><em>Type:</em> Scipy.stats frozen distribution object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.timer.RandomTimer.callback">
+<code class="descclassname">RandomTimer.</code><code class="descname">callback</code><a class="headerlink" href="#despy.core.timer.RandomTimer.callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>TimerEvents include this callback function.</p>
+<p><em>Type:</em> Python method or function object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.timer.RandomTimer.immediate">
+<code class="descclassname">RandomTimer.</code><code class="descname">immediate</code><a class="headerlink" href="#despy.core.timer.RandomTimer.immediate" title="Permalink to this definition">¶</a></dt>
+<dd><p>If true, first TimerEvent will occur immediately.</p>
+<p><em>Type:</em> Boolean</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.timer.RandomTimer.current_interval">
+<code class="descclassname">RandomTimer.</code><code class="descname">current_interval</code><a class="headerlink" href="#despy.core.timer.RandomTimer.current_interval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interval between most recently completed and next event.</p>
+<p><em>Type:</em> Integer</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="despy.core.timer.RandomTimer.priority">
+<code class="descclassname">RandomTimer.</code><code class="descname">priority</code><a class="headerlink" href="#despy.core.timer.RandomTimer.priority" title="Permalink to this definition">¶</a></dt>
+<dd><p>FelItem priority of TimerEvents.</p>
+<p><em>Type:</em> Integer</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../output/traceRecord.html" title="despy.output.trace.TraceRecord"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="resourceFinishServiceEvent.html" title="despy.core.resource.ResourceFinishServiceEvent"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../classes.html" >Despy Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Stacy Irwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

@@ -227,6 +227,14 @@ each run of the simulation. For troubleshooting or testing
 purposes, it&#8217;s often useful to repeatedly run the simulation
 with the same sequence of random numbers. This can be
 accomplished by setting the seed variable.</p>
+<p>Designers should use this seed property when seeding the random
+number generators. While despy will use the numpy random number
+generator instead of the generator built into Python&#8217;s random
+module, we can&#8217;t guarantee that Python random module functions
+won&#8217;t sneak into a custom subclass. The numpy and Python random
+number generators use different random number sequences, so it&#8217;s
+necessary to seed both generators to ensure a consistent random
+number sequence thoughout the simulation.</p>
 </dd></dl>
 
 <dl class="attribute">

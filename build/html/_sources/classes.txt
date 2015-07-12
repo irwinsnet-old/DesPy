@@ -20,6 +20,7 @@ Despy Classes
    core/resource
    core/resourceQueue
    core/resourceFinishServiceEvent
+   core/timer
    
    output/traceRecord
    output/trace

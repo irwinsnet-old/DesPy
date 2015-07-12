@@ -18,14 +18,14 @@ Provides a random number seed function and statistical helper functions.
     * :mod:`scipy.stats`
     * :mod:`numpy.random`
     
-Designers should use the despy.stats.random.seed function when seeding
-the random number generators. While despy will use the numpy random
-number generator instead of the generator built into Python's random
-module, we can't guarantee that Python random module functions won't
-sneak into a custom subclass. The numpy and Python random number
-generators use different random number sequences, so it's necessary to
-seed both generators to ensure a consistent random number sequence
-thoughout the simulation.
+Designers should use either the despy.stats.random.seed function or the
+Simulation class's seed function when seeding the random number
+generators. While despy will use the numpy random number generator
+instead of the generator built into Python's random module, we can't
+guarantee that Python random module functions won't sneak into a custom
+subclass. The numpy and Python random number generators use different
+random number sequences, so it's necessary to seed both generators to
+ensure a consistent random number sequence thoughout the simulation.
 
 Using the other functions in this module is optional. Designers who are
 familiar with the scipy.stats package are encouraged to use that package

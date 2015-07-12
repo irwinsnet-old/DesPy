@@ -264,7 +264,7 @@
 <span class="sd">        start</span>
 <span class="sd">        stop</span>
 <span class="sd">        max_length</span>
-<span class="sd">        length</span>
+<span class="sd">        __len__</span>
 <span class="sd">        __getitem__</span>
 <span class="sd">        is_active</span>
 <span class="sd">        add</span>
@@ -343,6 +343,13 @@
         <span class="sd">&quot;&quot;&quot;The corresponding Generator object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen</span>
+    
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Built-in len() function will return number of records.</span>
+<span class="sd">        </span>
+<span class="sd">        *Returns:* Integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_record_list</span><span class="p">)</span>
     
 <div class="viewcode-block" id="Trace.__getitem__"><a class="viewcode-back" href="../../../output/trace.html#despy.output.trace.Trace.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Enables accessing TraceRecord with square brackets and index.</span>

@@ -123,14 +123,14 @@
 </ul>
 </dd>
 </dl>
-<p>Designers should use the despy.stats.random.seed function when seeding
-the random number generators. While despy will use the numpy random
-number generator instead of the generator built into Python&#8217;s random
-module, we can&#8217;t guarantee that Python random module functions won&#8217;t
-sneak into a custom subclass. The numpy and Python random number
-generators use different random number sequences, so it&#8217;s necessary to
-seed both generators to ensure a consistent random number sequence
-thoughout the simulation.</p>
+<p>Designers should use either the despy.stats.random.seed function or the
+Simulation class&#8217;s seed function when seeding the random number
+generators. While despy will use the numpy random number generator
+instead of the generator built into Python&#8217;s random module, we can&#8217;t
+guarantee that Python random module functions won&#8217;t sneak into a custom
+subclass. The numpy and Python random number generators use different
+random number sequences, so it&#8217;s necessary to seed both generators to
+ensure a consistent random number sequence thoughout the simulation.</p>
 <p>Using the other functions in this module is optional. Designers who are
 familiar with the scipy.stats package are encouraged to use that package
 directly &#8211; it&#8217;s more than sufficient. However, the documentation for
