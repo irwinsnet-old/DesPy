@@ -9,7 +9,7 @@ despy.core.simulation
 
 :class:`.Simulation`
     Schedule events and manage the future event list (FEL).
-:class:`.FelItem`
+:class:`.FutureEvent`
     A named tuple that represents a scheduled event.
 :class:`.NoEventsRemaining`
     Raised by despy.core.simulation's step method when FEL is empty.
@@ -29,14 +29,15 @@ import datetime, random
 from despy.output.generator import Generator
 from despy.output.report import Datatype
 from despy.base.named_object import NamedObject
+from despy.base.utilities import Priority
 import numpy as np
 
 
-class FelItem(namedtuple('FelItemTuple',
+class FutureEvent(namedtuple('FutureEventTuple',
                          ['time_fld', 'event_fld', 'priority_fld'])):
     """A named tuple that represents a scheduled event.
     
-    Every item on the FEL must be an instance of FelItem. A FelItem
+    Every item on the FEL must be an instance of FutureEvent. A FutureEvent
     consists of the event, the scheduled time, and priority.
     
     **Attributes**
@@ -48,42 +49,8 @@ class FelItem(namedtuple('FelItemTuple',
       * :attr:`priority_fld`: A priority constant from the 
         :mod:`despy.base.named_object` module, or an integer between
         -4 and +4, inclusive.
-        
-    **Priority Constants**
-        The despy.base package includes three constants that are used to
-        prioritize events that are scheduled to occur a the same time.
-        Events assigned a higher priority will occur before events that
-        are assigned lower priorities.
-        
-        *PRIORITY_STANDARD*
-            Despy uses PRIORITY_STANDARD as the default priority when no
-            other priority is specified.
-            
-        *PRIORITY_EARLY*
-            Events assigned PRIORITY_EARLY will be executed before
-            PRIORITY_STANDARD and PRIORITY_LATE events.
-            
-        *PRIORITY_LATE*
-            Events assigned PRIORITY_LATE will be executed after
-            PRIORITY_EARLY and PRIORITY_STANDARD events.
-            
-        Events scheduled to occur at the same time with the same
-        priority may be executed in any order.
-        
-        The priority integer value is added to the scheduled event time.
-        Internally, Despy multiplies the scheduled time by 10. This
-        means that events scheduled to occur at time 1 are internally
-        scheduled for time 10, time 12 would occur at internal time
-        120, etc. This scheduling mechanism allows priorities as high
-        as 4 and as low as -4. A model that requires more than three
-        different priorities probably needs to be redesigned, therefore,
-        Despy only provides named constants for priorities from -1 to 1.
     
     """
-
-    PRIORITY_EARLY = -1
-    PRIORITY_STANDARD = 0
-    PRIORITY_LATE = 1
 
 class Simulation(NamedObject):
     """Schedule events and manage the future event list (FEL).
@@ -201,8 +168,8 @@ class Simulation(NamedObject):
         Internally, Despy multiplies the time by a factor of ten and
         each step in the simulation is a multiple of ten. This allows
         assignment of priorities to each event. For example,
-        ``PRIORITY_EARLY`` events would be scheduled to run at time 39,
-        ``PRIORITY_DEFAULT`` events at time 40, and ``PRIORITY_LATE``
+        ``Priority.EARLY`` events would be scheduled to run at time 39,
+        ``Priority.DEFAULT`` events at time 40, and ``Priority.LATE``
         events at time 41. Despy would indicate that all of these events
         occurred at time = 4 in standard reports and output. This
         practice simplifies the routines that run the events because
@@ -282,7 +249,7 @@ class Simulation(NamedObject):
         """
         self._models.append(model)
 
-    def schedule(self, event, delay=0, priority=FelItem.PRIORITY_STANDARD):
+    def schedule(self, event, delay=0, priority=Priority.STANDARD):
         """ Add an event to the FEL.
 
         *Arguments*
@@ -293,9 +260,9 @@ class Simulation(NamedObject):
                 the event will be scheduled to occur immediately.
             priority (integer)
                 An attribute of the
-                :class:`despy.core.simulation.FelItem` enumeration, or
+                :class:`despy.core.simulation.FutureEvent` enumeration, or
                 an integer ranging from -5 to +5. The default is
-                ``FelItem.PRIORITY_STANDARD``, which is equivalent to
+                ``Priority.STANDARD``, which is equivalent to
                 zero.
         """
         # Ensures delay value is always an integer.
@@ -306,7 +273,7 @@ class Simulation(NamedObject):
         scheduleTime = self._now + (delay * 10) + priority
         
         heappush(self._futureEventList,
-                 FelItem(time_fld=scheduleTime, event_fld=event,
+                 FutureEvent(time_fld=scheduleTime, event_fld=event,
                          priority_fld=priority))
 
     def peek(self, prioritized=True):
@@ -315,7 +282,7 @@ class Simulation(NamedObject):
         *Arguments*
             prioritized (Boolean):
                 If ``True``, the time will reflect the event's priority.
-                For example, for a ``PRIORITY_EARLY`` event scheduled to
+                For example, for a ``Priority.EARLY`` event scheduled to
                 run at time = 25, ``peek`` will return 24.9 if the
                 ``prioritized`` attribute is set to ``True``. If
                 ``False``, then our example would return 25, the nominal
@@ -360,7 +327,7 @@ class Simulation(NamedObject):
                 Occurs if no more events are scheduled on the FEL.
                 
         *Returns*
-            :class:`despy.core.simulation.FelItem`
+            :class:`despy.core.simulation.FutureEvent`
         """
 
         # Get next event from FEL and advance current simulation time.

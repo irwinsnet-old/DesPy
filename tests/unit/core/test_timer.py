@@ -48,14 +48,14 @@ class testTimer(unittest.TestCase):
         self.assertEqual(trace2[1]['time'], 285)
         self.assertEqual(len(trace2), 3)
         
-        #Test timer with PRIORITY_LATE
+        #Test timer with Priority.LATE
         print()
         print("=====Testing Priority Attribute =======================")
         model3 = dp.Model("Timer Test Model-C")
         model3.sim.seed = 731
         dist3 = drand.get_empirical_pmf([5, 10], [0.3, 0.7])
         _ = dp.RandomTimer(model3, "Timer-C", dist3, timer_callback,
-                           priority = dp.fi.PRIORITY_LATE)
+                           priority = dp.Priority.LATE)
         model3.sim.run(100)
         trace3 = model3.sim.gen.trace
         self.assertEqual(trace3[0]['priority'], 1)

@@ -13,8 +13,9 @@ despy.core.model
     ``Model`` class.
 """
 
-from despy.core.simulation import Simulation, FelItem as fi
+from despy.core.simulation import Simulation
 from despy.base.named_object import NamedObject
+from despy.base.utilities import Priority
 
 class Model(NamedObject):
     """Represents the logical elements of the real-world system.
@@ -197,7 +198,7 @@ class Model(NamedObject):
             return
 
     def schedule(self, event, delay = 0,
-                 priority = fi.PRIORITY_STANDARD):
+                 priority = Priority.STANDARD):
         """Call the Simulation object's schedule() method.
 
         *Arguments*

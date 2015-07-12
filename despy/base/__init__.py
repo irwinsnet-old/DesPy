@@ -12,5 +12,10 @@ despy.base.named_object
 
 ..  automodule:: despy.base.named_object
     :noindex:
-    
+
+despy.base.utilities
+====================
+
+..  automodule:: despy.base.utilities
+    :noindex:
 """

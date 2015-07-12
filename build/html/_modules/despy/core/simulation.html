@@ -81,7 +81,7 @@
 
 <span class="sd">:class:`.Simulation`</span>
 <span class="sd">    Schedule events and manage the future event list (FEL).</span>
-<span class="sd">:class:`.FelItem`</span>
+<span class="sd">:class:`.FutureEvent`</span>
 <span class="sd">    A named tuple that represents a scheduled event.</span>
 <span class="sd">:class:`.NoEventsRemaining`</span>
 <span class="sd">    Raised by despy.core.simulation&#39;s step method when FEL is empty.</span>
@@ -101,14 +101,15 @@
 <span class="kn">from</span> <span class="nn">despy.output.generator</span> <span class="kn">import</span> <span class="n">Generator</span>
 <span class="kn">from</span> <span class="nn">despy.output.report</span> <span class="kn">import</span> <span class="n">Datatype</span>
 <span class="kn">from</span> <span class="nn">despy.base.named_object</span> <span class="kn">import</span> <span class="n">NamedObject</span>
+<span class="kn">from</span> <span class="nn">despy.base.utilities</span> <span class="kn">import</span> <span class="n">Priority</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="FelItem"><a class="viewcode-back" href="../../../core/felitem.html#despy.core.simulation.FelItem">[docs]</a><span class="k">class</span> <span class="nc">FelItem</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FelItemTuple&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="FutureEvent"><a class="viewcode-back" href="../../../core/futureEvent.html#despy.core.simulation.FutureEvent">[docs]</a><span class="k">class</span> <span class="nc">FutureEvent</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FutureEventTuple&#39;</span><span class="p">,</span>
                          <span class="p">[</span><span class="s">&#39;time_fld&#39;</span><span class="p">,</span> <span class="s">&#39;event_fld&#39;</span><span class="p">,</span> <span class="s">&#39;priority_fld&#39;</span><span class="p">])):</span>
     <span class="sd">&quot;&quot;&quot;A named tuple that represents a scheduled event.</span>
 <span class="sd">    </span>
-<span class="sd">    Every item on the FEL must be an instance of FelItem. A FelItem</span>
+<span class="sd">    Every item on the FEL must be an instance of FutureEvent. A FutureEvent</span>
 <span class="sd">    consists of the event, the scheduled time, and priority.</span>
 <span class="sd">    </span>
 <span class="sd">    **Attributes**</span>
@@ -120,42 +121,8 @@
 <span class="sd">      * :attr:`priority_fld`: A priority constant from the </span>
 <span class="sd">        :mod:`despy.base.named_object` module, or an integer between</span>
 <span class="sd">        -4 and +4, inclusive.</span>
-<span class="sd">        </span>
-<span class="sd">    **Priority Constants**</span>
-<span class="sd">        The despy.base package includes three constants that are used to</span>
-<span class="sd">        prioritize events that are scheduled to occur a the same time.</span>
-<span class="sd">        Events assigned a higher priority will occur before events that</span>
-<span class="sd">        are assigned lower priorities.</span>
-<span class="sd">        </span>
-<span class="sd">        *PRIORITY_STANDARD*</span>
-<span class="sd">            Despy uses PRIORITY_STANDARD as the default priority when no</span>
-<span class="sd">            other priority is specified.</span>
-<span class="sd">            </span>
-<span class="sd">        *PRIORITY_EARLY*</span>
-<span class="sd">            Events assigned PRIORITY_EARLY will be executed before</span>
-<span class="sd">            PRIORITY_STANDARD and PRIORITY_LATE events.</span>
-<span class="sd">            </span>
-<span class="sd">        *PRIORITY_LATE*</span>
-<span class="sd">            Events assigned PRIORITY_LATE will be executed after</span>
-<span class="sd">            PRIORITY_EARLY and PRIORITY_STANDARD events.</span>
-<span class="sd">            </span>
-<span class="sd">        Events scheduled to occur at the same time with the same</span>
-<span class="sd">        priority may be executed in any order.</span>
-<span class="sd">        </span>
-<span class="sd">        The priority integer value is added to the scheduled event time.</span>
-<span class="sd">        Internally, Despy multiplies the scheduled time by 10. This</span>
-<span class="sd">        means that events scheduled to occur at time 1 are internally</span>
-<span class="sd">        scheduled for time 10, time 12 would occur at internal time</span>
-<span class="sd">        120, etc. This scheduling mechanism allows priorities as high</span>
-<span class="sd">        as 4 and as low as -4. A model that requires more than three</span>
-<span class="sd">        different priorities probably needs to be redesigned, therefore,</span>
-<span class="sd">        Despy only provides named constants for priorities from -1 to 1.</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">PRIORITY_EARLY</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="n">PRIORITY_STANDARD</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">PRIORITY_LATE</span> <span class="o">=</span> <span class="mi">1</span>
 </div>
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Schedule events and manage the future event list (FEL).</span>
@@ -273,8 +240,8 @@
 <span class="sd">        Internally, Despy multiplies the time by a factor of ten and</span>
 <span class="sd">        each step in the simulation is a multiple of ten. This allows</span>
 <span class="sd">        assignment of priorities to each event. For example,</span>
-<span class="sd">        ``PRIORITY_EARLY`` events would be scheduled to run at time 39,</span>
-<span class="sd">        ``PRIORITY_DEFAULT`` events at time 40, and ``PRIORITY_LATE``</span>
+<span class="sd">        ``Priority.EARLY`` events would be scheduled to run at time 39,</span>
+<span class="sd">        ``Priority.DEFAULT`` events at time 40, and ``Priority.LATE``</span>
 <span class="sd">        events at time 41. Despy would indicate that all of these events</span>
 <span class="sd">        occurred at time = 4 in standard reports and output. This</span>
 <span class="sd">        practice simplifies the routines that run the events because</span>
@@ -354,7 +321,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simulation.schedule"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.schedule">[docs]</a>    <span class="k">def</span> <span class="nf">schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">FelItem</span><span class="o">.</span><span class="n">PRIORITY_STANDARD</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulation.schedule"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.schedule">[docs]</a>    <span class="k">def</span> <span class="nf">schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">Priority</span><span class="o">.</span><span class="n">STANDARD</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Add an event to the FEL.</span>
 
 <span class="sd">        *Arguments*</span>
@@ -365,9 +332,9 @@
 <span class="sd">                the event will be scheduled to occur immediately.</span>
 <span class="sd">            priority (integer)</span>
 <span class="sd">                An attribute of the</span>
-<span class="sd">                :class:`despy.core.simulation.FelItem` enumeration, or</span>
+<span class="sd">                :class:`despy.core.simulation.FutureEvent` enumeration, or</span>
 <span class="sd">                an integer ranging from -5 to +5. The default is</span>
-<span class="sd">                ``FelItem.PRIORITY_STANDARD``, which is equivalent to</span>
+<span class="sd">                ``Priority.STANDARD``, which is equivalent to</span>
 <span class="sd">                zero.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># Ensures delay value is always an integer.</span>
@@ -378,7 +345,7 @@
         <span class="n">scheduleTime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_now</span> <span class="o">+</span> <span class="p">(</span><span class="n">delay</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="n">priority</span>
         
         <span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span><span class="p">,</span>
-                 <span class="n">FelItem</span><span class="p">(</span><span class="n">time_fld</span><span class="o">=</span><span class="n">scheduleTime</span><span class="p">,</span> <span class="n">event_fld</span><span class="o">=</span><span class="n">event</span><span class="p">,</span>
+                 <span class="n">FutureEvent</span><span class="p">(</span><span class="n">time_fld</span><span class="o">=</span><span class="n">scheduleTime</span><span class="p">,</span> <span class="n">event_fld</span><span class="o">=</span><span class="n">event</span><span class="p">,</span>
                          <span class="n">priority_fld</span><span class="o">=</span><span class="n">priority</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="Simulation.peek"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.peek">[docs]</a>    <span class="k">def</span> <span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prioritized</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
@@ -387,7 +354,7 @@
 <span class="sd">        *Arguments*</span>
 <span class="sd">            prioritized (Boolean):</span>
 <span class="sd">                If ``True``, the time will reflect the event&#39;s priority.</span>
-<span class="sd">                For example, for a ``PRIORITY_EARLY`` event scheduled to</span>
+<span class="sd">                For example, for a ``Priority.EARLY`` event scheduled to</span>
 <span class="sd">                run at time = 25, ``peek`` will return 24.9 if the</span>
 <span class="sd">                ``prioritized`` attribute is set to ``True``. If</span>
 <span class="sd">                ``False``, then our example would return 25, the nominal</span>
@@ -432,7 +399,7 @@
 <span class="sd">                Occurs if no more events are scheduled on the FEL.</span>
 <span class="sd">                </span>
 <span class="sd">        *Returns*</span>
-<span class="sd">            :class:`despy.core.simulation.FelItem`</span>
+<span class="sd">            :class:`despy.core.simulation.FutureEvent`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c"># Get next event from FEL and advance current simulation time.</span>

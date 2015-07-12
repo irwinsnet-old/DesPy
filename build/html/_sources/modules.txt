@@ -1,29 +1,32 @@
 *************
 Despy Modules
 *************
-..  automodule:: despy.base.named_object
-    :noindex:
+.. automodule:: despy.base.named_object
+   :noindex:
     
-..  automodule:: despy.core.component
-    :noindex:
+.. automodule:: despy.base.utilities
+   :noindex:
     
-..  automodule:: despy.core.model
-    :noindex:
+.. automodule:: despy.core.component
+   :noindex:
     
-..  automodule:: despy.core.simulation
-    :noindex:
+.. automodule:: despy.core.model
+   :noindex:
     
-..  automodule:: despy.core.event
-    :noindex:
+.. automodule:: despy.core.simulation
+   :noindex:
     
-..  automodule:: despy.core.resource
-    :noindex:
+.. automodule:: despy.core.event
+   :noindex:
     
-..  automodule:: despy.core.queue
-    :noindex:
+.. automodule:: despy.core.resource
+   :noindex:
     
-..  automodule:: despy.output.trace
-    :noindex:
+.. automodule:: despy.core.queue
+   :noindex:
+    
+.. automodule:: despy.output.trace
+   :noindex:
 
 .. automodule:: despy.output.report
    :noindex:
@@ -32,4 +35,7 @@ Despy Modules
    :noindex:
 
 .. automodule:: despy.output.plot
+   :noindex:
+   
+.. automodule:: despy.stats.random
    :noindex:

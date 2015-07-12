@@ -4,7 +4,7 @@
 #   Copyright (c) 2015, Stacy Irwin
 """
 ********************
-despy.base.component
+despy.core.component
 ********************
 
 :class:`.Component`

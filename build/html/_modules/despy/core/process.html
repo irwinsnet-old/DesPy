@@ -99,8 +99,8 @@
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">from</span> <span class="nn">despy.core.component</span> <span class="kn">import</span> <span class="n">Component</span>
-<span class="kn">from</span> <span class="nn">despy.core.simulation</span> <span class="kn">import</span> <span class="n">FelItem</span> <span class="k">as</span> <span class="n">fi</span>
 <span class="kn">from</span> <span class="nn">despy.core.event</span> <span class="kn">import</span> <span class="n">Event</span>
+<span class="kn">from</span> <span class="nn">despy.base.utilities</span> <span class="kn">import</span> <span class="n">Priority</span>
 
 <div class="viewcode-block" id="Process"><a class="viewcode-back" href="../../../core/process.html#despy.core.process.Process">[docs]</a><span class="k">class</span> <span class="nc">Process</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Portion of a real-world system, including events and parameters.</span>
@@ -198,7 +198,7 @@
     <span class="k">def</span> <span class="nf">generator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generator_function</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span> <span class="o">=</span> <span class="n">generator_function</span>
         
-<div class="viewcode-block" id="Process.start"><a class="viewcode-back" href="../../../core/process.html#despy.core.process.Process.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">priority</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">PRIORITY_STANDARD</span><span class="p">):</span>
+<div class="viewcode-block" id="Process.start"><a class="viewcode-back" href="../../../core/process.html#despy.core.process.Process.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">priority</span> <span class="o">=</span> <span class="n">Priority</span><span class="o">.</span><span class="n">STANDARD</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Schedules a process start event on the FEL.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
@@ -208,7 +208,7 @@
 <span class="sd">                delayed by *delay* time units.</span>
 <span class="sd">            ``priority``</span>
 <span class="sd">                Priority of the process start event. Defaults to</span>
-<span class="sd">                PRIORITY_STANDARD.</span>
+<span class="sd">                Priority.STANDARD.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">ProcessTimeOutEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                             <span class="s">&quot;Start &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="n">delay</span><span class="p">,</span> <span class="n">priority</span><span class="p">)</span>
@@ -225,7 +225,7 @@
                                     <span class="n">scheduled_event</span><span class="o">.</span><span class="n">priority_</span><span class="p">)</span>
         </div>
 <div class="viewcode-block" id="Process.schedule_timeout"><a class="viewcode-back" href="../../../core/process.html#despy.core.process.Process.schedule_timeout">[docs]</a>    <span class="k">def</span> <span class="nf">schedule_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-                         <span class="n">priority</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">PRIORITY_STANDARD</span><span class="p">,</span>
+                         <span class="n">priority</span> <span class="o">=</span> <span class="n">Priority</span><span class="o">.</span><span class="n">STANDARD</span><span class="p">,</span>
                          <span class="n">trace_fields</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns a ProcessTimeOutEvent.</span>
 <span class="sd">        </span>
@@ -256,7 +256,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_awake</span> <span class="o">=</span> <span class="bp">False</span>
     </div>
-<div class="viewcode-block" id="Process.wake"><a class="viewcode-back" href="../../../core/process.html#despy.core.process.Process.wake">[docs]</a>    <span class="k">def</span> <span class="nf">wake</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">priority</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">PRIORITY_STANDARD</span><span class="p">):</span>
+<div class="viewcode-block" id="Process.wake"><a class="viewcode-back" href="../../../core/process.html#despy.core.process.Process.wake">[docs]</a>    <span class="k">def</span> <span class="nf">wake</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">priority</span> <span class="o">=</span> <span class="n">Priority</span><span class="o">.</span><span class="n">STANDARD</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Restarts a sleeping processes.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
@@ -266,7 +266,7 @@
 <span class="sd">                *delay* time units have elapsed.</span>
 <span class="sd">            ``priority``</span>
 <span class="sd">                Priority for waking the process. Defaults to</span>
-<span class="sd">                PRIORITY_STANDARD.</span>
+<span class="sd">                Priority.STANDARD.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">awake</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">ProcessTimeOutEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>

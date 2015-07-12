@@ -85,8 +85,9 @@
 <span class="sd">    ``Model`` class.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">despy.core.simulation</span> <span class="kn">import</span> <span class="n">Simulation</span><span class="p">,</span> <span class="n">FelItem</span> <span class="k">as</span> <span class="n">fi</span>
+<span class="kn">from</span> <span class="nn">despy.core.simulation</span> <span class="kn">import</span> <span class="n">Simulation</span>
 <span class="kn">from</span> <span class="nn">despy.base.named_object</span> <span class="kn">import</span> <span class="n">NamedObject</span>
+<span class="kn">from</span> <span class="nn">despy.base.utilities</span> <span class="kn">import</span> <span class="n">Priority</span>
 
 <div class="viewcode-block" id="Model"><a class="viewcode-back" href="../../../core/model.html#despy.core.model.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Represents the logical elements of the real-world system.</span>
@@ -269,7 +270,7 @@
             <span class="k">return</span>
 </div>
 <div class="viewcode-block" id="Model.schedule"><a class="viewcode-back" href="../../../core/model.html#despy.core.model.Model.schedule">[docs]</a>    <span class="k">def</span> <span class="nf">schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-                 <span class="n">priority</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">PRIORITY_STANDARD</span><span class="p">):</span>
+                 <span class="n">priority</span> <span class="o">=</span> <span class="n">Priority</span><span class="o">.</span><span class="n">STANDARD</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Call the Simulation object&#39;s schedule() method.</span>
 
 <span class="sd">        *Arguments*</span>

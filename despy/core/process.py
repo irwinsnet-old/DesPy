@@ -27,8 +27,8 @@ despy.core.process
 from collections import namedtuple
 import types
 from despy.core.component import Component
-from despy.core.simulation import FelItem as fi
 from despy.core.event import Event
+from despy.base.utilities import Priority
 
 class Process(Component):
     """Portion of a real-world system, including events and parameters.
@@ -126,7 +126,7 @@ class Process(Component):
     def generator(self, generator_function):
         self._generator = generator_function
         
-    def start(self, delay = 0, priority = fi.PRIORITY_STANDARD):
+    def start(self, delay = 0, priority = Priority.STANDARD):
         """Schedules a process start event on the FEL.
         
         *Arguments*
@@ -136,7 +136,7 @@ class Process(Component):
                 delayed by *delay* time units.
             ``priority``
                 Priority of the process start event. Defaults to
-                PRIORITY_STANDARD.
+                Priority.STANDARD.
         """
         self.model.schedule(ProcessTimeOutEvent(self,
                             "Start " + self.name), delay, priority)
@@ -153,7 +153,7 @@ class Process(Component):
                                     scheduled_event.priority_)
         
     def schedule_timeout(self, name, delay = 0,
-                         priority = fi.PRIORITY_STANDARD,
+                         priority = Priority.STANDARD,
                          trace_fields = None):
         """Returns a ProcessTimeOutEvent.
         
@@ -184,7 +184,7 @@ class Process(Component):
         """
         self._awake = False
     
-    def wake(self, delay = 0, priority = fi.PRIORITY_STANDARD):
+    def wake(self, delay = 0, priority = Priority.STANDARD):
         """Restarts a sleeping processes.
         
         *Arguments*
@@ -194,7 +194,7 @@ class Process(Component):
                 *delay* time units have elapsed.
             ``priority``
                 Priority for waking the process. Defaults to
-                PRIORITY_STANDARD.
+                Priority.STANDARD.
         """
         if not self.awake:
             self.model.schedule(ProcessTimeOutEvent(self,

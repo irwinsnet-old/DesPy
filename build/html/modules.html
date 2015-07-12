@@ -58,7 +58,8 @@
   <ul>
 <li><a class="reference internal" href="#">Despy Modules</a><ul>
 <li><a class="reference internal" href="#despy-base-named-object">despy.base.named_object</a></li>
-<li><a class="reference internal" href="#despy-base-component">despy.base.component</a></li>
+<li><a class="reference internal" href="#despy-base-utilities">despy.base.utilities</a></li>
+<li><a class="reference internal" href="#despy-core-component">despy.core.component</a></li>
 <li><a class="reference internal" href="#despy-core-model">despy.core.model</a></li>
 <li><a class="reference internal" href="#despy-core-simulation">despy.core.simulation</a></li>
 <li><a class="reference internal" href="#despy-core-event">despy.core.event</a></li>
@@ -115,8 +116,11 @@
 <dd>A base class that provides name and description fields.</dd>
 </dl>
 </div>
-<div class="section" id="despy-base-component">
-<h2>despy.base.component<a class="headerlink" href="#despy-base-component" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="despy-base-utilities">
+<h2>despy.base.utilities<a class="headerlink" href="#despy-base-utilities" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="despy-core-component">
+<h2>despy.core.component<a class="headerlink" href="#despy-core-component" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt><a class="reference internal" href="core/component.html#despy.core.component.Component" title="despy.core.component.Component"><code class="xref py py-class docutils literal"><span class="pre">Component</span></code></a></dt>
 <dd>A base class that provides object counters and other attributes.</dd>
@@ -136,7 +140,7 @@ The user will generally build their model by sub-classing the
 <dl class="docutils">
 <dt><a class="reference internal" href="core/simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">Simulation</span></code></a></dt>
 <dd>Schedule events and manage the future event list (FEL).</dd>
-<dt><a class="reference internal" href="core/felitem.html#despy.core.simulation.FelItem" title="despy.core.simulation.FelItem"><code class="xref py py-class docutils literal"><span class="pre">FelItem</span></code></a></dt>
+<dt><a class="reference internal" href="core/futureEvent.html#despy.core.simulation.FutureEvent" title="despy.core.simulation.FutureEvent"><code class="xref py py-class docutils literal"><span class="pre">FutureEvent</span></code></a></dt>
 <dd>A named tuple that represents a scheduled event.</dd>
 <dt><code class="xref py py-class docutils literal"><span class="pre">NoEventsRemaining</span></code></dt>
 <dd>Raised by despy.core.simulation&#8217;s step method when FEL is empty.</dd>
@@ -229,6 +233,55 @@ read-only attributes.</p>
 </dd>
 </dl>
 </div>
+<p>Provides a random number seed function and statistical helper functions.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="stats/random.html#despy.stats.random.seed" title="despy.stats.random.seed"><code class="xref py py-obj docutils literal"><span class="pre">seed</span></code></a>(seed)</td>
+<td>Seed random number generators in numpy and Python random module.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="stats/random.html#despy.stats.random.get_poisson_pmf" title="despy.stats.random.get_poisson_pmf"><code class="xref py py-obj docutils literal"><span class="pre">get_poisson_pmf</span></code></a>(mu)</td>
+<td>Return Scipy.stats Poisson PMF class with lambda = mu.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="stats/random.html#despy.stats.random.get_empirical_pmf" title="despy.stats.random.get_empirical_pmf"><code class="xref py py-obj docutils literal"><span class="pre">get_empirical_pmf</span></code></a>(values,&nbsp;probabilities[,&nbsp;name])</td>
+<td>Return custom Scipy.stats discrete PMF.</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Python Library Dependencies</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3.4/library/random.html#module-random" title="(in Python v3.4)"><code class="xref py py-mod docutils literal"><span class="pre">random</span></code></a></li>
+</ul>
+</dd>
+<dt><strong>External Library Dependencies</strong></dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/stats.html#module-scipy.stats" title="(in SciPy v0.15.1)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.stats</span></code></a></li>
+<li><code class="xref py py-mod docutils literal"><span class="pre">numpy.random</span></code></li>
+</ul>
+</dd>
+</dl>
+<p>Designers should use either the despy.stats.random.seed function or the
+Simulation class&#8217;s seed function when seeding the random number
+generators. While despy will use the numpy random number generator
+instead of the generator built into Python&#8217;s random module, we can&#8217;t
+guarantee that Python random module functions won&#8217;t sneak into a custom
+subclass. The numpy and Python random number generators use different
+random number sequences, so it&#8217;s necessary to seed both generators to
+ensure a consistent random number sequence thoughout the simulation.</p>
+<p>Using the other functions in this module is optional. Designers who are
+familiar with the scipy.stats package are encouraged to use that package
+directly &#8211; it&#8217;s more than sufficient. However, the documentation for
+the scipy.stats package can be challenging for new users, so I&#8217;ve
+included helper functions to steer new simulation designers in the
+right direction.</p>
+<p>The get...pmf and get...cdf functions return frozen scipy.stats
+probability distributions. Each distribution can generate random
+variables, calculate expected means, medians, and variances, and much
+more.</p>
 </div>
 
 

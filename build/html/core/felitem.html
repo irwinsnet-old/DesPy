@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>FelItem &mdash; Despy 1 documentation</title>
+    <title>FutureEvent &mdash; Despy 1 documentation</title>
     
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -90,13 +90,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="felitem">
-<h1>FelItem<a class="headerlink" href="#felitem" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="futureevent">
+<h1>FutureEvent<a class="headerlink" href="#futureevent" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="despy.core.simulation.FelItem">
-<em class="property">class </em><code class="descclassname">despy.core.simulation.</code><code class="descname">FelItem</code><a class="reference internal" href="../_modules/despy/core/simulation.html#FelItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.FelItem" title="Permalink to this definition">¶</a></dt>
+<dt id="despy.core.simulation.FutureEvent">
+<em class="property">class </em><code class="descclassname">despy.core.simulation.</code><code class="descname">FutureEvent</code><a class="reference internal" href="../_modules/despy/core/simulation.html#FutureEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.FutureEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>A named tuple that represents a scheduled event.</p>
-<p>Every item on the FEL must be an instance of FelItem. A FelItem
+<p>Every item on the FEL must be an instance of FutureEvent. A FutureEvent
 consists of the event, the scheduled time, and priority.</p>
 <p><strong>Attributes</strong></p>
 <blockquote>
@@ -110,35 +110,6 @@ execution. Type: a non-negative integer.</li>
 -4 and +4, inclusive.</li>
 </ul>
 </div></blockquote>
-<dl class="docutils">
-<dt><strong>Priority Constants</strong></dt>
-<dd><p class="first">The despy.base package includes three constants that are used to
-prioritize events that are scheduled to occur a the same time.
-Events assigned a higher priority will occur before events that
-are assigned lower priorities.</p>
-<dl class="docutils">
-<dt><em>PRIORITY_STANDARD</em></dt>
-<dd>Despy uses PRIORITY_STANDARD as the default priority when no
-other priority is specified.</dd>
-<dt><em>PRIORITY_EARLY</em></dt>
-<dd>Events assigned PRIORITY_EARLY will be executed before
-PRIORITY_STANDARD and PRIORITY_LATE events.</dd>
-<dt><em>PRIORITY_LATE</em></dt>
-<dd>Events assigned PRIORITY_LATE will be executed after
-PRIORITY_EARLY and PRIORITY_STANDARD events.</dd>
-</dl>
-<p>Events scheduled to occur at the same time with the same
-priority may be executed in any order.</p>
-<p class="last">The priority integer value is added to the scheduled event time.
-Internally, Despy multiplies the scheduled time by 10. This
-means that events scheduled to occur at time 1 are internally
-scheduled for time 10, time 12 would occur at internal time
-120, etc. This scheduling mechanism allows priorities as high
-as 4 and as low as -4. A model that requires more than three
-different priorities probably needs to be redesigned, therefore,
-Despy only provides named constants for priorities from -1 to 1.</p>
-</dd>
-</dl>
 </dd></dl>
 
 </div>

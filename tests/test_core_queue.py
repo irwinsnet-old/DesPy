@@ -12,15 +12,15 @@ import despy.core as dp
 
 class testQueue(unittest.TestCase):
     def test_negative_time(self):
-        #If an event is scheduled at time 0 with PRIORITY_EARLY, then the raw
+        #If an event is scheduled at time 0 with Priority.EARLY, then the raw
         #  FEL Time will be negative. Test verifies that negative time still
         #  works.
         print()
         model = dp.Model("Negative Time Model")
         model.schedule(dp.Event(model, "Positive Time"),
-                       priority = dp.fi.PRIORITY_LATE)        
+                       priority = dp.Priority.LATE)        
         model.schedule(dp.Event(model, "Negative Time"),
-                       priority = dp.fi.PRIORITY_EARLY)
+                       priority = dp.Priority.EARLY)
         self.assertEqual(model.sim.peek(False), -0.1)
 
         model.sim.run()
@@ -68,7 +68,7 @@ class testQueue(unittest.TestCase):
                 super().__init__(model, "Customer")
                 
         def initialize(self):
-            self.customer_process.start(0, dp.fi.PRIORITY_EARLY)
+            self.customer_process.start(0, dp.Priority.EARLY)
             self.service_process.start()
             
         class CustArrProcess(dp.Process):

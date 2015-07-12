@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/bizstyle.js"></script>
     <link rel="top" title="Despy 1 documentation" href="../index.html" />
     <link rel="up" title="Despy Classes" href="../classes.html" />
-    <link rel="next" title="FelItem" href="felitem.html" />
+    <link rel="next" title="FutureEvent" href="felitem.html" />
     <link rel="prev" title="despy.core.component.Component" href="component.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
@@ -45,7 +45,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="felitem.html" title="FelItem"
+          <a href="felitem.html" title="FutureEvent"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="component.html" title="despy.core.component.Component"
@@ -72,7 +72,7 @@
                         title="previous chapter">despy.core.component.Component</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="felitem.html"
-                        title="next chapter">FelItem</a></p>
+                        title="next chapter">FutureEvent</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -250,8 +250,8 @@ is defined by the simulation.</p>
 <p>Internally, Despy multiplies the time by a factor of ten and
 each step in the simulation is a multiple of ten. This allows
 assignment of priorities to each event. For example,
-<code class="docutils literal"><span class="pre">PRIORITY_EARLY</span></code> events would be scheduled to run at time 39,
-<code class="docutils literal"><span class="pre">PRIORITY_DEFAULT</span></code> events at time 40, and <code class="docutils literal"><span class="pre">PRIORITY_LATE</span></code>
+<code class="docutils literal"><span class="pre">Priority.EARLY</span></code> events would be scheduled to run at time 39,
+<code class="docutils literal"><span class="pre">Priority.DEFAULT</span></code> events at time 40, and <code class="docutils literal"><span class="pre">Priority.LATE</span></code>
 events at time 41. Despy would indicate that all of these events
 occurred at time = 4 in standard reports and output. This
 practice simplifies the routines that run the events because
@@ -358,9 +358,9 @@ type None.</li>
 the event will be scheduled to occur immediately.</dd>
 <dt>priority (integer)</dt>
 <dd>An attribute of the
-<a class="reference internal" href="felitem.html#despy.core.simulation.FelItem" title="despy.core.simulation.FelItem"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.FelItem</span></code></a> enumeration, or
+<a class="reference internal" href="felitem.html#despy.core.simulation.FutureEvent" title="despy.core.simulation.FutureEvent"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.FutureEvent</span></code></a> enumeration, or
 an integer ranging from -5 to +5. The default is
-<code class="docutils literal"><span class="pre">FelItem.PRIORITY_STANDARD</span></code>, which is equivalent to
+<code class="docutils literal"><span class="pre">Priority.STANDARD</span></code>, which is equivalent to
 zero.</dd>
 </dl>
 </dd>
@@ -376,7 +376,7 @@ zero.</dd>
 <dd><dl class="first last docutils">
 <dt>prioritized (Boolean):</dt>
 <dd>If <code class="docutils literal"><span class="pre">True</span></code>, the time will reflect the event&#8217;s priority.
-For example, for a <code class="docutils literal"><span class="pre">PRIORITY_EARLY</span></code> event scheduled to
+For example, for a <code class="docutils literal"><span class="pre">Priority.EARLY</span></code> event scheduled to
 run at time = 25, <code class="docutils literal"><span class="pre">peek</span></code> will return 24.9 if the
 <code class="docutils literal"><span class="pre">prioritized</span></code> attribute is set to <code class="docutils literal"><span class="pre">True</span></code>. If
 <code class="docutils literal"><span class="pre">False</span></code>, then our example would return 25, the nominal
@@ -407,7 +407,7 @@ remaining events on the FEL.</p>
 </dl>
 </dd>
 <dt><em>Returns</em></dt>
-<dd><a class="reference internal" href="felitem.html#despy.core.simulation.FelItem" title="despy.core.simulation.FelItem"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.FelItem</span></code></a></dd>
+<dd><a class="reference internal" href="felitem.html#despy.core.simulation.FutureEvent" title="despy.core.simulation.FutureEvent"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.FutureEvent</span></code></a></dd>
 </dl>
 </dd></dl>
 
@@ -513,7 +513,7 @@ should be considered private.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="felitem.html" title="FelItem"
+          <a href="felitem.html" title="FutureEvent"
              >next</a> |</li>
         <li class="right" >
           <a href="component.html" title="despy.core.component.Component"

@@ -16,7 +16,7 @@ despy.core.timer
 import scipy.stats as stats
 from despy.core.component import Component
 from despy.core.event import Event
-from despy.core.simulation import FelItem
+from despy.base.utilities import Priority
 
 
 class RandomTimer(Component):
@@ -38,7 +38,7 @@ class RandomTimer(Component):
     """
     def __init__(self, model, name, distribution, callback,
                  immediate = False,
-                 priority = FelItem.PRIORITY_STANDARD,
+                 priority = Priority.STANDARD,
                  description = None):
         """ Instantiates a RandomTimer object.
         
@@ -58,7 +58,7 @@ class RandomTimer(Component):
                 immediately. If False (default), first event will occur
                 after a random interval.
             ``priority`` Integer
-                Optional. Default is FelItem.PRIORITY_STANDARD. 
+                Optional. Default is Priority.STANDARD. 
                 RandomTimerEvents will execute with this priority.
             ``description`` String
                 Optional. Default is None. A paragraph that describes
@@ -131,7 +131,7 @@ class RandomTimer(Component):
     
     @property
     def priority(self):
-        """FelItem priority of TimerEvents.
+        """FutureEvent priority of TimerEvents.
         
         *Type:* Integer
         """

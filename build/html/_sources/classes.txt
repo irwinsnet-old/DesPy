@@ -6,9 +6,10 @@ Despy Classes
    :maxdepth: 2
 
    base/namedobject
+   base/utilities
    core/component
    core/simulation
-   core/felitem
+   core/futureEvent
    core/model
    core/entity
    core/event

@@ -88,7 +88,7 @@
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="kn">as</span> <span class="nn">stats</span>
 <span class="kn">from</span> <span class="nn">despy.core.component</span> <span class="kn">import</span> <span class="n">Component</span>
 <span class="kn">from</span> <span class="nn">despy.core.event</span> <span class="kn">import</span> <span class="n">Event</span>
-<span class="kn">from</span> <span class="nn">despy.core.simulation</span> <span class="kn">import</span> <span class="n">FelItem</span>
+<span class="kn">from</span> <span class="nn">despy.base.utilities</span> <span class="kn">import</span> <span class="n">Priority</span>
 
 
 <div class="viewcode-block" id="RandomTimer"><a class="viewcode-back" href="../../../core/timer.html#despy.core.timer.RandomTimer">[docs]</a><span class="k">class</span> <span class="nc">RandomTimer</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
@@ -110,7 +110,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="RandomTimer.__init__"><a class="viewcode-back" href="../../../core/timer.html#despy.core.timer.RandomTimer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">distribution</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span>
                  <span class="n">immediate</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
-                 <span class="n">priority</span> <span class="o">=</span> <span class="n">FelItem</span><span class="o">.</span><span class="n">PRIORITY_STANDARD</span><span class="p">,</span>
+                 <span class="n">priority</span> <span class="o">=</span> <span class="n">Priority</span><span class="o">.</span><span class="n">STANDARD</span><span class="p">,</span>
                  <span class="n">description</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Instantiates a RandomTimer object.</span>
 <span class="sd">        </span>
@@ -130,7 +130,7 @@
 <span class="sd">                immediately. If False (default), first event will occur</span>
 <span class="sd">                after a random interval.</span>
 <span class="sd">            ``priority`` Integer</span>
-<span class="sd">                Optional. Default is FelItem.PRIORITY_STANDARD. </span>
+<span class="sd">                Optional. Default is Priority.STANDARD. </span>
 <span class="sd">                RandomTimerEvents will execute with this priority.</span>
 <span class="sd">            ``description`` String</span>
 <span class="sd">                Optional. Default is None. A paragraph that describes</span>
@@ -203,7 +203,7 @@
     
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">priority</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;FelItem priority of TimerEvents.</span>
+        <span class="sd">&quot;&quot;&quot;FutureEvent priority of TimerEvents.</span>
 <span class="sd">        </span>
 <span class="sd">        *Type:* Integer</span>
 <span class="sd">        &quot;&quot;&quot;</span>

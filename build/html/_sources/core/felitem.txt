@@ -1,5 +1,4 @@
-FelItem
-#######
+FutureEvent
+###########
 
-..  autoclass:: despy.core.simulation.FelItem
-    :members: PRIORITY_EARLY, PRIORITY_STANDARD, PRIORITY_LATE
+..  autoclass:: despy.core.simulation.FutureEvent
