@@ -7,8 +7,10 @@
 ***********************
 despy.base.named_object
 ***********************
-:class:`NamedObject`
-    A base class that provides name and description fields.
+
+..  autosummary::
+
+    NamedObject
 """
 
 import re

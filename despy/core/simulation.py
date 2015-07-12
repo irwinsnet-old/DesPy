@@ -7,12 +7,11 @@
 despy.core.simulation
 *********************
 
-:class:`.Simulation`
-    Schedule events and manage the future event list (FEL).
-:class:`.FutureEvent`
-    A named tuple that represents a scheduled event.
-:class:`.NoEventsRemaining`
-    Raised by despy.core.simulation's step method when FEL is empty.
+..  autosummary::
+
+    Simulation
+    FutureEvent
+    NoEventsRemainingError
     
 ..  todo
     
@@ -24,33 +23,15 @@ despy.core.simulation
 
 from heapq import heappush, heappop
 from itertools import count
-from collections import namedtuple
 import datetime, random
+from collections import namedtuple
+
+import numpy as np
+
 from despy.output.generator import Generator
 from despy.output.report import Datatype
 from despy.base.named_object import NamedObject
 from despy.base.utilities import Priority
-import numpy as np
-
-
-class FutureEvent(namedtuple('FutureEventTuple',
-                         ['time_fld', 'event_fld', 'priority_fld'])):
-    """A named tuple that represents a scheduled event.
-    
-    Every item on the FEL must be an instance of FutureEvent. A FutureEvent
-    consists of the event, the scheduled time, and priority.
-    
-    **Attributes**
-    
-      * :attr:`time_fld`: The time that the event is scheduled for
-        execution. Type: a non-negative integer.
-      * :attr:`event_fld`: An instance of
-        :class:`despy.core.event.Event`.
-      * :attr:`priority_fld`: A priority constant from the 
-        :mod:`despy.base.named_object` module, or an integer between
-        -4 and +4, inclusive.
-    
-    """
 
 class Simulation(NamedObject):
     """Schedule events and manage the future event list (FEL).
@@ -273,8 +254,8 @@ class Simulation(NamedObject):
         scheduleTime = self._now + (delay * 10) + priority
         
         heappush(self._futureEventList,
-                 FutureEvent(time_fld=scheduleTime, event_fld=event,
-                         priority_fld=priority))
+                 FutureEvent(time=scheduleTime, event=event,
+                         priority=priority))
 
     def peek(self, prioritized=True):
         """Return the time of the next scheduled event.
@@ -294,10 +275,10 @@ class Simulation(NamedObject):
         """
         try:
             if prioritized:
-                return int((self._futureEventList[0].time_fld - \
-                        self._futureEventList[0].priority_fld) / 10)
+                return int((self._futureEventList[0].time - \
+                        self._futureEventList[0].priority) / 10)
             else:
-                return self._futureEventList[0].time_fld / 10
+                return self._futureEventList[0].time / 10
         except IndexError:
             return float('Infinity')
         
@@ -336,21 +317,21 @@ class Simulation(NamedObject):
         except IndexError:
             raise NoEventsRemainingError
         else:
-            self.now = int((fel_item.time_fld - \
-                    fel_item.priority_fld) / 10)
-            self._pri = fel_item.priority_fld
+            self.now = int((fel_item.time - \
+                    fel_item.priority) / 10)
+            self._pri = fel_item.priority
 
         # Record event in trace report        
-        self.gen.trace.add_event(self.now, fel_item.priority_fld,
-                                 fel_item.event_fld)
+        self.gen.trace.add_event(self.now, fel_item.priority,
+                                 fel_item.event)
 
         # Run event
-        self._evt = fel_item.event_fld
-        fel_item.event_fld._do_event()
+        self._evt = fel_item.event
+        fel_item.event._do_event()
         self._evt = None
         
         # Reset the event in case it is called again.
-        fel_item.event_fld._reset()
+        fel_item.event._reset()
         
         return fel_item
 
@@ -462,6 +443,25 @@ class Simulation(NamedObject):
         # why it was here in first place.
         for model in self.models:
             model.initial_events_scheduled = False
+            
+class FutureEvent(namedtuple('FutureEventTuple',
+                         ['time', 'event', 'priority'])):
+    """A event that has been placed on the future event list (FEL).
+    
+    Every item on the FEL must be an instance of FutureEvent. A
+    FutureEvent consists of the event, the scheduled time, and priority.
+    
+    **Attributes**
+    
+      * :attr:`time`: The time that the event is scheduled for
+        execution. Type: a non-negative integer.
+      * :attr:`event`: An instance of
+        :class:`despy.core.event.Event`.
+      * :attr:`priority`: A priority constant from the 
+        :mod:`despy.base.named_object` module, or an integer between
+        -4 and +4, inclusive.
+    
+    """
 
 class NoEventsRemainingError(Exception):
     """Raised by despy.core.simulation's step method when FEL is empty.

@@ -79,12 +79,11 @@
 <span class="sd">despy.core.simulation</span>
 <span class="sd">*********************</span>
 
-<span class="sd">:class:`.Simulation`</span>
-<span class="sd">    Schedule events and manage the future event list (FEL).</span>
-<span class="sd">:class:`.FutureEvent`</span>
-<span class="sd">    A named tuple that represents a scheduled event.</span>
-<span class="sd">:class:`.NoEventsRemaining`</span>
-<span class="sd">    Raised by despy.core.simulation&#39;s step method when FEL is empty.</span>
+<span class="sd">..  autosummary::</span>
+
+<span class="sd">    Simulation</span>
+<span class="sd">    FutureEvent</span>
+<span class="sd">    NoEventsRemainingError</span>
 <span class="sd">    </span>
 <span class="sd">..  todo</span>
 <span class="sd">    </span>
@@ -96,34 +95,16 @@
 
 <span class="kn">from</span> <span class="nn">heapq</span> <span class="kn">import</span> <span class="n">heappush</span><span class="p">,</span> <span class="n">heappop</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">import</span> <span class="nn">datetime</span><span class="o">,</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
 <span class="kn">from</span> <span class="nn">despy.output.generator</span> <span class="kn">import</span> <span class="n">Generator</span>
 <span class="kn">from</span> <span class="nn">despy.output.report</span> <span class="kn">import</span> <span class="n">Datatype</span>
 <span class="kn">from</span> <span class="nn">despy.base.named_object</span> <span class="kn">import</span> <span class="n">NamedObject</span>
 <span class="kn">from</span> <span class="nn">despy.base.utilities</span> <span class="kn">import</span> <span class="n">Priority</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-
-<div class="viewcode-block" id="FutureEvent"><a class="viewcode-back" href="../../../core/futureEvent.html#despy.core.simulation.FutureEvent">[docs]</a><span class="k">class</span> <span class="nc">FutureEvent</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FutureEventTuple&#39;</span><span class="p">,</span>
-                         <span class="p">[</span><span class="s">&#39;time_fld&#39;</span><span class="p">,</span> <span class="s">&#39;event_fld&#39;</span><span class="p">,</span> <span class="s">&#39;priority_fld&#39;</span><span class="p">])):</span>
-    <span class="sd">&quot;&quot;&quot;A named tuple that represents a scheduled event.</span>
-<span class="sd">    </span>
-<span class="sd">    Every item on the FEL must be an instance of FutureEvent. A FutureEvent</span>
-<span class="sd">    consists of the event, the scheduled time, and priority.</span>
-<span class="sd">    </span>
-<span class="sd">    **Attributes**</span>
-<span class="sd">    </span>
-<span class="sd">      * :attr:`time_fld`: The time that the event is scheduled for</span>
-<span class="sd">        execution. Type: a non-negative integer.</span>
-<span class="sd">      * :attr:`event_fld`: An instance of</span>
-<span class="sd">        :class:`despy.core.event.Event`.</span>
-<span class="sd">      * :attr:`priority_fld`: A priority constant from the </span>
-<span class="sd">        :mod:`despy.base.named_object` module, or an integer between</span>
-<span class="sd">        -4 and +4, inclusive.</span>
-<span class="sd">    </span>
-<span class="sd">    &quot;&quot;&quot;</span>
-</div>
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Schedule events and manage the future event list (FEL).</span>
 <span class="sd">    </span>
@@ -345,8 +326,8 @@
         <span class="n">scheduleTime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_now</span> <span class="o">+</span> <span class="p">(</span><span class="n">delay</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="n">priority</span>
         
         <span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span><span class="p">,</span>
-                 <span class="n">FutureEvent</span><span class="p">(</span><span class="n">time_fld</span><span class="o">=</span><span class="n">scheduleTime</span><span class="p">,</span> <span class="n">event_fld</span><span class="o">=</span><span class="n">event</span><span class="p">,</span>
-                         <span class="n">priority_fld</span><span class="o">=</span><span class="n">priority</span><span class="p">))</span>
+                 <span class="n">FutureEvent</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">scheduleTime</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="n">event</span><span class="p">,</span>
+                         <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="Simulation.peek"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.peek">[docs]</a>    <span class="k">def</span> <span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prioritized</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the time of the next scheduled event.</span>
@@ -366,10 +347,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">prioritized</span><span class="p">:</span>
-                <span class="k">return</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time_fld</span> <span class="o">-</span> \
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">priority_fld</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time</span> <span class="o">-</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time_fld</span> <span class="o">/</span> <span class="mi">10</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_futureEventList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time</span> <span class="o">/</span> <span class="mi">10</span>
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;Infinity&#39;</span><span class="p">)</span>
         </div>
@@ -408,21 +389,21 @@
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">NoEventsRemainingError</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">now</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">fel_item</span><span class="o">.</span><span class="n">time_fld</span> <span class="o">-</span> \
-                    <span class="n">fel_item</span><span class="o">.</span><span class="n">priority_fld</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_pri</span> <span class="o">=</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">priority_fld</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">now</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">fel_item</span><span class="o">.</span><span class="n">time</span> <span class="o">-</span> \
+                    <span class="n">fel_item</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pri</span> <span class="o">=</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">priority</span>
 
         <span class="c"># Record event in trace report        </span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">now</span><span class="p">,</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">priority_fld</span><span class="p">,</span>
-                                 <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">now</span><span class="p">,</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span>
+                                 <span class="n">fel_item</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
 
         <span class="c"># Run event</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_evt</span> <span class="o">=</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span>
-        <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="o">.</span><span class="n">_do_event</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_evt</span> <span class="o">=</span> <span class="n">fel_item</span><span class="o">.</span><span class="n">event</span>
+        <span class="n">fel_item</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">_do_event</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_evt</span> <span class="o">=</span> <span class="bp">None</span>
         
         <span class="c"># Reset the event in case it is called again.</span>
-        <span class="n">fel_item</span><span class="o">.</span><span class="n">event_fld</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
+        <span class="n">fel_item</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
         
         <span class="k">return</span> <span class="n">fel_item</span>
 </div>
@@ -534,7 +515,26 @@
         <span class="c"># why it was here in first place.</span>
         <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">:</span>
             <span class="n">model</span><span class="o">.</span><span class="n">initial_events_scheduled</span> <span class="o">=</span> <span class="bp">False</span>
-</div></div>
+            </div></div>
+<div class="viewcode-block" id="FutureEvent"><a class="viewcode-back" href="../../../core/futureEvent.html#despy.core.simulation.FutureEvent">[docs]</a><span class="k">class</span> <span class="nc">FutureEvent</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FutureEventTuple&#39;</span><span class="p">,</span>
+                         <span class="p">[</span><span class="s">&#39;time&#39;</span><span class="p">,</span> <span class="s">&#39;event&#39;</span><span class="p">,</span> <span class="s">&#39;priority&#39;</span><span class="p">])):</span>
+    <span class="sd">&quot;&quot;&quot;A event that has been placed on the future event list (FEL).</span>
+<span class="sd">    </span>
+<span class="sd">    Every item on the FEL must be an instance of FutureEvent. A</span>
+<span class="sd">    FutureEvent consists of the event, the scheduled time, and priority.</span>
+<span class="sd">    </span>
+<span class="sd">    **Attributes**</span>
+<span class="sd">    </span>
+<span class="sd">      * :attr:`time`: The time that the event is scheduled for</span>
+<span class="sd">        execution. Type: a non-negative integer.</span>
+<span class="sd">      * :attr:`event`: An instance of</span>
+<span class="sd">        :class:`despy.core.event.Event`.</span>
+<span class="sd">      * :attr:`priority`: A priority constant from the </span>
+<span class="sd">        :mod:`despy.base.named_object` module, or an integer between</span>
+<span class="sd">        -4 and +4, inclusive.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</div>
 <div class="viewcode-block" id="NoEventsRemainingError"><a class="viewcode-back" href="../../../core/NoEventsRemainingError.html#despy.core.simulation.NoEventsRemainingError">[docs]</a><span class="k">class</span> <span class="nc">NoEventsRemainingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Raised by despy.core.simulation&#39;s step method when FEL is empty.</span>
 <span class="sd">    </span>

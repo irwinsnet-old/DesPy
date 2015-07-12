@@ -7,7 +7,9 @@
 despy.output.plot
 *****************
 
-:func:`Histogram`
+..  autosummary::
+
+    Histogram
 
 **Python Library Dependencies**
     * :mod:`math`
@@ -24,6 +26,7 @@ despy.output.plot
 """
 
 import math
+
 import matplotlib.pyplot as plt
 import numpy as np
 

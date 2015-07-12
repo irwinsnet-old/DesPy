@@ -7,15 +7,19 @@
 despy.core.event
 ****************
 
-:class:`Event`:
-    An event object represents an occurrence within the system being
-    simulated.
+..  autosummary::
+
+    Event
+    
+    
+..  todo
+
+    Add remove_trace_field method.
 """
 
-#TODO: Add remove_trace_field method.
-
 import types
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
+
 from despy.core.component import Component
 
 class Event(Component):
@@ -209,4 +213,5 @@ class Event(Component):
         *Returns:* ``True`` if ``self.id > y.id``, ``False`` otherwise.
         """
         return self.id > y.id
+
         

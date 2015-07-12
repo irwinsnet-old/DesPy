@@ -6,15 +6,13 @@
 ******************
 despy.output.trace
 ******************
-   
-:class:`TraceRecord`
-    Single record in a trace report containing multiple data fields.
-    
-:class:`Trace`
-    List of messages and events that occurred during the simulation.
-    
-:class:`CSV_file`
-    A CSV file_name containing that contains all trace records.
+
+..  autosummary::
+
+    TraceRecord
+    Trace
+    CSV_file
+
     
 ..  todo::
 
@@ -37,6 +35,7 @@ despy.output.trace
 """
 from collections import OrderedDict
 import csv
+
 from despy.output.report import Datatype
         
 class TraceRecord(OrderedDict):

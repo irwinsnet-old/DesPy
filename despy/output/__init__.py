@@ -3,7 +3,7 @@
 #   Released under the MIT License (MIT)
 #   Copyright (c) 2015, Stacy Irwin
 """
-..  module:: despy.core.__init__
+..  module:: despy.output.__init__
     :noindex:
 
 The despy.ouput package contains classes and functions for creating

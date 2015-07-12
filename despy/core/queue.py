@@ -7,18 +7,26 @@
 despy.core.queue
 ****************
    
-:class:`Queue`
-    Represents a limited, real-world, entity that provides a service.
+..  autosummary::
+
+    Queue
+    
+..  todo
+
+    Refactor so folder parameter doesn't need to be passed to the get
+    data method.
+    
+    Add property and output for total items entering the queue.
+    
+    Add property and output for total items leaving the queue.
+    
+    Add properties and output for max and min items in queue.
 """
 
-#TODO: Refactor so folder parameter doesn't need to be passed to the
-# get data method.
-#TODO: Add property and output for total items entering the queue
-#TODO: Add property and output for total items leaving the queue.
-#TODO: Add properties and output for max and min items in queue.
-
 from collections import deque, namedtuple
+
 import numpy as np
+
 from despy.core.component import Component
 from despy.output.report import Datatype
 import despy.output.plot as plot

@@ -79,15 +79,19 @@
 <span class="sd">despy.core.event</span>
 <span class="sd">****************</span>
 
-<span class="sd">:class:`Event`:</span>
-<span class="sd">    An event object represents an occurrence within the system being</span>
-<span class="sd">    simulated.</span>
+<span class="sd">..  autosummary::</span>
+
+<span class="sd">    Event</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">..  todo</span>
+
+<span class="sd">    Add remove_trace_field method.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="c">#TODO: Add remove_trace_field method.</span>
-
 <span class="kn">import</span> <span class="nn">types</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="n">namedtuple</span>
+
 <span class="kn">from</span> <span class="nn">despy.core.component</span> <span class="kn">import</span> <span class="n">Component</span>
 
 <div class="viewcode-block" id="Event"><a class="viewcode-back" href="../../../core/event.html#despy.core.event.Event">[docs]</a><span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
@@ -281,6 +285,7 @@
 <span class="sd">        *Returns:* ``True`` if ``self.id &gt; y.id``, ``False`` otherwise.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">&gt;</span> <span class="n">y</span><span class="o">.</span><span class="n">id</span>
+
         </div></div>
 </pre></div>
 

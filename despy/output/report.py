@@ -8,10 +8,10 @@
 despy.output.report
 *******************
 
-:class:`HtmlReport`
-    Renders an HTML report containing simulation results.
+..  autosummary::
 
-:class:`Datatype`
+    HtmlReport
+    Datatype
 """
 
 from enum import Enum

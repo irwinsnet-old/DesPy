@@ -7,8 +7,10 @@
 despy.core.process
 ******************
    
-:class:`Process`
-    Portion of a real-world system, including events and parameters.
+..  autosummary::
+
+    Process
+    
     
 ..  todo::
 
@@ -26,6 +28,7 @@ despy.core.process
 
 from collections import namedtuple
 import types
+
 from despy.core.component import Component
 from despy.core.event import Event
 from despy.base.utilities import Priority

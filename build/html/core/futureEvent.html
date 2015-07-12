@@ -95,17 +95,17 @@
 <dl class="class">
 <dt id="despy.core.simulation.FutureEvent">
 <em class="property">class </em><code class="descclassname">despy.core.simulation.</code><code class="descname">FutureEvent</code><a class="reference internal" href="../_modules/despy/core/simulation.html#FutureEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.simulation.FutureEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>A named tuple that represents a scheduled event.</p>
-<p>Every item on the FEL must be an instance of FutureEvent. A FutureEvent
-consists of the event, the scheduled time, and priority.</p>
+<dd><p>A event that has been placed on the future event list (FEL).</p>
+<p>Every item on the FEL must be an instance of FutureEvent. A
+FutureEvent consists of the event, the scheduled time, and priority.</p>
 <p><strong>Attributes</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="xref py py-attr docutils literal"><span class="pre">time_fld</span></code>: The time that the event is scheduled for
+<li><code class="xref py py-attr docutils literal"><span class="pre">time</span></code>: The time that the event is scheduled for
 execution. Type: a non-negative integer.</li>
-<li><code class="xref py py-attr docutils literal"><span class="pre">event_fld</span></code>: An instance of
+<li><code class="xref py py-attr docutils literal"><span class="pre">event</span></code>: An instance of
 <a class="reference internal" href="event.html#despy.core.event.Event" title="despy.core.event.Event"><code class="xref py py-class docutils literal"><span class="pre">despy.core.event.Event</span></code></a>.</li>
-<li><code class="xref py py-attr docutils literal"><span class="pre">priority_fld</span></code>: A priority constant from the 
+<li><code class="xref py py-attr docutils literal"><span class="pre">priority</span></code>: A priority constant from the 
 <code class="xref py py-mod docutils literal"><span class="pre">despy.base.named_object</span></code> module, or an integer between
 -4 and +4, inclusive.</li>
 </ul>

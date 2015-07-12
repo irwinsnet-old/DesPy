@@ -7,8 +7,9 @@
 despy.core.entity
 *****************
    
-:class:`Entity`
-    Represents a real world object that moves through a system.
+..  autosummary::
+
+    Entity
     
 ..  todo
 

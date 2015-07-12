@@ -79,16 +79,17 @@
 <span class="sd">despy.core.resource</span>
 <span class="sd">*******************</span>
 
-<span class="sd">:class:`Resource`</span>
-<span class="sd">    Represents a limited, real-world, entity that provides a service.</span>
-<span class="sd">:class:`ResourceFinishServiceEvent`</span>
-<span class="sd">    Event that is called when the resource completes it&#39;s service.</span>
-<span class="sd">:class:`ResourceQueue`</span>
-<span class="sd">    A queue that provides entities to a resource object.</span>
+<span class="sd">..  autosummary::</span>
+
+<span class="sd">    Resource</span>
+<span class="sd">    ResourceFinishServiceEvent</span>
+<span class="sd">    ResourceQueue</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="n">namedtuple</span>
+
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">randint</span>
+
 <span class="kn">from</span> <span class="nn">despy.core.component</span> <span class="kn">import</span> <span class="n">Component</span>
 <span class="kn">from</span> <span class="nn">despy.core.event</span> <span class="kn">import</span> <span class="n">Event</span>
 <span class="kn">from</span> <span class="nn">despy.core.queue</span> <span class="kn">import</span> <span class="n">Queue</span>

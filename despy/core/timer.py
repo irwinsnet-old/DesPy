@@ -7,13 +7,13 @@
 despy.core.timer
 ****************
 
-:class:`RandomTimer`
-    Schedules an event to occur repeatedly at a random interval.
-:class:`TimerEvent`
-    Event that schedules itself to recur after an interval.
+..  autosummary::
 
+    RandomTimer
+    TimerEvent
 """
 import scipy.stats as stats
+
 from despy.core.component import Component
 from despy.core.event import Event
 from despy.base.utilities import Priority

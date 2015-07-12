@@ -7,8 +7,9 @@
 despy.core.component
 ********************
 
-:class:`.Component`
-    A base class that provides object counters and other attributes.
+..  autosummary::
+
+    Component
 """
 from itertools import count
 

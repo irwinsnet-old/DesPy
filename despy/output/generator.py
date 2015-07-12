@@ -7,14 +7,16 @@
 despy.output.generator
 **********************
 
-:class:`Generator`
-    Generates the simulation's output reports and graphs.
+..  autosummary::
+
+    Generator
     
 ..  todo::
 
     Make _full_path attribute a documented public attribute.
 """
 import os
+
 from despy.output.trace import Trace
 from despy.output.report import HtmlReport
     

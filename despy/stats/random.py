@@ -40,10 +40,10 @@ variables, calculate expected means, medians, and variances, and much
 more. 
     
 """
+import random
 
 import scipy.stats as stats
 import numpy as np
-import random
 
 def seed(seed):
     """Seed random number generators in numpy and Python random module.

@@ -7,16 +7,17 @@
 despy.core.resource
 *******************
 
-:class:`Resource`
-    Represents a limited, real-world, entity that provides a service.
-:class:`ResourceFinishServiceEvent`
-    Event that is called when the resource completes it's service.
-:class:`ResourceQueue`
-    A queue that provides entities to a resource object.
+..  autosummary::
+
+    Resource
+    ResourceFinishServiceEvent
+    ResourceQueue
 """
 
 from collections import OrderedDict, namedtuple
+
 from scipy.stats import randint
+
 from despy.core.component import Component
 from despy.core.event import Event
 from despy.core.queue import Queue

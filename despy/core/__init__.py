@@ -57,14 +57,14 @@ despy.core.queue
 ..  automodule:: despy.core.queue
     :noindex:
 
-..  todo
-    
-    Write an entity generator class.
+despy.core.timer
+===================
+..  automodule:: despy.core.timer
+    :noindex:
 """
 
 from despy.base.utilities import Priority
 from despy.core.simulation import Simulation
-from despy.core.simulation import FutureEvent as fi
 from despy.core.model import Model
 from despy.core.event import Event
 from despy.core.process import Process

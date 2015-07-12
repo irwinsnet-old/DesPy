@@ -7,6 +7,9 @@
 despy.base.utilities
 ********************
 
+..  autosummary::
+
+    Priority
 """
 
 class Priority():
