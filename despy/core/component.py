@@ -98,6 +98,8 @@ class Component(NamedObject):
         # Adds the component to the model's internal dictionary of
         # member components
         model[self.id] = self
+        
+        self._values = dict()
     
     @property
     def sim(self):
@@ -142,7 +144,12 @@ class Component(NamedObject):
         in Windows replaced by underscores. The *id* attribute is
         suitable for creating file names.
         """
-        return "{0}.{1}.{2}".format(self.model.slug, self.slug, self._number)
+        return "{0}.{1}.{2}".format(self.model.slug, self.slug,
+                                    self._number)
+        
+    @property
+    def values(self):
+        return self._values
     
     @classmethod
     def set_counter(cls):
@@ -196,6 +203,9 @@ class Component(NamedObject):
         code that will be executed after all events on the FEL.
         """
         pass
+    
+    def add_value(self, value):
+        self.values.append(value)
     
     def get_data(self, folder):
         """Subclasses should override this method to provide simulation

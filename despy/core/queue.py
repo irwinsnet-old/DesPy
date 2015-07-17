@@ -21,6 +21,8 @@ despy.core.queue
     Add property and output for total items leaving the queue.
     
     Add properties and output for max and min items in queue.
+    
+    Replace length property with __len__
 """
 
 from collections import deque, namedtuple
