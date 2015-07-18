@@ -26,7 +26,9 @@ class Statistic(NamedObject):
     b1, i1, i2, i4, i8, u1, u2, u4, u8, f2, f4, f8, c8, c16, a
     """
     
-    def __init__(self, name, description, dtype):
+    Point = namedtuple('Point', 'rep batch time value')
+    
+    def __init__(self, name, dtype, description = None ):
         super().__init__(name, description)
         self.dtype = dtype
         self.reps = list()
@@ -35,26 +37,41 @@ class Statistic(NamedObject):
         self.values = list()
         self.finalized = False
         
-    def append_value(self, time, value, rep = 1, batch = 1):
-        self.reps.append(time)
+    def append(self, rep, batch, time, value):
+        self.reps.append(rep)
         self.batches.append(batch)
         self.times.append(time)
         self.values.append(value)
         
+    def append_point(self, point):
+        self.append(point.rep, point.batch, point.time,
+                          point.value)
+        
     def __len__(self):
         return len(self.values)
     
+    def __getitem__(self, i):
+        return self.Point(self.reps[i], self.batches[i], \
+                          self.times[i], self.values[i])
+    
     def finalize(self):
-        self.np_arr = np.zeros(len(self),
-                dtype=[('rep', 'u2'), ('batch', 'u2')('time', 'u4'),
+        self.final = np.zeros(len(self),
+                dtype=[('rep', 'u2'), ('batch', 'u2'), ('time', 'u4'),
                        ('value', self.dtype)])
         
-        self.np_arr['rep'] = self.reps
-        self.np_arr['batch'] = self.batches
-        self.np_arr['time'] = self.times
-        self.np.arr['value'] = self.values
+        self.final['rep'] = self.reps
+        self.final['batch'] = self.batches
+        self.final['time'] = self.times
+        self.final['value'] = self.values
         
         self.finalize = True
+        
+        self.reps = self.final['rep']
+        self.batches = self.final['batch']
+        self.times = self.final['time']
+        self.values = self.final['value']
+        
+
         
         
         
