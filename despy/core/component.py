@@ -99,7 +99,7 @@ class Component(NamedObject):
         # member components
         model[self.id] = self
         
-        self._values = dict()
+        self._obs = dict()
     
     @property
     def sim(self):
@@ -149,7 +149,7 @@ class Component(NamedObject):
         
     @property
     def values(self):
-        return self._values
+        return self._obs
     
     @classmethod
     def set_counter(cls):
