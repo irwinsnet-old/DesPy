@@ -12,6 +12,12 @@ despy.output.statistic
 
 ..  todo::
 
+    Add a time-weighted mean.
+    Add mins and maxs
+    Add variances
+    Add standard deviations
+    Add medians
+
 
 """
 from collections import namedtuple
@@ -26,89 +32,116 @@ class Statistic(NamedObject):
     b1, i1, i2, i4, i8, u1, u2, u4, u8, f2, f4, f8, c8, c16, a
     """
     
-    Point = namedtuple('Point', 'rep batch time value')
+#     Point = namedtuple('Point', 'rep time value')
     
-    def __init__(self, name, dtype, description = None ):
+    def __init__(self, name, dtype, reps = 1, time_weighted = False, 
+                 description = None):
         super().__init__(name, description)
         self._dtype = dtype
-        self._finalized = False        
-        self._reps = list()
-        self._batches = list()
-        self._times = list()
-        self._obs = list()
+        self._reps = reps
+        self._time_weighted = time_weighted
+        
+        self._times = [list() for _ in range(self.reps)]
+        self._values = [list() for _ in range(self.reps)]
+        
+        self._finalized = False
+        self._total_length = None
+        self._rep_lengths = None 
         self._mean = None
+        self._rep_means = None
+        self._min = None
 
     @property
     def dtype(self):
         return self._dtype
     
     @property
-    def finalized(self):
-        return self._finalized
-    
-    @property
     def reps(self):
         return self._reps
     
     @property
-    def batches(self):
-        return self._batches
-    
+    def time_weighted(self):
+        return self._time_weighted
+
     @property
     def times(self):
-        return self._times
+        if self.finalized:
+            return self._times
+        else:
+            return np.array(self._times)
+
+    @property
+    def values(self):
+        if self.finalized:
+            return self._values
+        else:
+            return np.array(self._values)
+        
+    @property
+    def finalized(self):
+        return self._finalized
     
     @property
-    def obs(self):
-        return self._obs
+    def total_length(self):
+        if self._total_length is not None:
+            return self._total_length
+        else:
+            total_length = np.sum(self.rep_lengths)
+            if self.finalized:
+                self._total_length = total_length
+            return total_length
+    
+    @property
+    def rep_lengths(self):
+        if self._rep_lengths is not None:
+            return self._rep_lengths
+        else:
+            reps = len(self.times)            
+            rep_lengths = np.array(\
+                    [len(self.times[i]) for i in range(reps)])
+            if self.finalized:
+                self._rep_lengths = rep_lengths
+            return rep_lengths
     
     @property
     def mean(self):
-        if not self.finalized:
-            return np.mean(np.array(self.obs))
-        elif self._mean is None :
-            self._mean = np.mean(self.obs)
+        if self._mean is not None:
             return self._mean
         else:
-            return self._mean
+            mean = np.sum(self.rep_means * self.rep_lengths) / \
+                    self.total_length
+            if self.finalized:
+                self._mean = mean
+            return mean
+                
+    @property
+    def rep_means(self):
+        if self._rep_means is not None:
+            return self._rep_means
+        else:
+            reps = len(self.times)
+            rep_means = np.array(\
+                    [np.mean(self.values[i]) for i in range(reps)])
+            if self.finalized:
+                self._rep_means = rep_means
+            return rep_means
         
-    def append(self, rep, batch, time, value):
+    def append(self, rep, time, value):
         if not self.finalized:
-            self._reps.append(rep)
-            self._batches.append(batch)
-            self._times.append(time)
-            self._obs.append(value)
+            self._times[rep].append(time)
+            self._values[rep].append(value)
         else:
             raise StatisticNotFinalizedError("Cannot append to"
                                              "finalized statistics.")
-        
-    def append_point(self, point):
-        self.append(point.rep, point.batch, point.time,
-                          point.value)
-        
-    def __len__(self):
-        return len(self.obs)
-    
-    def __getitem__(self, i):
-        return self.Point(self.reps[i], self.batches[i], \
-                          self.times[i], self.obs[i])
     
     def finalize(self):
-        self.final = np.zeros(len(self),
-                dtype=[('rep', 'u2'), ('batch', 'u2'), ('time', 'u4'),
-                       ('value', self.dtype)])
+        np_times = np.array(self.times)
+        np_values = np.array(self.values)
         
-        self.final['rep'] = self.reps
-        self.final['batch'] = self.batches
-        self.final['time'] = self.times
-        self.final['value'] = self.obs
+        self._times = np_times
+        self._values = np_values
         
         self._finalized = True
-        
-        self._reps = self.final['rep']
-        self._batches = self.final['batch']
-        self._times = self.final['time']
-        self._obs = self.final['value']
         
 class StatisticNotFinalizedError(Exception):
     pass

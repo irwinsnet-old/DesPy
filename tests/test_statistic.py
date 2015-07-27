@@ -9,43 +9,68 @@ from despy.output.statistic import Statistic, StatisticNotFinalizedError
 
 
 
-class testRandom(unittest.TestCase):
+class testStatistic(unittest.TestCase):
     
     def test_stat(self):
         print()
         print("======Statistic First Test=====")
-        stat1 = Statistic('stat1', 'i4')
-        
+        stat1 = Statistic('stat1', 'i4', 5)
         dsr.seed(731)
-        exp_values = [101, 103, 100, 101, 100, 101, 100, 100, 100, 101]
                 
-        dist = stats.expon(100)
-                
-        for i in range(10):
-            stat1.append(1, 1, i, round(dist.rvs()))
-        
+        dist_v = stats.expon(100)
+        dist_num = stats.expon(3)
+        dist_time = stats.expon(10)
 
+        for i in range(5):
+            time = 0
+            for _ in range(round(dist_num.rvs())):
+                time += round(dist_time.rvs())
+                value = round(dist_v.rvs())
+                stat1.append(i, time, value)
+                
+        times = [[13, 24, 35, 45],
+                     [10, 21, 35, 47],
+                     [11, 21, 32, 49, 60],
+                     [10, 23, 33],
+                     [11, 22, 34, 45]]
         
-        self.assertEqual(len(stat1), 10)
-        self.assertListEqual(exp_values, stat1.obs)
+        vals = [[100, 100, 100, 100],
+                   [103, 102, 102, 102],
+                   [101, 101, 102, 101, 101],
+                   [101, 101, 101],
+                   [100, 101, 104, 100]]
+         
+        self.assertListEqual(times, stat1.times.tolist())
+        self.assertListEqual(vals, stat1.values.tolist())
+        print(stat1.values)
         
-        print("=====Values before Finalization=====")
-        for i in range(10):
-            print(stat1[i])
-            
-        self.assertEqual(stat1.mean, np.mean(np.array(exp_values)))
-            
+        print("=====Pre-Finalized=====")
+        print("rep_means: {}".format(stat1.rep_means))
+        res_means = [sum(vals[i])/len(vals[i]) \
+                    for i in range(len(vals))]
+        self.assertListEqual(res_means, stat1.rep_means.tolist())
+        
+        print("total_length: {}".format(stat1.total_length))
+        length = sum([len(times[i]) for i in range(len(times))])
+        self.assertEqual(stat1.total_length, length)
+        
+        print("mean: {}".format(stat1.mean))
+        total_sum = sum([sum(vals[i]) for i in range(len(vals))])
+        mean = total_sum / length
+        self.assertEqual(stat1.mean, mean)
+        
         stat1.finalize()
-            
-        print ("=====Values after Finalization=====")
-        for i in range(10):
-            print(stat1[i])
         
-        self.assertIsInstance(stat1.obs, np.ndarray)
-        self.assertListEqual(exp_values, stat1.obs.tolist())
-        with self.assertRaises(StatisticNotFinalizedError):
-            stat1.append(2, 2, 2, 2)
-            
-        print("=====Estimates=====")
-        print("Mean: {}".format(stat1.mean))
-        self.assertEqual(stat1.mean, np.mean(np.array(exp_values)))
+        self.assertListEqual(times, stat1.times.tolist())
+        self.assertListEqual(vals, stat1.values.tolist())
+        
+        print()
+        print("=====Post-Finalized=====")
+        print("rep_means: {}".format(stat1.rep_means))
+        self.assertListEqual(res_means, stat1.rep_means.tolist())
+        
+        print("total_length: {}".format(stat1.total_length))
+        self.assertEqual(stat1.total_length, length)
+        
+        print("mean: {}".format(stat1.mean))
+        self.assertEqual(stat1.mean, mean)
