@@ -32,7 +32,7 @@ class Statistic(NamedObject):
     b1, i1, i2, i4, i8, u1, u2, u4, u8, f2, f4, f8, c8, c16, a
     """
     
-#     Point = namedtuple('Point', 'rep time value')
+#     Point = namedtuple('Point', 'time value')
     
     def __init__(self, name, dtype, reps = 1, time_weighted = False, 
                  description = None):
@@ -41,9 +41,12 @@ class Statistic(NamedObject):
         self._reps = reps
         self._time_weighted = time_weighted
         
-        self._times = [list() for _ in range(self.reps)]
-        self._values = [list() for _ in range(self.reps)]
+        self._times = list()
+        self._values = list()
+        self._rep_index = list()
+        self._rep_index[0]= 0
         
+        self._rep = 0
         self._finalized = False
         self._total_length = None
         self._rep_lengths = None 
@@ -78,6 +81,10 @@ class Statistic(NamedObject):
             return np.array(self._values)
         
     @property
+    def rep_index(self):
+        return self._rep_index
+        
+    @property
     def finalized(self):
         return self._finalized
     
@@ -86,7 +93,7 @@ class Statistic(NamedObject):
         if self._total_length is not None:
             return self._total_length
         else:
-            total_length = np.sum(self.rep_lengths)
+            total_length = len(self.times)
             if self.finalized:
                 self._total_length = total_length
             return total_length
@@ -95,21 +102,22 @@ class Statistic(NamedObject):
     def rep_lengths(self):
         if self._rep_lengths is not None:
             return self._rep_lengths
-        else:
-            reps = len(self.times)            
-            rep_lengths = np.array(\
-                    [len(self.times[i]) for i in range(reps)])
+        else:         
+            rep_lengths = list(
+                    [self.rep_index[i+1] - self.rep_index[i] \
+                     for i in range(len(self.rep_index)-1)])
+            rep_lengths.append(self.total_length - self.rep_index[-1])
+            np_rep_lengths = np.array(rep_lengths)
             if self.finalized:
-                self._rep_lengths = rep_lengths
-            return rep_lengths
+                self._rep_lengths = np_rep_lengths
+            return np_rep_lengths
     
     @property
     def mean(self):
         if self._mean is not None:
             return self._mean
         else:
-            mean = np.sum(self.rep_means * self.rep_lengths) / \
-                    self.total_length
+            mean = np.mean(self.values)
             if self.finalized:
                 self._mean = mean
             return mean
@@ -119,27 +127,34 @@ class Statistic(NamedObject):
         if self._rep_means is not None:
             return self._rep_means
         else:
-            reps = len(self.times)
-            rep_means = np.array(\
-                    [np.mean(self.values[i]) for i in range(reps)])
+            rep_means = list(
+                    [np.mean(self.values[self.rep_index[i-1]:self.rep_index[i]])\
+                     for i in range(1, len(self.times)-1)])
+            rep_means.append(np.mean(self.values[-1:]))
             if self.finalized:
                 self._rep_means = rep_means
             return rep_means
         
-    def append(self, rep, time, value):
+    def increment_rep(self):
+        self._rep += 1
+        self.rep_index[self._rep] = len(self.times)
+        
+    def append(self, time, value):
         if not self.finalized:
-            self._times[rep].append(time)
-            self._values[rep].append(value)
+            self._times.append(time)
+            self._values.append(value)
         else:
             raise StatisticNotFinalizedError("Cannot append to"
                                              "finalized statistics.")
     
-    def finalize(self):
-        np_times = np.array(self.times)
-        np_values = np.array(self.values)
+    def finalize(self):    
+        np_times = np.array(self.times, dtype='u8')
+        np_values = np.array(self.values, dtype=self.dtype)
+        np_reps = np.array(self.reps, dtype='u4')
         
         self._times = np_times
         self._values = np_values
+        self._reps = np_reps
         
         self._finalized = True
         
