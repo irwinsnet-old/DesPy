@@ -1,5 +1,5 @@
 
-import unittest
+import unittest, statistics
 
 import scipy.stats as stats
 import numpy as np
@@ -20,57 +20,64 @@ class testStatistic(unittest.TestCase):
         dist_v = stats.expon(100)
         dist_num = stats.expon(3)
         dist_time = stats.expon(10)
-
-        for i in range(5):
+        
+        r_lens = []; times = []; values = []
+ 
+        reps = 5
+        for rep in range(reps):
             time = 0
-            for _ in range(round(dist_num.rvs())):
+            r_lens.append(round(dist_num.rvs()))
+            for _ in range(r_lens[-1]):
                 time += round(dist_time.rvs())
                 value = round(dist_v.rvs())
-                stat1.append(i, time, value)
-                
-        times = [[13, 24, 35, 45],
-                     [10, 21, 35, 47],
-                     [11, 21, 32, 49, 60],
-                     [10, 23, 33],
-                     [11, 22, 34, 45]]
-        
-        vals = [[100, 100, 100, 100],
-                   [103, 102, 102, 102],
-                   [101, 101, 102, 101, 101],
-                   [101, 101, 101],
-                   [100, 101, 104, 100]]
-         
+                stat1.append(time, value)
+                times.append(time)
+                values.append(value)
+            if rep < reps - 1:
+                stat1.increment_rep()
+
+        print("=====Checking Test Setup Data=====")
+        self.assertListEqual(stat1.rep_lengths.tolist(), r_lens)
         self.assertListEqual(times, stat1.times.tolist())
-        self.assertListEqual(vals, stat1.values.tolist())
-        print(stat1.values)
-        
+        self.assertListEqual(values, stat1.values.tolist())
+        print("Test Values: {}".format(stat1.values))
+        print("Replication Lengths: {}".format(r_lens))
+        print("Statistic Index: {}".format(stat1.index))
+
+        print()
         print("=====Pre-Finalized=====")
-        print("rep_means: {}".format(stat1.rep_means))
-        res_means = [sum(vals[i])/len(vals[i]) \
-                    for i in range(len(vals))]
-        self.assertListEqual(res_means, stat1.rep_means.tolist())
         
         print("total_length: {}".format(stat1.total_length))
-        length = sum([len(times[i]) for i in range(len(times))])
-        self.assertEqual(stat1.total_length, length)
+        total_length = sum(r_lens)
+        self.assertEqual(stat1.total_length, total_length)
         
         print("mean: {}".format(stat1.mean))
-        total_sum = sum([sum(vals[i]) for i in range(len(vals))])
-        mean = total_sum / length
+        mean = statistics.mean(values)
         self.assertEqual(stat1.mean, mean)
-        
-        stat1.finalize()
-        
-        self.assertListEqual(times, stat1.times.tolist())
-        self.assertListEqual(vals, stat1.values.tolist())
-        
+
+        print("rep_means: {}".format(stat1.rep_means))
+        rep_means = []; r_beg = 0
+        for length in r_lens:
+            r_end = r_beg + length
+            r_mean = sum(values[r_beg:r_end]) / length
+            rep_means.append(r_mean)
+            r_beg += length
+        self.assertListEqual(rep_means, stat1.rep_means.tolist())
+
         print()
         print("=====Post-Finalized=====")
-        print("rep_means: {}".format(stat1.rep_means))
-        self.assertListEqual(res_means, stat1.rep_means.tolist())
-        
+        stat1.finalize()
+         
+        self.assertListEqual(times, stat1.times.tolist())
+        self.assertListEqual(values, stat1.values.tolist())
+
         print("total_length: {}".format(stat1.total_length))
-        self.assertEqual(stat1.total_length, length)
-        
+        self.assertEqual(stat1.total_length, total_length)
+
         print("mean: {}".format(stat1.mean))
         self.assertEqual(stat1.mean, mean)
+
+        print("rep_means: {}".format(stat1.rep_means))
+        self.assertListEqual(stat1.rep_means.tolist(), rep_means)
+         
+
