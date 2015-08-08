@@ -50,7 +50,7 @@ class Generator(object):
         self.folder_basename = None
         self.console_trace = True
         self.trace = Trace(self)
-        self.report = HtmlReport()        
+        self.report = HtmlReport()  
         
         #Read-only Public Attributes
         self._full_path = None    
@@ -112,9 +112,19 @@ class Generator(object):
     def trace(self, trace):
         self._trace = trace
         
+    @property
+    def statistics(self):
+        return self._statistics
+    
+    def add_statistic(self, stat):
+        self._statistics.append(stat)
+        
     def write_files(self):
         """Creates trace and HTML reports in folder_basename location.
         """
+        #Finalize statistics
+
+        
         #Take no action if no output folder specified.
         if self.folder_basename is None:
             return None

@@ -132,8 +132,8 @@ class testDespyb(unittest.TestCase):
         evt1 = dp.Event(model, "First Event")
         
         def evt1_callback(self):
-            evt2 = dp.Event(self.model, "Callback Event")
-            self.model.schedule(evt2, 10)
+            evt2 = dp.Event(self.mod, "Callback Event")
+            self.mod.schedule(evt2, 10)
 
         evt1.append_callback(evt1_callback)
         
@@ -201,7 +201,7 @@ class testDespyb(unittest.TestCase):
         event = dp.Event(model, "Trace Control Event")
         
         def event_callback(self):
-            self.model.schedule(self, 10)
+            self.mod.schedule(self, 10)
             
         event.append_callback(event_callback)
         model.sim.schedule(event, 0)
@@ -226,7 +226,7 @@ class testDespyb(unittest.TestCase):
         evt2 = dp.Event(model, "Trace Control Event Step=1")
         
         def event_callback2(self):
-            self.model.schedule(self, 1)
+            self.mod.schedule(self, 1)
         
         evt2.append_callback(event_callback2)
         model.sim.schedule(evt2, 0)

@@ -18,7 +18,7 @@ __init__
 **********
 Attributes
 **********
-..  autoattribute:: .Component.model
+..  autoattribute:: .Component.mod
 ..  autoattribute:: .Component.sim
 ..  autoattribute:: .Component.number
 ..  autoattribute:: .Component.id

@@ -10,6 +10,12 @@ despy.core.component
 ..  autosummary::
 
     Component
+    
+..  todo
+
+    Rename model attribute to "mod" because it's used so often.
+    
+    
 """
 from itertools import count
 
@@ -35,7 +41,7 @@ class Component(NamedObject):
 
     ..  autosummary::
         
-        model
+        mod
         sim
         number
         id
@@ -82,7 +88,7 @@ class Component(NamedObject):
         super().__init__(name, description)
         
         if isinstance(model, Model):
-            self._model = model
+            self._mod = model
         else:
                 raise TypeError("Object passed to model argument " +\
                     "must be instance of despy.core.model.Model")
@@ -99,8 +105,8 @@ class Component(NamedObject):
         # member components
         model[self.id] = self
         
-        self._obs = dict()
-    
+        self._statistics = {}
+        
     @property
     def sim(self):
         """A link to the model's simulation attribute.
@@ -112,7 +118,7 @@ class Component(NamedObject):
         return self._sim
     
     @property
-    def model(self):
+    def mod(self):
         """A link to the component's model object.
         
         This read-only attribute is set by the ``Model.__init__``
@@ -120,7 +126,7 @@ class Component(NamedObject):
         
         *Returns* :class:`despy.core.model.Model`
         """
-        return self._model
+        return self._mod
     
     @property
     def number(self):
@@ -144,12 +150,18 @@ class Component(NamedObject):
         in Windows replaced by underscores. The *id* attribute is
         suitable for creating file names.
         """
-        return "{0}.{1}.{2}".format(self.model.slug, self.slug,
+        return "{0}.{1}.{2}".format(self.mod.slug, self.slug,
                                     self._number)
+    
+    def add_stat(self, key, stat):
+        self._statistics[key] = stat
         
+    def get_stat(self, key):
+        return self._statistics[key]
+    
     @property
-    def values(self):
-        return self._obs
+    def statistics(self):
+        return self._statistics
     
     @classmethod
     def set_counter(cls):
@@ -189,7 +201,7 @@ class Component(NamedObject):
         
         *Returns* str
         """
-        return "{0}:{1}#{2}".format(self.model, self.name, self._number)
+        return "{0}:{1}#{2}".format(self.mod, self.name, self._number)
     
     def initialize(self):
         """Subclasses should override this method with initialization
@@ -203,9 +215,6 @@ class Component(NamedObject):
         code that will be executed after all events on the FEL.
         """
         pass
-    
-    def add_value(self, value):
-        self.values.append(value)
     
     def get_data(self, folder):
         """Subclasses should override this method to provide simulation

@@ -76,18 +76,18 @@ class testQueue(unittest.TestCase):
                 super().__init__(model, "Customer Generator", self.generator)
 
             def generator(self):
-                first_customer = self.model.Customer(self.model)
-                self.model.c_qu.add(first_customer)                
+                first_customer = self.mod.Customer(self.mod)
+                self.mod.c_qu.add(first_customer)                
                 yield self.schedule_timeout(\
                         "Customer #{0} arrives.".format(first_customer.number))
                 while True:
                     delay = round(stats.expon.rvs(scale = 3))
-                    customer = self.model.Customer(self.model)                    
+                    customer = self.mod.Customer(self.mod)                    
                     yield self.schedule_timeout(\
                             "Customer #{0} arrives.".format(customer.number),
                             delay)
-                    self.model.c_qu.add(customer)
-                    self.model.service_process.wake()
+                    self.mod.c_qu.add(customer)
+                    self.mod.service_process.wake()
         
         class CustServiceProcess(dp.Process):
             def __init__(self, model):
@@ -95,8 +95,8 @@ class testQueue(unittest.TestCase):
                 
             def generator(self):
                 while True:
-                    if self.model.c_qu.length > 0:
-                        customer = self.model.c_qu.remove()
+                    if self.mod.c_qu.length > 0:
+                        customer = self.mod.c_qu.remove()
                         delay = round(stats.expon.rvs(scale = 4))
                         yield self.schedule_timeout(\
                                 "Finished serving customer #{0}, Service time: {1}".format(customer.number, delay),

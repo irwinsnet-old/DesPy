@@ -156,10 +156,10 @@
         <span class="c"># Schedule first event</span>
         <span class="n">evt</span> <span class="o">=</span> <span class="n">TimerEvent</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">immediate</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">evt</span><span class="p">,</span> <span class="n">priority</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">evt</span><span class="p">,</span> <span class="n">priority</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_current_interval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">evt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_interval</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">evt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_interval</span><span class="p">,</span>
                                     <span class="n">priority</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
         </div>
     <span class="nd">@property</span>
@@ -238,7 +238,7 @@
 <span class="sd">                The event recurs based on the parameters of the</span>
 <span class="sd">                RandomTimer object passed via this argument.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">timer</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">timer</span><span class="o">.</span><span class="n">mod</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">=</span> <span class="n">timer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">append_callback</span><span class="p">(</span><span class="n">timer</span><span class="o">.</span><span class="n">callback</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">append_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reschedule</span><span class="p">)</span>

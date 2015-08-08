@@ -84,10 +84,10 @@ class RandomTimer(Component):
         # Schedule first event
         evt = TimerEvent(name, self)
         if immediate:
-            self.model.sim.schedule(evt, priority = self.priority)
+            self.sim.schedule(evt, priority = self.priority)
         else:
             self._current_interval = self.distribution.rvs()
-            self.model.sim.schedule(evt, self.current_interval,
+            self.sim.schedule(evt, self.current_interval,
                                     priority = self.priority)
         
     @property
@@ -166,7 +166,7 @@ class TimerEvent(Event):
                 The event recurs based on the parameters of the
                 RandomTimer object passed via this argument.
         """
-        super().__init__(timer.model, name)
+        super().__init__(timer.mod, name)
         self.timer = timer
         self.append_callback(timer.callback)
         self.append_callback(self.reschedule)

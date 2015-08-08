@@ -12,6 +12,18 @@ despy.core.resource
     Resource
     ResourceFinishServiceEvent
     ResourceQueue
+    
+..  todo
+
+    Modify get_service_time feature to allow passing a frozen scipy
+    distribution directly into Resource.
+    
+    Test different options for selection of empty resources, either
+    prioritization by number, random selection, or equal loading.
+    
+    Check dictionary used to store resources in ResourceQueue class.
+    It may cause problems when there is more than one Resource due to
+    not preserving order.
 """
 
 from collections import OrderedDict, namedtuple
@@ -21,12 +33,7 @@ from scipy.stats import randint
 from despy.core.component import Component
 from despy.core.event import Event
 from despy.core.queue import Queue
-
-# TODO: Test different options for selection of empty resources, either
-# prioritization by number, random selection, or equal loading.
-
-# TODO: Fix trace report. Label the interarrival time state on which
-# customer service was finished.
+from despy.output.statistic import Statistic
 
 class Resource(Component):
     """Represents a limited, real-world entity that provides a service.
@@ -76,12 +83,14 @@ class Resource(Component):
                 Optional, defaults to None. A function that returns the
                 time required to service an entity.
         """
+
         super().__init__(model, name)
         
         #Instance Attributes
         self._capacity = capacity
         self._res_queue = None
         self._service_time = time_function
+        self.add_stat("ServiceTime", Statistic("Service Time", 'u4'))
         
         self._Station_tuple = namedtuple('Station',
                                         ['entity', 'start_time'])
@@ -94,11 +103,11 @@ class Resource(Component):
     @property
     def capacity(self):
         """The number of entities that can be served simultaneously.
-        
+         
         *Type:* Integer
         """
         return self._capacity
-    
+     
     @capacity.setter
     def capacity(self, capacity):
         self._capacity = capacity
@@ -269,9 +278,9 @@ class Resource(Component):
         
         #Get service time and schedule end of service on FEL.
         service_time = self.get_service_time(index)
-        finish_event = ResourceFinishServiceEvent(\
-            self, index, service_time)
-        self.model.schedule(finish_event, service_time)
+        finish_event = ResourceFinishServiceEvent(self, index,
+                                                  service_time)
+        self.mod.schedule(finish_event, service_time)
         
     def finish_service(self, index):
         """Remove entity from a resource station.
@@ -339,7 +348,7 @@ class ResourceFinishServiceEvent(Event):
             ``service_time`` (Integer)
                 The time required to complete the service.
         """
-        super().__init__(resource.model, "Finished Service")
+        super().__init__(resource.mod, "Finished Service")
         
         self._resource = resource
         self._station_index = station_index
@@ -383,7 +392,10 @@ class ResourceFinishServiceEvent(Event):
         """The event's callback method that checks the queue for a
         waiting entity.
         """
-        self.resource.finish_service(self.station_index)        
+        self.resource.finish_service(self.station_index)
+        self.resource.statistics["ServiceTime"].append(
+                                                self.sim.now,
+                                                self.service_time)      
         
     def _update_trace_record(self, trace_record):
         """Adds the entity name and service time to the trace report.

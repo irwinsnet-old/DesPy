@@ -141,7 +141,7 @@ class Process(Component):
                 Priority of the process start event. Defaults to
                 Priority.STANDARD.
         """
-        self.model.schedule(ProcessTimeOutEvent(self,
+        self.mod.schedule(ProcessTimeOutEvent(self,
                             "Start " + self.name), delay, priority)
         self._awake = True
 
@@ -151,7 +151,7 @@ class Process(Component):
         scheduled_event = next(self._iterator)
         if scheduled_event != None:
             if self.awake:
-                self.model.schedule(scheduled_event.event_,
+                self.mod.schedule(scheduled_event.event_,
                                     scheduled_event.delay_,
                                     scheduled_event.priority_)
         
@@ -200,7 +200,7 @@ class Process(Component):
                 Priority.STANDARD.
         """
         if not self.awake:
-            self.model.schedule(ProcessTimeOutEvent(self,
+            self.mod.schedule(ProcessTimeOutEvent(self,
                                 "Wake " + self.name), delay, priority)
             self._awake = True
 
@@ -233,7 +233,7 @@ class ProcessTimeOutEvent(Event):
     
     def __init__(self, process, name, trace_fields = None):
         self._process = process
-        super().__init__(process.model, name, trace_fields)
+        super().__init__(process.mod, name, trace_fields)
         self.append_callback(self.process_callback)
         
     @property

@@ -17,7 +17,7 @@ __init__
 **********
 Attributes
 **********
-..  autoattribute:: Resource.capacity
+..  autoinstanceattribute:: Resource.capacity
 ..  autoattribute:: Resource.res_queue
 ..  autoattribute:: Resource.service_time
 ..  autoattribute:: Resource.Station_tuple
@@ -32,7 +32,7 @@ Inherited Attributes
     :noindex:
 ..  autoattribute:: despy.base.named_object.NamedObject.slug
     :noindex:
-..  autoattribute:: despy.core.component.Component.model
+..  autoattribute:: despy.core.component.Component.mod
     :noindex:
 ..  autoattribute:: despy.core.component.Component.sim
     :noindex:

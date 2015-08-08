@@ -139,8 +139,9 @@
 <span class="sd">                sentences.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">initial_events_scheduled</span> <span class="o">=</span> <span class="bp">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">components</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_events_scheduled</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_components</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_statistics</span> <span class="o">=</span> <span class="p">{}</span>
         
         <span class="c"># Create a default simulation if no simulation is provided</span>
         <span class="c"># to the constructor.</span>
@@ -161,23 +162,15 @@
 </div>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">initial_events_scheduled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return True of the model&#39;s initialize method has</span>
+        <span class="sd">&quot;&quot;&quot;Return True if the model&#39;s initialize method has</span>
 <span class="sd">        been executed.</span>
 <span class="sd">        </span>
-<span class="sd">        *Returns:* (Boolean)</span>
+<span class="sd">        *Type:* (Boolean)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_events_scheduled</span>
     
     <span class="nd">@initial_events_scheduled.setter</span>
     <span class="k">def</span> <span class="nf">initial_events_scheduled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scheduled</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set to True if the model&#39;s initialize method has been</span>
-<span class="sd">        run.</span>
-<span class="sd">        </span>
-<span class="sd">        *Arguments*</span>
-<span class="sd">            schedule (Boolean):</span>
-<span class="sd">                Set to True if the model&#39;s initialize method has</span>
-<span class="sd">                been run.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_initial_events_scheduled</span> <span class="o">=</span> <span class="n">scheduled</span>
 
     <span class="nd">@property</span>
@@ -198,6 +191,14 @@
 <span class="sd">                and execute the model&#39;s events.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span> <span class="o">=</span> <span class="n">sim</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">components</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_statistics</span>
   
 <div class="viewcode-block" id="Model.__setitem__"><a class="viewcode-back" href="../../../core/model.html#despy.core.model.Model.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Assign a component to the model using dictionary notation.</span>
@@ -209,7 +210,7 @@
 <span class="sd">            ``item`` (:class:`despy.core.component.Component`)</span>
 <span class="sd">                An instance of ``Component`` or one of it&#39;s sub-classes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_components</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
 </div>
 <div class="viewcode-block" id="Model.__getitem__"><a class="viewcode-back" href="../../../core/model.html#despy.core.model.Model.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Access a component using a dictionary key.</span>
@@ -221,7 +222,7 @@
 <span class="sd">            ``item`` (:class:`despy.core.component.Component`)</span>
 <span class="sd">                An instance of ``Component`` or one of it&#39;s sub-classes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
         </div>
 <div class="viewcode-block" id="Model.delete_component"><a class="viewcode-back" href="../../../core/model.html#despy.core.model.Model.delete_component">[docs]</a>    <span class="k">def</span> <span class="nf">delete_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove a component from the model.</span>
@@ -231,7 +232,7 @@
 <span class="sd">                The dictionary key that will be used to identify the</span>
 <span class="sd">                component that will be removed from the model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
         </div>
 <div class="viewcode-block" id="Model.set_initialize_method"><a class="viewcode-back" href="../../../core/model.html#despy.core.model.Model.set_initialize_method">[docs]</a>    <span class="k">def</span> <span class="nf">set_initialize_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initialize_method</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Assign an initialize method to the model.</span>

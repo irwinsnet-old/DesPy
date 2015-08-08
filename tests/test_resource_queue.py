@@ -6,6 +6,7 @@ from collections import OrderedDict
 import scipy.stats as stats
 
 import despy.core as dp
+from despy.output.statistic import Statistic
 
 class testResource(unittest.TestCase):
     def get_rnd_exp(self, user):
@@ -64,6 +65,7 @@ class testResource(unittest.TestCase):
              
             def get_service_time(self, index):
                 return round(stats.expon.rvs(scale = 4))
+                
          
         class CustArrProcess(dp.Process):
             def __init__(self, model, server_resource):
@@ -72,7 +74,7 @@ class testResource(unittest.TestCase):
                 self.server_resource = server_resource
              
             def generator(self):
-                customer = self.model.Customer(self.model)
+                customer = self.mod.Customer(self.mod)
                 args1 = OrderedDict()
                 args1["Interarrival_Time"] = None
                 args1["Customer"] = customer
@@ -82,7 +84,7 @@ class testResource(unittest.TestCase):
                 while True:
                     self.server_resource.request(customer)
                     delay = round(stats.expon.rvs(scale = 3))
-                    customer = self.model.Customer(self.model)
+                    customer = self.mod.Customer(self.mod)
                     args2 = OrderedDict()
                     args2["Interarrival_Time"] = delay                    
                     args2["Customer"] = customer

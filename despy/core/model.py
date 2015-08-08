@@ -67,8 +67,9 @@ class Model(NamedObject):
                 sentences.
         """
         super().__init__(name, description)
-        self.initial_events_scheduled = False
-        self.components = {}
+        self._initial_events_scheduled = False
+        self._components = {}
+        self._statistics = {}
         
         # Create a default simulation if no simulation is provided
         # to the constructor.
@@ -89,23 +90,15 @@ class Model(NamedObject):
 
     @property
     def initial_events_scheduled(self):
-        """Return True of the model's initialize method has
+        """Return True if the model's initialize method has
         been executed.
         
-        *Returns:* (Boolean)
+        *Type:* (Boolean)
         """
         return self._initial_events_scheduled
     
     @initial_events_scheduled.setter
     def initial_events_scheduled(self, scheduled):
-        """Set to True if the model's initialize method has been
-        run.
-        
-        *Arguments*
-            schedule (Boolean):
-                Set to True if the model's initialize method has
-                been run.
-        """
         self._initial_events_scheduled = scheduled
 
     @property
@@ -126,6 +119,14 @@ class Model(NamedObject):
                 and execute the model's events.
         """
         self._sim = sim
+        
+    @property
+    def components(self):
+        return self._components
+    
+    @property
+    def statistics(self):
+        return self._statistics
   
     def __setitem__(self, key, item):
         """ Assign a component to the model using dictionary notation.
@@ -137,7 +138,7 @@ class Model(NamedObject):
             ``item`` (:class:`despy.core.component.Component`)
                 An instance of ``Component`` or one of it's sub-classes.
         """
-        self.components[key] = item
+        self._components[key] = item
 
     def __getitem__(self, key):
         """Access a component using a dictionary key.
@@ -149,7 +150,7 @@ class Model(NamedObject):
             ``item`` (:class:`despy.core.component.Component`)
                 An instance of ``Component`` or one of it's sub-classes.
         """
-        return self.components[key]
+        return self._components[key]
         
     def delete_component(self, key):
         """Remove a component from the model.
@@ -159,7 +160,7 @@ class Model(NamedObject):
                 The dictionary key that will be used to identify the
                 component that will be removed from the model.
         """
-        del self.components[key]
+        del self._components[key]
         
     def set_initialize_method(self, initialize_method):
         """Assign an initialize method to the model.
