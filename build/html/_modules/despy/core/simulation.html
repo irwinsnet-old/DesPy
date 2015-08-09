@@ -91,6 +91,11 @@
 <span class="sd">    </span>
 <span class="sd">    Change seed property to a method to be consistent with numpy and</span>
 <span class="sd">    random syntax</span>
+<span class="sd">    </span>
+<span class="sd">    Modify _finalize algorithm so it doesn&#39;t run when the simulation</span>
+<span class="sd">    is paused.</span>
+<span class="sd">    </span>
+<span class="sd">    Add functionality for multiple reps.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">heapq</span> <span class="kn">import</span> <span class="n">heappush</span><span class="p">,</span> <span class="n">heappop</span>
@@ -105,6 +110,16 @@
 <span class="kn">from</span> <span class="nn">despy.base.named_object</span> <span class="kn">import</span> <span class="n">NamedObject</span>
 <span class="kn">from</span> <span class="nn">despy.base.utilities</span> <span class="kn">import</span> <span class="n">Priority</span>
 
+
+<div class="viewcode-block" id="NoEventsRemainingError"><a class="viewcode-back" href="../../../core/NoEventsRemainingError.html#despy.core.simulation.NoEventsRemainingError">[docs]</a><span class="k">class</span> <span class="nc">NoEventsRemainingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised by despy.core.simulation&#39;s step method when FEL is empty.</span>
+<span class="sd">    </span>
+<span class="sd">    Raised by the ``Simulation.step`` method when no events remain on the</span>
+<span class="sd">    FEL.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+</div>
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Schedule events and manage the future event list (FEL).</span>
 <span class="sd">    </span>
@@ -364,6 +379,10 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="o">.</span><span class="n">initial_events_scheduled</span><span class="p">:</span>
                 <span class="n">model</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
                 <span class="n">model</span><span class="o">.</span><span class="n">initial_events_scheduled</span> <span class="o">=</span> <span class="bp">True</span>
+                </div>
+<div class="viewcode-block" id="Simulation._finalize_models"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation._finalize_models">[docs]</a>    <span class="k">def</span> <span class="nf">_finalize_models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="p">:</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">_finalize</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Simulation.step"><a class="viewcode-back" href="../../../core/simulation.html#despy.core.simulation.Simulation.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Advance simulation time and execute the next event.</span>
@@ -433,7 +452,6 @@
 <span class="sd">                101 or later will not.</span>
 <span class="sd">                </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># Initialize models and components</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_run_start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_models</span><span class="p">()</span>
         
@@ -452,7 +470,7 @@
                 <span class="k">except</span> <span class="n">NoEventsRemainingError</span><span class="p">:</span>
                     <span class="k">break</span>
         
-        <span class="c"># Record stop time and write output files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_finalize_models</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_run_stop_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">write_files</span><span class="p">()</span>
             </div>
@@ -533,16 +551,8 @@
 <span class="sd">        :mod:`despy.base.named_object` module, or an integer between</span>
 <span class="sd">        -4 and +4, inclusive.</span>
 <span class="sd">    </span>
-<span class="sd">    &quot;&quot;&quot;</span>
-</div>
-<div class="viewcode-block" id="NoEventsRemainingError"><a class="viewcode-back" href="../../../core/NoEventsRemainingError.html#despy.core.simulation.NoEventsRemainingError">[docs]</a><span class="k">class</span> <span class="nc">NoEventsRemainingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Raised by despy.core.simulation&#39;s step method when FEL is empty.</span>
-<span class="sd">    </span>
-<span class="sd">    Raised by the ``Simulation.step`` method when no events remain on the</span>
-<span class="sd">    FEL.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">pass</span>
-</pre></div></div>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+</pre></div>
 
           </div>
         </div>

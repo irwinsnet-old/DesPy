@@ -283,12 +283,15 @@
         <span class="k">pass</span>
     </div>
 <div class="viewcode-block" id="Component.finalize"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.component.Component.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Subclasses should override this method with cleanup or other</span>
-<span class="sd">        code that will be executed after all events on the FEL.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
     </div>
-<div class="viewcode-block" id="Component.get_data"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.component.Component.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The Simulation calls finalize methods after final event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="p">,</span> <span class="n">stat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">statistics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">stat</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
+    
+<div class="viewcode-block" id="Component.get_data"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.component.Component.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Subclasses should override this method to provide simulation</span>
 <span class="sd">        output that will be included in the output report.</span>
 <span class="sd">        </span>

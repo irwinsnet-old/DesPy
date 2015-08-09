@@ -12,10 +12,7 @@ despy.core.queue
     Queue
     
 ..  todo
-
-    Refactor so folder parameter doesn't need to be passed to the get
-    data method.
-    
+   
     Add property and output for total items entering the queue.
     
     Add property and output for total items leaving the queue.
@@ -23,6 +20,10 @@ despy.core.queue
     Add properties and output for max and min items in queue.
     
     Replace length property with __len__
+    
+    Remove reference to histogram folder from get_data method.
+    
+    Refactor time in queue to use Statistic class.
 """
 
 from collections import deque, namedtuple
@@ -134,7 +135,7 @@ class Queue(Component):
         self.times_in_queue.append(self._sim.now - item.time_in_fld)
         return item.item_fld
     
-    def get_data(self, folder):
+    def get_data(self):
         """Creates charts and adds data to final report.
         
         *Arguments*
@@ -148,6 +149,7 @@ class Queue(Component):
         # Create Time in Queue Histogram
         qtimes = np.array(self.times_in_queue, np.int32)
         qtime_filename = '{0}_time_in_q'.format(self.id)
+        folder = self.sim.gen._full_path
         full_fname = plot.Histogram(self.times_in_queue, folder,
                        qtime_filename,
                        title = self.name,

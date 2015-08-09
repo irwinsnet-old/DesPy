@@ -82,6 +82,12 @@
 <span class="sd">..  autosummary::</span>
 
 <span class="sd">    Model</span>
+<span class="sd">    </span>
+<span class="sd">..  todo</span>
+
+<span class="sd">    Refactor to use &quot;_method_name&quot; for callback methods and</span>
+<span class="sd">    &quot;method_name&quot; for overridden names. With this structure, user won&#39;t</span>
+<span class="sd">    have to remember when to call super().</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">despy.core.simulation</span> <span class="kn">import</span> <span class="n">Simulation</span>
@@ -259,7 +265,6 @@
 <span class="sd">        Next it will call whatever method was passed to</span>
 <span class="sd">        ``set_initialize_method``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># Initialize components that are attached to the model.</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">component</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
         
@@ -268,7 +273,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span>
-</div>
+        </div>
+    <span class="k">def</span> <span class="nf">_finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">component</span><span class="o">.</span><span class="n">_finalize</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
 <div class="viewcode-block" id="Model.schedule"><a class="viewcode-back" href="../../../core/model.html#despy.core.model.Model.schedule">[docs]</a>    <span class="k">def</span> <span class="nf">schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
                  <span class="n">priority</span> <span class="o">=</span> <span class="n">Priority</span><span class="o">.</span><span class="n">STANDARD</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Call the Simulation object&#39;s schedule() method.</span>

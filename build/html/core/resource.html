@@ -164,7 +164,7 @@ kind of service.</p>
 <tr class="row-even"><td><a class="reference internal" href="#despy.core.resource.Resource.start_service" title="despy.core.resource.Resource.start_service"><code class="xref py py-obj docutils literal"><span class="pre">start_service</span></code></a>(index,&nbsp;entity)</td>
 <td>Commence servicing an entity at the index position.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#despy.core.resource.Resource.finish_service" title="despy.core.resource.Resource.finish_service"><code class="xref py py-obj docutils literal"><span class="pre">finish_service</span></code></a>(index)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.resource.Resource.finish_service" title="despy.core.resource.Resource.finish_service"><code class="xref py py-obj docutils literal"><span class="pre">finish_service</span></code></a>(index,&nbsp;service_time)</td>
 <td>Remove entity from a resource station.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#despy.core.resource.Resource.remove_entity" title="despy.core.resource.Resource.remove_entity"><code class="xref py py-obj docutils literal"><span class="pre">remove_entity</span></code></a>(index)</td>
@@ -434,7 +434,7 @@ be servicing the entity.</dd>
 
 <dl class="method">
 <dt id="despy.core.resource.Resource.finish_service">
-<code class="descclassname">Resource.</code><code class="descname">finish_service</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.finish_service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource.finish_service" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Resource.</code><code class="descname">finish_service</code><span class="sig-paren">(</span><em>index</em>, <em>service_time</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/resource.html#Resource.finish_service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.resource.Resource.finish_service" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove entity from a resource station.</p>
 <dl class="docutils">
 <dt><em>Arguments:</em></dt>
@@ -476,13 +476,11 @@ event list (FEL).</p>
 <dl class="method">
 <dt>
 <code class="descclassname">Component.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component.finalize"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Subclasses should override this method with cleanup or other
-code that will be executed after all events on the FEL.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="descclassname">Component.</code><code class="descname">get_data</code><span class="sig-paren">(</span><em>folder</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component.get_data"><span class="viewcode-link">[source]</span></a></dt>
+<code class="descclassname">Component.</code><code class="descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component.get_data"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Subclasses should override this method to provide simulation
 output that will be included in the output report.</p>
 <p>The output is a Python list of two-element tuples. The first

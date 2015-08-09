@@ -25,6 +25,10 @@ import numpy as np
 
 from despy.base.named_object import NamedObject
 
+class StatisticNotFinalizedError(Exception):
+    pass
+
+
 class Statistic(NamedObject):
     """
     
@@ -176,9 +180,7 @@ class Statistic(NamedObject):
             if self.finalized:
                 self._rep_means = rep_means
             return rep_means
-        
-class StatisticNotFinalizedError(Exception):
-    pass
+
         
 
         

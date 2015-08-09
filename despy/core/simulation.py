@@ -19,6 +19,11 @@ despy.core.simulation
     
     Change seed property to a method to be consistent with numpy and
     random syntax
+    
+    Modify _finalize algorithm so it doesn't run when the simulation
+    is paused.
+    
+    Add functionality for multiple reps.
 """
 
 from heapq import heappush, heappop
@@ -32,6 +37,16 @@ from despy.output.generator import Generator
 from despy.output.report import Datatype
 from despy.base.named_object import NamedObject
 from despy.base.utilities import Priority
+
+
+class NoEventsRemainingError(Exception):
+    """Raised by despy.core.simulation's step method when FEL is empty.
+    
+    Raised by the ``Simulation.step`` method when no events remain on the
+    FEL.
+    """
+    pass
+
 
 class Simulation(NamedObject):
     """Schedule events and manage the future event list (FEL).
@@ -292,6 +307,10 @@ class Simulation(NamedObject):
             if not model.initial_events_scheduled:
                 model.initialize()
                 model.initial_events_scheduled = True
+                
+    def _finalize_models(self):
+        for model in self._models:
+            model._finalize()
 
     def step(self):
         """Advance simulation time and execute the next event.
@@ -361,7 +380,6 @@ class Simulation(NamedObject):
                 101 or later will not.
                 
         """
-        # Initialize models and components
         self._run_start_time = datetime.datetime.today()
         self._initialize_models()
         
@@ -380,7 +398,7 @@ class Simulation(NamedObject):
                 except NoEventsRemainingError:
                     break
         
-        # Record stop time and write output files
+        self._finalize_models
         self._run_stop_time = datetime.datetime.today()
         self.gen.write_files()
             
@@ -462,12 +480,3 @@ class FutureEvent(namedtuple('FutureEventTuple',
         -4 and +4, inclusive.
     
     """
-
-class NoEventsRemainingError(Exception):
-    """Raised by despy.core.simulation's step method when FEL is empty.
-    
-    Raised by the ``Simulation.step`` method when no events remain on the
-    FEL.
-    """
-    pass
-

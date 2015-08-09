@@ -211,12 +211,15 @@ class Component(NamedObject):
         pass
     
     def finalize(self):
-        """Subclasses should override this method with cleanup or other
-        code that will be executed after all events on the FEL.
-        """
         pass
     
-    def get_data(self, folder):
+    def _finalize(self):
+        """The Simulation calls finalize methods after final event.
+        """
+        for _ , stat in self.statistics.items():
+            stat.finalize()
+    
+    def get_data(self):
         """Subclasses should override this method to provide simulation
         output that will be included in the output report.
         

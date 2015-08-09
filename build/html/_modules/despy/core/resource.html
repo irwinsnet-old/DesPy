@@ -106,6 +106,7 @@
 <span class="kn">from</span> <span class="nn">despy.core.event</span> <span class="kn">import</span> <span class="n">Event</span>
 <span class="kn">from</span> <span class="nn">despy.core.queue</span> <span class="kn">import</span> <span class="n">Queue</span>
 <span class="kn">from</span> <span class="nn">despy.output.statistic</span> <span class="kn">import</span> <span class="n">Statistic</span>
+<span class="kn">from</span> <span class="nn">despy.output.report</span> <span class="kn">import</span> <span class="n">Datatype</span>
 
 <div class="viewcode-block" id="Resource"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource">[docs]</a><span class="k">class</span> <span class="nc">Resource</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Represents a limited, real-world entity that provides a service.</span>
@@ -158,11 +159,11 @@
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         
-        <span class="c">#Instance Attributes</span>
+        <span class="c"># Instance Attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_capacity</span> <span class="o">=</span> <span class="n">capacity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_res_queue</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_service_time</span> <span class="o">=</span> <span class="n">time_function</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_stat</span><span class="p">(</span><span class="s">&quot;ServiceTime&quot;</span><span class="p">,</span> <span class="n">Statistic</span><span class="p">(</span><span class="s">&quot;Service Time&quot;</span><span class="p">,</span> <span class="s">&#39;u4&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_stat</span><span class="p">(</span><span class="s">&quot;Service Time&quot;</span><span class="p">,</span> <span class="n">Statistic</span><span class="p">(</span><span class="s">&quot;Service Time&quot;</span><span class="p">,</span> <span class="s">&#39;u4&#39;</span><span class="p">))</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">_Station_tuple</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;Station&#39;</span><span class="p">,</span>
                                         <span class="p">[</span><span class="s">&#39;entity&#39;</span><span class="p">,</span> <span class="s">&#39;start_time&#39;</span><span class="p">])</span>
@@ -354,14 +355,19 @@
                                                   <span class="n">service_time</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">finish_event</span><span class="p">,</span> <span class="n">service_time</span><span class="p">)</span>
         </div>
-<div class="viewcode-block" id="Resource.finish_service"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.finish_service">[docs]</a>    <span class="k">def</span> <span class="nf">finish_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<div class="viewcode-block" id="Resource.finish_service"><a class="viewcode-back" href="../../../core/resource.html#despy.core.resource.Resource.finish_service">[docs]</a>    <span class="k">def</span> <span class="nf">finish_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">service_time</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove entity from a resource station.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments:*</span>
 <span class="sd">            ``index``: (Integer)</span>
 <span class="sd">                The index number of the resource station.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Record service time and remove entity from resource station.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statistics</span><span class="p">[</span><span class="s">&quot;Service Time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">,</span>
+                                              <span class="n">service_time</span><span class="p">)</span>  
         <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Station_tuple</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        
+        <span class="c"># Start service on next entity in queue.</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">res_queue</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">res_queue</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">res_queue</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
@@ -381,102 +387,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">return</span> <span class="n">entity</span>
+     </div>
+    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_stat</span><span class="p">(</span><span class="s">&quot;Service Time&quot;</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[(</span><span class="n">Datatype</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s">&quot;Resource: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                  <span class="p">(</span><span class="n">Datatype</span><span class="o">.</span><span class="n">paragraph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">),</span>
+                  <span class="p">(</span><span class="n">Datatype</span><span class="o">.</span><span class="n">param_list</span><span class="p">,</span>
+                    <span class="p">[(</span><span class="s">&#39;Entities Served&#39;</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">total_length</span><span class="p">),</span>
+                     <span class="p">(</span><span class="s">&#39;Mean Service Time&#39;</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">mean</span><span class="p">)])]</span>
+        <span class="k">return</span> <span class="n">output</span>
 
-</div></div>
-<div class="viewcode-block" id="ResourceFinishServiceEvent"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent">[docs]</a><span class="k">class</span> <span class="nc">ResourceFinishServiceEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Event that is called when the resource completes it&#39;s service.</span>
-<span class="sd">    </span>
-<span class="sd">    **Inherited Classes**</span>
-<span class="sd">      * :class:`despy.base.named_object.NamedObject`</span>
-<span class="sd">      * :class:`despy.core.component.Component`</span>
-<span class="sd">      * :class:`despy.core.event.Event`</span>
-<span class="sd">      </span>
-<span class="sd">    The ResourceFinishServiceEvent object occurs when the resource</span>
-<span class="sd">    finishes servicing the assigned entity (after the designated</span>
-<span class="sd">    service time has elapsed). </span>
-<span class="sd">    </span>
-<span class="sd">    **Members**</span>
-<span class="sd">    </span>
-<span class="sd">    ..  autosummary::</span>
-<span class="sd">    </span>
-<span class="sd">        resource</span>
-<span class="sd">        station_index</span>
-<span class="sd">        service_time</span>
-<span class="sd">        entity</span>
-<span class="sd">        check_resource_queue</span>
-<span class="sd">        _update_trace_record</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    
-    
-<div class="viewcode-block" id="ResourceFinishServiceEvent.__init__"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">,</span> <span class="n">station_index</span><span class="p">,</span> <span class="n">service_time</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a ResourceFinishServiceEvent object.</span>
-<span class="sd">        </span>
-<span class="sd">        *Arguments:*</span>
-<span class="sd">            ``resource`` (:class:`Resource`)</span>
-<span class="sd">                The Resource that will complete the service.</span>
-<span class="sd">            ``station_index`` (Integer)</span>
-<span class="sd">                The index number of the resource station.</span>
-<span class="sd">            ``service_time`` (Integer)</span>
-<span class="sd">                The time required to complete the service.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">mod</span><span class="p">,</span> <span class="s">&quot;Finished Service&quot;</span><span class="p">)</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">_resource</span> <span class="o">=</span> <span class="n">resource</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_station_index</span> <span class="o">=</span> <span class="n">station_index</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_service_time</span> <span class="o">=</span> <span class="n">service_time</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">station_index</span><span class="p">]</span><span class="o">.</span><span class="n">entity</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">append_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_resource_queue</span><span class="p">)</span>
-        </div>
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">resource</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The applicable Resource object.</span>
-<span class="sd">        </span>
-<span class="sd">        *Type*: class:`despy.core.resource.Resource`, read-only</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resource</span>
-    
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">station_index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Index number of the station that is finishing service.</span>
-<span class="sd">        </span>
-<span class="sd">        *Type:* Integer, read-only</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_station_index</span>
-    
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">service_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The elapsed service time.</span>
-<span class="sd">        </span>
-<span class="sd">        *Type:* Integer, read-only</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_service_time</span>
-    
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">entity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The entity that is the target of the activity.</span>
-<span class="sd">        </span>
-<span class="sd">        *Type:* :class:`despy.core.entity.Entity`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span>
-        
-<div class="viewcode-block" id="ResourceFinishServiceEvent.check_resource_queue"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent.check_resource_queue">[docs]</a>    <span class="k">def</span> <span class="nf">check_resource_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The event&#39;s callback method that checks the queue for a</span>
-<span class="sd">        waiting entity.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">finish_service</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">station_index</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">statistics</span><span class="p">[</span><span class="s">&quot;ServiceTime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                                                <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">,</span>
-                                                <span class="bp">self</span><span class="o">.</span><span class="n">service_time</span><span class="p">)</span>      
-        </div>
-<div class="viewcode-block" id="ResourceFinishServiceEvent._update_trace_record"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent._update_trace_record">[docs]</a>    <span class="k">def</span> <span class="nf">_update_trace_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_record</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Adds the entity name and service time to the trace report.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;duration_field&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_time</span>        
-        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;Entity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span>
-        <span class="k">return</span> <span class="n">trace_record</span>
-
-</div></div>
+</div>
 <div class="viewcode-block" id="ResourceQueue"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.resource.ResourceQueue">[docs]</a><span class="k">class</span> <span class="nc">ResourceQueue</span><span class="p">(</span><span class="n">Queue</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A queue that provides entities to a resource object.</span>
 <span class="sd">    </span>
@@ -622,10 +543,99 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="c">#Resources all busy</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-            <span class="k">return</span> <span class="bp">False</span>         
-    
+            <span class="k">return</span> <span class="bp">False</span>
+        
+</div></div>
+<div class="viewcode-block" id="ResourceFinishServiceEvent"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent">[docs]</a><span class="k">class</span> <span class="nc">ResourceFinishServiceEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Event that is called when the resource completes it&#39;s service.</span>
+<span class="sd">    </span>
+<span class="sd">    **Inherited Classes**</span>
+<span class="sd">      * :class:`despy.base.named_object.NamedObject`</span>
+<span class="sd">      * :class:`despy.core.component.Component`</span>
+<span class="sd">      * :class:`despy.core.event.Event`</span>
+<span class="sd">      </span>
+<span class="sd">    The ResourceFinishServiceEvent object occurs when the resource</span>
+<span class="sd">    finishes servicing the assigned entity (after the designated</span>
+<span class="sd">    service time has elapsed). </span>
+<span class="sd">    </span>
+<span class="sd">    **Members**</span>
+<span class="sd">    </span>
+<span class="sd">    ..  autosummary::</span>
+<span class="sd">    </span>
+<span class="sd">        resource</span>
+<span class="sd">        station_index</span>
+<span class="sd">        service_time</span>
+<span class="sd">        entity</span>
+<span class="sd">        check_resource_queue</span>
+<span class="sd">        _update_trace_record</span>
 
-        </div></div>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    
+<div class="viewcode-block" id="ResourceFinishServiceEvent.__init__"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">,</span> <span class="n">station_index</span><span class="p">,</span> <span class="n">service_time</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a ResourceFinishServiceEvent object.</span>
+<span class="sd">        </span>
+<span class="sd">        *Arguments:*</span>
+<span class="sd">            ``resource`` (:class:`Resource`)</span>
+<span class="sd">                The Resource that will complete the service.</span>
+<span class="sd">            ``station_index`` (Integer)</span>
+<span class="sd">                The index number of the resource station.</span>
+<span class="sd">            ``service_time`` (Integer)</span>
+<span class="sd">                The time required to complete the service.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">mod</span><span class="p">,</span> <span class="s">&quot;Finished Service&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resource</span> <span class="o">=</span> <span class="n">resource</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_station_index</span> <span class="o">=</span> <span class="n">station_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_service_time</span> <span class="o">=</span> <span class="n">service_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">stations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">station_index</span><span class="p">]</span><span class="o">.</span><span class="n">entity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">append_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_resource_queue</span><span class="p">)</span>
+        </div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">resource</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The applicable Resource object.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type*: class:`despy.core.resource.Resource`, read-only</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resource</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">station_index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Index number of the station that is finishing service.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type:* Integer, read-only</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_station_index</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">service_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The elapsed service time.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type:* Integer, read-only</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_service_time</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">entity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The entity that is the target of the activity.</span>
+<span class="sd">        </span>
+<span class="sd">        *Type:* :class:`despy.core.entity.Entity`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span>
+        
+<div class="viewcode-block" id="ResourceFinishServiceEvent.check_resource_queue"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent.check_resource_queue">[docs]</a>    <span class="k">def</span> <span class="nf">check_resource_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The event&#39;s callback method that checks the queue for a</span>
+<span class="sd">        waiting entity.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">finish_service</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">station_index</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">service_time</span><span class="p">)</span>    
+        </div>
+<div class="viewcode-block" id="ResourceFinishServiceEvent._update_trace_record"><a class="viewcode-back" href="../../../core/resourceFinishServiceEvent.html#despy.core.resource.ResourceFinishServiceEvent._update_trace_record">[docs]</a>    <span class="k">def</span> <span class="nf">_update_trace_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_record</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds the entity name and service time to the trace report.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;duration_field&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_time</span>        
+        <span class="n">trace_record</span><span class="p">[</span><span class="s">&#39;Entity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span>
+        <span class="k">return</span> <span class="n">trace_record</span>        </div></div>
 </pre></div>
 
           </div>

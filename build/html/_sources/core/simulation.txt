@@ -46,3 +46,4 @@ These methods are not intended to be called by the user. They
 should be considered private.
 
 ..  automethod:: Simulation._initialize_models
+..  automethod:: Simulation._finalize_models

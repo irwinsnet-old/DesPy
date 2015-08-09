@@ -122,14 +122,14 @@ class Generator(object):
     def write_files(self):
         """Creates trace and HTML reports in folder_basename location.
         """
-        #Finalize statistics
-
         
-        #Take no action if no output folder specified.
+        # Take no action if no output folder specified.
         if self.folder_basename is None:
             return None
         
-        #Write trace csv file.
+        # Finalize models and components.
+        
+        # Write trace csv file.
         self.set_full_path()
         self.trace.write_csv(self._full_path)
         
@@ -138,7 +138,7 @@ class Generator(object):
             self.report.append_output(self.sim.get_data())
             
             for _, component in model.components.items():
-                output = component.get_data(self._full_path)
+                output = component.get_data()
                 if output is not None:
                     self.report.append_output(output)
             

@@ -142,9 +142,9 @@ method in the subclass&#8217;s <code class="docutils literal"><span class="pre">
 <td>Subclasses should override this method with initialization code that will be executed prior to any events on the future event list (FEL).</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#despy.core.component.Component.finalize" title="despy.core.component.Component.finalize"><code class="xref py py-obj docutils literal"><span class="pre">finalize</span></code></a>()</td>
-<td>Subclasses should override this method with cleanup or other code that will be executed after all events on the FEL.</td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#despy.core.component.Component.get_data" title="despy.core.component.Component.get_data"><code class="xref py py-obj docutils literal"><span class="pre">get_data</span></code></a>(folder)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#despy.core.component.Component.get_data" title="despy.core.component.Component.get_data"><code class="xref py py-obj docutils literal"><span class="pre">get_data</span></code></a>()</td>
 <td>Subclasses should override this method to provide simulation output that will be included in the output report.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#despy.core.component.Component.__str__" title="despy.core.component.Component.__str__"><code class="xref py py-obj docutils literal"><span class="pre">__str__</span></code></a>()</td>
@@ -298,13 +298,11 @@ event list (FEL).</p>
 <dl class="method">
 <dt id="despy.core.component.Component.finalize">
 <code class="descclassname">Component.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component.finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.component.Component.finalize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Subclasses should override this method with cleanup or other
-code that will be executed after all events on the FEL.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="despy.core.component.Component.get_data">
-<code class="descclassname">Component.</code><code class="descname">get_data</code><span class="sig-paren">(</span><em>folder</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.component.Component.get_data" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Component.</code><code class="descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/core/component.html#Component.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.core.component.Component.get_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subclasses should override this method to provide simulation
 output that will be included in the output report.</p>
 <p>The output is a Python list of two-element tuples. The first

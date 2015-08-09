@@ -10,6 +10,12 @@ despy.core.model
 ..  autosummary::
 
     Model
+    
+..  todo
+
+    Refactor to use "_method_name" for callback methods and
+    "method_name" for overridden names. With this structure, user won't
+    have to remember when to call super().
 """
 
 from despy.core.simulation import Simulation
@@ -187,7 +193,6 @@ class Model(NamedObject):
         Next it will call whatever method was passed to
         ``set_initialize_method``.
         """
-        # Initialize components that are attached to the model.
         for _, component in self.components.items():
             component.initialize()
         
@@ -196,6 +201,14 @@ class Model(NamedObject):
             self._initialize(self)
         except:
             return
+        
+    def _finalize(self):
+        for _, component in self.components.items():
+            component._finalize()
+        try:
+            self.finalize()
+        except AttributeError:
+            pass
 
     def schedule(self, event, delay = 0,
                  priority = Priority.STANDARD):

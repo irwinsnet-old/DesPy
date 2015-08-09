@@ -84,10 +84,7 @@
 <span class="sd">    Queue</span>
 <span class="sd">    </span>
 <span class="sd">..  todo</span>
-
-<span class="sd">    Refactor so folder parameter doesn&#39;t need to be passed to the get</span>
-<span class="sd">    data method.</span>
-<span class="sd">    </span>
+<span class="sd">   </span>
 <span class="sd">    Add property and output for total items entering the queue.</span>
 <span class="sd">    </span>
 <span class="sd">    Add property and output for total items leaving the queue.</span>
@@ -95,6 +92,10 @@
 <span class="sd">    Add properties and output for max and min items in queue.</span>
 <span class="sd">    </span>
 <span class="sd">    Replace length property with __len__</span>
+<span class="sd">    </span>
+<span class="sd">    Remove reference to histogram folder from get_data method.</span>
+<span class="sd">    </span>
+<span class="sd">    Refactor time in queue to use Statistic class.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span><span class="p">,</span> <span class="n">namedtuple</span>
@@ -206,7 +207,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">times_in_queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="o">.</span><span class="n">now</span> <span class="o">-</span> <span class="n">item</span><span class="o">.</span><span class="n">time_in_fld</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">item_fld</span>
     </div>
-<div class="viewcode-block" id="Queue.get_data"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.queue.Queue.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.get_data"><a class="viewcode-back" href="../../../core/resourceQueue.html#despy.core.queue.Queue.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creates charts and adds data to final report.</span>
 <span class="sd">        </span>
 <span class="sd">        *Arguments*</span>
@@ -220,6 +221,7 @@
         <span class="c"># Create Time in Queue Histogram</span>
         <span class="n">qtimes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times_in_queue</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
         <span class="n">qtime_filename</span> <span class="o">=</span> <span class="s">&#39;{0}_time_in_q&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">_full_path</span>
         <span class="n">full_fname</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">Histogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times_in_queue</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span>
                        <span class="n">qtime_filename</span><span class="p">,</span>
                        <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>

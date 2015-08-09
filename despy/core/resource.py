@@ -34,6 +34,7 @@ from despy.core.component import Component
 from despy.core.event import Event
 from despy.core.queue import Queue
 from despy.output.statistic import Statistic
+from despy.output.report import Datatype
 
 class Resource(Component):
     """Represents a limited, real-world entity that provides a service.
@@ -86,11 +87,11 @@ class Resource(Component):
 
         super().__init__(model, name)
         
-        #Instance Attributes
+        # Instance Attributes
         self._capacity = capacity
         self._res_queue = None
         self._service_time = time_function
-        self.add_stat("ServiceTime", Statistic("Service Time", 'u4'))
+        self.add_stat("Service Time", Statistic("Service Time", 'u4'))
         
         self._Station_tuple = namedtuple('Station',
                                         ['entity', 'start_time'])
@@ -282,14 +283,19 @@ class Resource(Component):
                                                   service_time)
         self.mod.schedule(finish_event, service_time)
         
-    def finish_service(self, index):
+    def finish_service(self, index, service_time):
         """Remove entity from a resource station.
         
         *Arguments:*
             ``index``: (Integer)
                 The index number of the resource station.
         """
+        # Record service time and remove entity from resource station.
+        self.statistics["Service Time"].append(self.sim.now,
+                                              service_time)  
         self.stations[index] = self.Station_tuple(None, None)
+        
+        # Start service on next entity in queue.
         if self.res_queue:
             if self.res_queue.length > 0:
                 entity = self.res_queue.remove()
@@ -309,100 +315,15 @@ class Resource(Component):
         self.stations[index].entity = None
         self.stations[index].start_time = None
         return entity
-
-
-class ResourceFinishServiceEvent(Event):
-    """Event that is called when the resource completes it's service.
-    
-    **Inherited Classes**
-      * :class:`despy.base.named_object.NamedObject`
-      * :class:`despy.core.component.Component`
-      * :class:`despy.core.event.Event`
-      
-    The ResourceFinishServiceEvent object occurs when the resource
-    finishes servicing the assigned entity (after the designated
-    service time has elapsed). 
-    
-    **Members**
-    
-    ..  autosummary::
-    
-        resource
-        station_index
-        service_time
-        entity
-        check_resource_queue
-        _update_trace_record
-
-    """
-    
-    
-    def __init__(self, resource, station_index, service_time):
-        """Create a ResourceFinishServiceEvent object.
-        
-        *Arguments:*
-            ``resource`` (:class:`Resource`)
-                The Resource that will complete the service.
-            ``station_index`` (Integer)
-                The index number of the resource station.
-            ``service_time`` (Integer)
-                The time required to complete the service.
-        """
-        super().__init__(resource.mod, "Finished Service")
-        
-        self._resource = resource
-        self._station_index = station_index
-        self._service_time = service_time
-        self._entity = self.resource.stations[self.station_index].entity
-        self.append_callback(self.check_resource_queue)
-        
-    @property
-    def resource(self):
-        """The applicable Resource object.
-        
-        *Type*: class:`despy.core.resource.Resource`, read-only
-        """
-        return self._resource
-    
-    @property
-    def station_index(self):
-        """Index number of the station that is finishing service.
-        
-        *Type:* Integer, read-only
-        """
-        return self._station_index
-    
-    @property
-    def service_time(self):
-        """The elapsed service time.
-        
-        *Type:* Integer, read-only
-        """
-        return self._service_time
-    
-    @property
-    def entity(self):
-        """The entity that is the target of the activity.
-        
-        *Type:* :class:`despy.core.entity.Entity`
-        """
-        return self._entity
-        
-    def check_resource_queue(self):
-        """The event's callback method that checks the queue for a
-        waiting entity.
-        """
-        self.resource.finish_service(self.station_index)
-        self.resource.statistics["ServiceTime"].append(
-                                                self.sim.now,
-                                                self.service_time)      
-        
-    def _update_trace_record(self, trace_record):
-        """Adds the entity name and service time to the trace report.
-        """
-        trace_record['duration_field'] = self.service_time        
-        trace_record['Entity'] = self.entity
-        return trace_record
+     
+    def get_data(self):
+        st = self.get_stat("Service Time")
+        output = [(Datatype.title, "Resource: " + self.name),
+                  (Datatype.paragraph, self.description),
+                  (Datatype.param_list,
+                    [('Entities Served', st.total_length),
+                     ('Mean Service Time', st.mean)])]
+        return output
 
 
 class ResourceQueue(Queue):
@@ -550,7 +471,96 @@ class ResourceQueue(Queue):
         else:
             #Resources all busy
             self.add(entity)
-            return False         
-    
-
+            return False
         
+
+class ResourceFinishServiceEvent(Event):
+    """Event that is called when the resource completes it's service.
+    
+    **Inherited Classes**
+      * :class:`despy.base.named_object.NamedObject`
+      * :class:`despy.core.component.Component`
+      * :class:`despy.core.event.Event`
+      
+    The ResourceFinishServiceEvent object occurs when the resource
+    finishes servicing the assigned entity (after the designated
+    service time has elapsed). 
+    
+    **Members**
+    
+    ..  autosummary::
+    
+        resource
+        station_index
+        service_time
+        entity
+        check_resource_queue
+        _update_trace_record
+
+    """
+    
+    
+    def __init__(self, resource, station_index, service_time):
+        """Create a ResourceFinishServiceEvent object.
+        
+        *Arguments:*
+            ``resource`` (:class:`Resource`)
+                The Resource that will complete the service.
+            ``station_index`` (Integer)
+                The index number of the resource station.
+            ``service_time`` (Integer)
+                The time required to complete the service.
+        """
+        super().__init__(resource.mod, "Finished Service")
+        
+        self._resource = resource
+        self._station_index = station_index
+        self._service_time = service_time
+        self._entity = self.resource.stations[self.station_index].entity
+        self.append_callback(self.check_resource_queue)
+        
+    @property
+    def resource(self):
+        """The applicable Resource object.
+        
+        *Type*: class:`despy.core.resource.Resource`, read-only
+        """
+        return self._resource
+    
+    @property
+    def station_index(self):
+        """Index number of the station that is finishing service.
+        
+        *Type:* Integer, read-only
+        """
+        return self._station_index
+    
+    @property
+    def service_time(self):
+        """The elapsed service time.
+        
+        *Type:* Integer, read-only
+        """
+        return self._service_time
+    
+    @property
+    def entity(self):
+        """The entity that is the target of the activity.
+        
+        *Type:* :class:`despy.core.entity.Entity`
+        """
+        return self._entity
+        
+    def check_resource_queue(self):
+        """The event's callback method that checks the queue for a
+        waiting entity.
+        """
+        self.resource.finish_service(self.station_index,
+                                     self.service_time)    
+        
+    def _update_trace_record(self, trace_record):
+        """Adds the entity name and service time to the trace report.
+        """
+        trace_record['duration_field'] = self.service_time        
+        trace_record['Entity'] = self.entity
+        return trace_record        
