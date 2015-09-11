@@ -39,8 +39,8 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(testModel.name, "Test Model")
         self.assertEqual(testModel.sim.name, "Test Model:Default Simulation")
         self.assertEqual(testModel.sim.slug, "Test_Model_Default_Simulation")
-        self.assertEqual(len(testModel.sim.models), 1)
-        self.assertEqual(testModel.sim.models[0].name, "Test Model")
+        self.assertIsNotNone(testModel.sim.model)
+        self.assertEqual(testModel.sim.model.name, "Test Model")
         
         # Verify Exception if name is not a string.
         self.assertRaises(TypeError, dp.Model, 1)

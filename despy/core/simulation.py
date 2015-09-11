@@ -60,7 +60,7 @@ class Simulation(NamedObject):
     
     ..  autosummary::
     
-        models
+        model
         seed
         now
         pri
@@ -75,14 +75,14 @@ class Simulation(NamedObject):
         run
         get_data
         reset
-        _initialize_models
+        _initialize_model
         
     **Inherits**
       * :class:`despy.core.base.NamedObject`
     """
 
     def __init__(self, initial_time=0, name = "Simulation",
-                 description = None):
+                 description = None, model = None):
         """Creates and initializes the Simulation object.
         
         The Simulation object contains and manages the future event
@@ -99,7 +99,7 @@ class Simulation(NamedObject):
               type None.
         """
         super().__init__(name, description)
-        self._models = []
+        self._model = model
         self._seed = None
         self._evt = None
         self._run_start_time = None
@@ -111,12 +111,16 @@ class Simulation(NamedObject):
         self.reset(initial_time)
 
     @property
-    def models(self):
-        """Get a list of all models attached to the simulation.
+    def model(self):
+        """Get a list of all model attached to the simulation.
         
         *Returns:* A list of despy.model.Model objects.
         """
-        return self._models
+        return self._model
+    
+    @model.setter
+    def model(self, model):
+        self._model = model
     
     @property
     def seed(self):
@@ -235,15 +239,6 @@ class Simulation(NamedObject):
     @gen.setter
     def gen(self, generator):
         self._gen = generator
-    
-    def append_model(self, model):
-        """ Append a model object to the simulation.
-        
-        *Arguments*
-            model:
-                A :class:`~despy.core.model.Model` object.
-        """
-        self._models.append(model)
 
     def schedule(self, event, delay=0, priority=Priority.STANDARD):
         """ Add an event to the FEL.
@@ -297,21 +292,6 @@ class Simulation(NamedObject):
         except IndexError:
             return float('Infinity')
         
-    def _initialize_models(self):
-        """Run the ``initialize`` method on every attached model.
-        
-        ``_initialize_models`` is called by the
-        :meth:`.run` method. (INTERNAL)
-        """
-        for model in self._models:
-            if not model.initial_events_scheduled:
-                model.initialize()
-                model.initial_events_scheduled = True
-                
-    def _finalize_models(self):
-        for model in self._models:
-            model._finalize()
-
     def step(self):
         """Advance simulation time and execute the next event.
         
@@ -361,11 +341,11 @@ class Simulation(NamedObject):
         until the FEL is empty or until the time specified in the
         ``until`` parameter is reached.
         
-        Before executing any events, ``run`` will ensure models are
-        initialized by calling ``_initialize_models``.
-        `_initialize_models` ensures models are only initialized one
+        Before executing any events, ``run`` will ensure model are
+        initialized by calling ``_initialize_model``.
+        `_initialize_model` ensures model are only initialized one
         time, so users can call ``run`` multiple times and Despy will only
-        initialize the models on the first call to ``run`` (unless
+        initialize the model on the first call to ``run`` (unless
         :meth:`.reset` is called, of course).
 
         *Arguments*
@@ -381,7 +361,7 @@ class Simulation(NamedObject):
                 
         """
         self._run_start_time = datetime.datetime.today()
-        self._initialize_models()
+        self.model.initialize()
         
         # Step through events on FEL
         if isinstance(until, int):
@@ -398,7 +378,7 @@ class Simulation(NamedObject):
                 except NoEventsRemainingError:
                     break
         
-        self._finalize_models
+        self.model._finalize()
         self._run_stop_time = datetime.datetime.today()
         self.gen.write_files()
             
@@ -456,11 +436,11 @@ class Simulation(NamedObject):
         # event.
         self._counter = count()
         self.gen.trace.clear()
-        #self.gen = Generator(self) #Removed because created problems with trace
-        # start and stop times following a simulation reset. Not quite sure
-        # why it was here in first place.
-        for model in self.models:
-            model.initial_events_scheduled = False
+        
+        try:
+            self.model.initial_events_scheduled = False
+        except AttributeError:
+            pass
             
 class FutureEvent(namedtuple('FutureEventTuple',
                          ['time', 'event', 'priority'])):

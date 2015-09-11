@@ -127,22 +127,21 @@ class Generator(object):
         if self.folder_basename is None:
             return None
         
-        # Finalize models and components.
+        # Finalize model and components.
         
         # Write trace csv file.
         self.set_full_path()
         self.trace.write_csv(self._full_path)
         
         #Get data for all components and create HTML report.
-        for model in self._sim.models:
-            self.report.append_output(self.sim.get_data())
+        self.report.append_output(self.sim.get_data())
             
-            for _, component in model.components.items():
-                output = component.get_data()
-                if output is not None:
-                    self.report.append_output(output)
-            
-            self.report.write_report(self._full_path)
+        for _, component in self.sim.model.components.items():
+            output = component.get_data()
+            if output is not None:
+                self.report.append_output(output)
+        
+        self.report.write_report(self._full_path)
                  
     def set_full_path(self):
         """Adds time-stamp to end of Generator.folder_basename.

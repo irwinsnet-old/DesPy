@@ -80,14 +80,13 @@ class Model(NamedObject):
         # Create a default simulation if no simulation is provided
         # to the constructor.
         if sim == None:
-            simulation = Simulation()
+            simulation = Simulation(model = self)
             simulation.name = "{0}:Default Simulation".format(name)
             self._sim = simulation
         else:
             self._sim = sim
             
         #Create link to model in simulation object
-        self._sim.append_model(self)
         self._initialize = None
         
         # Convenience Attributes
@@ -193,6 +192,9 @@ class Model(NamedObject):
         Next it will call whatever method was passed to
         ``set_initialize_method``.
         """
+        if self.initial_events_scheduled:
+            return
+        
         for _, component in self.components.items():
             component.initialize()
         
@@ -201,6 +203,8 @@ class Model(NamedObject):
             self._initialize(self)
         except:
             return
+        
+        self.initial_events_scheduled = True
         
     def _finalize(self):
         for _, component in self.components.items():
