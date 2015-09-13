@@ -54,7 +54,7 @@ class Model(NamedObject):
 
     """
 
-    def __init__(self, name, sim = None, description = None):
+    def __init__(self, name, description = None):
         """Create a Model object.
         
         *Arguments*
@@ -76,22 +76,10 @@ class Model(NamedObject):
         self._initial_events_scheduled = False
         self._components = {}
         self._statistics = {}
-        
-        # Create a default simulation if no simulation is provided
-        # to the constructor.
-        if sim == None:
-            simulation = Simulation(model = self)
-            simulation.name = "{0}:Default Simulation".format(name)
-            self._sim = simulation
-        else:
-            self._sim = sim
+        self._sim = None
             
         #Create link to model in simulation object
         self._initialize = None
-        
-        # Convenience Attributes
-        self.gen = self._sim.gen
-        self.trace = self._sim.gen.trace
 
     @property
     def initial_events_scheduled(self):
@@ -124,6 +112,8 @@ class Model(NamedObject):
                 and execute the model's events.
         """
         self._sim = sim
+        for _, component in self.components.items():
+            component.sim = sim
         
     @property
     def components(self):
@@ -167,6 +157,10 @@ class Model(NamedObject):
         """
         del self._components[key]
 
+    def initialize(self):
+        pass
+        
+    
     def dp_initialize(self):
         """Initialize the model and all components.
         
@@ -176,9 +170,9 @@ class Model(NamedObject):
         """
         if self.initial_events_scheduled:
             return
-        
+
         for _, component in self.components.items():
-            component.initialize()
+            component.dp_initialize()
         
         if isinstance(self.initialize, types.FunctionType):
             self.initialize(self)
@@ -187,17 +181,14 @@ class Model(NamedObject):
         
         self.initial_events_scheduled = True
         
-    def initialize(self):
-        pass
+    def finalize(self):
+        pass        
         
     def dp_finalize(self):
         for _, component in self.components.items():
             component.dp_finalize()
 
         self.finalize()
-        
-    def finalize(self):
-        pass
     
     def reset(self):
         self.initial_events_scheduled = False

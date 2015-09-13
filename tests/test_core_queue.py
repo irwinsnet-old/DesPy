@@ -17,13 +17,14 @@ class testQueue(unittest.TestCase):
         #  works.
         print()
         model = dp.Model("Negative Time Model")
-        model.schedule(dp.Event(model, "Positive Time"),
+        sim = dp.Simulation(model = model)
+        sim.schedule(dp.Event(model, "Positive Time"),
                        priority = dp.Priority.LATE)        
-        model.schedule(dp.Event(model, "Negative Time"),
+        model.sim.schedule(dp.Event(model, "Negative Time"),
                        priority = dp.Priority.EARLY)
-        self.assertEqual(model.sim.peek(False), -0.1)
+        self.assertEqual(sim.peek(False), -0.1)
 
-        model.sim.run()
+        sim.run()
         
     def test_entity_counter(self):
         print()
@@ -37,6 +38,7 @@ class testQueue(unittest.TestCase):
     def test_queue(self):
         print()
         model = dp.Model("Q-test")
+        _ = dp.Simulation(model = model)
         qu = dp.Queue(model, "TestQueue")
         self.assertEqual(qu.name, "TestQueue")
         customers = []
@@ -106,19 +108,19 @@ class testQueue(unittest.TestCase):
         
         def __init__(self, name):
             super().__init__(name)
-            self.c_qu = dp.Queue(self, "Customer Queue")
-            self.customer_process = self.CustArrProcess(self)
-            self.service_process = self.CustServiceProcess(self)
+            self["c_qu"] = dp.Queue(self, "Customer Queue")
+            self["customer_process"] = self.CustArrProcess(self)
+            self["service_process"] = self.CustServiceProcess(self)
 
     def test_queue_in_simulation(self):
         print()
         self.QuModel.Customer.set_counter()
         model = self.QuModel("Queue Model")
-        simulation = model.sim
-        simulation.gen.folder_basename = \
+        sim = dp.Simulation(model = self.QuModel)
+        sim.gen.folder_basename = \
                 "C:/Projects/despy_output/queue_sim"
         
-        simulation.run(100)
+        sim.run(100)
         self.assertGreater(len(model.components), 0)
 
 if __name__ == '__main__':

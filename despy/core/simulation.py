@@ -28,7 +28,7 @@ despy.core.simulation
 
 from heapq import heappush, heappop
 from itertools import count
-import datetime, random
+import datetime, random, types
 from collections import namedtuple
 
 import numpy as np
@@ -99,11 +99,9 @@ class Simulation(NamedObject):
               type None.
         """
         super().__init__(name, description)
-        self._model = model
+        self.model = model
         self._seed = None
         self._evt = None
-        self._run_start_time = None
-        self._run_stop_time = None
         self._gen = Generator(self)
         self.gen.console_trace = True
         self.gen.folder_basename = None
@@ -121,6 +119,10 @@ class Simulation(NamedObject):
     @model.setter
     def model(self, model):
         self._model = model
+        try:
+            self._model.sim = self
+        except:
+            pass
     
     @property
     def seed(self):
@@ -389,7 +391,11 @@ class Simulation(NamedObject):
                 
         """
         self._run_start_time = datetime.datetime.today()
-        self.model.dp_initialize()
+        
+        if isinstance(self.model.dp_initialize, types.FunctionType):
+            self.model.dp_initialize(self.model)
+        else:
+            self.model.dp_initialize()
         
         # Step through events on FEL
         if isinstance(until, int):
@@ -406,7 +412,11 @@ class Simulation(NamedObject):
                 except NoEventsRemainingError:
                     break
         
-        self.model.dp_finalize()
+        if isinstance(self.model.dp_finalize, types.FunctionType):
+            self.model.dp_finalize(self.model)
+        else:
+            self.model.dp_finalize()
+            
         self._run_stop_time = datetime.datetime.today()
         self.gen.write_files()
             

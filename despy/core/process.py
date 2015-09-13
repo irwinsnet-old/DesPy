@@ -94,10 +94,8 @@ class Process(Component):
             
         if isinstance(self.generator, types.FunctionType):
             self._iterator = self.generator(self)
-            print("===Function Object===")
         elif isinstance(self.generator, types.MethodType):
             self._iterator = self.generator()
-            print("===Method Object===")
         else:
             raise TypeError(\
                 "generator_method must be a function or class method")

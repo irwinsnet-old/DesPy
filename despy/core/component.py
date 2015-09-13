@@ -2,6 +2,7 @@
 #   Version 0.1
 #   Released under the MIT License (MIT)
 #   Copyright (c) 2015, Stacy Irwin
+from test.test_smtplib import sim_auth
 """
 ********************
 despy.core.component
@@ -87,24 +88,20 @@ class Component(NamedObject):
         """
         super().__init__(name, description)
         
-        if isinstance(model, Model):
-            self._mod = model
-        else:
-                raise TypeError("Object passed to model argument " +\
-                    "must be instance of despy.core.model.Model")
-                
-        self._sim = model.sim
-        
         # Assigns an unused counter if this is the first component
         # instance.
         if not hasattr(self, "_count"):
             self.set_counter()
         self._number = self._get_next_number()
-        
-        # Adds the component to the model's internal dictionary of
-        # member components
-        model[self.id] = self
-        
+
+        if isinstance(model, Model):
+            self._mod = model
+            self.sim = model.sim
+            model[self.id] = self
+        else:
+                raise TypeError("Object passed to model argument " +\
+                    "must be instance of despy.core.model.Model")
+
         self._statistics = {}
         
     @property
@@ -116,6 +113,10 @@ class Component(NamedObject):
         *Returns:* :class:`despy.core.simulation.Simulation`
         """
         return self._sim
+    
+    @sim.setter
+    def sim(self, sim):
+        self._sim = sim
     
     @property
     def mod(self):
@@ -203,6 +204,9 @@ class Component(NamedObject):
         """
         return "{0}:{1}#{2}".format(self.mod, self.name, self._number)
     
+    def dp_initialize(self):
+        self.initialize()
+        
     def initialize(self):
         """Subclasses should override this method with initialization
         code that will be executed prior to any events on the future
