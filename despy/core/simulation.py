@@ -74,7 +74,7 @@ class Simulation(NamedObject):
         step
         run
         get_data
-        reset
+        initialize
         _initialize_model
         
     **Inherits**
@@ -108,7 +108,7 @@ class Simulation(NamedObject):
         self.gen.console_trace = True
         self.gen.folder_basename = None
         
-        self.reset(initial_time)
+        self.initialize(initial_time)
 
     @property
     def model(self):
@@ -239,6 +239,34 @@ class Simulation(NamedObject):
     @gen.setter
     def gen(self, generator):
         self._gen = generator
+        
+
+    def initialize(self, initial_time = 0):
+        """Reset the time to zero, allowing the simulation to be rerun.
+        
+        Sets the simulation time to zero. Also sets the model's
+        initial_events_scheduled attribute to ``False``, which will cause
+        the model's initialize methods to be executed the next time the
+        simulation is run. In addition:
+        
+            * Clears the FEL
+            * Erases the run_start_time and run_stop_time properties
+            * Clears the trace records
+            * Resets the main simulation counter
+            
+        *Arguments*
+            ``initial_time``: Set the simulation clock to the value
+            specified in ``initial_time``. Defaults to zero.
+        """
+        self._now = initial_time * 10
+        self._pri = 0
+        self._futureEventList = []
+        self._run_start_time = None
+        self._run_stop_time = None
+        #  Each event gets a unique integer ID, starting with 0 for the first
+        # event.
+        self._counter = count()
+        self.gen.trace.clear()
 
     def schedule(self, event, delay=0, priority=Priority.STANDARD):
         """ Add an event to the FEL.
@@ -346,7 +374,7 @@ class Simulation(NamedObject):
         `_initialize_model` ensures model are only initialized one
         time, so users can call ``run`` multiple times and Despy will only
         initialize the model on the first call to ``run`` (unless
-        :meth:`.reset` is called, of course).
+        :meth:`.initialize` is called, of course).
 
         *Arguments*
             until (integer):
@@ -361,7 +389,7 @@ class Simulation(NamedObject):
                 
         """
         self._run_start_time = datetime.datetime.today()
-        self.model.initialize()
+        self.model.dp_initialize()
         
         # Step through events on FEL
         if isinstance(until, int):
@@ -378,7 +406,7 @@ class Simulation(NamedObject):
                 except NoEventsRemainingError:
                     break
         
-        self.model._finalize()
+        self.model.dp_finalize()
         self._run_stop_time = datetime.datetime.today()
         self.gen.write_files()
             
@@ -409,38 +437,10 @@ class Simulation(NamedObject):
                      ('Elapsed Time', elapsed_time)])
                   ]
         return output
-
+    
     def reset(self, initial_time = 0):
-        """Reset the time to zero, allowing the simulation to be rerun.
-        
-        Sets the simulation time to zero. Also sets the model's
-        initial_events_scheduled attribute to ``False``, which will cause
-        the model's initialize methods to be executed the next time the
-        simulation is run. In addition:
-        
-            * Clears the FEL
-            * Erases the run_start_time and run_stop_time properties
-            * Clears the trace records
-            * Resets the main simulation counter
-            
-        *Arguments*
-            ``initial_time``: Set the simulation clock to the value
-            specified in ``initial_time``. Defaults to zero.
-        """
-        self._now = initial_time * 10
-        self._pri = 0
-        self._futureEventList = []
-        self._run_start_time = None
-        self._run_stop_time = None
-        #  Each event gets a unique integer ID, starting with 0 for the first
-        # event.
-        self._counter = count()
-        self.gen.trace.clear()
-        
-        try:
-            self.model.initial_events_scheduled = False
-        except AttributeError:
-            pass
+        self.initialize(initial_time)
+        self.model.reset()
             
 class FutureEvent(namedtuple('FutureEventTuple',
                          ['time', 'event', 'priority'])):

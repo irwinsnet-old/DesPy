@@ -213,7 +213,7 @@ class Component(NamedObject):
     def finalize(self):
         pass
     
-    def _finalize(self):
+    def dp_finalize(self):
         """The Simulation calls finalize methods after final event.
         """
         for _ , stat in self.statistics.items():

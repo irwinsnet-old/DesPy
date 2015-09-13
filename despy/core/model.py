@@ -17,6 +17,7 @@ despy.core.model
     "method_name" for overridden names. With this structure, user won't
     have to remember when to call super().
 """
+import types
 
 from despy.core.simulation import Simulation
 from despy.base.named_object import NamedObject
@@ -45,7 +46,6 @@ class Model(NamedObject):
         __setitem__
         __getitem__
         delete_component
-        set_initialize_method
         initialize
         schedule
         
@@ -166,31 +166,13 @@ class Model(NamedObject):
                 component that will be removed from the model.
         """
         del self._components[key]
-        
-    def set_initialize_method(self, initialize_method):
-        """Assign an initialize method to the model.
-        
-        The initialize method is run once, when the simulation is run,
-        before any events are executed. Initialize methods are often
-        used to add the first events to the FEL.
-        
-        Users can pass an initialize method to the model with this
-        method, or they can override the ``_initialize`` method in a
-        model subclass.
-        
-        *Arguments*
-            ``initialize_method`` (function)
-                A Python function that will initialize the model.
-        """
-        self._initialize = initialize_method
 
-    def initialize(self):
+    def dp_initialize(self):
         """Initialize the model and all components.
         
         This default initialize method will first call all of the
         components' ``initialize`` methods, in no particular order.
-        Next it will call whatever method was passed to
-        ``set_initialize_method``.
+        Next it will call Model.initialize().
         """
         if self.initial_events_scheduled:
             return
@@ -198,21 +180,27 @@ class Model(NamedObject):
         for _, component in self.components.items():
             component.initialize()
         
-        # Call the method passed to self.set_initialize_method.
-        try:
-            self._initialize(self)
-        except:
-            return
+        if isinstance(self.initialize, types.FunctionType):
+            self.initialize(self)
+        else:
+            self.initialize()
         
         self.initial_events_scheduled = True
         
-    def _finalize(self):
+    def initialize(self):
+        pass
+        
+    def dp_finalize(self):
         for _, component in self.components.items():
-            component._finalize()
-        try:
-            self.finalize()
-        except AttributeError:
-            pass
+            component.dp_finalize()
+
+        self.finalize()
+        
+    def finalize(self):
+        pass
+    
+    def reset(self):
+        self.initial_events_scheduled = False
 
     def schedule(self, event, delay = 0,
                  priority = Priority.STANDARD):

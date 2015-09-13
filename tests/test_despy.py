@@ -140,7 +140,7 @@ class testDespyb(unittest.TestCase):
         def initializeModel(self):
             self.schedule(evt1, 5)
         
-        model.set_initialize_method(initializeModel)
+        model.initialize = initializeModel
         model.sim.gen.folder_basename = \
                 "C:/Projects/despy_output/append_callback1"
         model.sim.run()
@@ -152,7 +152,7 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(evtTrace[1]['name'], "Callback Event")
         self.assertEqual(evtTrace[1]['time'], 15)
         
-        #Test reset method and until parameter
+        #Test initialize method and until parameter
         model.sim.reset()
         model.sim.gen.folder_basename = \
                 "C:/Projects/despy_output/append_callback2"
@@ -211,7 +211,7 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(model.trace.length, 50)
          
         # User can set trace start and stop times
-        model.sim.reset()
+        model.sim.initialize()
         model.sim.schedule(event, 0)
         model.trace.start = 200
         model.trace.stop = 300
@@ -222,7 +222,7 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(model.trace[9]['time'], 290)
         
         # Default maximum trace length is 1000 lines.
-        model.sim.reset()        
+        model.sim.initialize()        
         evt2 = dp.Event(model, "Trace Control Event Step=1")
         
         def event_callback2(self):
@@ -231,12 +231,12 @@ class testDespyb(unittest.TestCase):
         evt2.append_callback(event_callback2)
         model.sim.schedule(evt2, 0)
         model.trace.start = 0
-        model.trace.stop = 10000
+        model.trace.stop = 1000
         model.sim.run(5000)
         self.assertEqual(model.trace.length, 1000)
         
         # User can set maximum trace length
-        model.sim.reset()
+        model.sim.initialize()
         model.sim.schedule(evt2, 0)
         model.trace.max_length = 2000
         model.trace.start = 365
