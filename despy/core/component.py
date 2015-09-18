@@ -97,7 +97,6 @@ class Component(NamedObject):
         if isinstance(model, Model):
             self._mod = model
             self.sim = model.sim
-            model[self.id] = self
         else:
                 raise TypeError("Object passed to model argument " +\
                     "must be instance of despy.core.model.Model")

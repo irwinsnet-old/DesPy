@@ -396,7 +396,7 @@ class Simulation(NamedObject):
             self.model.dp_initialize(self.model)
         else:
             self.model.dp_initialize()
-        
+
         # Step through events on FEL
         if isinstance(until, int):
             stopTime = until

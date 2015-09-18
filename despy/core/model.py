@@ -19,7 +19,6 @@ despy.core.model
 """
 import types
 
-from despy.core.simulation import Simulation
 from despy.base.named_object import NamedObject
 from despy.base.utilities import Priority
 
@@ -73,13 +72,10 @@ class Model(NamedObject):
                 sentences.
         """
         super().__init__(name, description)
-        self._initial_events_scheduled = False
+        self.initial_events_scheduled = False
         self._components = {}
         self._statistics = {}
         self._sim = None
-            
-        #Create link to model in simulation object
-        self._initialize = None
 
     @property
     def initial_events_scheduled(self):
@@ -146,6 +142,9 @@ class Model(NamedObject):
                 An instance of ``Component`` or one of it's sub-classes.
         """
         return self._components[key]
+    
+    def __len__(self):
+        return len(self._components)
         
     def delete_component(self, key):
         """Remove a component from the model.
@@ -160,7 +159,6 @@ class Model(NamedObject):
     def initialize(self):
         pass
         
-    
     def dp_initialize(self):
         """Initialize the model and all components.
         

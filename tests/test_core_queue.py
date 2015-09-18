@@ -16,6 +16,7 @@ class testQueue(unittest.TestCase):
         #  FEL Time will be negative. Test verifies that negative time still
         #  works.
         print()
+        print("=====Negative Time Test=====")
         model = dp.Model("Negative Time Model")
         sim = dp.Simulation(model = model)
         sim.schedule(dp.Event(model, "Positive Time"),
@@ -28,6 +29,7 @@ class testQueue(unittest.TestCase):
         
     def test_entity_counter(self):
         print()
+        print("=====Entity Counter Test=====")
         model = dp.Model("Entity Counter Test")
         dp.Entity.set_counter()
         ent1 = dp.Entity(model, "Entity #1")
@@ -37,6 +39,7 @@ class testQueue(unittest.TestCase):
 
     def test_queue(self):
         print()
+        print("=====Test Queue=====")
         model = dp.Model("Q-test")
         _ = dp.Simulation(model = model)
         qu = dp.Queue(model, "TestQueue")
@@ -62,66 +65,66 @@ class testQueue(unittest.TestCase):
         entity = qu.remove()
         self.assertEqual(entity.name, "Customer #2")
         self.assertEqual(qu.length, 0)
-        
-    class QuModel(dp.Model):
-
-        class Customer(dp.Entity):
-            def __init__(self, model):
-                super().__init__(model, "Customer")
-                
-        def initialize(self):
-            self.customer_process.start(0, dp.Priority.EARLY)
-            self.service_process.start()
-            
-        class CustArrProcess(dp.Process):
-            def __init__(self, model):
-                super().__init__(model, "Customer Generator", self.generator)
-
-            def generator(self):
-                first_customer = self.mod.Customer(self.mod)
-                self.mod.c_qu.add(first_customer)                
-                yield self.schedule_timeout(\
-                        "Customer #{0} arrives.".format(first_customer.number))
-                while True:
-                    delay = round(stats.expon.rvs(scale = 3))
-                    customer = self.mod.Customer(self.mod)                    
-                    yield self.schedule_timeout(\
-                            "Customer #{0} arrives.".format(customer.number),
-                            delay)
-                    self.mod.c_qu.add(customer)
-                    self.mod.service_process.wake()
-        
-        class CustServiceProcess(dp.Process):
-            def __init__(self, model):
-                super().__init__(model, "Customer Server", self.generator)
-                
-            def generator(self):
-                while True:
-                    if self.mod.c_qu.length > 0:
-                        customer = self.mod.c_qu.remove()
-                        delay = round(stats.expon.rvs(scale = 4))
-                        yield self.schedule_timeout(\
-                                "Finished serving customer #{0}, Service time: {1}".format(customer.number, delay),
-                                delay)
-                    else:
-                        yield self.sleep()
-        
-        def __init__(self, name):
-            super().__init__(name)
-            self["c_qu"] = dp.Queue(self, "Customer Queue")
-            self["customer_process"] = self.CustArrProcess(self)
-            self["service_process"] = self.CustServiceProcess(self)
 
     def test_queue_in_simulation(self):
         print()
-        self.QuModel.Customer.set_counter()
-        model = self.QuModel("Queue Model")
-        sim = dp.Simulation(model = self.QuModel)
+        print("=====Test Queue In Simulation======")
+        Customer.set_counter()
+        model = QuModel("Queue Model")
+        sim = dp.Simulation(model = model)
         sim.gen.folder_basename = \
                 "C:/Projects/despy_output/queue_sim"
         
         sim.run(100)
         self.assertGreater(len(model.components), 0)
+        
+class QuModel(dp.Model):
+    def __init__(self, name):
+        super().__init__(name, "Queue Model Test")
+        self["c_qu"] = dp.Queue(self, "Customer Queue")
+        self["customer_process"] = CustArrProcess(self)
+        self["service_process"] = CustServiceProcess(self)
+        
+    def initialize(self):
+        self["customer_process"].start(0, dp.Priority.EARLY)
+        self["service_process"].start()
+
+class Customer(dp.Entity):
+    def __init__(self, model):
+        super().__init__(model, "Customer")
+        
+class CustArrProcess(dp.Process):
+    def __init__(self, model):
+        super().__init__(model, "Customer Generator", self.generator)
+
+    def generator(self):
+        first_customer = Customer(self.mod)
+        self.mod["c_qu"].add(first_customer)                
+        yield self.schedule_timeout(\
+                "Customer #{0} arrives.".format(first_customer.number))
+        while True:
+            delay = round(stats.expon.rvs(scale = 3))
+            customer = Customer(self.mod)                    
+            yield self.schedule_timeout(\
+                    "Customer #{0} arrives.".format(customer.number),
+                    delay)
+            self.mod["c_qu"].add(customer)
+            self.mod["service_process"].wake()
+
+class CustServiceProcess(dp.Process):
+    def __init__(self, model):
+        super().__init__(model, "Customer Server", self.generator)
+        
+    def generator(self):
+        while True:
+            if self.mod["c_qu"].length > 0:
+                customer = self.mod["c_qu"].remove()
+                delay = round(stats.expon.rvs(scale = 4))
+                yield self.schedule_timeout(\
+                        "Finished serving customer #{0}, Service time: {1}".format(customer.number, delay),
+                        delay)
+            else:
+                yield self.sleep()
 
 if __name__ == '__main__':
     unittest.main()
