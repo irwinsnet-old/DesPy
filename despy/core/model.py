@@ -110,6 +110,7 @@ class Model(NamedObject):
         self._sim = sim
         for _, component in self.components.items():
             component.sim = sim
+            print("Set sim for {}".format(component.name))
         
     @property
     def components(self):

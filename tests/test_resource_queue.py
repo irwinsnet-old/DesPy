@@ -6,7 +6,6 @@ from collections import OrderedDict
 import scipy.stats as stats
 
 import despy.core as dp
-from despy.output.statistic import Statistic
 
 class testResource(unittest.TestCase):
     def get_rnd_exp(self, user):
@@ -16,7 +15,12 @@ class testResource(unittest.TestCase):
         print()
         print("TEST RESOURCE INIT OUTPUT")
         model = dp.Model("Resource Test #1")
+
         server = dp.Resource(model, "Server", 2, self.get_rnd_exp)
+        model["server"] = server
+        _ = dp.Simulation(model = model)
+        self.assertEqual(len(model.components), 1)
+        print("server.sim: {}".format(server.sim))
         self.assertEqual(server.name, "Server")
         ents = []
         for _ in range(3):
@@ -41,11 +45,11 @@ class testResource(unittest.TestCase):
         self.assertEqual(position, 0)
          
         #   Check request(user)
-        position = server.request(ents[0])
-        self.assertEqual(position, 0)
-        self.assertTrue(server[position].entity is not None)
-        self.assertTrue(server[position].start_time is not None)
-        self.assertTrue(server[1].entity is None)
+#         position = server.request(ents[0])
+#         self.assertEqual(position, 0)
+#         self.assertTrue(server[position].entity is not None)
+#         self.assertTrue(server[position].start_time is not None)
+#         self.assertTrue(server[1].entity is None)
          
     class ResModel(dp.Model):
         class Customer(dp.Entity):
@@ -94,15 +98,17 @@ class testResource(unittest.TestCase):
         def __init__(self, name):
             super().__init__(name)
             self.server_resource = self.CustServiceResource(self, 2)
+            self["server_resource"] = self.server_resource
             self.customer_process = self.CustArrProcess(self,
                                                 self.server_resource)
+            self["customer_process"] = self.customer_process
      
     def test_resource_in_simulation(self):
         print()
         print("TEST RESOURCE IN SIMULATION OUTPUT")
         self.ResModel.Customer.set_counter()
         model = self.ResModel("Resource Model")
-        simulation = model.sim
+        simulation = dp.Simulation(model = model)
         simulation.gen.folder_basename = "C:/Projects/despy_output/resource_sim"
         simulation.run(100)
         

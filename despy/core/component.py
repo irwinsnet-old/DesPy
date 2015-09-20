@@ -96,12 +96,41 @@ class Component(NamedObject):
 
         if isinstance(model, Model):
             self._mod = model
-            self.sim = model.sim
         else:
                 raise TypeError("Object passed to model argument " +\
                     "must be instance of despy.core.model.Model")
 
+        self._components = {}
         self._statistics = {}
+        
+        
+    @property
+    def components(self):
+        return self._components
+    
+    def __setitem__(self, key, item):
+        """ Assign a component to the model using dictionary notation.
+        
+        *Arguments*
+            ``key`` (String)
+                The dictionary key that will be used to retrieve the
+                component.
+            ``item`` (:class:`despy.core.component.Component`)
+                An instance of ``Component`` or one of it's sub-classes.
+        """
+        self._components[key] = item
+
+    def __getitem__(self, key):
+        """Access a component using a dictionary key.
+        
+        *Arguments*
+            ``key`` (String)
+                The dictionary key that will be used to retrieve the
+                component.
+            ``item`` (:class:`despy.core.component.Component`)
+                An instance of ``Component`` or one of it's sub-classes.
+        """
+        return self._components[key]
         
     @property
     def sim(self):
@@ -115,7 +144,17 @@ class Component(NamedObject):
     
     @sim.setter
     def sim(self, sim):
+        """Assigns the model to a new simulation.
+        
+        *Arguments*
+            simulation (:class:`despy.core.simulation.Simulation`):
+                A simulation object that will run the simulation
+                and execute the model's events.
+        """
         self._sim = sim
+        for _, component in self.components.items():
+            component.sim = sim
+            print("Set sim for {}".format(component.name))
     
     @property
     def mod(self):

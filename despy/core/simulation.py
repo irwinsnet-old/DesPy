@@ -119,11 +119,9 @@ class Simulation(NamedObject):
     @model.setter
     def model(self, model):
         self._model = model
-        try:
-            self._model.sim = self
-        except:
-            pass
-    
+        if model is not None:
+            self.model.sim = self
+        
     @property
     def seed(self):
         """Calls seed methods in both numpy and standard random modules. 
@@ -390,6 +388,7 @@ class Simulation(NamedObject):
                 101 or later will not.
                 
         """
+        self.model.sim = self
         self._run_start_time = datetime.datetime.today()
         
         if isinstance(self.model.dp_initialize, types.FunctionType):

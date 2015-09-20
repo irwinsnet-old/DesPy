@@ -41,8 +41,9 @@ class testQueue(unittest.TestCase):
         print()
         print("=====Test Queue=====")
         model = dp.Model("Q-test")
-        _ = dp.Simulation(model = model)
         qu = dp.Queue(model, "TestQueue")
+        model["q"] = qu
+        _ = dp.Simulation(model = model)
         self.assertEqual(qu.name, "TestQueue")
         customers = []
         dp.Entity.set_counter()

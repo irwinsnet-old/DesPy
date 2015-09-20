@@ -84,7 +84,7 @@ class Resource(Component):
                 Optional, defaults to None. A function that returns the
                 time required to service an entity.
         """
-
+        print("In resource __init__()")
         super().__init__(model, name)
         
         # Instance Attributes
@@ -268,14 +268,14 @@ class Resource(Component):
         """
 
         #Assign entity to station
-        self.stations[index] = self.Station_tuple(entity, self._sim.now)
+        self.stations[index] = self.Station_tuple(entity, self.sim.now)
         
         #Create trace record for starting the service.
         fields = OrderedDict()
         fields[self.name + ' station'] = str(index)
         fields['Entity'] = self.stations[index].entity
         message = "Starting Service"
-        self._sim.gen.trace.add_message(message, fields)
+        self.sim.gen.trace.add_message(message, fields)
         
         #Get service time and schedule end of service on FEL.
         service_time = self.get_service_time(index)
@@ -367,7 +367,7 @@ class ResourceQueue(Queue):
                 
         """
         super().__init__(model, name)
-        self._resources = {}
+        #self._resources = {}
          
     @property
     def num_resources(self):
@@ -377,36 +377,36 @@ class ResourceQueue(Queue):
         resourceQueue object with the :meth:`.assign_resource` method.
         (Integer)
         """
-        return len(self._resources)
+        return len(self._components)
     
-    def __getitem__(self, index):
-        """Allows accessing resource positions with array brackets.
-        
-        A Python magic method that makes a ResourceQueue object act like an
-        array. It allows users to specify a resource position index in
-        square brackets on a ResourceQueue object.
-        
-        *Returns*: :class:`despy.core.resource.ResourceQueue.Resource`
-        """
-        return self._resources[index]
-    
-    def __setitem__(self, index, item):
-        """Allows setting resource positions with array brackets.
-        
-        *Arguments*
-            ``index``
-                An integer ranging from 1 to ``ResourceQueue.capacity``.
-                The ``index`` argument is specified inside square
-                brackets.
-            ``item``
-                An instance of
-                :class:`despy.core.resource.ResourceQueue.Resource`. The
-                ``item`` object is assigned with an equals sign::
-                
-                    ResourceQueue[index] = item
-        
-        """
-        self._resources[index] = item
+#     def __getitem__(self, index):
+#         """Allows accessing resource positions with array brackets.
+#         
+#         A Python magic method that makes a ResourceQueue object act like an
+#         array. It allows users to specify a resource position index in
+#         square brackets on a ResourceQueue object.
+#         
+#         *Returns*: :class:`despy.core.resource.ResourceQueue.Resource`
+#         """
+#         return self._resources[index]
+#     
+#     def __setitem__(self, index, item):
+#         """Allows setting resource positions with array brackets.
+#         
+#         *Arguments*
+#             ``index``
+#                 An integer ranging from 1 to ``ResourceQueue.capacity``.
+#                 The ``index`` argument is specified inside square
+#                 brackets.
+#             ``item``
+#                 An instance of
+#                 :class:`despy.core.resource.ResourceQueue.Resource`. The
+#                 ``item`` object is assigned with an equals sign::
+#                 
+#                     ResourceQueue[index] = item
+#         
+#         """
+#         self._resources[index] = item
         
     def assign_resource(self, resource):
         """Assign a resource to the resourceQueue object.
