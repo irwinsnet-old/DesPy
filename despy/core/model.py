@@ -40,7 +40,6 @@ class Model(NamedObject):
     
         name
         description
-        initial_events_scheduled
         sim
         __setitem__
         __getitem__
@@ -72,23 +71,9 @@ class Model(NamedObject):
                 sentences.
         """
         super().__init__(name, description)
-        self.initial_events_scheduled = False
         self._components = {}
         self._statistics = {}
         self._sim = None
-
-    @property
-    def initial_events_scheduled(self):
-        """Return True if the model's initialize method has
-        been executed.
-        
-        *Type:* (Boolean)
-        """
-        return self._initial_events_scheduled
-    
-    @initial_events_scheduled.setter
-    def initial_events_scheduled(self, scheduled):
-        self._initial_events_scheduled = scheduled
 
     @property
     def sim(self):
@@ -143,19 +128,6 @@ class Model(NamedObject):
                 An instance of ``Component`` or one of it's sub-classes.
         """
         return self._components[key]
-    
-    def __len__(self):
-        return len(self._components)
-        
-    def delete_component(self, key):
-        """Remove a component from the model.
-        
-        *Arguments*
-            ``key`` (String)
-                The dictionary key that will be used to identify the
-                component that will be removed from the model.
-        """
-        del self._components[key]
 
     def initialize(self):
         pass
@@ -167,7 +139,7 @@ class Model(NamedObject):
         components' ``initialize`` methods, in no particular order.
         Next it will call Model.initialize().
         """
-        if self.initial_events_scheduled:
+        if self.sim.is_rep_initialized():
             return
 
         for _, component in self.components.items():
@@ -178,8 +150,6 @@ class Model(NamedObject):
         else:
             self.initialize()
         
-        self.initial_events_scheduled = True
-        
     def finalize(self):
         pass        
         
@@ -188,22 +158,19 @@ class Model(NamedObject):
             component.dp_finalize()
 
         self.finalize()
-    
-    def reset(self):
-        self.initial_events_scheduled = False
 
-    def schedule(self, event, delay = 0,
-                 priority = Priority.STANDARD):
-        """Call the Simulation object's schedule() method.
-
-        *Arguments*
-            event (:class:`despy.core.event.Event`):
-                The event that will be scheduled.
-            delay (integer):
-                A non-negative integer that specifies how much time
-                will elapse before the event will be scheduled. The
-                delay plus the current time equals the absolute time
-                that the event will occur.
-
-        """
-        self._sim.schedule(event, delay, priority)
+#     def schedule(self, event, delay = 0,
+#                  priority = Priority.STANDARD):
+#         """Call the Simulation object's schedule() method.
+# 
+#         *Arguments*
+#             event (:class:`despy.core.event.Event`):
+#                 The event that will be scheduled.
+#             delay (integer):
+#                 A non-negative integer that specifies how much time
+#                 will elapse before the event will be scheduled. The
+#                 delay plus the current time equals the absolute time
+#                 that the event will occur.
+# 
+#         """
+#         self._sim.schedule(event, delay, priority)

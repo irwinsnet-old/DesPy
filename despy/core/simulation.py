@@ -267,6 +267,9 @@ class Simulation(NamedObject):
         # event.
         self._counter = count()
         self.gen.trace.clear()
+        
+    def is_rep_initialized(self):
+        return (len(self._futureEventList) > 0)
 
     def schedule(self, event, delay=0, priority=Priority.STANDARD):
         """ Add an event to the FEL.
@@ -449,7 +452,6 @@ class Simulation(NamedObject):
     
     def reset(self, initial_time = 0):
         self.initialize(initial_time)
-        self.model.reset()
             
 class FutureEvent(namedtuple('FutureEventTuple',
                          ['time', 'event', 'priority'])):

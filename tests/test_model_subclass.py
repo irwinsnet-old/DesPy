@@ -28,8 +28,7 @@ class testQueue(unittest.TestCase):
         self.assertIsInstance(p_model.initialize,
                               types.MethodType)
         
-        self.assertFalse(p_model.initial_events_scheduled)
-        self.assertEqual(len(p_model), 0)
+        self.assertEqual(len(p_model.components), 0)
         
         print()
         print("=====Testing Subclassed Model=====")
@@ -41,8 +40,7 @@ class testQueue(unittest.TestCase):
         self.assertEqual(sc_model.description, scm_description)
         
         self.assertIsInstance(sc_model.initialize, types.MethodType)
-        self.assertFalse(sc_model.initial_events_scheduled)
-        self.assertEqual(len(sc_model), 0)
+        self.assertEqual(len(sc_model.components), 0)
 
         print()
         print("=====Testing Queue Model=====")
@@ -52,8 +50,7 @@ class testQueue(unittest.TestCase):
         self.assertEqual(q_model.name, q_name)
         self.assertEqual(q_model.description, q_description)
         self.assertIsInstance(q_model.initialize, types.MethodType)
-        self.assertFalse(q_model.initial_events_scheduled)
-        self.assertEqual(len(q_model), 3)
+        self.assertEqual(len(q_model.components), 3)
         print(q_model.components)
         
         sim = dp.Simulation(model = q_model)

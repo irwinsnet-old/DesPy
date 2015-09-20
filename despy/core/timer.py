@@ -80,10 +80,11 @@ class RandomTimer(Component):
         else:
             raise TypeError("distribution parameter must be "
                             "type stats.rv_discrete")
-
-        # Schedule first event
-        evt = TimerEvent(name, self)
-        if immediate:
+            
+    def initialize(self):
+        evt = TimerEvent(self.name, self)
+        
+        if self.immediate:
             self.sim.schedule(evt, priority = self.priority)
         else:
             self._current_interval = self.distribution.rvs()
@@ -175,7 +176,7 @@ class TimerEvent(Event):
         """Reschedules event based on the RandomTimer's distribution.
         """
         self.timer._current_interval = self.timer.distribution.rvs()
-        self.sim.schedule(self, self.timer.current_interval,
+        self.mod.sim.schedule(self, self.timer.current_interval,
                           self.timer.priority)
         
     def _update_trace_record(self, trace_record):

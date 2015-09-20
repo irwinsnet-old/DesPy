@@ -2,11 +2,9 @@
 import unittest, statistics
 
 import scipy.stats as stats
-import numpy as np
 
 import despy.stats.random as dsr
-from despy.output.statistic import Statistic, StatisticNotFinalizedError
-
+from despy.output.statistic import Statistic
 
 
 class testStatistic(unittest.TestCase):

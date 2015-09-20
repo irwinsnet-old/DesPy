@@ -281,7 +281,7 @@ class Resource(Component):
         service_time = self.get_service_time(index)
         finish_event = ResourceFinishServiceEvent(self, index,
                                                   service_time)
-        self.mod.schedule(finish_event, service_time)
+        self.sim.schedule(finish_event, service_time)
         
     def finish_service(self, index, service_time):
         """Remove entity from a resource station.

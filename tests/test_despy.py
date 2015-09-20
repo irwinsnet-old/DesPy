@@ -73,16 +73,16 @@ class testDespyb(unittest.TestCase):
     ###Event Scheduling Tests
     def test_peek(self):
         model = dp.Model("Test Model #1")
-        _ = dp.Simulation(model = model)
+        sim = dp.Simulation(model = model)
         
         self.assertEqual(model.sim.peek(), float('Infinity'))
         
-        model.schedule(dp.Event(model, "Event #1"),
+        model.sim.schedule(dp.Event(model, "Event #1"),
                        20,
                        dp.Priority.EARLY)
         self.assertEqual(model.sim.peek(), 20)
         
-        model.schedule(dp.Event(model, "Event #2"), 5)
+        sim.schedule(dp.Event(model, "Event #2"), 5)
         self.assertEqual(model.sim.peek(), 5)
         
     def test_step(self):
@@ -96,7 +96,7 @@ class testDespyb(unittest.TestCase):
         #Schedule Events
         sim_ts.schedule(ev_late, 5, dp.Priority.LATE)
         model.sim.schedule(ev_early, 5, dp.Priority.EARLY)
-        model.schedule(ev_standard, 5, dp.Priority.STANDARD)
+        model.sim.schedule(ev_standard, 5, dp.Priority.STANDARD)
         
         #Verify events run in correct order.
         print()
@@ -111,10 +111,10 @@ class testDespyb(unittest.TestCase):
 
     def test_run(self):
         model = dp.Model("RunTest Model")
-        _ = dp.Simulation(model = model)
-        model.schedule(dp.Event(model, "First Event"), 0)
-        model.schedule(dp.Event(model, "Second Event"), 4)
-        model.schedule(dp.Event(model, "Third Event"), 8)
+        sim = dp.Simulation(model = model)
+        model.sim.schedule(dp.Event(model, "First Event"), 0)
+        sim.schedule(dp.Event(model, "Second Event"), 4)
+        sim.schedule(dp.Event(model, "Third Event"), 8)
         model.sim.run()
         
         self.assertEqual(model.sim.gen.trace.length, 3)
@@ -131,12 +131,12 @@ class testDespyb(unittest.TestCase):
         
         def evt1_callback(self):
             evt2 = dp.Event(self.mod, "Callback Event")
-            self.mod.schedule(evt2, 10)
+            self.mod.sim.schedule(evt2, 10)
 
         evt1.append_callback(evt1_callback)
         
         def initializeModel(self):
-            self.schedule(evt1, 5)
+            self.sim.schedule(evt1, 5)
         
         sim_tc = dp.Simulation(model = model)
         sim_tc.gen.folder_basename = ("C:/Projects/despy_output/"
@@ -165,8 +165,6 @@ class testDespyb(unittest.TestCase):
         
     def test_process(self):
         model = dp.Model("Process Model")
-        _ = dp.Simulation(model = model)
-        model.sim.seed = 42
         
         def generator(self):
             while True:
@@ -177,15 +175,17 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(process.id,  "Process_Model.Test_Process.1")
         model["Test Process"] = process
         self.assertEqual(len(model.components), 1)
+        _ = dp.Simulation(model = model)
+        model.sim.seed = 42
         process.start()
         model.sim.run(20)
         
     def test_simultaneous_events(self):
         #Test simultaneous, different events.
         model = dp.Model("Simultaneous Events Model")
-        _ = dp.Simulation(model = model)
-        model.schedule(dp.Event(model, "Event #1"), 3)
-        model.schedule(dp.Event(model, "Event #2"), 3)
+        sim = dp.Simulation(model = model)
+        model.sim.schedule(dp.Event(model, "Event #1"), 3)
+        sim.schedule(dp.Event(model, "Event #2"), 3)
         model.sim.run()
         self.assertEqual(model.sim.gen.trace.length, 2)
         
@@ -204,7 +204,7 @@ class testDespyb(unittest.TestCase):
         event = dp.Event(model, "Trace Control Event")
         
         def event_callback(self):
-            self.mod.schedule(self, 10)
+            self.mod.sim.schedule(self, 10)
             
         event.append_callback(event_callback)
         model.sim.schedule(event, 0)
@@ -229,7 +229,7 @@ class testDespyb(unittest.TestCase):
         evt2 = dp.Event(model, "Trace Control Event Step=1")
         
         def event_callback2(self):
-            self.mod.schedule(self, 1)
+            self.mod.sim.schedule(self, 1)
         
         evt2.append_callback(event_callback2)
         model.sim.schedule(evt2, 0)

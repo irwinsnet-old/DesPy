@@ -18,7 +18,7 @@ despy.core.event
 """
 
 import types
-from collections import OrderedDict, namedtuple
+from collections import OrderedDict
 
 from despy.core.component import Component
 

@@ -2,7 +2,6 @@
 #   Version 0.1
 #   Released under the MIT License (MIT)
 #   Copyright (c) 2015, Stacy Irwin
-from test.test_smtplib import sim_auth
 """
 ********************
 despy.core.component
@@ -19,6 +18,7 @@ despy.core.component
     
 """
 from itertools import count
+import types
 
 from despy.base.named_object import NamedObject
 from despy.core.model import Model
@@ -243,7 +243,16 @@ class Component(NamedObject):
         return "{0}:{1}#{2}".format(self.mod, self.name, self._number)
     
     def dp_initialize(self):
-        self.initialize()
+        if self.sim.is_rep_initialized():
+            return
+
+        for _, component in self.components.items():
+            component.dp_initialize()
+        
+        if isinstance(self.initialize, types.FunctionType):
+            self.initialize(self)
+        else:
+            self.initialize()
         
     def initialize(self):
         """Subclasses should override this method with initialization
@@ -258,6 +267,11 @@ class Component(NamedObject):
     def dp_finalize(self):
         """The Simulation calls finalize methods after final event.
         """
+        for _, component in self.components.items():
+            component.dp_finalize()
+
+        self.finalize()
+        
         for _ , stat in self.statistics.items():
             stat.finalize()
     

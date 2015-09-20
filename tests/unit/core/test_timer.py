@@ -24,11 +24,12 @@ class testTimer(unittest.TestCase):
         print()
         print("=====Testing RandomTimer with immediate = False========")
         model1 = dp.Model("Timer Test Model-A")
-        model1.sim.seed = 731
         dist1 = stats.poisson(10)
-        _ = dp.RandomTimer(model1, "Timer-A", dist1, timer_callback)
+        model1["timer"] = dp.RandomTimer(model1, "Timer-A", dist1, timer_callback)
+        sim = dp.Simulation(model = model1)
+        model1.sim.seed = 731
         self.assertEqual(len(model1.components), 1)
-        model1.sim.run(100)
+        sim.run(100)
         
         trace1 = model1.sim.gen.trace
         self.assertEqual(trace1[0]['time'], 7)
@@ -39,10 +40,12 @@ class testTimer(unittest.TestCase):
         print()
         print("=====Testing RandomTimer with immediate = True=========")
         model2 = dp.Model("Timer Test Model-B")
-        model2.sim.seed = 704
         dist2 = stats.poisson(150)
-        _ = dp.RandomTimer(model2, "Timer-B", dist2, timer_callback)
-        model2.sim.run(1000)
+        model2["Timer"] = dp.RandomTimer(model2, "Timer-B", dist2,
+                                         timer_callback)
+        sim = dp.Simulation(model = model2)
+        sim.seed = 704
+        sim.run(1000)
         trace2 = model2.sim.gen.trace
         self.assertEqual(trace2[0]['time'], 142)
         self.assertEqual(trace2[1]['time'], 285)
@@ -52,11 +55,14 @@ class testTimer(unittest.TestCase):
         print()
         print("=====Testing Priority Attribute =======================")
         model3 = dp.Model("Timer Test Model-C")
-        model3.sim.seed = 731
+
         dist3 = drand.get_empirical_pmf([5, 10], [0.3, 0.7])
-        _ = dp.RandomTimer(model3, "Timer-C", dist3, timer_callback,
-                           priority = dp.Priority.LATE)
-        model3.sim.run(100)
+        model3["timer"] = dp.RandomTimer(model3, "Timer-C", dist3,
+                                timer_callback,
+                                priority = dp.Priority.LATE)
+        sim = dp.Simulation(model = model3)
+        model3.sim.seed = 731        
+        sim.run(100)
         trace3 = model3.sim.gen.trace
         self.assertEqual(trace3[0]['priority'], 1)
         self.assertEqual(trace3[1]['priority'], 1)
