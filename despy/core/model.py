@@ -20,6 +20,7 @@ despy.core.model
 import types
 
 from despy.base.named_object import NamedObject
+from despy.core.simulation import Session
 
 class Model(NamedObject):
     """Represents the logical elements of the real-world system.
@@ -72,7 +73,7 @@ class Model(NamedObject):
         super().__init__(name, description)
         self._components = {}
         self._statistics = {}
-        self._sim = None
+        self.session = Session()
 
     @property
     def sim(self):
@@ -80,21 +81,21 @@ class Model(NamedObject):
         
         *Returns:* (:class:`despy.core.simulation.Simulation`)
         """
-        return self._sim
-    
-    @sim.setter
-    def sim(self, sim):
-        """Assigns the model to a new simulation.
-        
-        *Arguments*
-            simulation (:class:`despy.core.simulation.Simulation`):
-                A simulation object that will run the simulation
-                and execute the model's events.
-        """
-        self._sim = sim
-        for _, component in self.components.items():
-            component.sim = sim
-            print("Set sim for {}".format(component.name))
+        return self.session.sim
+#     
+#     @sim.setter
+#     def sim(self, sim):
+#         """Assigns the model to a new simulation.
+#         
+#         *Arguments*
+#             simulation (:class:`despy.core.simulation.Simulation`):
+#                 A simulation object that will run the simulation
+#                 and execute the model's events.
+#         """
+#         self._sim = sim
+#         for _, component in self.components.items():
+#             component.sim = sim
+#             print("Set sim for {}".format(component.name))
         
     @property
     def components(self):

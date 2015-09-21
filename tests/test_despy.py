@@ -51,13 +51,13 @@ class testDespyb(unittest.TestCase):
         # Verify Exception if description is not a string.
         self.assertRaises(TypeError, dp.Model, ("Model Name", None, 365))
         
-        #Replace simulation.
+        #Check simulation.
         exp = dp.Simulation()
         exp.name = "New Simulation C\\C/C|C*C?C"
         self.assertEqual(exp.slug, "New_Simulation_C_C_C_C_C_C")
         self.assertIsInstance(testModel.sim, dp.Simulation)
-        self.assertIsNot(testModel.sim, exp)
-        testModel.sim = exp
+#         self.assertIsNot(testModel.sim, exp)
+        testModel.session.sim = exp
         self.assertIs(testModel.sim, exp)
         
         # Test description.

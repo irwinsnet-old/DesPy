@@ -20,8 +20,8 @@ despy.core.component
 from itertools import count
 import types
 
+from despy.core.simulation import Session
 from despy.base.named_object import NamedObject
-from despy.core.model import Model
 
 class Component(NamedObject):
     """A base class that provides object counters and other attributes.
@@ -94,17 +94,10 @@ class Component(NamedObject):
             self.set_counter()
         self._number = self._get_next_number()
 
-#         print(model.__class__)
-#         if (issubclass(model.__class__, Model)) or \
-#             (issubclass(model.__class__, Component)):
-#             self._mod = model
-#         else:
-#                 raise TypeError("Object passed to model argument "
-#                                 "must be instance of"
-#                                 "despy.core.component.Component")
-
         self._components = {}
         self._statistics = {}
+        
+        self.session = Session()
         
         
     @property
@@ -144,21 +137,21 @@ class Component(NamedObject):
         
         *Returns:* :class:`despy.core.simulation.Simulation`
         """
-        return self._sim
-    
-    @sim.setter
-    def sim(self, sim):
-        """Assigns the model to a new simulation.
-        
-        *Arguments*
-            simulation (:class:`despy.core.simulation.Simulation`):
-                A simulation object that will run the simulation
-                and execute the model's events.
-        """
-        self._sim = sim
-        for _, component in self.components.items():
-            component.sim = sim
-            print("Set sim for {}".format(component.name))
+        return self.session.sim
+#     
+#     @sim.setter
+#     def sim(self, sim):
+#         """Assigns the model to a new simulation.
+#         
+#         *Arguments*
+#             simulation (:class:`despy.core.simulation.Simulation`):
+#                 A simulation object that will run the simulation
+#                 and execute the model's events.
+#         """
+#         self._sim = sim
+#         for _, component in self.components.items():
+#             component.sim = sim
+#             print("Set sim for {}".format(component.name))
     
     @property
     def mod(self):

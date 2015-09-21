@@ -47,6 +47,40 @@ class NoEventsRemainingError(Exception):
     """
     pass
 
+class Session:
+    class __Session:
+        def __init__(self):
+            self._sim = None
+            self._model = None
+            
+        @property
+        def sim(self):
+            return self._sim
+        
+        @sim.setter
+        def sim(self, sim):
+            self._sim = sim
+            
+        @property
+        def mod(self):
+            return self._model
+        
+        @mod.setter
+        def mod(self, model):
+            self._model = model
+    
+    _instance = None
+    
+    def __init__(self):
+        if Session._instance is None:
+            Session._instance = Session.__Session()
+    
+    def __getattr__(self, name):
+        return getattr(self._instance, name)
+    
+    def __setattr__(self, name, value):
+        setattr(self._instance, name, value)
+
 
 class Simulation(NamedObject):
     """Schedule events and manage the future event list (FEL).
@@ -107,6 +141,9 @@ class Simulation(NamedObject):
         self.gen.folder_basename = None
         
         self.initialize(initial_time)
+        
+        self.session = Session()
+        self.session.sim = self
 
     @property
     def model(self):
@@ -119,8 +156,6 @@ class Simulation(NamedObject):
     @model.setter
     def model(self, model):
         self._model = model
-        if model is not None:
-            self.model.sim = self
         
     @property
     def seed(self):
@@ -391,7 +426,6 @@ class Simulation(NamedObject):
                 101 or later will not.
                 
         """
-        self.model.sim = self
         self._run_start_time = datetime.datetime.today()
         
         if isinstance(self.model.dp_initialize, types.FunctionType):
