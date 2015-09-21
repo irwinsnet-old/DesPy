@@ -20,7 +20,6 @@ despy.core.model
 import types
 
 from despy.base.named_object import NamedObject
-from despy.base.utilities import Priority
 
 class Model(NamedObject):
     """Represents the logical elements of the real-world system.
@@ -116,6 +115,7 @@ class Model(NamedObject):
                 An instance of ``Component`` or one of it's sub-classes.
         """
         self._components[key] = item
+        item.mod = self
 
     def __getitem__(self, key):
         """Access a component using a dictionary key.

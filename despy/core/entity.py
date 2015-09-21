@@ -44,3 +44,4 @@ class Entity(Component):
         """
         
         super().__init__(model, name, description)
+        self.mod = model

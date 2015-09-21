@@ -66,6 +66,7 @@ class Event(Component):
         """
 
         super().__init__(model, name)
+        self.mod = model
         self.description = "Event"
         self._callbacks = []
         self._trace_fields = OrderedDict()

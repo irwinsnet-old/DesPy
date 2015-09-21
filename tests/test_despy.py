@@ -172,8 +172,8 @@ class testDespyb(unittest.TestCase):
                 yield self.schedule_timeout("Repeated Event", delay)
         
         process = dp.Process(model, "Test Process", generator)
-        self.assertEqual(process.id,  "Process_Model.Test_Process.1")
         model["Test Process"] = process
+        self.assertEqual(process.id,  "Process_Model.Test_Process.1")
         self.assertEqual(len(model.components), 1)
         _ = dp.Simulation(model = model)
         model.sim.seed = 42

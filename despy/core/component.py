@@ -94,11 +94,14 @@ class Component(NamedObject):
             self.set_counter()
         self._number = self._get_next_number()
 
-        if isinstance(model, Model):
-            self._mod = model
-        else:
-                raise TypeError("Object passed to model argument " +\
-                    "must be instance of despy.core.model.Model")
+#         print(model.__class__)
+#         if (issubclass(model.__class__, Model)) or \
+#             (issubclass(model.__class__, Component)):
+#             self._mod = model
+#         else:
+#                 raise TypeError("Object passed to model argument "
+#                                 "must be instance of"
+#                                 "despy.core.component.Component")
 
         self._components = {}
         self._statistics = {}
@@ -119,6 +122,7 @@ class Component(NamedObject):
                 An instance of ``Component`` or one of it's sub-classes.
         """
         self._components[key] = item
+        item.mod = self
 
     def __getitem__(self, key):
         """Access a component using a dictionary key.
@@ -166,6 +170,10 @@ class Component(NamedObject):
         *Returns* :class:`despy.core.model.Model`
         """
         return self._mod
+    
+    @mod.setter
+    def mod(self, model):
+        self._mod = model
     
     @property
     def number(self):
