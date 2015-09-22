@@ -43,5 +43,5 @@ class Entity(Component):
                 A descriptive paragraph. Optional.
         """
         
-        super().__init__(model, name, description)
+        super().__init__(name, description)
         self.mod = model

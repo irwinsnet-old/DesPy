@@ -85,7 +85,7 @@ class Resource(Component):
                 time required to service an entity.
         """
         print("In resource __init__()")
-        super().__init__(model, name)
+        super().__init__(name)
         
         # Instance Attributes
         self._capacity = capacity
@@ -379,35 +379,6 @@ class ResourceQueue(Queue):
         """
         return len(self._components)
     
-#     def __getitem__(self, index):
-#         """Allows accessing resource positions with array brackets.
-#         
-#         A Python magic method that makes a ResourceQueue object act like an
-#         array. It allows users to specify a resource position index in
-#         square brackets on a ResourceQueue object.
-#         
-#         *Returns*: :class:`despy.core.resource.ResourceQueue.Resource`
-#         """
-#         return self._resources[index]
-#     
-#     def __setitem__(self, index, item):
-#         """Allows setting resource positions with array brackets.
-#         
-#         *Arguments*
-#             ``index``
-#                 An integer ranging from 1 to ``ResourceQueue.capacity``.
-#                 The ``index`` argument is specified inside square
-#                 brackets.
-#             ``item``
-#                 An instance of
-#                 :class:`despy.core.resource.ResourceQueue.Resource`. The
-#                 ``item`` object is assigned with an equals sign::
-#                 
-#                     ResourceQueue[index] = item
-#         
-#         """
-#         self._resources[index] = item
-        
     def assign_resource(self, resource):
         """Assign a resource to the resourceQueue object.
         

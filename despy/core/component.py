@@ -66,7 +66,7 @@ class Component(NamedObject):
     """
     
     
-    def __init__(self, model, name, description = None):
+    def __init__(self, name, description = None):
         """Creates an instance of a *Component* object.
         
         Except for the simulation and model classes, all members of the
@@ -138,20 +138,6 @@ class Component(NamedObject):
         *Returns:* :class:`despy.core.simulation.Simulation`
         """
         return self.session.sim
-#     
-#     @sim.setter
-#     def sim(self, sim):
-#         """Assigns the model to a new simulation.
-#         
-#         *Arguments*
-#             simulation (:class:`despy.core.simulation.Simulation`):
-#                 A simulation object that will run the simulation
-#                 and execute the model's events.
-#         """
-#         self._sim = sim
-#         for _, component in self.components.items():
-#             component.sim = sim
-#             print("Set sim for {}".format(component.name))
     
     @property
     def mod(self):

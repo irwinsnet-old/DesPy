@@ -81,7 +81,7 @@ class testQueue(unittest.TestCase):
         
 class QuModel(dp.Component):
     def __init__(self, name):
-        super().__init__(None, name, "Queue Model Test")
+        super().__init__(name, "Queue Model Test")
         self["c_qu"] = dp.Queue(self, "Customer Queue")
         self["customer_process"] = CustArrProcess(self)
         self["service_process"] = CustServiceProcess(self)

@@ -23,7 +23,7 @@ class testTimer(unittest.TestCase):
         #Test a basic timer.
         print()
         print("=====Testing RandomTimer with immediate = False========")
-        model1 = dp.Model("Timer Test Model-A")
+        model1 = dp.Component("Timer Test Model-A")
         dist1 = stats.poisson(10)
         model1["timer"] = dp.RandomTimer(model1, "Timer-A", dist1, timer_callback)
         sim = dp.Simulation(model = model1)

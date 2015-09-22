@@ -82,7 +82,7 @@ class Process(Component):
                 Function object that uses the Python ``yield`` statement
                 to pause until some time in the future. Optional.
         """
-        super().__init__(model, name)
+        super().__init__(name)
         
         self.processTuple = namedtuple('processTuple', ['event_',
                                                         'delay_',

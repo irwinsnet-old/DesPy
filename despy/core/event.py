@@ -65,7 +65,7 @@ class Event(Component):
                 trace record for this event.
         """
 
-        super().__init__(model, name)
+        super().__init__(name)
         self.mod = model
         self.description = "Event"
         self._callbacks = []

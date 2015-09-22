@@ -75,7 +75,7 @@ class Queue(Component):
                 Optional. Default is None. 
         """
         
-        super().__init__(model, name, description = description)
+        super().__init__(name, description = description)
         if isinstance(max_length, int):
             self._queue = deque(max_length)
         else:

@@ -66,7 +66,7 @@ class RandomTimer(Component):
         """
         
         # Set some attributes
-        super().__init__(model, name, description = description)
+        super().__init__(name, description = description)
         self._immediate = immediate
         self.priority = priority
         self.callback = callback
