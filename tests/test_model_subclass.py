@@ -11,7 +11,7 @@ import scipy.stats as stats
 
 import despy.core as dp
 
-class SubClassModel(dp.Model):
+class SubClassModel(dp.Component):
     def initialize(self):
         pass
 
@@ -22,7 +22,7 @@ class testQueue(unittest.TestCase):
         print("=====Testing Plain Model=====")
         pm_name = "Plain Model"
         pm_description = "Verifyin plain model attributes."
-        p_model = dp.Model(pm_name, description = pm_description)
+        p_model = dp.Component(pm_name, description = pm_description)
         self.assertEqual(p_model.name, pm_name)
         self.assertEqual(p_model.description, pm_description)
         self.assertIsInstance(p_model.initialize,
@@ -58,7 +58,7 @@ class testQueue(unittest.TestCase):
         sim.run(100)
         
         
-class QModel(dp.Model):
+class QModel(dp.Component):
     def __init__(self, name, description):
         super().__init__(name, description)
         self["c_q"] = dp.Queue(self, "Customer Queue")

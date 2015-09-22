@@ -39,7 +39,7 @@ class testTimer(unittest.TestCase):
         #Test timer with immediate = True
         print()
         print("=====Testing RandomTimer with immediate = True=========")
-        model2 = dp.Model("Timer Test Model-B")
+        model2 = dp.Component("Timer Test Model-B")
         dist2 = stats.poisson(150)
         model2["Timer"] = dp.RandomTimer(model2, "Timer-B", dist2,
                                          timer_callback)
@@ -54,7 +54,7 @@ class testTimer(unittest.TestCase):
         #Test timer with Priority.LATE
         print()
         print("=====Testing Priority Attribute =======================")
-        model3 = dp.Model("Timer Test Model-C")
+        model3 = dp.Component("Timer Test Model-C")
 
         dist3 = drand.get_empirical_pmf([5, 10], [0.3, 0.7])
         model3["timer"] = dp.RandomTimer(model3, "Timer-C", dist3,

@@ -14,7 +14,7 @@ class testResource(unittest.TestCase):
     def test_resource_init(self):
         print()
         print("TEST RESOURCE INIT OUTPUT")
-        model = dp.Model("Resource Test #1")
+        model = dp.Component("Resource Test #1")
 
         server = dp.Resource(model, "Server", 2, self.get_rnd_exp)
         model["server"] = server
@@ -45,13 +45,13 @@ class testResource(unittest.TestCase):
         self.assertEqual(position, 0)
          
         #   Check request(user)
-#         position = server.request(ents[0])
-#         self.assertEqual(position, 0)
-#         self.assertTrue(server[position].entity is not None)
-#         self.assertTrue(server[position].start_time is not None)
-#         self.assertTrue(server[1].entity is None)
+        position = server.request(ents[0])
+        self.assertEqual(position, 0)
+        self.assertTrue(server[position].entity is not None)
+        self.assertTrue(server[position].start_time is not None)
+        self.assertTrue(server[1].entity is None)
          
-    class ResModel(dp.Model):
+    class ResModel(dp.Component):
         class Customer(dp.Entity):
             def __init__(self, model):
                 super().__init__(model, "Customer")

@@ -35,7 +35,7 @@ class testDespyb(unittest.TestCase):
     ### Model Class Tests
     def test_name(self):
         #Create model with default simulation.
-        testModel = dp.Model("Test Model")
+        testModel = dp.Component("Test Model")
         _ = dp.Simulation(name = "Test Simulation",
                                model = testModel)
         self.assertEqual(testModel.name, "Test Model")
@@ -45,11 +45,11 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(testModel.sim.model.name, "Test Model")
         
         # Verify Exception if name is not a string.
-        self.assertRaises(TypeError, dp.Model, 1)
-        self.assertRaises(TypeError, dp.Model, None)
+        self.assertRaises(TypeError, dp.Component, 1)
+        self.assertRaises(TypeError, dp.Component, None)
         
         # Verify Exception if description is not a string.
-        self.assertRaises(TypeError, dp.Model, ("Model Name", None, 365))
+        self.assertRaises(TypeError, dp.Component, ("Model Name", None, 365))
         
         #Check simulation.
         exp = dp.Simulation()
@@ -72,7 +72,7 @@ class testDespyb(unittest.TestCase):
 
     ###Event Scheduling Tests
     def test_peek(self):
-        model = dp.Model("Test Model #1")
+        model = dp.Component("Test Model #1")
         sim = dp.Simulation(model = model)
         
         self.assertEqual(model.sim.peek(), float('Infinity'))
@@ -87,7 +87,7 @@ class testDespyb(unittest.TestCase):
         
     def test_step(self):
         #Create model and events.
-        model = dp.Model("Test Model #2")
+        model = dp.Component("Test Model #2")
         sim_ts = dp.Simulation(model = model)
         ev_early = dp.Event(model, "Early Event")
         ev_standard = dp.Event(model, "Standard Event")
@@ -110,7 +110,7 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(exp.now, 5)
 
     def test_run(self):
-        model = dp.Model("RunTest Model")
+        model = dp.Component("RunTest Model")
         sim = dp.Simulation(model = model)
         model.sim.schedule(dp.Event(model, "First Event"), 0)
         sim.schedule(dp.Event(model, "Second Event"), 4)
@@ -126,7 +126,7 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(evtTrace[2]['time'], 8)
 
     def test_appendCallback(self):
-        model = dp.Model("AppendCallback Model")
+        model = dp.Component("AppendCallback Model")
         evt1 = dp.Event(model, "First Event")
         
         def evt1_callback(self):
@@ -164,7 +164,7 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(evtTrace.length, 2)
         
     def test_process(self):
-        model = dp.Model("Process Model")
+        model = dp.Component("Process Model")
         
         def generator(self):
             while True:
@@ -173,7 +173,6 @@ class testDespyb(unittest.TestCase):
         
         process = dp.Process(model, "Test Process", generator)
         model["Test Process"] = process
-        self.assertEqual(process.id,  "Process_Model.Test_Process.1")
         self.assertEqual(len(model.components), 1)
         _ = dp.Simulation(model = model)
         model.sim.seed = 42
@@ -182,7 +181,7 @@ class testDespyb(unittest.TestCase):
         
     def test_simultaneous_events(self):
         #Test simultaneous, different events.
-        model = dp.Model("Simultaneous Events Model")
+        model = dp.Component("Simultaneous Events Model")
         sim = dp.Simulation(model = model)
         model.sim.schedule(dp.Event(model, "Event #1"), 3)
         sim.schedule(dp.Event(model, "Event #2"), 3)
@@ -190,7 +189,7 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(model.sim.gen.trace.length, 2)
         
         #Test simultaneous, identical events.
-        model2 = dp.Model("Simultaneous Identical Events Model")
+        model2 = dp.Component("Simultaneous Identical Events Model")
         _ = dp.Simulation(model = model2)
         event = dp.Event(model2, "The Event")
         model2.sim.schedule(event, 1)
@@ -199,7 +198,7 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(model2.sim.gen.trace.length, 2)
         
     def test_trace_control(self):
-        model = dp.Model("Trace Control")
+        model = dp.Component("Trace Control")
         _ = dp.Simulation(model = model)
         event = dp.Event(model, "Trace Control Event")
         

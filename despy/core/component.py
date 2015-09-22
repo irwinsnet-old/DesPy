@@ -98,6 +98,7 @@ class Component(NamedObject):
         self._statistics = {}
         
         self.session = Session()
+        self.mod = None
         
         
     @property

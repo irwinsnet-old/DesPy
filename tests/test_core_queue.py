@@ -17,7 +17,7 @@ class testQueue(unittest.TestCase):
         #  works.
         print()
         print("=====Negative Time Test=====")
-        model = dp.Model("Negative Time Model")
+        model = dp.Component("Negative Time Model")
         sim = dp.Simulation(model = model)
         sim.schedule(dp.Event(model, "Positive Time"),
                        priority = dp.Priority.LATE)        
@@ -30,7 +30,7 @@ class testQueue(unittest.TestCase):
     def test_entity_counter(self):
         print()
         print("=====Entity Counter Test=====")
-        model = dp.Model("Entity Counter Test")
+        model = dp.Component("Entity Counter Test")
         dp.Entity.set_counter()
         ent1 = dp.Entity(model, "Entity #1")
         self.assertEqual(ent1.number, 1)
@@ -40,7 +40,7 @@ class testQueue(unittest.TestCase):
     def test_queue(self):
         print()
         print("=====Test Queue=====")
-        model = dp.Model("Q-test")
+        model = dp.Component("Q-test")
         qu = dp.Queue(model, "TestQueue")
         model["q"] = qu
         _ = dp.Simulation(model = model)
