@@ -64,7 +64,7 @@ despy.core.timer
 """
 
 from despy.base.utilities import Priority
-from despy.core.simulation import Simulation
+from despy.core.simulation import Session, Simulation
 from despy.core.component import Component
 from despy.core.event import Event
 from despy.core.process import Process

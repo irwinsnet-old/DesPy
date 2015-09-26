@@ -71,6 +71,7 @@ class testQueue(unittest.TestCase):
         print("=====Test Queue In Simulation======")
         Customer.set_counter()
         model = QuModel("Queue Model")
+        self.assertIsInstance(dp.Session().model, QuModel)
         sim = dp.Simulation(model = model)
         sim.gen.folder_basename = \
                 "C:/Projects/despy_output/queue_sim"
@@ -80,7 +81,7 @@ class testQueue(unittest.TestCase):
         
 class QuModel(dp.Component):
     def __init__(self, name):
-        super().__init__(name, "Queue Model Test")
+        super().__init__(name, "Queue Model Test", is_model = True)
         self.add_component("c_qu", dp.Queue("Customer Queue"))
         self.add_component("customer_process", CustArrProcess())
         self.add_component("service_process", CustServiceProcess())

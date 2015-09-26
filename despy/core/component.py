@@ -14,7 +14,6 @@ despy.core.component
 """
 from itertools import count
 import types
-import keyword
 
 from despy.core.simulation import Session
 from despy.base.named_object import NamedObject
@@ -61,7 +60,7 @@ class Component(NamedObject):
     """
     
     
-    def __init__(self, name, description = None):
+    def __init__(self, name, description = None, is_model = False):
         """Creates an instance of a *Component* object.
         
         Except for the simulation and model classes, all members of the
@@ -91,11 +90,15 @@ class Component(NamedObject):
 
         self._components = {}
         self._statistics = {}
-        
-        self.session = Session()
+
         self._parent = None
-        
-        
+        if is_model:
+            print("is_model is True!")
+            self.session = Session(self)
+        else:
+#             print("is_model is False. :(")
+            self.session = Session()
+
     @property
     def components(self):
         return self._components

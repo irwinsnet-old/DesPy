@@ -51,7 +51,7 @@ class Session:
     class __Session:
         def __init__(self):
             self._sim = None
-            self._model = None
+            self.model = None
             
         @property
         def sim(self):
@@ -62,18 +62,20 @@ class Session:
             self._sim = sim
             
         @property
-        def mod(self):
+        def model(self):
             return self._model
         
-        @mod.setter
-        def mod(self, model):
+        @model.setter
+        def model(self, model):
             self._model = model
     
     _instance = None
     
-    def __init__(self):
-        if Session._instance is None:
+    def __init__(self, model = None):
+        if Session._instance is None:          
             Session._instance = Session.__Session()
+        if model is not None:
+            Session._instance.model = model
     
     def __getattr__(self, name):
         return getattr(self._instance, name)

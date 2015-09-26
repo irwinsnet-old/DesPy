@@ -94,7 +94,7 @@ class testResource(unittest.TestCase):
                             trace_fields = args2)
                      
         def __init__(self, name):
-            super().__init__(name)
+            super().__init__(name, is_model = True)
             self.add_component("server_resource",
                                self.CustServiceResource(2))
             self.add_component("customer_process", 
