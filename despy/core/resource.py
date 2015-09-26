@@ -68,7 +68,7 @@ class Resource(Component):
     """
     
     
-    def __init__(self, model, name, capacity = 1, time_function = None):
+    def __init__(self, name, capacity = 1, time_function = None):
         """Create a Resource object.
         
         *Arguments*
@@ -354,7 +354,7 @@ class ResourceQueue(Queue):
       * :meth:`ResourceQueue.request`: Request a resource for a entity.
     """
     
-    def __init__(self, model, name):
+    def __init__(self, name):
         """Instantiates a resourceQueue object.
         
         *Arguments*
@@ -365,7 +365,7 @@ class ResourceQueue(Queue):
                 The name of the resourceQueue.
                 
         """
-        super().__init__(model, name)
+        super().__init__(name)
         #self._resources = {}
          
     @property

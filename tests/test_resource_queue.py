@@ -16,7 +16,7 @@ class testResource(unittest.TestCase):
         print("TEST RESOURCE INIT OUTPUT")
         model = dp.Component("Resource Test #1")
 
-        server = dp.Resource(model, "Server", 2, self.get_rnd_exp)
+        server = dp.Resource("Server", 2, self.get_rnd_exp)
         model["server"] = server
         _ = dp.Simulation(model = model)
         self.assertEqual(len(model.components), 1)
@@ -61,10 +61,10 @@ class testResource(unittest.TestCase):
             super().initialize()
              
         class CustServiceResource(dp.ResourceQueue):
-            def __init__(self, model, capacity):
+            def __init__(self, capacity):
                 print("Initializing Customer Service Resource")                
-                super().__init__(model, "ServerQueue")
-                self.assign_resource(dp.Resource(model, "Server",
+                super().__init__("ServerQueue")
+                self.assign_resource(dp.Resource("Server",
                                               capacity,
                                               self.get_service_time))
 
@@ -97,7 +97,7 @@ class testResource(unittest.TestCase):
                      
         def __init__(self, name):
             super().__init__(name)
-            self.server_resource = self.CustServiceResource(self, 2)
+            self.server_resource = self.CustServiceResource(2)
             self["server_resource"] = self.server_resource
             self.customer_process = self.CustArrProcess(self.server_resource)
             self["customer_process"] = self.customer_process

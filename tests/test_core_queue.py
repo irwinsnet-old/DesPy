@@ -40,7 +40,7 @@ class testQueue(unittest.TestCase):
         print()
         print("=====Test Queue=====")
         model = dp.Component("Q-test")
-        qu = dp.Queue(model, "TestQueue")
+        qu = dp.Queue("TestQueue")
         model["q"] = qu
         _ = dp.Simulation(model = model)
         self.assertEqual(qu.name, "TestQueue")
@@ -81,7 +81,7 @@ class testQueue(unittest.TestCase):
 class QuModel(dp.Component):
     def __init__(self, name):
         super().__init__(name, "Queue Model Test")
-        self["c_qu"] = dp.Queue(self, "Customer Queue")
+        self["c_qu"] = dp.Queue("Customer Queue")
         self["customer_process"] = CustArrProcess(self)
         self["service_process"] = CustServiceProcess(self)
         

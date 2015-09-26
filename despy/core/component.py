@@ -129,17 +129,7 @@ class Component(NamedObject):
                 An instance of ``Component`` or one of it's sub-classes.
         """
         return self._components[key]
-     
-#     def __getattr__(self, name):
-#         """Allows accessing child components with self.key notation.
-#         
-#         *Returns:* Child component.
-#         """
-#         if name in self.components.keys():
-#             return self[name]
-#         else:
-#             raise AttributeError
-        
+            
     @property
     def sim(self):
         """A link to the model's simulation attribute.

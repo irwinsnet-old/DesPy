@@ -58,7 +58,7 @@ class Queue(Component):
       
     """
 
-    def __init__(self, model, name, max_length = None,
+    def __init__(self, name, max_length = None,
                  description = None):
         """Create a Queue object.
         
