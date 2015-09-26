@@ -62,8 +62,8 @@ class QModel(dp.Component):
     def __init__(self, name, description):
         super().__init__(name, description)
         self["c_q"] = dp.Queue(self, "Customer Queue")
-        self["service_process"] = CustServiceProcess(self)
-        self["customer_process"] = CustArrProcess(self)
+        self["service_process"] = CustServiceProcess()
+        self["customer_process"] = CustArrProcess()
         
     def initialize(self):
         print("Initializing QuModel")
@@ -73,37 +73,37 @@ class QModel(dp.Component):
         
         
 class Customer(dp.Entity):
-    def __init__(self, model):
-        super().__init__(model, "Customer")
+    def __init__(self):
+        super().__init__("Customer")
       
         
 class CustArrProcess(dp.Process):
-    def __init__(self, model):
-        super().__init__(model, "Customer Generator", self.generator)
+    def __init__(self):
+        super().__init__("Customer Generator", self.generator)
 
     def generator(self):
-        first_customer = Customer(self.mod)
-        self.mod["c_q"].add(first_customer)                
+        first_customer = Customer()
+        self.parent["c_q"].add(first_customer)                
         yield self.schedule_timeout(\
                 "Customer #{0} arrives.".format(first_customer.number))
         while True:
             delay = round(stats.expon.rvs(scale = 3))
-            customer = Customer(self.mod)                    
+            customer = Customer()                    
             yield self.schedule_timeout(\
                     "Customer #{0} arrives.".format(customer.number),
                     delay)
-            self.mod["c_q"].add(customer)
-            self.mod["service_process"].wake()
+            self.parent["c_q"].add(customer)
+            self.parent["service_process"].wake()
 
 
 class CustServiceProcess(dp.Process):
-    def __init__(self, model):
-        super().__init__(model, "Customer Server", self.generator)
+    def __init__(self):
+        super().__init__("Customer Server", self.generator)
         
     def generator(self):
         while True:
-            if self.mod["c_q"].length > 0:
-                customer = self.mod["c_q"].remove()
+            if self.parent["c_q"].length > 0:
+                customer = self.parent["c_q"].remove()
                 delay = round(stats.expon.rvs(scale = 4))
                 yield self.schedule_timeout(\
                         "Finished serving customer #{0}, "

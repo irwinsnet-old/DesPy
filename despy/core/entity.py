@@ -29,7 +29,7 @@ class Entity(Component):
       * :class:`despy.core.component.Component`
     """
     
-    def __init__(self, model, name, description = None):
+    def __init__(self, name, description = None):
         """Create an entity object.
         
         *Arguments*
@@ -44,4 +44,3 @@ class Entity(Component):
         """
         
         super().__init__(name, description)
-        self.mod = model

@@ -84,7 +84,6 @@ class Resource(Component):
                 Optional, defaults to None. A function that returns the
                 time required to service an entity.
         """
-        print("In resource __init__()")
         super().__init__(name)
         
         # Instance Attributes
@@ -405,7 +404,7 @@ class ResourceQueue(Queue):
         
         """
     
-        empty_resources = []
+        empty_resources = []    
         for index in range(self.num_resources):
             if self[index].get_available_station:
                 empty_resources.append(index)
@@ -482,7 +481,7 @@ class ResourceFinishServiceEvent(Event):
             ``service_time`` (Integer)
                 The time required to complete the service.
         """
-        super().__init__(resource.mod, "Finished Service")
+        super().__init__("Finished Service")
         
         self._resource = resource
         self._station_index = station_index

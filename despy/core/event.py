@@ -51,7 +51,7 @@ class Event(Component):
     """
 
 
-    def __init__(self, model, name, trace_fields = None):
+    def __init__(self, name, trace_fields = None):
         """Initialize the Event object.
 
         *Arguments*
@@ -66,7 +66,6 @@ class Event(Component):
         """
 
         super().__init__(name)
-        self.mod = model
         self.description = "Event"
         self._callbacks = []
         self._trace_fields = OrderedDict()

@@ -24,7 +24,7 @@ class testResource(unittest.TestCase):
         self.assertEqual(server.name, "Server")
         ents = []
         for _ in range(3):
-            ents.append(dp.Entity(model, "Entity"))
+            ents.append(dp.Entity("Entity"))
 
         #   Verify resource has two positions with keys 1 and 2, and that both
         # are empty (i.e., contain None object).
@@ -53,8 +53,8 @@ class testResource(unittest.TestCase):
          
     class ResModel(dp.Component):
         class Customer(dp.Entity):
-            def __init__(self, model):
-                super().__init__(model, "Customer")
+            def __init__(self):
+                super().__init__("Customer")
              
         def initialize(self):
             self.customer_process.start(0, dp.Priority.EARLY)
@@ -62,23 +62,23 @@ class testResource(unittest.TestCase):
              
         class CustServiceResource(dp.ResourceQueue):
             def __init__(self, model, capacity):
+                print("Initializing Customer Service Resource")                
                 super().__init__(model, "ServerQueue")
                 self.assign_resource(dp.Resource(model, "Server",
                                               capacity,
                                               self.get_service_time))
-             
+
             def get_service_time(self, index):
                 return round(stats.expon.rvs(scale = 4))
                 
          
         class CustArrProcess(dp.Process):
-            def __init__(self, model, server_resource):
-                super().__init__(model, "Customer Generator",
-                                 self.generator)
+            def __init__(self, server_resource):
+                super().__init__("Customer Generator", self.generator)
                 self.server_resource = server_resource
              
             def generator(self):
-                customer = self.mod.Customer(self.mod)
+                customer = self.parent.Customer()
                 args1 = OrderedDict()
                 args1["Interarrival_Time"] = None
                 args1["Customer"] = customer
@@ -88,7 +88,7 @@ class testResource(unittest.TestCase):
                 while True:
                     self.server_resource.request(customer)
                     delay = round(stats.expon.rvs(scale = 3))
-                    customer = self.mod.Customer(self.mod)
+                    customer = self.parent.Customer()
                     args2 = OrderedDict()
                     args2["Interarrival_Time"] = delay                    
                     args2["Customer"] = customer
@@ -99,8 +99,7 @@ class testResource(unittest.TestCase):
             super().__init__(name)
             self.server_resource = self.CustServiceResource(self, 2)
             self["server_resource"] = self.server_resource
-            self.customer_process = self.CustArrProcess(self,
-                                                self.server_resource)
+            self.customer_process = self.CustArrProcess(self.server_resource)
             self["customer_process"] = self.customer_process
      
     def test_resource_in_simulation(self):

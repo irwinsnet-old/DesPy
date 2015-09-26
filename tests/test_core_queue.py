@@ -19,9 +19,9 @@ class testQueue(unittest.TestCase):
         print("=====Negative Time Test=====")
         model = dp.Component("Negative Time Model")
         sim = dp.Simulation(model = model)
-        sim.schedule(dp.Event(model, "Positive Time"),
+        sim.schedule(dp.Event("Positive Time"),
                        priority = dp.Priority.LATE)        
-        model.sim.schedule(dp.Event(model, "Negative Time"),
+        model.sim.schedule(dp.Event("Negative Time"),
                        priority = dp.Priority.EARLY)
         self.assertEqual(sim.peek(False), -0.1)
 
@@ -30,11 +30,10 @@ class testQueue(unittest.TestCase):
     def test_entity_counter(self):
         print()
         print("=====Entity Counter Test=====")
-        model = dp.Component("Entity Counter Test")
         dp.Entity.set_counter()
-        ent1 = dp.Entity(model, "Entity #1")
+        ent1 = dp.Entity("Entity #1")
         self.assertEqual(ent1.number, 1)
-        ent2 = dp.Entity(model, "Entity #2")
+        ent2 = dp.Entity("Entity #2")
         self.assertEqual(ent2.number, 2)
 
     def test_queue(self):
@@ -48,7 +47,7 @@ class testQueue(unittest.TestCase):
         customers = []
         dp.Entity.set_counter()
         for i in range(5):
-            customers.append(dp.Entity(model, "Customer #{0}".format(i)))
+            customers.append(dp.Entity("Customer #{0}".format(i)))
         self.assertEqual(len(customers), 5)
         
         qu.add(customers[0])
@@ -91,35 +90,35 @@ class QuModel(dp.Component):
         self["service_process"].start()
 
 class Customer(dp.Entity):
-    def __init__(self, model):
-        super().__init__(model, "Customer")
+    def __init__(self):
+        super().__init__("Customer")
         
 class CustArrProcess(dp.Process):
     def __init__(self, model):
-        super().__init__(model, "Customer Generator", self.generator)
+        super().__init__("Customer Generator", self.generator)
 
     def generator(self):
-        first_customer = Customer(self.mod)
-        self.mod["c_qu"].add(first_customer)                
+        first_customer = Customer()
+        self.parent["c_qu"].add(first_customer)                
         yield self.schedule_timeout(\
                 "Customer #{0} arrives.".format(first_customer.number))
         while True:
             delay = round(stats.expon.rvs(scale = 3))
-            customer = Customer(self.mod)                    
+            customer = Customer()                    
             yield self.schedule_timeout(\
                     "Customer #{0} arrives.".format(customer.number),
                     delay)
-            self.mod["c_qu"].add(customer)
-            self.mod["service_process"].wake()
+            self.parent["c_qu"].add(customer)
+            self.parent["service_process"].wake()
 
 class CustServiceProcess(dp.Process):
     def __init__(self, model):
-        super().__init__(model, "Customer Server", self.generator)
+        super().__init__("Customer Server", self.generator)
         
     def generator(self):
         while True:
-            if self.mod["c_qu"].length > 0:
-                customer = self.mod["c_qu"].remove()
+            if self.parent["c_qu"].length > 0:
+                customer = self.parent["c_qu"].remove()
                 delay = round(stats.expon.rvs(scale = 4))
                 yield self.schedule_timeout(\
                         "Finished serving customer #{0}, Service time: {1}".format(customer.number, delay),

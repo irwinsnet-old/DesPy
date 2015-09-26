@@ -62,7 +62,7 @@ class Process(Component):
 
     """
 
-    def __init__(self, model, name, generator_function = None):
+    def __init__(self, name, generator_function = None):
         """Creates a process object.
         
         Designers should either pass a generator function object into
@@ -231,7 +231,7 @@ class ProcessTimeOutEvent(Event):
     
     def __init__(self, process, name, trace_fields = None):
         self._process = process
-        super().__init__(process.mod, name, trace_fields)
+        super().__init__(name, trace_fields)
         self.append_callback(self.process_callback)
         
     @property

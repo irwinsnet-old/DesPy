@@ -77,21 +77,21 @@ class testDespyb(unittest.TestCase):
         
         self.assertEqual(model.sim.peek(), float('Infinity'))
         
-        model.sim.schedule(dp.Event(model, "Event #1"),
+        model.sim.schedule(dp.Event("Event #1"),
                        20,
                        dp.Priority.EARLY)
         self.assertEqual(model.sim.peek(), 20)
         
-        sim.schedule(dp.Event(model, "Event #2"), 5)
+        sim.schedule(dp.Event("Event #2"), 5)
         self.assertEqual(model.sim.peek(), 5)
         
     def test_step(self):
         #Create model and events.
         model = dp.Component("Test Model #2")
         sim_ts = dp.Simulation(model = model)
-        ev_early = dp.Event(model, "Early Event")
-        ev_standard = dp.Event(model, "Standard Event")
-        ev_late = dp.Event(model, "Late Event")
+        ev_early = dp.Event("Early Event")
+        ev_standard = dp.Event("Standard Event")
+        ev_late = dp.Event("Late Event")
         
         #Schedule Events
         sim_ts.schedule(ev_late, 5, dp.Priority.LATE)
@@ -112,9 +112,9 @@ class testDespyb(unittest.TestCase):
     def test_run(self):
         model = dp.Component("RunTest Model")
         sim = dp.Simulation(model = model)
-        model.sim.schedule(dp.Event(model, "First Event"), 0)
-        sim.schedule(dp.Event(model, "Second Event"), 4)
-        sim.schedule(dp.Event(model, "Third Event"), 8)
+        model.sim.schedule(dp.Event("First Event"), 0)
+        sim.schedule(dp.Event("Second Event"), 4)
+        sim.schedule(dp.Event("Third Event"), 8)
         model.sim.run()
         
         self.assertEqual(model.sim.gen.trace.length, 3)
@@ -127,11 +127,11 @@ class testDespyb(unittest.TestCase):
 
     def test_appendCallback(self):
         model = dp.Component("AppendCallback Model")
-        evt1 = dp.Event(model, "First Event")
+        evt1 = dp.Event("First Event")
         
         def evt1_callback(self):
-            evt2 = dp.Event(self.mod, "Callback Event")
-            self.mod.sim.schedule(evt2, 10)
+            evt2 = dp.Event("Callback Event")
+            self.sim.schedule(evt2, 10)
 
         evt1.append_callback(evt1_callback)
         
@@ -171,7 +171,7 @@ class testDespyb(unittest.TestCase):
                 delay = round(stats.expon.rvs(scale = 3))
                 yield self.schedule_timeout("Repeated Event", delay)
         
-        process = dp.Process(model, "Test Process", generator)
+        process = dp.Process("Test Process", generator)
         model["Test Process"] = process
         self.assertEqual(len(model.components), 1)
         _ = dp.Simulation(model = model)
@@ -183,15 +183,15 @@ class testDespyb(unittest.TestCase):
         #Test simultaneous, different events.
         model = dp.Component("Simultaneous Events Model")
         sim = dp.Simulation(model = model)
-        model.sim.schedule(dp.Event(model, "Event #1"), 3)
-        sim.schedule(dp.Event(model, "Event #2"), 3)
+        model.sim.schedule(dp.Event("Event #1"), 3)
+        sim.schedule(dp.Event("Event #2"), 3)
         model.sim.run()
         self.assertEqual(model.sim.gen.trace.length, 2)
         
         #Test simultaneous, identical events.
         model2 = dp.Component("Simultaneous Identical Events Model")
         _ = dp.Simulation(model = model2)
-        event = dp.Event(model2, "The Event")
+        event = dp.Event("The Event")
         model2.sim.schedule(event, 1)
         model2.sim.schedule(event, 1)
         model2.sim.run()
@@ -200,10 +200,10 @@ class testDespyb(unittest.TestCase):
     def test_trace_control(self):
         model = dp.Component("Trace Control")
         _ = dp.Simulation(model = model)
-        event = dp.Event(model, "Trace Control Event")
+        event = dp.Event("Trace Control Event")
         
         def event_callback(self):
-            self.mod.sim.schedule(self, 10)
+            self.sim.schedule(self, 10)
             
         event.append_callback(event_callback)
         model.sim.schedule(event, 0)
@@ -225,10 +225,10 @@ class testDespyb(unittest.TestCase):
         
         # Default maximum trace length is 1000 lines.
         model.sim.initialize()        
-        evt2 = dp.Event(model, "Trace Control Event Step=1")
+        evt2 = dp.Event("Trace Control Event Step=1")
         
         def event_callback2(self):
-            self.mod.sim.schedule(self, 1)
+            self.sim.schedule(self, 1)
         
         evt2.append_callback(event_callback2)
         model.sim.schedule(evt2, 0)

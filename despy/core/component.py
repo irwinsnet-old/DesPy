@@ -98,7 +98,7 @@ class Component(NamedObject):
         self._statistics = {}
         
         self.session = Session()
-        self.mod = None
+        self._parent = None
         
         
     @property
@@ -116,7 +116,7 @@ class Component(NamedObject):
                 An instance of ``Component`` or one of it's sub-classes.
         """
         self._components[key] = item
-        item.mod = self
+        item.parent = self
 
     def __getitem__(self, key):
         """Access a component using a dictionary key.
@@ -129,6 +129,16 @@ class Component(NamedObject):
                 An instance of ``Component`` or one of it's sub-classes.
         """
         return self._components[key]
+     
+#     def __getattr__(self, name):
+#         """Allows accessing child components with self.key notation.
+#         
+#         *Returns:* Child component.
+#         """
+#         if name in self.components.keys():
+#             return self[name]
+#         else:
+#             raise AttributeError
         
     @property
     def sim(self):
@@ -141,19 +151,16 @@ class Component(NamedObject):
         return self.session.sim
     
     @property
-    def mod(self):
-        """A link to the component's model object.
+    def parent(self):
+        """A link to the component's parent.
         
-        This read-only attribute is set by the ``Model.__init__``
-        method.
-        
-        *Returns* :class:`despy.core.model.Model`
+        *Returns* :class:`despy.core.component.Component
         """
-        return self._mod
+        return self._parent
     
-    @mod.setter
-    def mod(self, model):
-        self._mod = model
+    @parent.setter
+    def parent(self, parent):
+        self._parent = parent
     
     @property
     def number(self):
@@ -177,8 +184,7 @@ class Component(NamedObject):
         in Windows replaced by underscores. The *id* attribute is
         suitable for creating file names.
         """
-        return "{0}.{1}.{2}".format(self.mod.slug, self.slug,
-                                    self._number)
+        return "{0}.{1}".format(self.slug, self._number)
     
     def add_stat(self, key, stat):
         self._statistics[key] = stat
@@ -228,7 +234,7 @@ class Component(NamedObject):
         
         *Returns* str
         """
-        return "{0}:{1}#{2}".format(self.mod, self.name, self._number)
+        return "{0}:{1}".format(self.name, self._number)
     
     def dp_initialize(self):
         if self.sim.is_rep_initialized():

@@ -167,7 +167,7 @@ class TimerEvent(Event):
                 The event recurs based on the parameters of the
                 RandomTimer object passed via this argument.
         """
-        super().__init__(timer.mod, name)
+        super().__init__(name)
         self.timer = timer
         self.append_callback(timer.callback)
         self.append_callback(self.reschedule)
@@ -176,7 +176,7 @@ class TimerEvent(Event):
         """Reschedules event based on the RandomTimer's distribution.
         """
         self.timer._current_interval = self.timer.distribution.rvs()
-        self.mod.sim.schedule(self, self.timer.current_interval,
+        self.sim.schedule(self, self.timer.current_interval,
                           self.timer.priority)
         
     def _update_trace_record(self, trace_record):
