@@ -36,7 +36,7 @@ class RandomTimer(Component):
           current_interval
           priority
     """
-    def __init__(self, model, name, distribution, callback,
+    def __init__(self, name, distribution, callback,
                  immediate = False,
                  priority = Priority.STANDARD,
                  description = None):
