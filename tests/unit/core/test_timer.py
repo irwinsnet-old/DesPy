@@ -20,15 +20,16 @@ def timer_callback(evt):
 
 class testTimer(unittest.TestCase):
     def test_timer(self):
-        #Test a basic timer.
+        #Test a basic timer
         print()
         print("=====Testing RandomTimer with immediate = False========")
         model1 = dp.Component("Timer Test Model-A")
         dist1 = stats.poisson(10)
-        model1["timer"] = dp.RandomTimer("Timer-A", dist1, timer_callback)
+        model1.add_component("timer",
+                   dp.RandomTimer("Timer-A", dist1, timer_callback))
         sim = dp.Simulation(model = model1)
         model1.sim.seed = 731
-        self.assertEqual(len(model1.children), 1)
+        self.assertEqual(len(model1.components), 1)
         sim.run(100)
         
         trace1 = model1.sim.gen.trace
@@ -41,8 +42,8 @@ class testTimer(unittest.TestCase):
         print("=====Testing RandomTimer with immediate = True=========")
         model2 = dp.Component("Timer Test Model-B")
         dist2 = stats.poisson(150)
-        model2["Timer"] = dp.RandomTimer("Timer-B", dist2,
-                                         timer_callback)
+        model2.add_component("Timer",
+                   dp.RandomTimer("Timer-B", dist2, timer_callback))
         sim = dp.Simulation(model = model2)
         sim.seed = 704
         sim.run(1000)
@@ -57,9 +58,9 @@ class testTimer(unittest.TestCase):
         model3 = dp.Component("Timer Test Model-C")
 
         dist3 = drand.get_empirical_pmf([5, 10], [0.3, 0.7])
-        model3["timer"] = dp.RandomTimer("Timer-C", dist3,
-                                timer_callback,
-                                priority = dp.Priority.LATE)
+        model3.add_component("timer", 
+                   dp.RandomTimer("Timer-C", dist3, timer_callback,
+                                priority = dp.Priority.LATE))
         sim = dp.Simulation(model = model3)
         model3.sim.seed = 731        
         sim.run(100)

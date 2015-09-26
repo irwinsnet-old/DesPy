@@ -41,7 +41,7 @@ class testQueue(unittest.TestCase):
         print("=====Test Queue=====")
         model = dp.Component("Q-test")
         qu = dp.Queue("TestQueue")
-        model["q"] = qu
+        model.add_component("q", qu)
         _ = dp.Simulation(model = model)
         self.assertEqual(qu.name, "TestQueue")
         customers = []
@@ -76,30 +76,30 @@ class testQueue(unittest.TestCase):
                 "C:/Projects/despy_output/queue_sim"
         
         sim.run(100)
-        self.assertGreater(len(model.children), 0)
+        self.assertGreater(len(model.components), 0)
         
 class QuModel(dp.Component):
     def __init__(self, name):
         super().__init__(name, "Queue Model Test")
-        self["c_qu"] = dp.Queue("Customer Queue")
-        self["customer_process"] = CustArrProcess(self)
-        self["service_process"] = CustServiceProcess(self)
+        self.add_component("c_qu", dp.Queue("Customer Queue"))
+        self.add_component("customer_process", CustArrProcess())
+        self.add_component("service_process", CustServiceProcess())
         
     def initialize(self):
-        self["customer_process"].start(0, dp.Priority.EARLY)
-        self["service_process"].start()
+        self.customer_process.start(0, dp.Priority.EARLY)
+        self.service_process.start()
 
 class Customer(dp.Entity):
     def __init__(self):
         super().__init__("Customer")
         
 class CustArrProcess(dp.Process):
-    def __init__(self, model):
+    def __init__(self):
         super().__init__("Customer Generator", self.generator)
 
     def generator(self):
         first_customer = Customer()
-        self.parent["c_qu"].add(first_customer)                
+        self.parent.c_qu.add(first_customer)                
         yield self.schedule_timeout(\
                 "Customer #{0} arrives.".format(first_customer.number))
         while True:
@@ -108,21 +108,21 @@ class CustArrProcess(dp.Process):
             yield self.schedule_timeout(\
                     "Customer #{0} arrives.".format(customer.number),
                     delay)
-            self.parent["c_qu"].add(customer)
-            self.parent["service_process"].wake()
+            self.parent.c_qu.add(customer)
+            self.parent.service_process.wake()
 
 class CustServiceProcess(dp.Process):
-    def __init__(self, model):
+    def __init__(self):
         super().__init__("Customer Server", self.generator)
         
     def generator(self):
         while True:
-            if self.parent["c_qu"].length > 0:
-                customer = self.parent["c_qu"].remove()
+            if self.parent.c_qu.length > 0:
+                customer = self.parent.c_qu.remove()
                 delay = round(stats.expon.rvs(scale = 4))
-                yield self.schedule_timeout(\
-                        "Finished serving customer #{0}, Service time: {1}".format(customer.number, delay),
-                        delay)
+                yield self.schedule_timeout("Finished serving customer"
+                        " #{0}, Service time: {1}"
+                        .format(customer.number, delay), delay)
             else:
                 yield self.sleep()
 

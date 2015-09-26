@@ -28,7 +28,7 @@ class testQueue(unittest.TestCase):
         self.assertIsInstance(p_model.initialize,
                               types.MethodType)
         
-        self.assertEqual(len(p_model.children), 0)
+        self.assertEqual(len(p_model.components), 0)
         
         print()
         print("=====Testing Subclassed Model=====")
@@ -40,7 +40,7 @@ class testQueue(unittest.TestCase):
         self.assertEqual(sc_model.description, scm_description)
         
         self.assertIsInstance(sc_model.initialize, types.MethodType)
-        self.assertEqual(len(sc_model.children), 0)
+        self.assertEqual(len(sc_model.components), 0)
 
         print()
         print("=====Testing Queue Model=====")
@@ -50,8 +50,8 @@ class testQueue(unittest.TestCase):
         self.assertEqual(q_model.name, q_name)
         self.assertEqual(q_model.description, q_description)
         self.assertIsInstance(q_model.initialize, types.MethodType)
-        self.assertEqual(len(q_model.children), 3)
-        print(q_model.children)
+        self.assertEqual(len(q_model.components), 3)
+        print(q_model.components)
         
         sim = dp.Simulation(model = q_model)
         sim.gen.folder_basename = "C:/Projects/despy_output/queue_sim"
@@ -61,16 +61,14 @@ class testQueue(unittest.TestCase):
 class QModel(dp.Component):
     def __init__(self, name, description):
         super().__init__(name, description)
-        self["c_q"] = dp.Queue("Customer Queue")
-        self["service_process"] = CustServiceProcess()
-        self["customer_process"] = CustArrProcess()
+        self.add_component("c_q", dp.Queue("Customer Queue"))
+        self.add_component("service_process", CustServiceProcess())
+        self.add_component("customer_process", CustArrProcess())
         
     def initialize(self):
-        print("Initializing QuModel")
-        self["customer_process"].start(0, dp.Priority.EARLY)
-        self["service_process"].start()
-        print("QuModel Components: {}".format(self.children))  
-        
+        self.customer_process.start(0, dp.Priority.EARLY)
+        self.service_process.start()
+       
         
 class Customer(dp.Entity):
     def __init__(self):
@@ -83,7 +81,7 @@ class CustArrProcess(dp.Process):
 
     def generator(self):
         first_customer = Customer()
-        self.parent["c_q"].add(first_customer)                
+        self.parent.c_q.add(first_customer)                
         yield self.schedule_timeout(\
                 "Customer #{0} arrives.".format(first_customer.number))
         while True:
@@ -92,8 +90,8 @@ class CustArrProcess(dp.Process):
             yield self.schedule_timeout(\
                     "Customer #{0} arrives.".format(customer.number),
                     delay)
-            self.parent["c_q"].add(customer)
-            self.parent["service_process"].wake()
+            self.parent.c_q.add(customer)
+            self.parent.service_process.wake()
 
 
 class CustServiceProcess(dp.Process):
@@ -102,8 +100,8 @@ class CustServiceProcess(dp.Process):
         
     def generator(self):
         while True:
-            if self.parent["c_q"].length > 0:
-                customer = self.parent["c_q"].remove()
+            if self.parent.c_q.length > 0:
+                customer = self.parent.c_q.remove()
                 delay = round(stats.expon.rvs(scale = 4))
                 yield self.schedule_timeout(\
                         "Finished serving customer #{0}, "

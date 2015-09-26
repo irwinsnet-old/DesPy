@@ -366,7 +366,7 @@ class ResourceQueue(Queue):
                 
         """
         super().__init__(name)
-        #self._resources = {}
+        self._resources = {}
          
     @property
     def num_resources(self):
@@ -376,7 +376,13 @@ class ResourceQueue(Queue):
         resourceQueue object with the :meth:`.assign_resource` method.
         (Integer)
         """
-        return len(self.children)
+        return len(self._resources)
+    
+    def __setitem__(self, key, item):
+        self._resources[key] = item
+        
+    def __getitem__(self, key):
+        return self._resources[key]
     
     def assign_resource(self, resource):
         """Assign a resource to the resourceQueue object.
