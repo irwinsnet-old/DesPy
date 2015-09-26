@@ -28,7 +28,7 @@ class testQueue(unittest.TestCase):
         self.assertIsInstance(p_model.initialize,
                               types.MethodType)
         
-        self.assertEqual(len(p_model.components), 0)
+        self.assertEqual(len(p_model.children), 0)
         
         print()
         print("=====Testing Subclassed Model=====")
@@ -40,7 +40,7 @@ class testQueue(unittest.TestCase):
         self.assertEqual(sc_model.description, scm_description)
         
         self.assertIsInstance(sc_model.initialize, types.MethodType)
-        self.assertEqual(len(sc_model.components), 0)
+        self.assertEqual(len(sc_model.children), 0)
 
         print()
         print("=====Testing Queue Model=====")
@@ -50,8 +50,8 @@ class testQueue(unittest.TestCase):
         self.assertEqual(q_model.name, q_name)
         self.assertEqual(q_model.description, q_description)
         self.assertIsInstance(q_model.initialize, types.MethodType)
-        self.assertEqual(len(q_model.components), 3)
-        print(q_model.components)
+        self.assertEqual(len(q_model.children), 3)
+        print(q_model.children)
         
         sim = dp.Simulation(model = q_model)
         sim.gen.folder_basename = "C:/Projects/despy_output/queue_sim"
@@ -69,7 +69,7 @@ class QModel(dp.Component):
         print("Initializing QuModel")
         self["customer_process"].start(0, dp.Priority.EARLY)
         self["service_process"].start()
-        print("QuModel Components: {}".format(self.components))  
+        print("QuModel Components: {}".format(self.children))  
         
         
 class Customer(dp.Entity):

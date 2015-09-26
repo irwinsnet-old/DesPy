@@ -9,12 +9,7 @@ despy.core.component
 
 ..  autosummary::
 
-    Component
-    
-..  todo
-
-    Rename model attribute to "mod" because it's used so often.
-    
+    Component    
     
 """
 from itertools import count
@@ -26,11 +21,11 @@ from despy.base.named_object import NamedObject
 class Component(NamedObject):
     """A base class that provides object counters and other attributes.
 
-    Models consist of several components, such as queues, processes, and
+    Models consist of several children, such as queues, processes, and
     entities. Components generally represent an element of the system
     that is being simulated.  The ``Component`` class is the base class
-    for the model's components. It maintains a counter, which uniquely
-    identifies components, and has attributes for accessing the model
+    for the model's children. It maintains a counter, which uniquely
+    identifies children, and has attributes for accessing the model
     and simulation objects. Users can create their own model elements by
     inheriting from the Component class.
     
@@ -42,7 +37,6 @@ class Component(NamedObject):
 
     ..  autosummary::
         
-        mod
         sim
         number
         id
@@ -94,7 +88,7 @@ class Component(NamedObject):
             self.set_counter()
         self._number = self._get_next_number()
 
-        self._components = {}
+        self._child_components = {}
         self._statistics = {}
         
         self.session = Session()
@@ -102,8 +96,8 @@ class Component(NamedObject):
         
         
     @property
-    def components(self):
-        return self._components
+    def children(self):
+        return self._child_components
     
     def __setitem__(self, key, item):
         """ Assign a component to the model using dictionary notation.
@@ -115,7 +109,7 @@ class Component(NamedObject):
             ``item`` (:class:`despy.core.component.Component`)
                 An instance of ``Component`` or one of it's sub-classes.
         """
-        self._components[key] = item
+        self._child_components[key] = item
         item.parent = self
 
     def __getitem__(self, key):
@@ -128,7 +122,7 @@ class Component(NamedObject):
             ``item`` (:class:`despy.core.component.Component`)
                 An instance of ``Component`` or one of it's sub-classes.
         """
-        return self._components[key]
+        return self._child_components[key]
             
     @property
     def sim(self):
@@ -230,7 +224,7 @@ class Component(NamedObject):
         if self.sim.is_rep_initialized():
             return
 
-        for _, component in self.components.items():
+        for _, component in self.children.items():
             component.dp_initialize()
         
         if isinstance(self.initialize, types.FunctionType):
@@ -251,7 +245,7 @@ class Component(NamedObject):
     def dp_finalize(self):
         """The Simulation calls finalize methods after final event.
         """
-        for _, component in self.components.items():
+        for _, component in self.children.items():
             component.dp_finalize()
 
         self.finalize()

@@ -173,7 +173,7 @@ class testDespyb(unittest.TestCase):
         
         process = dp.Process("Test Process", generator)
         model["Test Process"] = process
-        self.assertEqual(len(model.components), 1)
+        self.assertEqual(len(model.children), 1)
         _ = dp.Simulation(model = model)
         model.sim.seed = 42
         process.start()

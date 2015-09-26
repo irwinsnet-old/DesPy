@@ -28,7 +28,7 @@ class testTimer(unittest.TestCase):
         model1["timer"] = dp.RandomTimer("Timer-A", dist1, timer_callback)
         sim = dp.Simulation(model = model1)
         model1.sim.seed = 731
-        self.assertEqual(len(model1.components), 1)
+        self.assertEqual(len(model1.children), 1)
         sim.run(100)
         
         trace1 = model1.sim.gen.trace

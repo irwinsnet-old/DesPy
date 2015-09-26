@@ -127,16 +127,16 @@ class Generator(object):
         if self.folder_basename is None:
             return None
         
-        # Finalize model and components.
+        # Finalize model and children.
         
         # Write trace csv file.
         self.set_full_path()
         self.trace.write_csv(self._full_path)
         
-        #Get data for all components and create HTML report.
+        #Get data for all children and create HTML report.
         self.report.append_output(self.sim.get_data())
             
-        for _, component in self.sim.model.components.items():
+        for _, component in self.sim.model.children.items():
             output = component.get_data()
             if output is not None:
                 self.report.append_output(output)

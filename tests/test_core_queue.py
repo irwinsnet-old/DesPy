@@ -76,7 +76,7 @@ class testQueue(unittest.TestCase):
                 "C:/Projects/despy_output/queue_sim"
         
         sim.run(100)
-        self.assertGreater(len(model.components), 0)
+        self.assertGreater(len(model.children), 0)
         
 class QuModel(dp.Component):
     def __init__(self, name):

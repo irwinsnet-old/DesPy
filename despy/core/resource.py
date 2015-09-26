@@ -376,7 +376,7 @@ class ResourceQueue(Queue):
         resourceQueue object with the :meth:`.assign_resource` method.
         (Integer)
         """
-        return len(self._components)
+        return len(self.children)
     
     def assign_resource(self, resource):
         """Assign a resource to the resourceQueue object.

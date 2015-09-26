@@ -19,7 +19,7 @@ class testResource(unittest.TestCase):
         server = dp.Resource("Server", 2, self.get_rnd_exp)
         model["server"] = server
         _ = dp.Simulation(model = model)
-        self.assertEqual(len(model.components), 1)
+        self.assertEqual(len(model.children), 1)
         print("server.sim: {}".format(server.sim))
         self.assertEqual(server.name, "Server")
         ents = []
