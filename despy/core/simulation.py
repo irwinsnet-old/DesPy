@@ -71,11 +71,9 @@ class Session:
     
     _instance = None
     
-    def __init__(self, model = None):
+    def __init__(self):
         if Session._instance is None:          
             Session._instance = Session.__Session()
-        if model is not None:
-            Session._instance.model = model
     
     def __getattr__(self, name):
         return getattr(self._instance, name)

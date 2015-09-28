@@ -60,7 +60,7 @@ class Component(NamedObject):
     """
     
     
-    def __init__(self, name, description = None, is_model = False):
+    def __init__(self, name, description = None):
         """Creates an instance of a *Component* object.
         
         Except for the simulation and model classes, all members of the
@@ -92,12 +92,7 @@ class Component(NamedObject):
         self._statistics = {}
 
         self._parent = None
-        if is_model:
-            print("is_model is True!")
-            self.session = Session(self)
-        else:
-#             print("is_model is False. :(")
-            self.session = Session()
+        self.session = Session()
 
     @property
     def components(self):
