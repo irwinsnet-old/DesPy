@@ -14,6 +14,10 @@ despy.core.simulation
     NoEventsRemainingError
     
 ..  todo
+
+    URGENT: Split initialize_rep() into initialize_sim() and
+    intialize_rep(). Initialize_rep() will clear all simulation
+    triggers. This will fix the trace_control testing error.
     
     Update documentation to state that seed can raise a TypeError.
     
@@ -24,19 +28,32 @@ despy.core.simulation
     is paused.
     
     Add functionality for multiple reps.
+    
+    Create a callback object that contains a callback function. This
+    will remove the necessity to check if callbacks are functions or
+    methods (they will always be methods). Follows command pattern.
+    
+    Revise internal function names -- get rid of underscore prefix and
+    replace with "dp_" prefix to indicate an internal framework
+    method.
+    
+    Get rid of isinstance check for functiontype of dp_initialize in
+    Simulation.run()
 """
 
 from heapq import heappush, heappop
 from itertools import count
 import datetime, random, types
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 
 import numpy as np
 
+from despy.core.session import Session
 from despy.output.generator import Generator
 from despy.output.report import Datatype
 from despy.base.named_object import NamedObject
 from despy.base.utilities import Priority
+from despy.core.trigger import AbstractTrigger, TimeTrigger
 
 
 class NoEventsRemainingError(Exception):
@@ -46,40 +63,6 @@ class NoEventsRemainingError(Exception):
     FEL.
     """
     pass
-
-class Session:
-    class __Session:
-        def __init__(self):
-            self._sim = None
-            self.model = None
-            
-        @property
-        def sim(self):
-            return self._sim
-        
-        @sim.setter
-        def sim(self, sim):
-            self._sim = sim
-            
-        @property
-        def model(self):
-            return self._model
-        
-        @model.setter
-        def model(self, model):
-            self._model = model
-    
-    _instance = None
-    
-    def __init__(self):
-        if Session._instance is None:          
-            Session._instance = Session.__Session()
-    
-    def __getattr__(self, name):
-        return getattr(self._instance, name)
-    
-    def __setattr__(self, name, value):
-        setattr(self._instance, name, value)
 
 
 class Simulation(NamedObject):
@@ -108,7 +91,7 @@ class Simulation(NamedObject):
         step
         run
         get_data
-        initialize
+        initialize_rep
         _initialize_model
         
     **Inherits**
@@ -140,10 +123,11 @@ class Simulation(NamedObject):
         self.gen.console_trace = True
         self.gen.folder_basename = None
         
-        self.initialize(initial_time)
+        self.initialize_rep(initial_time)
         
         self.session = Session()
         self.session.sim = self
+        self._triggers = OrderedDict()
 
     @property
     def model(self):
@@ -234,6 +218,10 @@ class Simulation(NamedObject):
         
         """
         return self._evt
+    
+    @property
+    def triggers(self):
+        return self._triggers
         
     @property
     def run_start_time(self):
@@ -275,13 +263,16 @@ class Simulation(NamedObject):
     def gen(self, generator):
         self._gen = generator
         
+    def reset_sim(self, initial_time = 0):
+        self.initialize_rep(initial_time)
+        self._triggers.clear()
 
-    def initialize(self, initial_time = 0):
+    def initialize_rep(self, initial_time = 0):
         """Reset the time to zero, allowing the simulation to be rerun.
         
         Sets the simulation time to zero. Also sets the model's
         initial_events_scheduled attribute to ``False``, which will cause
-        the model's initialize methods to be executed the next time the
+        the model's initialize_rep methods to be executed the next time the
         simulation is run. In addition:
         
             * Clears the FEL
@@ -411,8 +402,8 @@ class Simulation(NamedObject):
         initialized by calling ``_initialize_model``.
         `_initialize_model` ensures model are only initialized one
         time, so users can call ``run`` multiple times and Despy will only
-        initialize the model on the first call to ``run`` (unless
-        :meth:`.initialize` is called, of course).
+        initialize_rep the model on the first call to ``run`` (unless
+        :meth:`.initialize_rep` is called, of course).
 
         *Arguments*
             until (integer):
@@ -426,6 +417,19 @@ class Simulation(NamedObject):
                 101 or later will not.
                 
         """
+        
+        if until is None:
+            try:
+                del self.triggers["dp_untilTrigger"]
+            except KeyError:
+                pass            
+        elif (until > 0):
+            self.add_trigger("dp_untilTrigger", TimeTrigger(until))
+        else:
+            raise AttributeError("Simulation.run() until argument "
+                                 "should be None or integer > 0.  {} "
+                                 "passed instead".format(until))
+
         self._run_start_time = datetime.datetime.today()
         
         if isinstance(self.model.dp_initialize, types.FunctionType):
@@ -433,20 +437,13 @@ class Simulation(NamedObject):
         else:
             self.model.dp_initialize()
 
-        # Step through events on FEL
-        if isinstance(until, int):
-            stopTime = until
-            while self.peek() <= stopTime:
-                try:
-                    self.step()
-                except NoEventsRemainingError:
-                    break
-        else:
-            while True:
-                try:
-                    self.step()
-                except NoEventsRemainingError:
-                    break
+        continue_rep = True
+        while continue_rep:
+            try:
+                self.step()
+            except NoEventsRemainingError:
+                break
+            continue_rep = self.dp_check_triggers()
         
         if isinstance(self.model.dp_finalize, types.FunctionType):
             self.model.dp_finalize(self.model)
@@ -455,6 +452,32 @@ class Simulation(NamedObject):
             
         self._run_stop_time = datetime.datetime.today()
         self.gen.write_files()
+        
+    def dp_check_triggers(self):
+        """Checks all simulation triggers, returning False ends rep.
+        
+        *Returns*
+            Boolean. True if replication should continue, False
+            otherwise.
+        """
+        continue_rep = True
+        for _, trigger in self.triggers.items():
+            if trigger.check():
+                if not trigger.pull():
+                    continue_rep = False
+                    break
+        return continue_rep
+    
+    def add_trigger(self, key, trigger):
+        err_msg = ("{0} object provided to Simulation.add_trigger() "
+                "method must be a subclass of "
+                "despy.core.trigger.Trigger or registered as a "
+                "subclass using the Trigger.register() method")
+        
+        if issubclass(trigger.__class__, AbstractTrigger):
+            self.triggers[key] = trigger
+        else:
+            raise TypeError(err_msg.format(repr(trigger)))
             
     def get_data(self):
         """ Get a Python list with simulation parameters and results.
@@ -485,7 +508,7 @@ class Simulation(NamedObject):
         return output
     
     def reset(self, initial_time = 0):
-        self.initialize(initial_time)
+        self.initialize_rep(initial_time)
             
 class FutureEvent(namedtuple('FutureEventTuple',
                          ['time', 'event', 'priority'])):

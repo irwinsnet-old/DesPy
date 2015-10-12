@@ -49,3 +49,9 @@ class Priority():
     EARLY = -1
     STANDARD = 0
     LATE = 1
+    
+def check_trigger(trigger):
+    if isinstance(trigger, Trigger):
+        return True
+    else:
+        return False

@@ -9,13 +9,19 @@ despy.core.component
 
 ..  autosummary::
 
-    Component    
+    Trigger
+    
+..  todo
+
+    Create a new class for transient objects (entities and events) to
+    inherit from.
     
 """
+
 from itertools import count
 import types
 
-from despy.core.simulation import Session
+from despy.core.session import Session
 from despy.base.named_object import NamedObject
 
 class Component(NamedObject):
@@ -67,18 +73,11 @@ class Component(NamedObject):
         despy.core package inherit from the *Component* class.
         
         *Arguments*
-            ``model`` (:class:`despy.core.model.Model`)
-                The model that represents the system that the component
-                belongs to.
             ``name`` (String)
                 A descriptive short name that will appear in the trace
                 and output reports.
             ``description`` (String)
                 A descriptive paragraph. Optional.
-        
-        *Raises*
-            ``TypeError:`` if model is not an instance of
-            :class:`despy.core.model.Model`
         """
         super().__init__(name, description)
         
