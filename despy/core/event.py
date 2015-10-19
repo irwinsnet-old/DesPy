@@ -14,20 +14,52 @@ despy.core.event
     
 ..  todo
 
+    Refactor event so it no longer inherits from Component.
+    
     Add remove_trace_field method.
 """
 
 import types
+import abc
 from collections import OrderedDict
 
 from despy.core.component import Component
+from despy.core.session import Session
+
+class AbstractCallback(metaclass = abc.ABCMeta):
+    def __init__(self):
+        self.session = Session()
+        self.mod = self.session.model
+        self.sim = self.session.sim
+        self.owner = None
+        
+    @abc.abstractmethod
+    def call(self):
+        pass
+
+class Callback(AbstractCallback):
+    def __init__(self, callback_function = None):
+        super().__init__()
+        if isinstance(callback_function, types.FunctionType):
+            self.call = types.MethodType(callback_function, self)
+        elif isinstance(callback_function, types.MethodType):
+            self.call = callback_function
+        else:
+            raise TypeError("Argument to Callback.__init__() "
+                    "via callback_function argument is not a function "
+                    "or method\n"
+                    "Argument: {}".format(repr(callback_function)))
+        
+    def call(self):
+        pass        
+    
 
 class Event(Component):
     """ A base class for all events.
 
     Create an event by inheriting from the Event class. Subclasses of
     Event must instantiate one or more of the doPriorEvent(),
-    _do_event(), or doPostEvent() methods. The Simulation will execute
+    do_event(), or doPostEvent() methods. The Simulation will execute
     these methods when the Event time occurs and the Event object is
     removed from the FEL.
       
@@ -43,7 +75,7 @@ class Event(Component):
         trace_records
         append_callback
         add_trace_field
-        _do_event
+        do_event
         _update_trace_record
         _reset
         __lt__
@@ -108,7 +140,9 @@ class Event(Component):
                 A variable that represents a class method or function.
         
         """
-        self._callbacks.append(callback)
+        if isinstance(callback, AbstractCallback):
+            self._callbacks.append(callback)
+            callback.owner = self
     
     def add_trace_field(self, key, value):
         """Add custom fields to the event's trace record.
@@ -125,7 +159,7 @@ class Event(Component):
         """
         self.trace_fields[key] = value
 
-    def _do_event(self):
+    def dp_do_event(self):
         """Executes an event's callback functions.
         
         Internal Method. The ``_do_event`` called by the ``Simulation``
@@ -135,16 +169,18 @@ class Event(Component):
         *Returns:* ``True`` if a callback method is executed. ``None`` if
         there are no callbacks attached to the event.
         """
+        self.do_event()
+        
         if len(self._callbacks)==0:
             return None
         else:
             for callback in self._callbacks:
-                if isinstance(callback, types.FunctionType):
-                    callback(self)
-                elif isinstance(callback, types.MethodType):
-                    callback()
+                callback.call()
 
             return True
+        
+    def do_event(self):
+        pass
     
     def _update_trace_record(self, trace_record):
         """Updates a trace record with custom fields.

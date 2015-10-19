@@ -18,7 +18,7 @@ class testResource(unittest.TestCase):
 
         server = dp.Resource("Server", 2, self.get_rnd_exp)
         model.add_component("server", server)
-        _ = dp.Simulation(model = model)
+        dp.Session().model = model
         self.assertEqual(len(model.components), 1)
         self.assertEqual(server.name, "Server")
         ents = []
@@ -105,7 +105,8 @@ class testResource(unittest.TestCase):
         print("TEST RESOURCE IN SIMULATION OUTPUT")
         self.ResModel.Customer.set_counter()
         model = self.ResModel("Resource Model")
-        simulation = dp.Simulation(model = model)
+        dp.Session().model = model
+        simulation = dp.Simulation()
         simulation.gen.folder_basename = "C:/Projects/despy_output/resource_sim"
         simulation.run(100)
         

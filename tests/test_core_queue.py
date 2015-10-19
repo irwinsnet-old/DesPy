@@ -18,7 +18,8 @@ class testQueue(unittest.TestCase):
         print()
         print("=====Negative Time Test=====")
         model = dp.Component("Negative Time Model")
-        sim = dp.Simulation(model = model)
+        dp.Session().model = model
+        sim = dp.Simulation()
         sim.schedule(dp.Event("Positive Time"),
                        priority = dp.Priority.LATE)        
         model.sim.schedule(dp.Event("Negative Time"),
@@ -42,7 +43,8 @@ class testQueue(unittest.TestCase):
         model = dp.Component("Q-test")
         qu = dp.Queue("TestQueue")
         model.add_component("q", qu)
-        _ = dp.Simulation(model = model)
+        dp.Session().model = model
+        _ = dp.Simulation()
         self.assertEqual(qu.name, "TestQueue")
         customers = []
         dp.Entity.set_counter()
@@ -73,7 +75,7 @@ class testQueue(unittest.TestCase):
         model = QuModel("Queue Model")
         dp.Session().model = model
         self.assertIsInstance(dp.Session().model, QuModel)
-        sim = dp.Simulation(model = model)
+        sim = dp.Simulation()
         sim.gen.folder_basename = \
                 "C:/Projects/despy_output/queue_sim"
         

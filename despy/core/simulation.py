@@ -15,6 +15,14 @@ despy.core.simulation
     
 ..  todo
 
+    Get rid of model argument in __init__(). Require model to be
+    added to Session object.
+    
+    Stop implicitly initializing the model inside the
+    Simulation.__init__() method. Simulation.__init__() should only
+    initialize the simulation object! Add an explicit initialization
+    step if appropriate.
+    
     URGENT: Split initialize_rep() into initialize_sim() and
     intialize_rep(). Initialize_rep() will clear all simulation
     triggers. This will fix the trace_control testing error.
@@ -98,8 +106,8 @@ class Simulation(NamedObject):
       * :class:`despy.core.base.NamedObject`
     """
 
-    def __init__(self, initial_time=0, name = "Simulation",
-                 description = None, model = None):
+    def __init__(self, model = None, initial_time=0, name = "Simulation",
+                 description = None):
         """Creates and initializes the Simulation object.
         
         The Simulation object contains and manages the future event
@@ -115,19 +123,21 @@ class Simulation(NamedObject):
               name attribute. Type: string or type None. Defaults to
               type None.
         """
-        super().__init__(name, description)
-        self.model = model
+        super().__init__(name, description)        
+        
+        self._session = Session()
+        self.session.sim = self
+        if (self.session.model is None) and (model is not None):
+            self.session.model = model     
+        
         self._seed = None
         self._evt = None
         self._gen = Generator(self)
         self.gen.console_trace = True
         self.gen.folder_basename = None
-        
-        self.initialize_rep(initial_time)
-        
-        self.session = Session()
-        self.session.sim = self
-        self._triggers = OrderedDict()
+        self.reps = 1
+            
+        self.initialize_sim(initial_time)
 
     @property
     def model(self):
@@ -135,12 +145,16 @@ class Simulation(NamedObject):
         
         *Returns:* A list of despy.model.Model objects.
         """
-        return self._model
+        return self.session.model
     
     @model.setter
     def model(self, model):
-        self._model = model
+        self.session.model = model
         
+    @property
+    def session(self):
+        return self._session
+         
     @property
     def seed(self):
         """Calls seed methods in both numpy and standard random modules. 
@@ -263,9 +277,10 @@ class Simulation(NamedObject):
     def gen(self, generator):
         self._gen = generator
         
-    def reset_sim(self, initial_time = 0):
+    def initialize_sim(self, initial_time = 0):
+        self._triggers = OrderedDict()
+        self.curr_rep = 1
         self.initialize_rep(initial_time)
-        self._triggers.clear()
 
     def initialize_rep(self, initial_time = 0):
         """Reset the time to zero, allowing the simulation to be rerun.
@@ -383,7 +398,7 @@ class Simulation(NamedObject):
 
         # Run event
         self._evt = fel_item.event
-        fel_item.event._do_event()
+        fel_item.event.dp_do_event()
         self._evt = None
         
         # Reset the event in case it is called again.

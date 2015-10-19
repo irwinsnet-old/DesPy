@@ -232,7 +232,6 @@ class ProcessTimeOutEvent(Event):
     def __init__(self, process, name, trace_fields = None):
         self._process = process
         super().__init__(name, trace_fields)
-        self.append_callback(self.process_callback)
         
     @property
     def process(self):
@@ -242,7 +241,7 @@ class ProcessTimeOutEvent(Event):
         """
         return self._process
     
-    def process_callback(self):
+    def do_event(self):
         """Calls process iterator when event is executed by FEL.
         """
         self.process.call()

@@ -15,7 +15,7 @@ despy.core.timer
 import scipy.stats as stats
 
 from despy.core.component import Component
-from despy.core.event import Event
+from despy.core.event import Event, AbstractCallback
 from despy.base.utilities import Priority
 
 
@@ -109,10 +109,10 @@ class RandomTimer(Component):
     
     @callback.setter
     def callback(self, callback):
-        if callable(callback):
+        if isinstance(callback, AbstractCallback):
             self._callback = callback
         else:
-            raise TypeError
+            raise TypeError()
 
     @property
     def immediate(self):
@@ -170,8 +170,10 @@ class TimerEvent(Event):
         super().__init__(name)
         self.timer = timer
         self.append_callback(timer.callback)
-        self.append_callback(self.reschedule)
-    
+        
+    def do_event(self):
+        self.reschedule()
+
     def reschedule(self):
         """Reschedules event based on the RandomTimer's distribution.
         """

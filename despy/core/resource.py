@@ -493,7 +493,6 @@ class ResourceFinishServiceEvent(Event):
         self._station_index = station_index
         self._service_time = service_time
         self._entity = self.resource.stations[self.station_index].entity
-        self.append_callback(self.check_resource_queue)
         
     @property
     def resource(self):
@@ -526,6 +525,9 @@ class ResourceFinishServiceEvent(Event):
         *Type:* :class:`despy.core.entity.Entity`
         """
         return self._entity
+    
+    def do_event(self):
+        self.check_resource_queue()
         
     def check_resource_queue(self):
         """The event's callback method that checks the queue for a

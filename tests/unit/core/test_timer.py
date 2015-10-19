@@ -15,8 +15,9 @@ import despy.stats.random as drand
 import scipy.stats as stats
 
 
-def timer_callback(evt):
-    pass
+class TimerCallback(dp.AbstractCallback):
+    def call(self):
+        pass
 
 class testTimer(unittest.TestCase):
     def test_timer(self):
@@ -26,8 +27,9 @@ class testTimer(unittest.TestCase):
         model1 = dp.Component("Timer Test Model-A")
         dist1 = stats.poisson(10)
         model1.add_component("timer",
-                   dp.RandomTimer("Timer-A", dist1, timer_callback))
-        sim = dp.Simulation(model = model1)
+                   dp.RandomTimer("Timer-A", dist1, TimerCallback()))
+        dp.Session().model = model1
+        sim = dp.Simulation()
         model1.sim.seed = 731
         self.assertEqual(len(model1.components), 1)
         sim.run(100)
@@ -43,8 +45,9 @@ class testTimer(unittest.TestCase):
         model2 = dp.Component("Timer Test Model-B")
         dist2 = stats.poisson(150)
         model2.add_component("Timer",
-                   dp.RandomTimer("Timer-B", dist2, timer_callback))
-        sim = dp.Simulation(model = model2)
+                   dp.RandomTimer("Timer-B", dist2, TimerCallback()))
+        dp.Session().model = model2
+        sim = dp.Simulation()
         sim.seed = 704
         sim.run(1000)
         trace2 = model2.sim.gen.trace
@@ -59,9 +62,10 @@ class testTimer(unittest.TestCase):
 
         dist3 = drand.get_empirical_pmf([5, 10], [0.3, 0.7])
         model3.add_component("timer", 
-                   dp.RandomTimer("Timer-C", dist3, timer_callback,
+                   dp.RandomTimer("Timer-C", dist3, TimerCallback(),
                                 priority = dp.Priority.LATE))
-        sim = dp.Simulation(model = model3)
+        dp.Session().model = model3
+        sim = dp.Simulation()
         model3.sim.seed = 731        
         sim.run(100)
         trace3 = model3.sim.gen.trace

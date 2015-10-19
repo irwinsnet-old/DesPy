@@ -21,7 +21,7 @@ class testQueue(unittest.TestCase):
         print()
         print("=====Testing Plain Model=====")
         pm_name = "Plain Model"
-        pm_description = "Verifyin plain model attributes."
+        pm_description = "Verifying plain model attributes."
         p_model = dp.Component(pm_name, description = pm_description)
         self.assertEqual(p_model.name, pm_name)
         self.assertEqual(p_model.description, pm_description)
@@ -53,7 +53,8 @@ class testQueue(unittest.TestCase):
         self.assertEqual(len(q_model.components), 3)
         print(q_model.components)
         
-        sim = dp.Simulation(model = q_model)
+        dp.Session().model = q_model
+        sim = dp.Simulation()
         sim.gen.folder_basename = "C:/Projects/despy_output/queue_sim"
         sim.run(100)
         
