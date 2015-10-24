@@ -23,25 +23,25 @@ class testTimer(unittest.TestCase):
     def test_timer(self):
         #Test a basic timer
         print()
-        print("=====Testing RandomTimer with immediate = False========")
+        print("=====Testing RandomTimer with immediate = False=======")
         model1 = dp.Component("Timer Test Model-A")
+        dp.Session().model = model1   
+        sim = dp.Simulation()
+        sim.seed = 731                  
         dist1 = stats.poisson(10)
         model1.add_component("timer",
-                   dp.RandomTimer("Timer-A", dist1, TimerCallback()))
-        dp.Session().model = model1
-        sim = dp.Simulation()
-        model1.sim.seed = 731
+                   dp.RandomTimer("TimerA", dist1, TimerCallback()))
         self.assertEqual(len(model1.components), 1)
         sim.run(100)
-        
+         
         trace1 = model1.sim.gen.trace
         self.assertEqual(trace1[0]['time'], 7)
         self.assertEqual(trace1[1]['time'], 15)
         self.assertEqual(trace1[2]['time'], 23)
-        
+         
         #Test timer with immediate = True
         print()
-        print("=====Testing RandomTimer with immediate = True=========")
+        print("=====Testing RandomTimer with immediate = True======")
         model2 = dp.Component("Timer Test Model-B")
         dist2 = stats.poisson(150)
         model2.add_component("Timer",
@@ -54,12 +54,12 @@ class testTimer(unittest.TestCase):
         self.assertEqual(trace2[0]['time'], 142)
         self.assertEqual(trace2[1]['time'], 285)
         self.assertEqual(len(trace2), 3)
-        
+         
         #Test timer with Priority.LATE
         print()
         print("=====Testing Priority Attribute =======================")
         model3 = dp.Component("Timer Test Model-C")
-
+ 
         dist3 = drand.get_empirical_pmf([5, 10], [0.3, 0.7])
         model3.add_component("timer", 
                    dp.RandomTimer("Timer-C", dist3, TimerCallback(),

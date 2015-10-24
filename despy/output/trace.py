@@ -361,6 +361,10 @@ class Trace(object):
         if self.gen.sim.evt is not None:
             self.gen.sim.evt.trace_records.append(trace_record)
             
+    def print_trace_records(self):
+        for trace_record in self._record_list:
+            print(trace_record)
+            
     def write_csv(self, directory):
         """Create a CSV file_name containing all trace data.
         

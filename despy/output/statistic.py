@@ -35,8 +35,6 @@ class Statistic(NamedObject):
     b1, i1, i2, i4, i8, u1, u2, u4, u8, f2, f4, f8, c8, c16, a
     """
     
-#     Point = namedtuple('Point', 'time value')
-    
     def __init__(self, name, dtype, time_weighted = False, 
                  description = None):
         super().__init__(name, description)
@@ -57,7 +55,7 @@ class Statistic(NamedObject):
         self._rep_means = None
         self._min = None
         
-        self._add_rep()
+#         self._add_rep()
 
     @property
     def dtype(self):

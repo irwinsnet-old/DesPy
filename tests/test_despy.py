@@ -13,7 +13,8 @@ class testDespyb(unittest.TestCase):
     ### Simulation Class Tests
     def test_now(self):
         # Verify that Simulation.now is set to 0 by default.
-        exp1 = dp.Simulation(dp.Component("Test"))
+        dp.Session().model = dp.Component("Test")
+        exp1 = dp.Simulation()
         self.assertEqual(exp1.now, 0)
         self.assertTrue(exp1.gen.console_trace)
         
@@ -24,7 +25,8 @@ class testDespyb(unittest.TestCase):
         self.assertTrue(exp1.gen.console_trace)
         
         # Verify that Simulation.now can be set by the class constructor.
-        exp2 = dp.Simulation(dp.Component("Test"), 42)
+        dp.Session().model = dp.Component("Test")
+        exp2 = dp.Simulation(42)
         self.assertEqual(exp2.now, 42)
         
         # Verify that a name can be assigned to the simulation.
@@ -52,7 +54,8 @@ class testDespyb(unittest.TestCase):
         self.assertRaises(TypeError, dp.Component, ("Model Name", None, 365))
         
         #Check simulation.
-        exp = dp.Simulation(dp.Component("Test"))
+        dp.Session().model = dp.Component("Test")
+        exp = dp.Simulation()
         exp.name = "New Simulation C\\C/C|C*C?C"
         self.assertEqual(exp.slug, "New_Simulation_C_C_C_C_C_C")
         self.assertIsInstance(testModel.sim, dp.Simulation)

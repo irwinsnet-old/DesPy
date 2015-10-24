@@ -90,8 +90,26 @@ class Component(NamedObject):
         self._components = {}
         self._statistics = {}
 
-        self._parent = None
-        self.session = Session()
+        self._owner = None
+        self._session = Session()
+        
+    @property
+    def session(self):
+        return self._session
+    
+    @property
+    def sim(self):
+        """A link to the model's simulation attribute.
+        
+        This read-only attribute is provided for convenience.
+        
+        *Returns:* :class:`despy.core.simulation.Simulation`
+        """
+        return self.session.sim
+    
+    @property
+    def model(self):
+        return self.session.model
 
     @property
     def components(self):
@@ -109,35 +127,25 @@ class Component(NamedObject):
         """
         if key.isidentifier() and (not hasattr(self, key)):
             self._components[key] = item
-            item.parent = self
+            item.owner = self
             setattr(self, key, item)
         else:
             raise ValueError("Invalid key. Key must be a valid "
                              "Python identifier and cannot be the "
                              "same as an existing attribute or "
                              "reserved keyword.")
-            
-    @property
-    def sim(self):
-        """A link to the model's simulation attribute.
-        
-        This read-only attribute is provided for convenience.
-        
-        *Returns:* :class:`despy.core.simulation.Simulation`
-        """
-        return self.session.sim
     
     @property
-    def parent(self):
-        """A link to the component's parent.
+    def owner(self):
+        """A link to the component's owner.
         
         *Returns* :class:`despy.core.component.Component
         """
-        return self._parent
+        return self._owner
     
-    @parent.setter
-    def parent(self, parent):
-        self._parent = parent
+    @owner.setter
+    def owner(self, owner):
+        self._owner = owner
     
     @property
     def number(self):
@@ -219,11 +227,15 @@ class Component(NamedObject):
 
         for _, component in self.components.items():
             component.dp_initialize()
+            for statistic in component.statistics.items():
+                statistic.increment_rep()
         
         if isinstance(self.initialize, types.FunctionType):
             self.initialize(self)
         else:
             self.initialize()
+        for statistic in self.statistics.items():
+            statistic.increment_rep()
         
     def initialize(self):
         """Subclasses should override this method with initialization

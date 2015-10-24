@@ -82,7 +82,7 @@ class CustArrProcess(dp.Process):
 
     def generator(self):
         first_customer = Customer()
-        self.parent.c_q.add(first_customer)                
+        self.owner.c_q.add(first_customer)                
         yield self.schedule_timeout(\
                 "Customer #{0} arrives.".format(first_customer.number))
         while True:
@@ -91,8 +91,8 @@ class CustArrProcess(dp.Process):
             yield self.schedule_timeout(\
                     "Customer #{0} arrives.".format(customer.number),
                     delay)
-            self.parent.c_q.add(customer)
-            self.parent.service_process.wake()
+            self.owner.c_q.add(customer)
+            self.owner.service_process.wake()
 
 
 class CustServiceProcess(dp.Process):
@@ -101,8 +101,8 @@ class CustServiceProcess(dp.Process):
         
     def generator(self):
         while True:
-            if self.parent.c_q.length > 0:
-                customer = self.parent.c_q.remove()
+            if self.owner.c_q.length > 0:
+                customer = self.owner.c_q.remove()
                 delay = round(stats.expon.rvs(scale = 4))
                 yield self.schedule_timeout(\
                         "Finished serving customer #{0}, "

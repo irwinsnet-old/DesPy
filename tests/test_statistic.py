@@ -22,17 +22,16 @@ class testStatistic(unittest.TestCase):
         r_lens = []; times = []; values = []
  
         reps = 5
-        for rep in range(reps):
+        for _ in range(reps):
             time = 0
             r_lens.append(round(dist_num.rvs()))
+            stat1.increment_rep()
             for _ in range(r_lens[-1]):
                 time += round(dist_time.rvs())
                 value = round(dist_v.rvs())
                 stat1.append(time, value)
                 times.append(time)
                 values.append(value)
-            if rep < reps - 1:
-                stat1.increment_rep()
 
         print("=====Checking Test Setup Data=====")
         self.assertListEqual(stat1.rep_lengths.tolist(), r_lens)

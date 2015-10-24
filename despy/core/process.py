@@ -24,6 +24,8 @@ despy.core.process
     Test sleep and wake methods.
 
     Have sleep method write a trace record.
+    
+    Refactor to use a Callback object.
 """
 
 from collections import namedtuple

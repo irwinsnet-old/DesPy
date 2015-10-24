@@ -76,7 +76,7 @@ class testResource(unittest.TestCase):
                 self.server_resource = server_resource
              
             def generator(self):
-                customer = self.parent.Customer()
+                customer = self.owner.Customer()
                 args1 = OrderedDict()
                 args1["Interarrival_Time"] = None
                 args1["Customer"] = customer
@@ -86,7 +86,7 @@ class testResource(unittest.TestCase):
                 while True:
                     self.server_resource.request(customer)
                     delay = round(stats.expon.rvs(scale = 3))
-                    customer = self.parent.Customer()
+                    customer = self.owner.Customer()
                     args2 = OrderedDict()
                     args2["Interarrival_Time"] = delay                    
                     args2["Customer"] = customer

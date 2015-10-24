@@ -176,7 +176,6 @@ class Event(Component):
         else:
             for callback in self._callbacks:
                 callback.call()
-
             return True
         
     def do_event(self):

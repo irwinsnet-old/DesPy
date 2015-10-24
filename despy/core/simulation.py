@@ -14,14 +14,6 @@ despy.core.simulation
     NoEventsRemainingError
     
 ..  todo
-
-    Get rid of model argument in __init__(). Require model to be
-    added to Session object.
-    
-    Stop implicitly initializing the model inside the
-    Simulation.__init__() method. Simulation.__init__() should only
-    initialize the simulation object! Add an explicit initialization
-    step if appropriate.
     
     URGENT: Split initialize_rep() into initialize_sim() and
     intialize_rep(). Initialize_rep() will clear all simulation
@@ -37,21 +29,14 @@ despy.core.simulation
     
     Add functionality for multiple reps.
     
-    Create a callback object that contains a callback function. This
-    will remove the necessity to check if callbacks are functions or
-    methods (they will always be methods). Follows command pattern.
-    
     Revise internal function names -- get rid of underscore prefix and
     replace with "dp_" prefix to indicate an internal framework
     method.
-    
-    Get rid of isinstance check for functiontype of dp_initialize in
-    Simulation.run()
 """
 
 from heapq import heappush, heappop
 from itertools import count
-import datetime, random, types
+import datetime, random
 from collections import namedtuple, OrderedDict
 
 import numpy as np
@@ -106,7 +91,7 @@ class Simulation(NamedObject):
       * :class:`despy.core.base.NamedObject`
     """
 
-    def __init__(self, model = None, initial_time=0, name = "Simulation",
+    def __init__(self, initial_time=0, name = "Simulation",
                  description = None):
         """Creates and initializes the Simulation object.
         
@@ -126,18 +111,38 @@ class Simulation(NamedObject):
         super().__init__(name, description)        
         
         self._session = Session()
-        self.session.sim = self
-        if (self.session.model is None) and (model is not None):
-            self.session.model = model     
+        self.session.sim = self  
         
+        self.initial_time = initial_time
         self._seed = None
         self._evt = None
         self._gen = Generator(self)
         self.gen.console_trace = True
         self.gen.folder_basename = None
-        self.reps = 1
+        self._reps = 1
+        self._rep = 0
             
-        self.initialize_sim(initial_time)
+        self.initialize_sim()
+        
+    @property
+    def reps(self):
+        return self._reps
+    
+    @reps.setter
+    def reps(self, reps):
+        self._reps = reps
+        
+    @property
+    def rep(self):
+        return self._rep
+    
+    @property
+    def initial_time(self):
+        return self._initial_time
+    
+    @initial_time.setter
+    def initial_time(self, initial_time):
+        self._initial_time = initial_time
 
     @property
     def model(self):
@@ -146,10 +151,6 @@ class Simulation(NamedObject):
         *Returns:* A list of despy.model.Model objects.
         """
         return self.session.model
-    
-    @model.setter
-    def model(self, model):
-        self.session.model = model
         
     @property
     def session(self):
@@ -277,12 +278,12 @@ class Simulation(NamedObject):
     def gen(self, generator):
         self._gen = generator
         
-    def initialize_sim(self, initial_time = 0):
+    def initialize_sim(self):
         self._triggers = OrderedDict()
         self.curr_rep = 1
-        self.initialize_rep(initial_time)
+        self.initialize_rep()
 
-    def initialize_rep(self, initial_time = 0):
+    def initialize_rep(self):
         """Reset the time to zero, allowing the simulation to be rerun.
         
         Sets the simulation time to zero. Also sets the model's
@@ -299,13 +300,11 @@ class Simulation(NamedObject):
             ``initial_time``: Set the simulation clock to the value
             specified in ``initial_time``. Defaults to zero.
         """
-        self._now = initial_time * 10
+        self._now = self.initial_time * 10
         self._pri = 0
         self._futureEventList = []
         self._run_start_time = None
         self._run_stop_time = None
-        #  Each event gets a unique integer ID, starting with 0 for the first
-        # event.
         self._counter = count()
         self.gen.trace.clear()
         
@@ -432,7 +431,7 @@ class Simulation(NamedObject):
                 101 or later will not.
                 
         """
-        
+        # Add trigger for replication stop time
         if until is None:
             try:
                 del self.triggers["dp_untilTrigger"]
@@ -444,26 +443,25 @@ class Simulation(NamedObject):
             raise AttributeError("Simulation.run() until argument "
                                  "should be None or integer > 0.  {} "
                                  "passed instead".format(until))
-
         self._run_start_time = datetime.datetime.today()
         
-        if isinstance(self.model.dp_initialize, types.FunctionType):
-            self.model.dp_initialize(self.model)
-        else:
+        for rep in range(0, self.reps):
+            self._rep = rep
             self.model.dp_initialize()
 
-        continue_rep = True
-        while continue_rep:
-            try:
-                self.step()
-            except NoEventsRemainingError:
-                break
-            continue_rep = self.dp_check_triggers()
+            # Step through events on FEL and check triggers.
+            continue_rep = True
+            while continue_rep:
+                try:
+                    self.step()
+                except NoEventsRemainingError:
+                    break
+                continue_rep = self.dp_check_triggers()
         
-        if isinstance(self.model.dp_finalize, types.FunctionType):
-            self.model.dp_finalize(self.model)
-        else:
+            # Finalize model and setup for next replication
             self.model.dp_finalize()
+            if rep < self.reps  - 1:
+                self.initialize_rep()
             
         self._run_stop_time = datetime.datetime.today()
         self.gen.write_files()
@@ -523,7 +521,7 @@ class Simulation(NamedObject):
         return output
     
     def reset(self, initial_time = 0):
-        self.initialize_rep(initial_time)
+        self.initialize_rep()
             
 class FutureEvent(namedtuple('FutureEventTuple',
                          ['time', 'event', 'priority'])):
