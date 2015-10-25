@@ -27,11 +27,11 @@ from despy.core.component import Component
 from despy.core.session import Session
 
 class AbstractCallback(metaclass = abc.ABCMeta):
-    def __init__(self):
+    def __init__(self, caller = None):
         self.session = Session()
         self.mod = self.session.model
         self.sim = self.session.sim
-        self.owner = None
+        self.caller = caller
         
     @abc.abstractmethod
     def call(self):
