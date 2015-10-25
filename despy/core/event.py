@@ -27,12 +27,11 @@ from despy.core.component import Component
 from despy.core.session import Session
 
 class AbstractCallback(metaclass = abc.ABCMeta):
-    def __init__(self, caller = None):
+    def __init__(self, **args):
         self.session = Session()
         self.mod = self.session.model
         self.sim = self.session.sim
-        self.caller = caller
-        
+        self.args = args
     @abc.abstractmethod
     def call(self):
         pass
@@ -142,7 +141,6 @@ class Event(Component):
         """
         if isinstance(callback, AbstractCallback):
             self._callbacks.append(callback)
-            callback.owner = self
     
     def add_trace_field(self, key, value):
         """Add custom fields to the event's trace record.
