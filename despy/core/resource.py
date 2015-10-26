@@ -412,7 +412,7 @@ class ResourceQueue(Queue):
     
         empty_resources = []    
         for index in range(self.num_resources):
-            if self[index].get_available_station:
+            if self[index].get_available_station() is not None:
                 empty_resources.append(index)
         
         if len(empty_resources) == 0:
