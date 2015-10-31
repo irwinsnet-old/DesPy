@@ -37,7 +37,7 @@ class AbstractCallback(metaclass = abc.ABCMeta):
         pass
 
 class Callback(AbstractCallback):
-    def __init__(self, callback_function = None):
+    def __init__(self, callback_function, owner = None):
         super().__init__()
         if isinstance(callback_function, types.FunctionType):
             self.call = types.MethodType(callback_function, self)
@@ -48,6 +48,7 @@ class Callback(AbstractCallback):
                     "via callback_function argument is not a function "
                     "or method\n"
                     "Argument: {}".format(repr(callback_function)))
+        self.owner = owner
         
     def call(self):
         pass        
@@ -141,6 +142,7 @@ class Event(Component):
         """
         if isinstance(callback, AbstractCallback):
             self._callbacks.append(callback)
+            callback.owner = self
     
     def add_trace_field(self, key, value):
         """Add custom fields to the event's trace record.

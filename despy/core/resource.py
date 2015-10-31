@@ -252,7 +252,7 @@ class Resource(Component):
             ``ResourceQueue.service_time`` property to a function.
         """
         try:
-            return self.service_time.rvs()
+            return round(self.service_time.rvs())
         except:
             if self.service_time is None:
                 raise NotImplementedError  

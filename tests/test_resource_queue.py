@@ -8,15 +8,13 @@ import scipy.stats as stats
 import despy.core as dp
 
 class testResource(unittest.TestCase):
-    def get_rnd_exp(self, user):
-        return round(stats.expon.rvs(scale = 4))
     
     def test_resource_init(self):
         print()
         print("TEST RESOURCE INIT OUTPUT")
         model = dp.Component("Resource Test #1")
 
-        server = dp.Resource("Server", 2, self.get_rnd_exp)
+        server = dp.Resource("Server", 2, stats.expon(scale=4))
         model.add_component("server", server)
         dp.Session().model = model
         self.assertEqual(len(model.components), 1)
@@ -64,11 +62,7 @@ class testResource(unittest.TestCase):
                 super().__init__("ServerQueue")
                 self.assign_resource(dp.Resource("Server",
                                               capacity,
-                                              self.get_service_time))
-
-            def get_service_time(self, index):
-                return round(stats.expon.rvs(scale = 4))
-                
+                                              stats.expon(scale=4)))                
          
         class CustArrProcess(dp.Process):
             def __init__(self, server_resource):
