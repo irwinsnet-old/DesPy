@@ -145,7 +145,6 @@ class Component(NamedObject):
     
     @owner.setter
     def owner(self, owner):
-        print("Setting owner on {}".format(self)) #DEBUG:
         self._owner = owner
     
     @property

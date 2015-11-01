@@ -32,6 +32,8 @@ despy.output.trace
     
     Refactor to remove use of "_" for private attributes. Only use for
     read-only attributes.
+    
+    Write column headers to console trace.
 """
 from collections import OrderedDict
 import csv
@@ -72,7 +74,7 @@ class TraceRecord(OrderedDict):
     **Python Library Dependencies**
         * :class:`collections.OrderedDict`
     """
-    def __init__(self, number, time, priority, record_type, name):
+    def __init__(self, number, rep, time, priority, record_type, name):
         """Construct a TraceRecord object.
         
         *Arguments*
@@ -92,6 +94,7 @@ class TraceRecord(OrderedDict):
         super().__init__()
         
         self['number'] = number
+        self['rep'] = rep
         self['time'] = time
         self['priority'] = priority
         self['record_type'] = record_type
@@ -112,9 +115,8 @@ class TraceRecord(OrderedDict):
         *Returns:* String
         """
         #Format data from default fields
-        tem1 = "{number:4}|{time:5}{priority:+2}| {record_type}| "
-        tem2 = "{name}"
-        template = tem1 + tem2
+        template = "{number:4}|{rep:4}|{time:5}{priority:+2}|" \
+            "{record_type:8}|{name}"
         default_fields = template.format(**self)
         
         #Format data from custom fields
@@ -325,7 +327,7 @@ class Trace(object):
                     assert isinstance(rec, TraceRecord)
                     print(rec)
             
-    def add_event(self, time, priority, event):
+    def add_event(self, rep, time, priority, event):
         """Record an event on the Trace report.
         
         *Arguments:*
@@ -337,8 +339,8 @@ class Trace(object):
                 Event object that is being recorded.
         """
         if self.is_active():
-            trace_record = TraceRecord(self._number, time, priority,
-                                       'Event', event.name)
+            trace_record = TraceRecord(self._number, rep, time,
+                                       priority, 'Event', event.name)
             self.add(event._update_trace_record(trace_record))
 
     def add_message(self, message, fields = None):
@@ -351,7 +353,8 @@ class Trace(object):
                 Custom fields that will be added to the TraceRecord.
                 Optional. Defaults to None.
         """
-        trace_record = TraceRecord(self._number, self.gen.sim.now,
+        trace_record = TraceRecord(self._number, self.gen.sim.rep,
+                                   self.gen.sim.now,
                                    self.gen.sim.pri, "Msg", message)
         if fields is not None:
             trace_record.add_fields(fields)
@@ -450,8 +453,8 @@ class CSV_file(object):
             self.write_sim_header_data(self.trace.gen.sim.get_data())
             
             # Write trace table
-            self._writer.writerow(['Record #', 'Time', 'Priority',
-                                   'Record Type', 'Name'])
+            self._writer.writerow(['Record #', 'Rep', 'Time',
+                                   'Priority', 'Record Type', 'Name'])
             for trace_record in self.trace._record_list:
                 self._writer.writerow(trace_record.get_row())
             file.close()

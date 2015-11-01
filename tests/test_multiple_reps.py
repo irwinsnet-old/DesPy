@@ -47,6 +47,7 @@ class Test(unittest.TestCase):
     def test_reps(self):
         dp.Session().model = RepModel()
         sim = dp.Simulation()
+        sim.reps = 2
         sim.gen.folder_basename = "C:/Projects/despy_output/mult_reps"
         sim.run(100)
 

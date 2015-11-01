@@ -281,6 +281,9 @@ class Simulation(NamedObject):
     def initialize_sim(self):
         self._triggers = OrderedDict()
         self.curr_rep = 1
+        self._run_start_time = None
+        self._run_stop_time = None
+        self.gen.trace.clear()
         self.initialize_rep()
 
     def initialize_rep(self):
@@ -303,10 +306,7 @@ class Simulation(NamedObject):
         self._now = self.initial_time * 10
         self._pri = 0
         self._futureEventList = []
-        self._run_start_time = None
-        self._run_stop_time = None
         self._counter = count()
-        self.gen.trace.clear()
         
     def is_rep_initialized(self):
         return (len(self._futureEventList) > 0)
@@ -392,7 +392,7 @@ class Simulation(NamedObject):
             self._pri = fel_item.priority
 
         # Record event in trace report        
-        self.gen.trace.add_event(self.now, fel_item.priority,
+        self.gen.trace.add_event(self.rep, self.now, fel_item.priority,
                                  fel_item.event)
 
         # Run event
@@ -521,7 +521,7 @@ class Simulation(NamedObject):
         return output
     
     def reset(self, initial_time = 0):
-        self.initialize_rep()
+        self.initialize_sim()
             
 class FutureEvent(namedtuple('FutureEventTuple',
                          ['time', 'event', 'priority'])):
