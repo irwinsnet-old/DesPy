@@ -32,6 +32,7 @@ class AbstractCallback(metaclass = abc.ABCMeta):
         self.mod = self.session.model
         self.sim = self.session.sim
         self.args = args
+        
     @abc.abstractmethod
     def call(self):
         pass

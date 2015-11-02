@@ -135,6 +135,9 @@ class Queue(Component):
         self.times_in_queue.append(self.sim.now - item.time_in_fld)
         return item.item_fld
     
+    def clear(self):
+        self._queue.clear()
+    
     def get_data(self):
         """Creates charts and adds data to final report.
         

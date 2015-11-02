@@ -94,10 +94,7 @@ class Resource(Component):
         
         self._Station_tuple = namedtuple('Station',
                                         ['entity', 'start_time'])
-    
-        empty_station = self.Station_tuple(entity = None,
-                                           start_time = None)
-        self._stations = [empty_station] * self.capacity
+        self.clear_stations()
         """  """
         
     @property
@@ -186,6 +183,11 @@ class Resource(Component):
                 A ResourceStation namedtuple object.
         """
         self.stations[index] = entity
+        
+    def clear_stations(self):
+        empty_station = self.Station_tuple(entity = None,
+                                           start_time = None)
+        self._stations = [empty_station] * self.capacity
 
     def get_available_station(self, random = False):
         """Returns the index of an empty station.
@@ -314,6 +316,9 @@ class Resource(Component):
         self.stations[index].entity = None
         self.stations[index].start_time = None
         return entity
+    
+    def finalize(self):
+        self.clear_stations()
      
     def get_data(self):
         st = self.get_stat("Service Time")
@@ -448,6 +453,11 @@ class ResourceQueue(Queue):
             #Resources all busy
             self.add(entity)
             return False
+        
+    def finalize(self):
+        for _, res in self._resources.items():
+            res.clear_stations()
+        self.clear()
         
 
 class ResourceFinishServiceEvent(Event):

@@ -459,8 +459,8 @@ class Simulation(NamedObject):
                 continue_rep = self.dp_check_triggers()
         
             # Finalize model and setup for next replication
-            self.model.dp_finalize()
             if rep < self.reps  - 1:
+                self.model.dp_finalize()
                 self.initialize_rep()
             
         self._run_stop_time = datetime.datetime.today()
