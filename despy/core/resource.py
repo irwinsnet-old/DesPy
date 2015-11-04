@@ -549,6 +549,7 @@ class ResourceFinishServiceEvent(Event):
     def _update_trace_record(self, trace_record):
         """Adds the entity name and service time to the trace report.
         """
-        trace_record['duration_field'] = self.service_time        
+        trace_record[self.resource.name + ": duration"] = \
+                self.service_time        
         trace_record['Entity'] = self.entity
         return trace_record        

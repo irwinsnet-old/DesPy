@@ -11,7 +11,13 @@ despy.core.timer
 
     RandomTimer
     TimerEvent
+    
+..  todo
+
+    Add ability to add custom trace fields from callback funtion.
 """
+from collections import OrderedDict
+
 import scipy.stats as stats
 
 from despy.core.component import Component
@@ -71,6 +77,7 @@ class RandomTimer(Component):
         self.priority = priority
         self.callback = callback
         self._current_interval = 0
+        self._trace_fields = OrderedDict()
         
         # Set distribution attribute
         if isinstance(distribution, stats.distributions.rv_frozen) or \
@@ -111,6 +118,7 @@ class RandomTimer(Component):
     def callback(self, callback):
         if isinstance(callback, AbstractCallback):
             self._callback = callback
+#             callback.timer = self
         else:
             raise TypeError()
 
@@ -141,7 +149,10 @@ class RandomTimer(Component):
     @priority.setter
     def priority(self, priority):
         self._priority = priority
-    
+        
+    @property
+    def trace_fields(self):
+        return self._trace_fields
         
 class TimerEvent(Event):
     """Event that schedules itself to recur after an interval.
@@ -185,4 +196,6 @@ class TimerEvent(Event):
         """Adds the entity name and service time to the trace report.
         """
         trace_record['interval'] = self.timer.current_interval
+#         for key, value in self.timer.trace_fields.items():
+#             trace_record[key] = value
         return trace_record

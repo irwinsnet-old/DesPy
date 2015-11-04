@@ -26,7 +26,7 @@ despy.core.queue
     Refactor time in queue to use Statistic class.
 """
 
-from collections import deque, namedtuple
+from collections import deque, namedtuple, OrderedDict
 
 import numpy as np
 
@@ -121,6 +121,10 @@ class Queue(Component):
         """
         self._queue.append(Queue.Item(item_fld = item, \
                                       time_in_fld = self.sim.now))
+        message = "Entering Queue"
+        fields = OrderedDict()
+        fields["Length"] = self.length
+        self.sim.gen.trace.add_message(message, fields)
     
     def remove(self):
         """Remove an item from the beginning of the queue.
