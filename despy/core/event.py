@@ -17,6 +17,8 @@ despy.core.event
     Refactor event so it no longer inherits from Component.
     
     Add remove_trace_field method.
+    
+    Consider getting rid of trace_record history.
 """
 
 import types
@@ -26,20 +28,22 @@ from collections import OrderedDict
 from despy.core.component import Component
 from despy.core.session import Session
 
-class AbstractCallback(metaclass = abc.ABCMeta):
+class AbstractCallback(metaclass = abc.ABCMeta):    
+    @abc.abstractmethod
+    def call(self, **args):
+        pass
+    
+class InheritedCallback(AbstractCallback):
     def __init__(self, **args):
         self.session = Session()
-        self.mod = self.session.model
-        self.sim = self.session.sim
         self.args = args
         
-    @abc.abstractmethod
-    def call(self):
+    def call(self, **args):
         pass
 
-class Callback(AbstractCallback):
-    def __init__(self, callback_function, owner = None):
-        super().__init__()
+class ArgumentCallback(AbstractCallback):
+    def __init__(self, callback_function):
+        self.session = Session()
         if isinstance(callback_function, types.FunctionType):
             self.call = types.MethodType(callback_function, self)
         elif isinstance(callback_function, types.MethodType):
@@ -49,9 +53,8 @@ class Callback(AbstractCallback):
                     "via callback_function argument is not a function "
                     "or method\n"
                     "Argument: {}".format(repr(callback_function)))
-        self.owner = owner
         
-    def call(self):
+    def call(self, **args):
         pass        
     
 
@@ -77,7 +80,7 @@ class Event(Component):
         append_callback
         add_trace_field
         do_event
-        _update_trace_record
+        dp_update_trace_record
         _reset
         __lt__
         __gt__
@@ -182,10 +185,10 @@ class Event(Component):
     def do_event(self):
         pass
     
-    def _update_trace_record(self, trace_record):
+    def dp_update_trace_record(self, trace_record):
         """Updates a trace record with custom fields.
         
-        Internal Method. The ``_update_trace_record`` method is called
+        Internal Method. The ``dp_update_trace_record`` method is called
         by the ``trace`` object. It is not intended to be called by the
         user.
         
@@ -201,10 +204,15 @@ class Event(Component):
         if self.trace_fields is not None:
             for key, value in self.trace_fields.items():
                 trace_record[key] = value
+                
+        trace_record = self.update_trace_record(trace_record)
         
         # If the event object is reused, object will keep list of all
         # of it's trace records.        
         self._trace_records.insert(0, trace_record)
+        return trace_record
+    
+    def update_trace_record(self, trace_record):
         return trace_record
     
     def _reset(self):

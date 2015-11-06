@@ -16,7 +16,7 @@ import scipy.stats as stats
 
 
 class TimerCallback(dp.AbstractCallback):
-    def call(self):
+    def call(self, **args):
         pass
 
 class testTimer(unittest.TestCase):

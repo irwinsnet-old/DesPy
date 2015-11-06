@@ -341,7 +341,7 @@ class Trace(object):
         if self.is_active():
             trace_record = TraceRecord(self._number, rep, time,
                                        priority, 'Event', event.name)
-            self.add(event._update_trace_record(trace_record))
+            self.add(event.dp_update_trace_record(trace_record))
 
     def add_message(self, message, fields = None):
         """Creates a message TraceRecord and adds it to the Trace.

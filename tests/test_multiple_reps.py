@@ -4,6 +4,7 @@ Created on Oct 25, 2015
 @author: stacy.irwin
 '''
 import unittest
+from collections import OrderedDict
 
 import despy.core as dp
 import despy.stats.random as dsr
@@ -37,9 +38,15 @@ class RepModel(dp.Component):
         self.res_q.assign_resource(dp.Resource("Abel", 1, abel_dist))
         self.res_q.assign_resource(dp.Resource("Baker", 1, baker_dist))
                            
-    class CustomerArrivalCallback(dp.AbstractCallback):
-        def call(self):
-            self.args["rep_model"].res_q.request(dp.Entity("Customer"))
+    class CustomerArrivalCallback(dp.InheritedCallback):
+        def call(self, **args):
+            new_customer = dp.Entity("Customer")
+            fields = OrderedDict()
+            fields["==="] = '='
+            fields["Customer"] = str(new_customer)
+            self.session.sim.gen.trace.add_message("Customer Arriving",
+                                    fields)            
+            self.args["rep_model"].res_q.request(new_customer)
 
 
 class Test(unittest.TestCase):

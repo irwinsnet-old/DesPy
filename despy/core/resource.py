@@ -481,7 +481,7 @@ class ResourceFinishServiceEvent(Event):
         service_time
         entity
         check_resource_queue
-        _update_trace_record
+        dp_update_trace_record
 
     """
     
@@ -546,7 +546,7 @@ class ResourceFinishServiceEvent(Event):
         self.resource.finish_service(self.station_index,
                                      self.service_time)    
         
-    def _update_trace_record(self, trace_record):
+    def dp_update_trace_record(self, trace_record):
         """Adds the entity name and service time to the trace report.
         """
         trace_record[self.resource.name + ": duration"] = \

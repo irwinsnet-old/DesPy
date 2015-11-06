@@ -124,6 +124,7 @@ class Queue(Component):
         message = "Entering Queue"
         fields = OrderedDict()
         fields["Length"] = self.length
+        fields["Entity"] = str(item)
         self.sim.gen.trace.add_message(message, fields)
     
     def remove(self):
@@ -136,7 +137,16 @@ class Queue(Component):
         *Returns:* The item that was removed from the queue.
         """
         item = self._queue.popleft()
-        self.times_in_queue.append(self.sim.now - item.time_in_fld)
+        q_time = self.sim.now - item.time_in_fld
+        self.times_in_queue.append(q_time)
+        
+        message = "Leaving Queue"
+        fields = OrderedDict()
+        fields["Length"] = self.length
+        fields["Entity"] = str(item.item_fld)
+        fields["Time_in_Q"] = q_time
+        self.sim.gen.trace.add_message(message, fields)        
+        
         return item.item_fld
     
     def clear(self):

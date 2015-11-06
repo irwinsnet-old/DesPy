@@ -227,7 +227,7 @@ class ProcessTimeOutEvent(Event):
     **Methods**
       * :meth:`ProcessTimeOutEvent.process_callback`: Calls process
         iterator when event is executed by FEL.
-      * :meth:`ProcessTimeOutEvent._update_trace_record`: Can be
+      * :meth:`ProcessTimeOutEvent.dp_update_trace_record`: Can be
         sub-classed to modify event trace record.
     """
     
@@ -248,7 +248,7 @@ class ProcessTimeOutEvent(Event):
         """
         self.process.call()
         
-    def _update_trace_record(self, trace_record):
+    def dp_update_trace_record(self, trace_record):
         """Can be sub-classed to modify event trace record.
         
         *Arguments*
@@ -256,4 +256,4 @@ class ProcessTimeOutEvent(Event):
                 The default trace record that is created by the trace
                 object.
         """
-        return super()._update_trace_record(trace_record)
+        return super().dp_update_trace_record(trace_record)

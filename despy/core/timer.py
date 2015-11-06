@@ -118,7 +118,6 @@ class RandomTimer(Component):
     def callback(self, callback):
         if isinstance(callback, AbstractCallback):
             self._callback = callback
-#             callback.timer = self
         else:
             raise TypeError()
 
@@ -150,9 +149,6 @@ class RandomTimer(Component):
     def priority(self, priority):
         self._priority = priority
         
-    @property
-    def trace_fields(self):
-        return self._trace_fields
         
 class TimerEvent(Event):
     """Event that schedules itself to recur after an interval.
@@ -180,10 +176,10 @@ class TimerEvent(Event):
         """
         super().__init__(name)
         self.timer = timer
-        self.append_callback(timer.callback)
         
     def do_event(self):
         self.reschedule()
+        self.timer.callback.call(timer_evt = self)
 
     def reschedule(self):
         """Reschedules event based on the RandomTimer's distribution.
@@ -192,10 +188,7 @@ class TimerEvent(Event):
         self.sim.schedule(self, self.timer.current_interval,
                           self.timer.priority)
         
-    def _update_trace_record(self, trace_record):
-        """Adds the entity name and service time to the trace report.
-        """
+    def update_trace_record(self, trace_record):
         trace_record['interval'] = self.timer.current_interval
-#         for key, value in self.timer.trace_fields.items():
-#             trace_record[key] = value
         return trace_record
+        
