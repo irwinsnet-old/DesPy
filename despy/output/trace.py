@@ -74,7 +74,7 @@ class TraceRecord(OrderedDict):
     **Python Library Dependencies**
         * :class:`collections.OrderedDict`
     """
-    def __init__(self, number, rep, time, priority, record_type, name):
+    def __init__(self, rep, time, priority, record_type, name):
         """Construct a TraceRecord object.
         
         *Arguments*
@@ -93,7 +93,7 @@ class TraceRecord(OrderedDict):
         """
         super().__init__()
         
-        self['number'] = number
+        self['number'] = None
         self['rep'] = rep
         self['time'] = time
         self['priority'] = priority
@@ -319,6 +319,7 @@ class Trace(object):
                 
             #Save each TraceRecord object to the Trace object.
             for rec in records:
+                rec["number"] = self._number
                 self._record_list.append(rec)
                 self._number = self._number + 1
                 
@@ -339,7 +340,7 @@ class Trace(object):
                 Event object that is being recorded.
         """
         if self.is_active():
-            trace_record = TraceRecord(self._number, rep, time,
+            trace_record = TraceRecord(rep, time,
                                        priority, 'Event', event.name)
             self.add(event.dp_update_trace_record(trace_record))
 
@@ -353,7 +354,7 @@ class Trace(object):
                 Custom fields that will be added to the TraceRecord.
                 Optional. Defaults to None.
         """
-        trace_record = TraceRecord(self._number, self.gen.sim.rep,
+        trace_record = TraceRecord(self.gen.sim.rep,
                                    self.gen.sim.now,
                                    self.gen.sim.pri, "Msg", message)
         if fields is not None:
@@ -361,8 +362,6 @@ class Trace(object):
         
         #Record message in event trace records.
         self.add(trace_record)
-        if self.gen.sim.evt is not None:
-            self.gen.sim.evt.trace_records.append(trace_record)
             
     def print_trace_records(self):
         for trace_record in self._record_list:

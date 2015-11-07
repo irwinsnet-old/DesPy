@@ -392,16 +392,13 @@ class Simulation(NamedObject):
             self._pri = fel_item.priority
 
         # Record event in trace report        
-        self.gen.trace.add_event(self.rep, self.now, fel_item.priority,
-                                 fel_item.event)
+#         self.gen.trace.add_event(self.rep, self.now, fel_item.priority,
+#                                  fel_item.event)
 
         # Run event
         self._evt = fel_item.event
         fel_item.event.dp_do_event()
         self._evt = None
-        
-        # Reset the event in case it is called again.
-        fel_item.event._reset()
         
         return fel_item
 
@@ -492,6 +489,12 @@ class Simulation(NamedObject):
         else:
             raise TypeError(err_msg.format(repr(trigger)))
             
+    def add_message(self, message, fields):
+        if self.evt is None:
+            self.gen.trace.add_message(message, fields)
+        else:
+            self.evt.add_message(message, fields)
+    
     def get_data(self):
         """ Get a Python list with simulation parameters and results.
         

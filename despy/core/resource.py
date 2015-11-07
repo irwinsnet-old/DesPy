@@ -276,7 +276,7 @@ class Resource(Component):
         fields[self.name + ' station'] = str(index)
         fields['Entity'] = self.stations[index].entity
         message = "Starting Service"
-        self.sim.gen.trace.add_message(message, fields)
+        self.sim.add_message(message, fields)
         
         #Get service time and schedule end of service on FEL.
         service_time = self.get_service_time(index)

@@ -37,15 +37,15 @@ class RepModel(dp.Component):
                            dp.ResourceQueue("Customer Servers"))
         self.res_q.assign_resource(dp.Resource("Abel", 1, abel_dist))
         self.res_q.assign_resource(dp.Resource("Baker", 1, baker_dist))
+        
+        dp.Entity.set_counter()
                            
-    class CustomerArrivalCallback(dp.InheritedCallback):
+    class CustomerArrivalCallback(dp.AbstractCallback):
         def call(self, **args):
             new_customer = dp.Entity("Customer")
-            fields = OrderedDict()
-            fields["==="] = '='
-            fields["Customer"] = str(new_customer)
-            self.session.sim.gen.trace.add_message("Customer Arriving",
-                                    fields)            
+            timer_evt = args["timer_evt"]
+            timer_evt.trace_fields["Customer"] = str(new_customer)
+          
             self.args["rep_model"].res_q.request(new_customer)
 
 

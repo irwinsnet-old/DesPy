@@ -71,9 +71,9 @@ class testTimer(unittest.TestCase):
         trace3 = model3.sim.gen.trace
         self.assertEqual(trace3[0]['priority'], 1)
         self.assertEqual(trace3[1]['priority'], 1)
-        self.assertEqual(trace3[2]['interval'], 5)
-        self.assertEqual(trace3[4]['interval'], 5)
-        self.assertEqual(trace3[10]['interval'], 5)
+        self.assertEqual(trace3[2]['interval'], 10)
+        self.assertEqual(trace3[4]['interval'], 10)
+        self.assertEqual(trace3[10]['interval'], 10)
         
         
         

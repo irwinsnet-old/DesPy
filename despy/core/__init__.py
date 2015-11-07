@@ -66,8 +66,7 @@ despy.core.timer
 from despy.base.utilities import Priority
 from despy.core.simulation import Session, Simulation
 from despy.core.component import Component
-from despy.core.event import Event, AbstractCallback, ArgumentCallback
-from despy.core.event import InheritedCallback
+from despy.core.event import Event, AbstractCallback, Callback
 from despy.core.process import Process
 from despy.core.queue import Queue
 from despy.core.entity import Entity

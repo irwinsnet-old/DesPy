@@ -27,23 +27,34 @@ from collections import OrderedDict
 
 from despy.core.component import Component
 from despy.core.session import Session
+from despy.output.trace import TraceRecord
 
-class AbstractCallback(metaclass = abc.ABCMeta):    
+class AbstractCallback(metaclass = abc.ABCMeta):
+    def __init__(self, **args):
+        self._session = Session()
+        self.args = args
+        
+    @property
+    def session(self):
+        return self._session
+        
+    @property
+    def mod(self):
+        return self._session.model
+    
+    @property
+    def sim(self):
+        return self._session.sim
+        
     @abc.abstractmethod
     def call(self, **args):
         pass
-    
-class InheritedCallback(AbstractCallback):
-    def __init__(self, **args):
-        self.session = Session()
+
+class Callback(AbstractCallback):
+    def __init__(self, callback_function, **args):
+        super().__init__()
         self.args = args
         
-    def call(self, **args):
-        pass
-
-class ArgumentCallback(AbstractCallback):
-    def __init__(self, callback_function):
-        self.session = Session()
         if isinstance(callback_function, types.FunctionType):
             self.call = types.MethodType(callback_function, self)
         elif isinstance(callback_function, types.MethodType):
@@ -162,6 +173,15 @@ class Event(Component):
                 A number, string, or other text-convertible value.
         """
         self.trace_fields[key] = value
+        
+    def add_message(self, message, fields):
+        msg_record = TraceRecord(self.sim.rep, self.sim.now,
+                                 self.sim.pri, "Msg", message)
+        
+        if fields is not None:
+            msg_record.add_fields(fields)
+            
+        self.trace_records.append(msg_record)
 
     def dp_do_event(self):
         """Executes an event's callback functions.
@@ -173,15 +193,22 @@ class Event(Component):
         *Returns:* ``True`` if a callback method is executed. ``None`` if
         there are no callbacks attached to the event.
         """
+        # Event record will precede any messages created in do_event().
+        evt_record = TraceRecord(self.sim.rep, self.sim.now,
+                                 self.sim.pri, "Event", self.name)
+        self.trace_records.append(evt_record)
+        
         self.do_event()
+        for callback in self._callbacks:
+            callback.call()
+            
+        # Modify record with info generated during event.
+        self.trace_records[0] = self.dp_update_trace_record(evt_record)
+        self.sim.gen.trace.add(self.trace_records)
         
-        if len(self._callbacks)==0:
-            return None
-        else:
-            for callback in self._callbacks:
-                callback.call()
-            return True
-        
+        # Clean up in case event is re-used.
+        self.trace_records.clear()  
+
     def do_event(self):
         pass
     
@@ -200,29 +227,17 @@ class Event(Component):
         
         *Returns:* A Python list containing the updated trace record.
         
-        """
-        if self.trace_fields is not None:
-            for key, value in self.trace_fields.items():
-                trace_record[key] = value
-                
+        """  
         trace_record = self.update_trace_record(trace_record)
         
-        # If the event object is reused, object will keep list of all
-        # of it's trace records.        
-        self._trace_records.insert(0, trace_record)
+        if self.trace_fields is not None:
+            for key, value in self.trace_fields.items():
+                trace_record[key] = value        
+        
         return trace_record
     
     def update_trace_record(self, trace_record):
         return trace_record
-    
-    def _reset(self):
-        """Resets the event to it's initial state.
-        
-        Internal Method. The ``reset`` method is called by the
-        `Simulation` class's ``reset`` method. It deletes all
-        trace_records from the event.
-        """
-        self._trace_records = []
     
     def __lt__(self, y):
         """Defines how ``Event`` objects respond to less-than operator.
