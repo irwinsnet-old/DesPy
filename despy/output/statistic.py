@@ -20,7 +20,6 @@ despy.output.statistic
     Add medians
 
 """
-
 import numpy as np
 
 from despy.base.named_object import NamedObject
@@ -50,12 +49,12 @@ class Statistic(NamedObject):
        
         self._finalized = False
         self._total_length = None
-        self._rep_lengths = None 
+        self._rep_lengths = None
+        self._time_spans = None
         self._mean = None
         self._rep_means = None
         self._min = None
-        
-#         self._add_rep()
+
 
     @property
     def dtype(self):
@@ -153,13 +152,32 @@ class Statistic(NamedObject):
             if self.finalized:
                 self._rep_lengths = rep_lengths
             return rep_lengths
-    
+        
+    @property
+    def time_spans(self):
+        if self._time_spans is not None:
+            return self._time_spans
+        else:
+            spans = []
+            for r_idx in range(0, self.reps):
+                first_span = [self.times[self._grb(r_idx)]]
+                other_spans = [self.times[i] - self.times[i-1] \
+                               for i in range(self._grb(r_idx)+1, 
+                                              self._gre(r_idx)+1)]
+                spans += first_span + other_spans
+            if self.finalized:
+                self._time_spans = spans
+            return spans
+                 
     @property
     def mean(self):
         if self._mean is not None:
             return self._mean
         else:
-            mean = np.mean(self.values)
+            if self.time_weighted:
+                return np.average(self.values, weights = self.time_spans)
+            else:
+                mean = np.mean(self.values)
             if self.finalized:
                 self._mean = mean
             return mean

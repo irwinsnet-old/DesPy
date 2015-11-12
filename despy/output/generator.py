@@ -16,6 +16,7 @@ despy.output.generator
     Make _full_path attribute a documented public attribute.
 """
 import os
+import csv
 
 from despy.output.trace import Trace
 from despy.output.report import HtmlReport
@@ -111,13 +112,13 @@ class Generator(object):
     @trace.setter
     def trace(self, trace):
         self._trace = trace
-        
-    @property
-    def statistics(self):
-        return self._statistics
-    
-    def add_statistic(self, stat):
-        self._statistics.append(stat)
+#         
+#     @property
+#     def statistics(self):
+#         return self._statistics
+#     
+#     def add_statistic(self, stat):
+#         self._statistics.append(stat)
         
     def write_files(self):
         """Creates trace and HTML reports in folder_basename location.
@@ -142,7 +143,14 @@ class Generator(object):
                 self.report.append_output(output)
         
         self.report.write_report(self._full_path)
-                 
+        
+        #Write CSV file for each statistic
+        for _, cpt in self.sim.model.components.items():
+            for _, st in cpt.statistics.items():
+                f_name = cpt.slug + ':' + st.name
+                print(f_name)
+                
+        
     def set_full_path(self):
         """Adds time-stamp to end of Generator.folder_basename.
         

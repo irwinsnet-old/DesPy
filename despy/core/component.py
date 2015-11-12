@@ -227,14 +227,14 @@ class Component(NamedObject):
 
         for _, component in self.components.items():
             component.dp_initialize()
-            for statistic in component.statistics.items():
+            for _, statistic in component.statistics.items():
                 statistic.increment_rep()
         
         if isinstance(self.initialize, types.FunctionType):
             self.initialize(self)
         else:
             self.initialize()
-        for statistic in self.statistics.items():
+        for _, statistic in self.statistics.items():
             statistic.increment_rep()
         
     def initialize(self):
