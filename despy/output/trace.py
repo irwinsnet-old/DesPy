@@ -427,7 +427,7 @@ class CSV_file(object):
     
     @file_name.setter
     def file_name(self, file_name):
-        self.file__name = file_name
+        self.file_name = file_name
         
     @property
     def trace(self):

@@ -459,6 +459,8 @@ class Simulation(NamedObject):
             if rep < self.reps  - 1:
                 self.model.dp_finalize()
                 self.initialize_rep()
+                
+        self.model.dp_finalize_sim()
             
         self._run_stop_time = datetime.datetime.today()
         self.gen.write_files()

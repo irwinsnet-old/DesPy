@@ -254,7 +254,8 @@ class Component(NamedObject):
             component.dp_finalize()
 
         self.finalize()
-        
+
+    def dp_finalize_sim(self):
         for _ , stat in self.statistics.items():
             stat.finalize()
     

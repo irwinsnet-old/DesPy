@@ -147,8 +147,14 @@ class Generator(object):
         #Write CSV file for each statistic
         for _, cpt in self.sim.model.components.items():
             for _, st in cpt.statistics.items():
-                f_name = cpt.slug + ':' + st.name
-                print(f_name)
+                f_name = cpt.slug + '-' + st.name + '.csv'
+                f_pname = self._full_path + '/' + f_name
+                with open(f_pname, 'w', newline = '') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(["Statistic: {}".format(f_name)])
+                    writer.writerow([])
+                    writer.writerow(["Max Rep Length",
+                                     st.max_rep_length])
                 
         
     def set_full_path(self):

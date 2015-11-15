@@ -50,6 +50,7 @@ class Statistic(NamedObject):
         self._finalized = False
         self._total_length = None
         self._rep_lengths = None
+        self._max_rep_length = None
         self._time_spans = None
         self._mean = None
         self._rep_means = None
@@ -152,6 +153,16 @@ class Statistic(NamedObject):
             if self.finalized:
                 self._rep_lengths = rep_lengths
             return rep_lengths
+        
+    @property
+    def max_rep_length(self):
+        if self._max_rep_length is not None:
+            return self._max_rep_length
+        else:
+            max_rep_length = np.amax(self.rep_lengths)
+        if self.finalized:
+            self._max_rep_length = max_rep_length
+        return max_rep_length
         
     @property
     def time_spans(self):

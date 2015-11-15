@@ -4,7 +4,6 @@ Created on Oct 25, 2015
 @author: stacy.irwin
 '''
 import unittest
-from collections import OrderedDict
 
 import despy.core as dp
 import despy.stats.random as dsr
