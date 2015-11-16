@@ -40,13 +40,24 @@ class Statistic(NamedObject):
         self._dtype = dtype
         self._time_weighted = time_weighted
         
-        self._times = []; self._values = []; self._index = []
+        self._times = []; self._values = []
+        
+        #Index structure
+        #[[rep1_beg, rep1_end], 
+        # [rep2_beg, rep2_end],
+        # ...
+        # [repn_beg, repn_end]]
+        self._index = []
+        self.increment_rep()
+        
         #Index structure
         #[[[rep1_beg, rep1_end], [b1_beg, b1_end] ... [bn_beg, bn_end]],
         # [[rep2_beg, rep2_end], [b1_beg, b1_end] ... [bn_beg, bn_end]],
         # ...
         # [[repn_beg, repn_end], [b1_beg, b1_end] ... [bn_beg, bn_end]]]
-       
+
+        self._batches = []
+        
         self._finalized = False
         self._total_length = None
         self._rep_lengths = None
@@ -88,35 +99,38 @@ class Statistic(NamedObject):
         return len(self.index)
     
     def _grb(self, rep):
-        return self.index[rep][0][0]
+        return self.index[rep][0]
     
     def _srb(self, rep, beg):
-        self.index[rep][0][0] = beg
+        self.index[rep][0] = beg
     
     def _gre(self, rep):
-        return self.index[rep][0][1]
+        return self.index[rep][1]
     
     def _sre(self, rep, end):
-        self.index[rep][0][1] = end
-        
-    def _add_rep(self):
-        self.index.append([[len(self.times), None]])
-        
-    def _close_curr_rep(self):
-        self._sre(-1, len(self.times)-1)
-        
-    def increment_rep(self):
-        if self.reps > 0:
-            self._close_curr_rep()
-        self._add_rep()
+        self.index[rep][1] = end
         
     def append(self, time, value):
         if not self.finalized:
             self._times.append(time)
             self._values.append(value)
+            curr_index = len(self._times) - 1
+            if self.index[-1][0] is None:
+                self.index[-1][0] = curr_index
+            self.index[-1][1] = curr_index
         else:
             raise StatisticNotFinalizedError("Cannot append to"
                                              "finalized statistics.")
+
+    def increment_rep(self):
+        self.index.append([None, None])
+        
+    def get_val(self, rep, index):
+        if index > self._gre(rep):
+            raise IndexError("rep cannot be larger "
+                             "than {}".format(self._gre()))
+        else:
+            return self.values[self._grb(rep) + index]
 
     def finalize(self):    
         np_times = np.array(self.times, dtype='u8')
@@ -146,7 +160,6 @@ class Statistic(NamedObject):
         if self._rep_lengths is not None:
             return self._rep_lengths
         else:
-            self._close_curr_rep()
             rep_lengths = np.array(
                     [self._gre(i) - self._grb(i) + 1 \
                      for i in range(self.reps)])

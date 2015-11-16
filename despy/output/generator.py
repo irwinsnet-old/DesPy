@@ -18,6 +18,8 @@ despy.output.generator
 import os
 import csv
 
+import numpy as np
+
 from despy.output.trace import Trace
 from despy.output.report import HtmlReport
     
@@ -155,7 +157,27 @@ class Generator(object):
                     writer.writerow([])
                     writer.writerow(["Max Rep Length",
                                      st.max_rep_length])
-                
+                    writer.writerow([])
+                    writer.writerow(["Rep-{}".format(i)
+                                     for i in range(st.reps)])
+                    vals = [st.rep_lengths]
+#                     vals = ([[st.get_val(r, i)
+#                                 for i in range(st.rep_lengths[r])]
+#                                 for r in range(st.reps)])
+                    print()
+                    print("!!!!!!{}!!!!!!".format(st.name))
+                    print("Num Reps: {}".format(st.reps))
+                    print("=====Flat Values=====")
+                    print(st.values)
+                    print("=====Rep Lengths")
+                    print(st.rep_lengths)
+                    print("======Original Matrix======")
+#                     print(vals) #DEBUG:
+#                     print("=====Transposed Matrix======")
+#                     t_vals = np.transpose(vals)
+#                     print(t_vals) #DEBUG:
+#                     writer.writerows(t_vals)
+                        
         
     def set_full_path(self):
         """Adds time-stamp to end of Generator.folder_basename.
