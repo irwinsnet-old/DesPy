@@ -151,6 +151,7 @@ class Generator(object):
             for _, st in cpt.statistics.items():
                 f_name = cpt.slug + '-' + st.name + '.csv'
                 f_pname = self._full_path + '/' + f_name
+                print(st.index) #DEBUG:
                 with open(f_pname, 'w', newline = '') as file:
                     writer = csv.writer(file)
                     writer.writerow(["Statistic: {}".format(f_name)])

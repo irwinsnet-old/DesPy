@@ -48,7 +48,6 @@ class Statistic(NamedObject):
         # ...
         # [repn_beg, repn_end]]
         self._index = []
-        self.increment_rep()
         
         #Index structure
         #[[[rep1_beg, rep1_end], [b1_beg, b1_end] ... [bn_beg, bn_end]],
@@ -112,6 +111,8 @@ class Statistic(NamedObject):
         
     def append(self, time, value):
         if not self.finalized:
+            if len(self.index) == 0:
+                self.increment_rep()
             self._times.append(time)
             self._values.append(value)
             curr_index = len(self._times) - 1
@@ -211,7 +212,6 @@ class Statistic(NamedObject):
         if self._rep_means is not None:
             return self._rep_means
         else:
-            self._close_curr_rep()
             rep_means = np.array(
                     [np.mean(
                         self.values[
