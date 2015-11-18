@@ -43,10 +43,10 @@ class Statistic(NamedObject):
         self._times = []; self._values = []
         
         #Index structure
-        #[[rep1_beg, rep1_end], 
-        # [rep2_beg, rep2_end],
+        #[[rep1_beg, rep1_len], 
+        # [rep2_beg, rep2_len],
         # ...
-        # [repn_beg, repn_end]]
+        # [repn_beg, repn_len]]
         self._index = []
         
         #Index structure
@@ -99,15 +99,18 @@ class Statistic(NamedObject):
     
     def _grb(self, rep):
         return self.index[rep][0]
-    
-    def _srb(self, rep, beg):
-        self.index[rep][0] = beg
+#     
+#     def _srb(self, rep, beg):
+#         self.index[rep][0] = beg
     
     def _gre(self, rep):
-        return self.index[rep][1]
+        return self.index[rep][0] + self.index[rep][1] - 1
     
-    def _sre(self, rep, end):
-        self.index[rep][1] = end
+    def _grl(self, rep):
+        return self.index[rep][1]
+#     
+#     def _sre(self, rep, end):
+#         self.index[rep][1] = end
         
     def append(self, time, value):
         if not self.finalized:
@@ -115,20 +118,20 @@ class Statistic(NamedObject):
                 self.increment_rep()
             self._times.append(time)
             self._values.append(value)
-            curr_index = len(self._times) - 1
-            if self.index[-1][0] is None:
-                self.index[-1][0] = curr_index
-            self.index[-1][1] = curr_index
+            self.index[-1][1] += 1
         else:
             raise StatisticNotFinalizedError("Cannot append to"
                                              "finalized statistics.")
 
     def increment_rep(self):
-        self.index.append([None, None])
+        self.index.append([len(self.times), 0])
         
     def get_val(self, rep, index):
+        if rep > self.reps:
+            raise IndexError("rep is greater than number of "
+                             "reps: {}".format(self.reps))
         if index > self._gre(rep):
-            raise IndexError("rep cannot be larger "
+            raise IndexError("index cannot be larger "
                              "than {}".format(self._gre()))
         else:
             return self.values[self._grb(rep) + index]
@@ -162,8 +165,7 @@ class Statistic(NamedObject):
             return self._rep_lengths
         else:
             rep_lengths = np.array(
-                    [self._gre(i) - self._grb(i) + 1 \
-                     for i in range(self.reps)])
+                    [self._grl(rep) for rep in range(self.reps)])
             if self.finalized:
                 self._rep_lengths = rep_lengths
             return rep_lengths
