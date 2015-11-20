@@ -14,6 +14,8 @@ despy.output.generator
 ..  todo::
 
     Make _full_path attribute a documented public attribute.
+    
+    Put statistic csv stuff in correct place, fix component traversal.
 """
 import os
 import csv
@@ -151,7 +153,7 @@ class Generator(object):
             for _, st in cpt.statistics.items():
                 f_name = cpt.slug + '-' + st.name + '.csv'
                 f_pname = self._full_path + '/' + f_name
-                print(st.index) #DEBUG:
+                print("Name: {}, Index List{}".format(st.name, st.index)) #DEBUG:
                 with open(f_pname, 'w', newline = '') as file:
                     writer = csv.writer(file)
                     writer.writerow(["Statistic: {}".format(f_name)])

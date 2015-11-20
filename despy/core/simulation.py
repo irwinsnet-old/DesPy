@@ -307,9 +307,6 @@ class Simulation(NamedObject):
         self._pri = 0
         self._futureEventList = []
         self._counter = count()
-        
-    def is_rep_initialized(self):
-        return (len(self._futureEventList) > 0)
 
     def schedule(self, event, delay=0, priority=Priority.STANDARD):
         """ Add an event to the FEL.

@@ -16,6 +16,8 @@ despy.core.component
     Create a new class for transient objects (entities and events) to
     inherit from.
     
+    Add static list of all components.
+    
 """
 
 from itertools import count
@@ -222,18 +224,14 @@ class Component(NamedObject):
         return "{0}:{1}".format(self.name, self._number)
     
     def dp_initialize(self):
-        if self.sim.is_rep_initialized():
-            return
-
         for _, component in self.components.items():
             component.dp_initialize()
-            for _, statistic in component.statistics.items():
-                statistic.increment_rep()
         
         if isinstance(self.initialize, types.FunctionType):
             self.initialize(self)
         else:
             self.initialize()
+            
         for _, statistic in self.statistics.items():
             statistic.increment_rep()
         
