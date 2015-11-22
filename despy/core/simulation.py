@@ -14,10 +14,8 @@ despy.core.simulation
     NoEventsRemainingError
     
 ..  todo
-    
-    URGENT: Split initialize_rep() into initialize_sim() and
-    intialize_rep(). Initialize_rep() will clear all simulation
-    triggers. This will fix the trace_control testing error.
+    Modify run and resume methods to accept triggers as parameters.
+    Move trigger handling into a differnt internal method.
     
     Update documentation to state that seed can raise a TypeError.
     
@@ -47,6 +45,7 @@ from despy.output.report import Datatype
 from despy.base.named_object import NamedObject
 from despy.base.utilities import Priority
 from despy.core.trigger import AbstractTrigger, TimeTrigger
+from despy.core.component import Component
 
 
 class NoEventsRemainingError(Exception):
@@ -284,6 +283,7 @@ class Simulation(NamedObject):
         self._run_start_time = None
         self._run_stop_time = None
         self.gen.trace.clear()
+        Component.archived_register.clear()
         self.initialize_rep()
 
     def initialize_rep(self):
@@ -457,10 +457,53 @@ class Simulation(NamedObject):
                 self.model.dp_finalize()
                 self.initialize_rep()
                 
-        self.model.dp_finalize_sim()
+        self.dp_finalize_sim()
             
         self._run_stop_time = datetime.datetime.today()
         self.gen.write_files()
+        
+    def resume(self, until=None):
+        if until is None:
+            try:
+                del self.triggers["dp_untilTrigger"]
+            except KeyError:
+                pass            
+        elif (until > 0):
+            self.add_trigger("dp_untilTrigger", TimeTrigger(until))
+        else:
+            raise AttributeError("Simulation.run() until argument "
+                                 "should be None or integer > 0.  {} "
+                                 "passed instead".format(until))
+        self._run_start_time = datetime.datetime.today()
+        
+        for rep in range(0, self.reps):
+            self._rep = rep
+
+            # Step through events on FEL and check triggers.
+            continue_rep = True
+            while continue_rep:
+                try:
+                    self.step()
+                except NoEventsRemainingError:
+                    break
+                continue_rep = self.dp_check_triggers()
+        
+            # Finalize model and setup for next replication
+            if rep < self.reps  - 1:
+                self.model.dp_finalize()
+                self.initialize_rep()
+                
+        self.dp_finalize_sim()
+            
+        self._run_stop_time = datetime.datetime.today()
+        self.gen.write_files()
+
+    def dp_finalize_sim(self):
+        for cpt in Component.active_register:
+            for _ , stat in cpt.statistics.items():
+                stat.finalize()
+        Component.archived_register = Component.active_register.copy()
+        Component.active_register.clear()
         
     def dp_check_triggers(self):
         """Checks all simulation triggers, returning False ends rep.

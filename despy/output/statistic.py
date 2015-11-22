@@ -136,7 +136,9 @@ class Statistic(NamedObject):
         else:
             return self.values[self._grb(rep) + index]
 
-    def finalize(self):    
+    def finalize(self):
+        if self.reps == 0:
+            self.increment_rep()
         np_times = np.array(self.times, dtype='u8')
         np_values = np.array(self.values, dtype=self.dtype)
         
@@ -172,9 +174,12 @@ class Statistic(NamedObject):
         
     @property
     def max_rep_length(self):
+        if self.reps == 0:
+            self.increment_rep()
         if self._max_rep_length is not None:
             return self._max_rep_length
         else:
+            print("Rep-lengths: {}".format(self.rep_lengths)) #DEBUG:
             max_rep_length = np.amax(self.rep_lengths)
         if self.finalized:
             self._max_rep_length = max_rep_length

@@ -169,7 +169,7 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(evtTrace.length, 1)
           
         #Verify that simulation can be restarted from current point.
-        model.sim.run()
+        model.sim.resume(20)
         self.assertEqual(evtTrace.length, 2)
         
     def test_process(self):

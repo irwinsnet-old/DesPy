@@ -95,6 +95,19 @@ class Component(NamedObject):
         self._owner = None
         self._session = Session()
         
+    active_register = []
+    """Central register of all Component objects in model.
+    
+    Component objects are automatically added to the register when
+    calling Component.add_component. This register is cleared when the
+    model is finalized at the end of the simulation and all components
+    are moved to Component.archived_register.
+    """
+    
+    archived_register = []
+    """This list of all components is available after finalization.
+    """
+    
     @property
     def session(self):
         return self._session
@@ -129,6 +142,7 @@ class Component(NamedObject):
         """
         if key.isidentifier() and (not hasattr(self, key)):
             self._components[key] = item
+            self.active_register.append(item)
             item.owner = self
             setattr(self, key, item)
         else:
@@ -252,10 +266,6 @@ class Component(NamedObject):
             component.dp_finalize()
 
         self.finalize()
-
-    def dp_finalize_sim(self):
-        for _ , stat in self.statistics.items():
-            stat.finalize()
     
     def get_data(self):
         """Subclasses should override this method to provide simulation

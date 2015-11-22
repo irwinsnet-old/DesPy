@@ -22,6 +22,7 @@ import csv
 
 import numpy as np
 
+from despy.core.component import Component
 from despy.output.trace import Trace
 from despy.output.report import HtmlReport
     
@@ -148,8 +149,15 @@ class Generator(object):
         
         self.report.write_report(self._full_path)
         
-        #Write CSV file for each statistic
-        for _, cpt in self.sim.model.components.items():
+        #DEBUG:
+#         print()
+#         print("=====COMPONENT LIST=====")
+#         for cpt in Component.register:
+#             print("Component: {}".format(cpt.name))
+#         print()
+        
+        #Write CSV file for each statistic        
+        for cpt in Component.archived_register:
             for _, st in cpt.statistics.items():
                 f_name = cpt.slug + '-' + st.name + '.csv'
                 f_pname = self._full_path + '/' + f_name
