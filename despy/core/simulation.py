@@ -14,6 +14,7 @@ despy.core.simulation
     NoEventsRemainingError
     
 ..  todo
+
     Modify run and resume methods to accept triggers as parameters.
     Move trigger handling into a differnt internal method.
     
@@ -21,11 +22,6 @@ despy.core.simulation
     
     Change seed property to a method to be consistent with numpy and
     random syntax
-    
-    Modify _finalize algorithm so it doesn't run when the simulation
-    is paused.
-    
-    Add functionality for multiple reps.
     
     Revise internal function names -- get rid of underscore prefix and
     replace with "dp_" prefix to indicate an internal framework
@@ -453,8 +449,8 @@ class Simulation(NamedObject):
                 continue_rep = self.dp_check_triggers()
         
             # Finalize model and setup for next replication
+            self.model.dp_finalize()
             if rep < self.reps  - 1:
-                self.model.dp_finalize()
                 self.initialize_rep()
                 
         self.dp_finalize_sim()

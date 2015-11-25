@@ -114,6 +114,14 @@ class Queue(Component):
         the second entity to leave the queue, etc.
         """
         return self._times_in_queue
+    
+    def initialize(self):
+        self.statistics['Queue_length'].append(self.sim.now,
+                                               self.length)
+        
+    def finalize(self):
+        self.statistics['Queue_length'].append(self.sim.now,
+                                               self.length)
 
     def add(self, item):
         """Add an item to the end of the queue.

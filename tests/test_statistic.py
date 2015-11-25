@@ -92,10 +92,9 @@ class testStatistic(unittest.TestCase):
         r_lens = []; times = []; values = []; spans = []
  
         reps = 3
-        for _ in range(reps):
+        for rep in range(reps):
             time = 0
             r_lens.append(round(dist_num.rvs()))
-            stat2.increment_rep()
             for _ in range(r_lens[-1]):
                 span = round(dist_time.rvs())
                 spans.append(span)
@@ -104,6 +103,8 @@ class testStatistic(unittest.TestCase):
                 stat2.append(time, value)
                 times.append(time)
                 values.append(value)
+            if rep < reps - 1:
+                stat2.increment_rep()
                 
         print("=====Checking Test Setup Data=====")
         self.assertListEqual(stat2.rep_lengths.tolist(), r_lens)

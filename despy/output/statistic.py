@@ -23,6 +23,7 @@ despy.output.statistic
 import numpy as np
 
 from despy.base.named_object import NamedObject
+from despy.core.simulation import Session
 
 class StatisticNotFinalizedError(Exception):
     pass
@@ -65,6 +66,7 @@ class Statistic(NamedObject):
         self._mean = None
         self._rep_means = None
         self._min = None
+        self.session = Session()
 
 
     @property
@@ -114,16 +116,19 @@ class Statistic(NamedObject):
         
     def append(self, time, value):
         if not self.finalized:
-            if len(self.index) == 0:
-                self.increment_rep()
             self._times.append(time)
             self._values.append(value)
+            if len(self.index) == 0:
+                self.increment_rep()            
             self.index[-1][1] += 1
         else:
             raise StatisticNotFinalizedError("Cannot append to"
                                              "finalized statistics.")
 
     def increment_rep(self):
+        if self.time_weighted:
+            if self.times[-1] != self.session.sim.now:
+                self.append(self.session.sim.now, self.values[-1])
         self.index.append([len(self.times), 0])
         
     def get_val(self, rep, index):
