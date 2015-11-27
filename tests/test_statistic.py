@@ -25,7 +25,7 @@ class testStatistic(unittest.TestCase):
         for _ in range(reps):
             time = 0
             r_lens.append(round(dist_num.rvs()))
-            stat1.increment_rep()
+            stat1.increment_rep(time)
             for _ in range(r_lens[-1]):
                 time += round(dist_time.rvs())
                 value = round(dist_v.rvs())
@@ -63,7 +63,7 @@ class testStatistic(unittest.TestCase):
 
         print()
         print("=====Post-Finalized=====")
-        stat1.finalize()
+        stat1.finalize(time)
          
         self.assertListEqual(times, stat1.times.tolist())
         self.assertListEqual(values, stat1.values.tolist())
@@ -88,6 +88,7 @@ class testStatistic(unittest.TestCase):
         dist_v = stats.expon(50)
         dist_num = stats.expon(7)
         dist_time = stats.expon(17)
+        dist_rep_end = stats.expon(2)
         
         r_lens = []; times = []; values = []; spans = []
  
@@ -103,8 +104,16 @@ class testStatistic(unittest.TestCase):
                 stat2.append(time, value)
                 times.append(time)
                 values.append(value)
+            end_span = 1 + round(dist_rep_end.rvs())
+            rep_end = time + end_span
+            spans.append(end_span)
+            times.append(rep_end)
+            values.append(value)
+            r_lens[rep] += 1        
             if rep < reps - 1:
-                stat2.increment_rep()
+                stat2.increment_rep(rep_end)
+            else:
+                stat2.finalize(rep_end)
                 
         print("=====Checking Test Setup Data=====")
         self.assertListEqual(stat2.rep_lengths.tolist(), r_lens)

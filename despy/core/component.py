@@ -247,7 +247,7 @@ class Component(NamedObject):
             self.initialize()
             
         for _, statistic in self.statistics.items():
-            statistic.increment_rep()
+            statistic.increment_rep(self.sim.now)
         
     def initialize(self):
         """Subclasses should override this method with initialization
@@ -266,6 +266,9 @@ class Component(NamedObject):
             component.dp_finalize()
 
         self.finalize()
+        
+        for _, statistic in self.statistics.items():
+            statistic.finalize(self.sim.now)
     
     def get_data(self):
         """Subclasses should override this method to provide simulation

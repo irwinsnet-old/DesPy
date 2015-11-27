@@ -497,7 +497,7 @@ class Simulation(NamedObject):
     def dp_finalize_sim(self):
         for cpt in Component.active_register:
             for _ , stat in cpt.statistics.items():
-                stat.finalize()
+                stat.finalize(self.now)
         Component.archived_register = Component.active_register.copy()
         Component.active_register.clear()
         
