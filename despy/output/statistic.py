@@ -3,7 +3,6 @@
 #   Released under the MIT License (MIT)
 #   Copyright (c) 2015, Stacy Irwin
 from abc import abstractmethod
-from sympy.simplify.cse_main import reps_toposort
 
 """
 **********************
@@ -31,7 +30,7 @@ import numpy as np
 from despy.base.named_object import NamedObject
 from despy.core.simulation import Session
 
-class StatisticNotFinalizedError(Exception):
+class StatisticError(Exception):
     pass
 
 class AbstractStatistic(metaclass = abc.ABCMeta):
@@ -78,11 +77,12 @@ class AbstractStatistic(metaclass = abc.ABCMeta):
         The letter specifies the type of data and the digit is the
         number of bytes.
         
-            * b: boolean
-            * i: integer
-            * u: unsigned integer
-            * f: float
-            * a: character
+            * b1: boolean, 
+            * i1, i2, i4, i8: integer
+            * u1, u2, u4, u8: unsigned integer
+            * f2, f4, f8: float
+            * c8, c16: complex
+            * a: character, can by any number of digits
         
         """
         return self._dtype
@@ -131,7 +131,7 @@ class AbstractStatistic(metaclass = abc.ABCMeta):
         """
         pass
 
-    @abstractmethod(self)
+    @abstractmethod
     def start_rep(self):
         """Called by sim to notify Statistic that new rep is starting.
         """
@@ -152,7 +152,7 @@ class AbstractStatistic(metaclass = abc.ABCMeta):
         """
         pass
     
-class  Statistic(AbstractStatistic):
+class  DiscreteStatistic(AbstractStatistic):
     """Basic statistic that is NOT time-weighted."""
     
     def __init__(self, name, dtype):
@@ -190,8 +190,16 @@ class  Statistic(AbstractStatistic):
                 self._reps = reps
             return reps
         
+    @property
+    def times(self):
+        return np.array(self._times)
+    
+    @property
+    def values(self):
+        return np.array(self._values)
+        
     def start_rep(self):
-        self.index.append([len(self.times), 0])
+        self._index.append([len(self._times), 0])
         
     def end_rep(self, time = None):
         pass
@@ -199,17 +207,17 @@ class  Statistic(AbstractStatistic):
     def _grb(self, rep):
         """Returns the index for the first statistic value in rep.
         """
-        return self.index[rep][0]
+        return self._index[rep][0]
     
     def _gre(self, rep):
         """Returns the index for the last statistic value in rep.
         """
-        return self.index[rep][0] + self.index[rep][1] - 1
+        return self._index[rep][0] + self._index[rep][1] - 1
     
     def _grl(self, rep):
         """Returns the number of statistic values in rep.
         """
-        return self.index[rep][1]
+        return self._index[rep][1]
     
     def append(self, time, value):
         """Append a data point to the statistic.
@@ -226,16 +234,255 @@ class  Statistic(AbstractStatistic):
               append the value (e.g., the statistic has been finalized
               and is read-only).
         """
-        if not self.finalized:
+        if not self._finalized:
             self._times.append(time)
             self._values.append(value)
-            if len(self.index) == 0:
-                self.start_rep()            
-            self.index[-1][1] += 1
+#             if len(self.index) == 0:
+#                 self.start_rep()            
+            self._index[-1][1] += 1
         else:
-            raise RuntimeError("Cannot append to finalized statistics.")
+            raise StatisticError("Cannot append to finalized "
+                                 "statistics.")
+        
+    def finalize(self):
+        """Convert data to numpy arrays to speed up calculations."""       
+        np_times = np.array(self._times, dtype='u8')
+        np_values = np.array(self._values, dtype=self.dtype)
+        self._times = np_times
+        self._values = np_values
+        self._finalized = True
+        
+    @property
+    def total_length(self):
+        if self._total_length is not None:
+            return self._total_length
+        else:
+            total_length = len(self._times)
+            if self._finalized:
+                self._total_length = total_length
+            return total_length
             
+    @property
+    def mean(self):
+        if self._mean is not None:
+            return self._mean
+        else:
+            mean = np.mean(self.values)
+            if self._finalized:
+                self._mean = mean
+            return mean
+        
+    @property
+    def rep_lengths(self):
+        if self._rep_lengths is not None:
+            return self._rep_lengths
+        else:
+            rep_lengths = np.array(
+                    [self._grl(rep) for rep in range(self.reps)])
+            if self._finalized:
+                self._rep_lengths = rep_lengths
+            return rep_lengths
+        
+    @property
+    def rep_means(self):
+        if self._rep_means is not None:
+            return self._rep_means
+        else:
+            rep_means = np.array([np.mean(
+                            self._values[self._grb(i):self._gre(i)+1])\
+                            for i in range(self.reps)])
+            if self._finalized:
+                self._rep_means = rep_means
+            return rep_means
 
+class  TimeWeightedStatistic(AbstractStatistic):
+    """Basic statistic that is NOT time-weighted."""
+    
+    def __init__(self, name, dtype):
+        super().__init__(name, dtype)
+               
+        #### Readable Properties #####
+        self._total_length = None
+        self._mean = None
+        self._reps = None
+        self._rep_lengths = None
+        self._rep_means = None
+        self.properties.append(['total_length', 'mean',
+                                'reps', 'rep_lengths', 'rep_means'])
+        
+        #### Internal Details #####
+        self._initial_time = 0
+        self._times = [];
+        self._values = [];
+        self._spans = []
+        self._index = []        
+        # Index structure
+        #[[rep1_beg, rep1_len, rep1_time], 
+        # [rep2_beg, rep2_len, rep2_time],
+        # ...
+        # [repn_beg, repn_len, repn_time]]
+        self._finalized = False
+        
+    @property
+    def initial_time(self):
+        return self._initial_time
+    
+    @initial_time.setter
+    def initial_time(self, time):
+        assert isinstance(time, int)
+        assert time >= 0
+        self._initial_time = time
+    
+    @property
+    def reps(self):
+        """The number of replications that have been commenced.
+        """
+        if self._reps is not None:
+            return self._reps
+        else:
+            reps = len(self._index)
+            if self._finalized:
+                self._reps = reps
+            return reps
+        
+    @property
+    def times(self):
+        return np.array(self._times)
+    
+    @property
+    def spans(self):
+        return np.array(self._spans)
+    
+    @property
+    def values(self):
+        return np.array(self._values)
+        
+    def start_rep(self):
+        self._index.append([len(self._times), 0, None])
+        
+    def end_rep(self, time):
+        # Method end_rep() is only run once
+        assert self._grt(-1) is None
+        
+        self._spans.append(time + 1 - self._spans(-1))
+        self._index[-1][2] = time + 1
+        
+        # Spans sum to rep time      
+        assert np.sum(self._spans[self._grb(-1):
+                                  self.gre(-1)]) == self._grt(-1)
+                                  
+        # Same length for spans, times, and values
+        assert len(self._spans) == len(self._times)
+        assert len(self._values) == len(self._times)
+    
+    def _grb(self, rep):
+        """Returns the index for the first statistic value in rep.
+        """
+        return self._index[rep][0]
+    
+    def _gre(self, rep):
+        """Returns the index for the last statistic value in rep.
+        """
+        return self._index[rep][0] + self._index[rep][1] - 1
+    
+    def _grl(self, rep):
+        """Returns the number of statistic values in rep.
+        """
+        return self._index[rep][1]
+    
+    def _grt(self, rep):
+        return self._index[rep][2]
+    
+    def append(self, time, value):
+        """Append a data point to the statistic.
+
+        *Arguments*
+            ``value``: type corresponds to Statistic.dtype attribute
+            ``time`` : integer, optional
+                Statistics may require the time associated with the
+                data point, e.g., time-weighted averages, plots, etc.
+                
+        *Raises*
+            * ``TypeError`` if value type does not correspond to dtype.
+            * ``RuntimeError`` if statistic is otherwise unable to
+              append the value (e.g., the statistic has been finalized
+              and is read-only).
+        """
+        if not self._finalized:
+            if self._grl(-1) == 0:
+                if time != self._initial_time:
+                    raise StatisticError("For TimeWeightedStatistic, "
+                            "first value appended in rep must be at "
+                            "Simulation.initial_time: {0}. Attempted "
+                            "to append value at time {1}"
+                            ".".format(self._initial_time, time))
+                else:
+                    self._spans.append(time - self._spans(-1))
+            self._times.append(time)
+            self._values.append(value)         
+            self._index[-1][1] += 1
+            assert len(self._values) == len(self._spans)
+            assert len(self._spans) == len(self._times) - 1
+        else:
+            raise StatisticError("Cannot append to "
+                                 "finalized statistics.")
+        
+    def finalize(self):
+        """Convert data to numpy arrays to speed up calculations."""
+        assert not self._finalized      
+        self._times = np.array(self._times, dtype='u8')
+        self._values = np.array(self._values, dtype=self.dtype)
+        self._spans = np.array(self._spans, dtype = 'u8')
+        self._finalized = True
+        
+    @property
+    def total_length(self):
+        if self._total_length is not None:
+            return self._total_length
+        else:
+            total_length = len(self._times)
+            assert total_length == np.sum(self.rep_lengths)
+            if self._finalized:
+                self._total_length = total_length
+            return total_length
+            
+    @property
+    def mean(self):
+        if self._mean is not None:
+            return self._mean
+        else:
+            mean = np.average(self.values, weights = self._spans,
+                              returned = True)
+            assert mean[1] == np.sum(self._spans)
+            if self._finalized:
+                self._mean = mean[0]
+            return mean[0]
+        
+    @property
+    def rep_lengths(self):
+        if self._rep_lengths is not None:
+            return self._rep_lengths
+        else:
+            rep_lengths = np.array(
+                    [self._grl(rep) for rep in range(self.reps)])
+            assert np.sum(rep_lengths) == self.total_length
+            if self._finalized:
+                self._rep_lengths = rep_lengths
+            return rep_lengths
+        
+    @property
+    def rep_means(self):
+        if self._rep_means is not None:
+            return self._rep_means
+        else:
+            rep_means = np.array(
+                [np.average(
+                    self.values[self._grb(i):self._gre(i)],
+                    weights = self._spans[self._grb(i):self._gre(i)])
+                for i in range(self.reps)])
+            if self._finalized:
+                self._rep_means = rep_means
+            return rep_means
 
 class Statistic_old(NamedObject):
     """
@@ -329,8 +576,8 @@ class Statistic_old(NamedObject):
                 self.increment_rep(time)            
             self.index[-1][1] += 1
         else:
-            raise StatisticNotFinalizedError("Cannot append to"
-                                             "finalized statistics.")
+            raise StatisticError("Cannot append to"
+                                "finalized statistics.")
 
     def increment_rep(self, now):
         if self.time_weighted:

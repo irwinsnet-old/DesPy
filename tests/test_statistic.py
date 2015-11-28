@@ -4,7 +4,7 @@ import unittest, statistics
 import scipy.stats as stats
 
 import despy.stats.random as dsr
-from despy.output.statistic import Statistic
+from despy.output.statistic import DiscreteStatistic
 
 
 class testStatistic(unittest.TestCase):
@@ -12,7 +12,7 @@ class testStatistic(unittest.TestCase):
     def test_stat(self):
         print()
         print("======Statistic First Test=====")
-        stat1 = Statistic('stat1', 'i4')
+        stat1 = DiscreteStatistic('stat1', 'i4')
         dsr.seed(731)
                 
         dist_v = stats.expon(100)
@@ -25,13 +25,14 @@ class testStatistic(unittest.TestCase):
         for _ in range(reps):
             time = 0
             r_lens.append(round(dist_num.rvs()))
-            stat1.increment_rep(time)
+            stat1.start_rep()
             for _ in range(r_lens[-1]):
                 time += round(dist_time.rvs())
                 value = round(dist_v.rvs())
                 stat1.append(time, value)
                 times.append(time)
                 values.append(value)
+            stat1.end_rep()
 
         print("=====Checking Test Setup Data=====")
         self.assertListEqual(stat1.rep_lengths.tolist(), r_lens)
@@ -39,7 +40,7 @@ class testStatistic(unittest.TestCase):
         self.assertListEqual(values, stat1.values.tolist())
         print("Test Values: {}".format(stat1.values))
         print("Replication Lengths: {}".format(r_lens))
-        print("Statistic Index: {}".format(stat1.index))
+#         print("Statistic Index: {}".format(stat1.index))
 
         print()
         print("=====Pre-Finalized=====")
@@ -63,7 +64,7 @@ class testStatistic(unittest.TestCase):
 
         print()
         print("=====Post-Finalized=====")
-        stat1.finalize(time)
+        stat1.finalize()
          
         self.assertListEqual(times, stat1.times.tolist())
         self.assertListEqual(values, stat1.values.tolist())
@@ -77,63 +78,63 @@ class testStatistic(unittest.TestCase):
         print("rep_means: {}".format(stat1.rep_means))
         self.assertListEqual(stat1.rep_means.tolist(), rep_means)
 
-    def test_time_weighted_mean(self):
-        print()
-        print("============================")
-        print("=====Time-Weighted-Mean=====")
-        stat2 = Statistic('time_weighted_stat', 'i4',
-                          time_weighted = True)
-        dsr.seed(731)
-                
-        dist_v = stats.expon(50)
-        dist_num = stats.expon(7)
-        dist_time = stats.expon(17)
-        dist_rep_end = stats.expon(2)
-        
-        r_lens = []; times = []; values = []; spans = []
- 
-        reps = 3
-        for rep in range(reps):
-            time = 0
-            r_lens.append(round(dist_num.rvs()))
-            for _ in range(r_lens[-1]):
-                span = round(dist_time.rvs())
-                spans.append(span)
-                time += round(span)
-                value = round(dist_v.rvs())
-                stat2.append(time, value)
-                times.append(time)
-                values.append(value)
-            end_span = 1 + round(dist_rep_end.rvs())
-            rep_end = time + end_span
-            spans.append(end_span)
-            times.append(rep_end)
-            values.append(value)
-            r_lens[rep] += 1        
-            if rep < reps - 1:
-                stat2.increment_rep(rep_end)
-            else:
-                stat2.finalize(rep_end)
-                
-        print("=====Checking Test Setup Data=====")
-        self.assertListEqual(stat2.rep_lengths.tolist(), r_lens)
-        self.assertListEqual(times, stat2.times.tolist())
-        self.assertListEqual(values, stat2.values.tolist())
-        print("Test Values: {}".format(stat2.values))
-        print("Replication Lengths: {}".format(r_lens))
-        print("Statistic Index: {}".format(stat2.index))
-        print()
-        print("Test Times: {}".format(stat2.times))        
-        print("Time Spans: {}".format(stat2.time_spans))
-        self.assertListEqual(stat2.time_spans, spans)
-        
-        print("mean: {}".format(stat2.mean))
-        
-#         sum = 0
-#         for idx in range(len(times)):
-#             sum += times[idx] * spans[idx]
-#         time_mean = sum
-#         self.assertEqual(stat2.mean, stats.average(self.times, ))
-        
+#     def test_time_weighted_mean(self):
+#         print()
+#         print("============================")
+#         print("=====Time-Weighted-Mean=====")
+#         stat2 = Statistic('time_weighted_stat', 'i4',
+#                           time_weighted = True)
+#         dsr.seed(731)
+#                 
+#         dist_v = stats.expon(50)
+#         dist_num = stats.expon(7)
+#         dist_time = stats.expon(17)
+#         dist_rep_end = stats.expon(2)
+#         
+#         r_lens = []; times = []; values = []; spans = []
+#  
+#         reps = 3
+#         for rep in range(reps):
+#             time = 0
+#             r_lens.append(round(dist_num.rvs()))
+#             for _ in range(r_lens[-1]):
+#                 span = round(dist_time.rvs())
+#                 spans.append(span)
+#                 time += round(span)
+#                 value = round(dist_v.rvs())
+#                 stat2.append(time, value)
+#                 times.append(time)
+#                 values.append(value)
+#             end_span = 1 + round(dist_rep_end.rvs())
+#             rep_end = time + end_span
+#             spans.append(end_span)
+#             times.append(rep_end)
+#             values.append(value)
+#             r_lens[rep] += 1        
+#             if rep < reps - 1:
+#                 stat2.increment_rep(rep_end)
+#             else:
+#                 stat2.finalize(rep_end)
+#                 
+#         print("=====Checking Test Setup Data=====")
+#         self.assertListEqual(stat2.rep_lengths.tolist(), r_lens)
+#         self.assertListEqual(times, stat2.times.tolist())
+#         self.assertListEqual(values, stat2.values.tolist())
+#         print("Test Values: {}".format(stat2.values))
+#         print("Replication Lengths: {}".format(r_lens))
+#         print("Statistic Index: {}".format(stat2.index))
+#         print()
+#         print("Test Times: {}".format(stat2.times))        
+#         print("Time Spans: {}".format(stat2.time_spans))
+#         self.assertListEqual(stat2.time_spans, spans)
+#         
+#         print("mean: {}".format(stat2.mean))
+#         
+# #         sum = 0
+# #         for idx in range(len(times)):
+# #             sum += times[idx] * spans[idx]
+# #         time_mean = sum
+# #         self.assertEqual(stat2.mean, stats.average(self.times, ))
+#         
         
 
