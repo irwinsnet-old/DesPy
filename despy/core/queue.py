@@ -33,7 +33,8 @@ import numpy as np
 from despy.core.component import Component
 from despy.output.report import Datatype
 import despy.output.plot as plot
-from despy.output.statistic import Statistic
+from despy.output.statistic import DiscreteStatistic
+from despy.output.statistic import TimeWeightedStatistic
 
 class Queue(Component):
     """A component that represents a real world queue.
@@ -82,8 +83,8 @@ class Queue(Component):
         else:
             self._queue = deque()
         self._times_in_queue = []
-        self.statistics['Queue_time'] = Statistic('w_q', 'u4')
-        self.statistics['Queue_length'] = Statistic('L_q', 'u4')
+        self.statistics['Queue_time'] = DiscreteStatistic('w_q', 'u4')
+        self.statistics['Queue_length'] = TimeWeightedStatistic('L_q', 'u4')
         
     Item = namedtuple('Item', ['item_fld', 'time_in_fld'])
     """(Class) A named tuple that contains an item added to the queue.

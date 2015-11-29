@@ -33,7 +33,8 @@ from scipy.stats import randint
 from despy.core.component import Component
 from despy.core.event import Event
 from despy.core.queue import Queue
-from despy.output.statistic import Statistic
+from despy.output.statistic import DiscreteStatistic
+from despy.output.statistic import TimeWeightedStatistic
 from despy.output.report import Datatype
 
 class Resource(Component):
@@ -90,7 +91,8 @@ class Resource(Component):
         self._capacity = capacity
         self._res_queue = None
         self._service_time = time_function
-        self.add_stat("Service Time", Statistic("Service Time", 'u4'))
+        self.add_stat("Service Time", DiscreteStatistic("Service Time",
+                                                        'u4'))
         
         self._Station_tuple = namedtuple('Station',
                                         ['entity', 'start_time'])
