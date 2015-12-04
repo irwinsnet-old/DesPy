@@ -123,16 +123,41 @@ class testStatistic(unittest.TestCase):
         print("Statistic Index: {}".format(stat2._index))
         print()
         print("Test Times: {}".format(stat2.times))        
-        print("Time Spans: {}".format(stat2._spans))
-        self.assertListEqual(stat2._spans, spans)
-#         
-#         print("mean: {}".format(stat2.mean))
-#         
-# #         sum = 0
-# #         for idx in range(len(times)):
-# #             sum += times[idx] * spans[idx]
-# #         time_mean = sum
-# #         self.assertEqual(stat2.mean, stats.average(self.times, ))
-#         
+        print("Time Spans: {}".format(stat2.spans))
+        self.assertListEqual(stat2.spans.tolist(), spans)
+
+        print()
+        print("=====Pre-finalized=====")
+        mean_sum = 0
+        for idx in range(len(times)):
+            mean_sum += values[idx] * spans[idx]
+        total_time = sum(spans)        
+        mean = mean_sum / total_time
+        print("Total time (stat, test): {}, {}".format(stat2.total_time,
+                                                   total_time))
+        self.assertEqual(stat2.total_time, total_time)
+        print("Mean (stat, test): {}, {}".format(stat2.mean, mean))        
+        self.assertEqual(stat2.mean, mean)
+        
+        rep_sums = [0, 0, 0]
+        rep_times = [0, 0, 0]
+        for i in range(r_lens[0]):
+            rep_sums[0] += values[i] * spans[i]
+            rep_times[0] += spans[i]
+        for i in range(r_lens[0], r_lens[0] + r_lens[1]):
+            rep_sums[1] += values[i] * spans[i]
+            rep_times[1] += spans[i]
+        for i in range(r_lens[0] + r_lens[1], sum(r_lens)):
+            rep_sums[2] += values[i] * spans[i]
+            rep_times[2] += spans[i]
+            
+        print("Rep_sums: {}".format(rep_sums))
+        print("Rep_times: {}".format(rep_times))
+            
+        rep_means = [rep_sums[i] / rep_times[i] for i in range(reps)]
+        print("Rep_means: {}".format(rep_means))
+        
+#         print("Rep means: {}".format(rep_means))
+         
         
 

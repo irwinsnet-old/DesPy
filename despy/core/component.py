@@ -150,7 +150,15 @@ class Component(NamedObject):
                              "Python identifier and cannot be the "
                              "same as an existing attribute or "
                              "reserved keyword.")
-    
+            
+    def __iter__(self):
+        """Enable post-order depth-first iteration of Component tree.
+        """
+        for child in self.components:
+            for component in child:
+                yield component
+        yield self
+            
     @property
     def owner(self):
         """A link to the component's owner.
@@ -238,9 +246,6 @@ class Component(NamedObject):
         return "{0}:{1}".format(self.name, self._number)
     
     def dp_initialize(self):
-        for _, component in self.components.items():
-            component.dp_initialize()
-        
         if isinstance(self.initialize, types.FunctionType):
             self.initialize(self)
         else:
@@ -248,27 +253,42 @@ class Component(NamedObject):
             
         for _, statistic in self.statistics.items():
             statistic.increment_rep(self.sim.now)
-        
+            
     def initialize(self):
         """Subclasses should override this method with initialization
         code that will be executed prior to any events on the future
         event list (FEL).
         """
+        pass            
+            
+    def dp_start_rep(self):
+        """Called at the beginning of each replication.
+        """
+        for _, statistic in self.statistics.items():
+            statistic.start_rep()
+        self.start_rep()
+    
+    def start_rep(self):
         pass
     
-    def finalize(self):
+    def dp_end_rep(self, time):
+        for _, statistic in self.statistics.items():
+            statistic.end_rep(time)
+        self.end_rep()
+    
+    def end_rep(self):
         pass
     
     def dp_finalize(self):
         """The Simulation calls finalize methods after final event.
         """
-        for _, component in self.components.items():
-            component.dp_finalize()
-
-        self.finalize()
-        
-        for _, statistic in self.statistics.items():
-            statistic.finalize(self.sim.now)
+        if isinstance(self.finalize, types.FunctionType):
+            self.finalize(self)
+        else:
+            self.finalize()
+    
+    def finalize(self):
+        pass
     
     def get_data(self):
         """Subclasses should override this method to provide simulation

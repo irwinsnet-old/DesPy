@@ -300,11 +300,12 @@ class  TimeWeightedStatistic(AbstractStatistic):
                
         #### Readable Properties #####
         self._total_length = None
+        self._total_time = None
         self._mean = None
         self._reps = None
         self._rep_lengths = None
         self._rep_means = None
-        self.properties.append(['total_length', 'mean',
+        self.properties.append(['total_length', 'total_time', 'mean',
                                 'reps', 'rep_lengths', 'rep_means'])
         
         #### Internal Details #####
@@ -444,6 +445,16 @@ class  TimeWeightedStatistic(AbstractStatistic):
             if self._finalized:
                 self._total_length = total_length
             return total_length
+    
+    @property
+    def total_time(self):
+        if self._total_time is not None:
+            return self._total_time
+        else:
+            total_time = np.sum(self._spans)
+            if self._finalized:
+                self._total_time = total_time
+            return total_time
             
     @property
     def mean(self):
