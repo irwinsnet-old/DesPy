@@ -94,19 +94,6 @@ class Component(NamedObject):
 
         self._owner = None
         self._session = Session()
-        
-    active_register = []
-    """Central register of all Component objects in model.
-    
-    Component objects are automatically added to the register when
-    calling Component.add_component. This register is cleared when the
-    model is finalized at the end of the simulation and all components
-    are moved to Component.archived_register.
-    """
-    
-    archived_register = []
-    """This list of all components is available after finalization.
-    """
     
     @property
     def session(self):
@@ -142,7 +129,6 @@ class Component(NamedObject):
         """
         if key.isidentifier() and (not hasattr(self, key)):
             self._components[key] = item
-            self.active_register.append(item)
             item.owner = self
             setattr(self, key, item)
         else:
@@ -154,7 +140,7 @@ class Component(NamedObject):
     def __iter__(self):
         """Enable post-order depth-first iteration of Component tree.
         """
-        for child in self.components:
+        for _, child in self.components.items():
             for component in child:
                 yield component
         yield self
@@ -245,48 +231,48 @@ class Component(NamedObject):
         """
         return "{0}:{1}".format(self.name, self._number)
     
-    def dp_initialize(self):
-        if isinstance(self.initialize, types.FunctionType):
-            self.initialize(self)
+    def _call_phase(self, phase):
+        if isinstance(phase, types.FunctionType):
+            phase(self)
         else:
-            self.initialize()
+            phase()
+                
+    def dp_initialize(self):
+        self._call_phase(self.initialize)
+    
+    def initialize(self):
+        pass
+    
+    def dp_setup(self):
+        self._call_phase(self.setup)
             
         for _, statistic in self.statistics.items():
-            statistic.increment_rep(self.sim.now)
+            statistic.open()
             
-    def initialize(self):
+    def setup(self):
         """Subclasses should override this method with initialization
         code that will be executed prior to any events on the future
         event list (FEL).
         """
-        pass            
+        pass
+
+    def dp_teardown(self, time):
+        """The Simulation calls teardown methods after final event.
+        """
+        for _, statistic in self.statistics.items():
+            statistic.teardown(time)
             
-    def dp_start_rep(self):
-        """Called at the beginning of each replication.
-        """
-        for _, statistic in self.statistics.items():
-            statistic.start_rep()
-        self.start_rep()
+        self._call_phase(self.teardown)
     
-    def start_rep(self):
+    def teardown(self):
         pass
     
-    def dp_end_rep(self, time):
+    def dp_finalize(self, time):
+        self._call_phase(self.finalize)
+            
         for _, statistic in self.statistics.items():
-            statistic.end_rep(time)
-        self.end_rep()
-    
-    def end_rep(self):
-        pass
-    
-    def dp_finalize(self):
-        """The Simulation calls finalize methods after final event.
-        """
-        if isinstance(self.finalize, types.FunctionType):
-            self.finalize(self)
-        else:
-            self.finalize()
-    
+            statistic.finalize(time)
+        
     def finalize(self):
         pass
     

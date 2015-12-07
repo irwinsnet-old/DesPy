@@ -129,13 +129,13 @@ class AbstractStatistic(metaclass = abc.ABCMeta):
         pass
 
     @abstractmethod
-    def start_rep(self):
+    def setup(self):
         """Called by sim to notify Statistic that new rep is starting.
         """
         pass
 
     @abstractmethod
-    def end_rep(self, time = None):
+    def teardown(self, time = None):
         """Called by sim to notify Statistic that rep has concluded.
         
         *Arguments*
@@ -195,10 +195,10 @@ class  DiscreteStatistic(AbstractStatistic):
     def values(self):
         return np.array(self._values)
         
-    def start_rep(self):
+    def setup(self):
         self._index.append([len(self._times), 0])
         
-    def end_rep(self, time = None):
+    def teardown(self, time = None):
         pass
     
     def _grb(self, rep):
@@ -235,7 +235,7 @@ class  DiscreteStatistic(AbstractStatistic):
             self._times.append(time)
             self._values.append(value)
 #             if len(self.index) == 0:
-#                 self.start_rep()            
+#                 self.initialize()            
             self._index[-1][1] += 1
         else:
             raise StatisticError("Cannot append to finalized "
@@ -355,11 +355,11 @@ class  TimeWeightedStatistic(AbstractStatistic):
     def values(self):
         return np.array(self._values)
         
-    def start_rep(self):
+    def setup(self):
         self._index.append([len(self._times), 0, None])
         
-    def end_rep(self, time):
-        # Method end_rep() is only run once
+    def teardown(self, time):
+        # Method finalize() is only run once
         assert self._grt(-1) is None
         
         self._spans.append(time + 1 - self._times[-1])

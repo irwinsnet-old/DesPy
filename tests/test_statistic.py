@@ -25,14 +25,14 @@ class testStatistic(unittest.TestCase):
         for _ in range(reps):
             time = 0
             r_lens.append(round(dist_num.rvs()))
-            stat1.start_rep()
+            stat1.setup()
             for _ in range(r_lens[-1]):
                 time += round(dist_time.rvs())
                 value = round(dist_v.rvs())
                 stat1.append(time, value)
                 times.append(time)
                 values.append(value)
-            stat1.end_rep()
+            stat1.teardown(time)
 
         print("=====Checking Test Setup Data=====")
         self.assertListEqual(stat1.rep_lengths.tolist(), r_lens)
@@ -43,7 +43,7 @@ class testStatistic(unittest.TestCase):
 #         print("Statistic Index: {}".format(stat1.index))
 
         print()
-        print("=====Pre-Finalized=====")
+        print("=====Open=====")
         
         print("total_length: {}".format(stat1.total_length))
         total_length = sum(r_lens)
@@ -63,7 +63,7 @@ class testStatistic(unittest.TestCase):
         self.assertListEqual(rep_means, stat1.rep_means.tolist())
 
         print()
-        print("=====Post-Finalized=====")
+        print("=====Finalized=====")
         stat1.finalize()
          
         self.assertListEqual(times, stat1.times.tolist())
@@ -96,7 +96,7 @@ class testStatistic(unittest.TestCase):
         for _ in range(reps):
             time = 0
             r_lens.append(round(dist_num.rvs()))
-            stat2.start_rep()
+            stat2.setup()
             stat2.append(0, 0)
             times.append(0)
             values.append(0)
@@ -112,7 +112,7 @@ class testStatistic(unittest.TestCase):
             rep_end = time + end_span
             spans.append(end_span + 1)
             r_lens[-1] += 1
-            stat2.end_rep(rep_end)
+            stat2.teardown(rep_end)
             
         print("=====Checking Test Setup Data=====")
         self.assertListEqual(stat2.rep_lengths.tolist(), r_lens)
@@ -127,7 +127,7 @@ class testStatistic(unittest.TestCase):
         self.assertListEqual(stat2.spans.tolist(), spans)
 
         print()
-        print("=====Pre-finalized=====")
+        print("=====Open=====")
         mean_sum = 0
         for idx in range(len(times)):
             mean_sum += values[idx] * spans[idx]

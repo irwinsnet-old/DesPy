@@ -41,7 +41,6 @@ from despy.output.report import Datatype
 from despy.base.named_object import NamedObject
 from despy.base.utilities import Priority
 from despy.core.trigger import AbstractTrigger, TimeTrigger
-from despy.core.component import Component
 
 
 class NoEventsRemainingError(Exception):
@@ -104,20 +103,64 @@ class Simulation(NamedObject):
               type None.
         """
         super().__init__(name, description)        
-        
         self._session = Session()
         self.session.sim = self  
-        
         self.initial_time = initial_time
         self._seed = None
-        self._evt = None
         self._gen = Generator(self)
         self.gen.console_trace = True
         self.gen.folder_basename = None
         self._reps = 1
         self._rep = 0
-            
-        self.initialize_sim()
+        
+        self.reset()
+        
+    def reset(self):
+        self._triggers = OrderedDict()
+        self._rep = 0
+        self._evt = None
+        self._run_start_time = None
+        self._run_stop_time = None
+        self.gen.trace.clear()
+        self._now = self.initial_time * 10
+        self._pri = 0
+        self._futureEventList = []
+        self._counter = count()
+        
+    def initialize(self):
+        for cpt in self.model:
+            cpt.dp_initialize()
+    
+    def setup(self):
+        """Setup for the next replication.
+        
+        Sets the simulation time to zero. Also sets the model's
+        initial_events_scheduled attribute to ``False``, which will cause
+        the model's initialize_rep methods to be executed the next time the
+        simulation is run. In addition:
+        
+            * Clears the FEL
+            * Erases the run_start_time and run_stop_time properties
+            * Clears the trace records
+            * Resets the main simulation counter
+        """
+        if self.rep > 0:
+            self._now = self.initial_time * 10
+            self._pri = 0
+            self._futureEventList = []
+            self._counter = count()
+        
+        for cpt in self.model:
+            cpt.dp_setup()
+    
+    def teardown(self):
+        for cpt in self.model:
+            cpt.dp_teardown(self.now)
+        
+    def finalize(self):
+        for cpt in self.model:
+            cpt.dp_finalize(self.now)
+        self.gen.write_files()
         
     @property
     def reps(self):
@@ -272,37 +315,6 @@ class Simulation(NamedObject):
     @gen.setter
     def gen(self, generator):
         self._gen = generator
-        
-    def initialize_sim(self):
-        self._triggers = OrderedDict()
-        self.curr_rep = 1
-        self._run_start_time = None
-        self._run_stop_time = None
-        self.gen.trace.clear()
-        Component.archived_register.clear()
-        self.initialize_rep()
-
-    def initialize_rep(self):
-        """Reset the time to zero, allowing the simulation to be rerun.
-        
-        Sets the simulation time to zero. Also sets the model's
-        initial_events_scheduled attribute to ``False``, which will cause
-        the model's initialize_rep methods to be executed the next time the
-        simulation is run. In addition:
-        
-            * Clears the FEL
-            * Erases the run_start_time and run_stop_time properties
-            * Clears the trace records
-            * Resets the main simulation counter
-            
-        *Arguments*
-            ``initial_time``: Set the simulation clock to the value
-            specified in ``initial_time``. Defaults to zero.
-        """
-        self._now = self.initial_time * 10
-        self._pri = 0
-        self._futureEventList = []
-        self._counter = count()
 
     def schedule(self, event, delay=0, priority=Priority.STANDARD):
         """ Add an event to the FEL.
@@ -434,10 +446,10 @@ class Simulation(NamedObject):
                                  "should be None or integer > 0.  {} "
                                  "passed instead".format(until))
         self._run_start_time = datetime.datetime.today()
-        
+
         for rep in range(0, self.reps):
             self._rep = rep
-            self.model.dp_initialize()
+            self.setup()
 
             # Step through events on FEL and check triggers.
             continue_rep = True
@@ -449,57 +461,9 @@ class Simulation(NamedObject):
                 continue_rep = self.dp_check_triggers()
         
             # Finalize model and setup for next replication
-            self.model.dp_finalize()
-            if rep < self.reps  - 1:
-                self.initialize_rep()
-                
-        self.dp_finalize_sim()
+            self.teardown()
             
         self._run_stop_time = datetime.datetime.today()
-        self.gen.write_files()
-        
-    def resume(self, until=None):
-        if until is None:
-            try:
-                del self.triggers["dp_untilTrigger"]
-            except KeyError:
-                pass            
-        elif (until > 0):
-            self.add_trigger("dp_untilTrigger", TimeTrigger(until))
-        else:
-            raise AttributeError("Simulation.run() until argument "
-                                 "should be None or integer > 0.  {} "
-                                 "passed instead".format(until))
-        self._run_start_time = datetime.datetime.today()
-        
-        for rep in range(0, self.reps):
-            self._rep = rep
-
-            # Step through events on FEL and check triggers.
-            continue_rep = True
-            while continue_rep:
-                try:
-                    self.step()
-                except NoEventsRemainingError:
-                    break
-                continue_rep = self.dp_check_triggers()
-        
-            # Finalize model and setup for next replication
-            if rep < self.reps  - 1:
-                self.model.dp_finalize()
-                self.initialize_rep()
-                
-        self.dp_finalize_sim()
-            
-        self._run_stop_time = datetime.datetime.today()
-        self.gen.write_files()
-
-    def dp_finalize_sim(self):
-        for cpt in Component.active_register:
-            for _ , stat in cpt.statistics.items():
-                stat.finalize(self.now)
-        Component.archived_register = Component.active_register.copy()
-        Component.active_register.clear()
         
     def dp_check_triggers(self):
         """Checks all simulation triggers, returning False ends rep.
@@ -560,9 +524,6 @@ class Simulation(NamedObject):
                      ('Elapsed Time', elapsed_time)])
                   ]
         return output
-    
-    def reset(self, initial_time = 0):
-        self.initialize_sim()
             
 class FutureEvent(namedtuple('FutureEventTuple',
                          ['time', 'event', 'priority'])):

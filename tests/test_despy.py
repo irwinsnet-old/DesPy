@@ -120,7 +120,9 @@ class testDespyb(unittest.TestCase):
         model.sim.schedule(dp.Event("First Event"), 0)
         sim.schedule(dp.Event("Second Event"), 4)
         sim.schedule(dp.Event("Third Event"), 8)
+        model.sim.initialize()
         model.sim.run()
+        model.sim.finalize()
         
         self.assertEqual(model.sim.gen.trace.length, 3)
         evtTrace = model.sim.gen.trace
@@ -151,6 +153,7 @@ class testDespyb(unittest.TestCase):
         sim_tc = dp.Simulation()
         sim_tc.gen.folder_basename = ("C:/Projects/despy_output/"
                                         "append_callback1")
+        sim_tc.initialize()
         sim_tc.run()
         
         evtTrace = model.sim.gen.trace
@@ -164,12 +167,13 @@ class testDespyb(unittest.TestCase):
         model.sim.reset()
         model.sim.gen.folder_basename = \
                 "C:/Projects/despy_output/append_callback2"
+        model.sim.initialize()
         model.sim.run(10)
         evtTrace = model.sim.gen.trace
         self.assertEqual(evtTrace.length, 1)
           
         #Verify that simulation can be restarted from current point.
-        model.sim.resume(20)
+        model.sim.run(20)
         self.assertEqual(evtTrace.length, 2)
         
     def test_process(self):
@@ -194,16 +198,23 @@ class testDespyb(unittest.TestCase):
         _ = dp.Simulation()
         model.sim.seed = 42
         process.start()
+        model.sim.initialize()
         model.sim.run(20)
         
     def test_simultaneous_events(self):
         #Test simultaneous, different events.
         model = dp.Component("Simultaneous Events Model")
+        
+        def setup(self):
+            self.sim.schedule(dp.Event("Event #1"), 3)
+            self.sim.schedule(dp.Event("Event #2"), 3)
+        model.setup = setup
+        
         dp.Session().model = model
         sim = dp.Simulation()
-        model.sim.schedule(dp.Event("Event #1"), 3)
-        sim.schedule(dp.Event("Event #2"), 3)
-        model.sim.run()
+        sim.initialize()        
+        sim.run()
+        sim.finalize()
         self.assertEqual(model.sim.gen.trace.length, 2)
         
         #Test simultaneous, identical events.
@@ -213,6 +224,7 @@ class testDespyb(unittest.TestCase):
         event = dp.Event("The Event")
         model2.sim.schedule(event, 1)
         model2.sim.schedule(event, 1)
+        model2.initialize()
         model2.sim.run()
         self.assertEqual(model2.sim.gen.trace.length, 2)
         
@@ -229,22 +241,26 @@ class testDespyb(unittest.TestCase):
         model.sim.schedule(event, 0)
         
         # Default settings limit trace to time < 500
+        model.sim.initialize()
         model.sim.run(1000)
+        model.sim.finalize()
         self.assertEqual(model.sim.gen.trace.length, 50)
          
-#         # User can set trace start and stop times
-        model.sim.initialize_sim()
+        # User can set trace start and stop times
+        model.sim.reset()
         model.sim.schedule(event, 0)
         model.sim.gen.trace.start = 200
         model.sim.gen.trace.stop = 300
         model.sim.console_output = False
+        model.sim.initialize()
         model.sim.run(1000)
+        model.sim.finalize()
         self.assertEqual(model.sim.gen.trace.length, 10)
         self.assertEqual(model.sim.gen.trace[0]['time'], 200)
         self.assertEqual(model.sim.gen.trace[9]['time'], 290)
         
-#         # Default maximum trace length is 1000 lines.
-        model.sim.initialize_sim()       
+        # Default maximum trace length is 1000 lines.
+        model.sim.reset()     
         evt2 = dp.Event("Trace Control Event Step=1")
          
         def event_callback2(self):
@@ -254,19 +270,23 @@ class testDespyb(unittest.TestCase):
         model.sim.schedule(evt2, 0)
         model.sim.gen.trace.start = 0
         model.sim.gen.trace.stop = 1000
+        model.sim.initialize()
         model.sim.run(5000)
+        model.sim.finalize()
         self.assertEqual(model.sim.gen.trace.length, 1000)
          
         # User can set maximum trace length
         model.sim.name = "bigTrace"
-        model.sim.initialize_sim()
+        model.sim.reset()
         model.sim.gen.folder_basename = \
                 "C:/Projects/despy_output/trace_control"
         model.sim.schedule(evt2, 0)
         model.sim.gen.trace.max_length = 2000
         model.sim.gen.trace.start = 365
         model.sim.gen.trace.stop = 2999
+        model.sim.initialize()
         model.sim.run(3000)
+        model.sim.finalize()
         self.assertEqual(model.sim.gen.trace.length, 2000)
         self.assertEqual(model.sim.gen.trace[0]['time'], 365)
         self.assertEqual(model.sim.gen.trace[1999]['time'], 2364)

@@ -157,7 +157,7 @@ class Generator(object):
 #         print()
         
         #Write CSV file for each statistic        
-        for cpt in Component.archived_register:
+        for cpt in self.sim.model:
             for _, st in cpt.statistics.items():
                 f_name = cpt.slug + '-' + st.name + '.csv'
                 f_pname = self._full_path + '/' + f_name
