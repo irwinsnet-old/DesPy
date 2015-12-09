@@ -244,10 +244,10 @@ class Component(NamedObject):
         pass
     
     def dp_setup(self):
-        self._call_phase(self.setup)
-            
         for _, statistic in self.statistics.items():
-            statistic.open()
+            statistic.setup()
+            
+        self._call_phase(self.setup)
             
     def setup(self):
         """Subclasses should override this method with initialization
@@ -267,11 +267,11 @@ class Component(NamedObject):
     def teardown(self):
         pass
     
-    def dp_finalize(self, time):
+    def dp_finalize(self):
         self._call_phase(self.finalize)
             
         for _, statistic in self.statistics.items():
-            statistic.finalize(time)
+            statistic.finalize()
         
     def finalize(self):
         pass

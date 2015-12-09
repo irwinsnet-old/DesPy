@@ -52,6 +52,7 @@ class testQueue(unittest.TestCase):
             customers.append(dp.Entity("Customer #{0}".format(i)))
         self.assertEqual(len(customers), 5)
         
+        qu.dp_setup()
         qu.add(customers[0])
         self.assertEqual(qu.length, 1)
         qu.add(customers[1])

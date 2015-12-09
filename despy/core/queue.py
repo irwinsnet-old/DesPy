@@ -116,13 +116,13 @@ class Queue(Component):
         """
         return self._times_in_queue
     
-    def initialize(self):
+    def setup(self):
         self.statistics['Queue_length'].append(self.sim.now,
                                                self.length)
-        
-    def finalize(self):
-        self.statistics['Queue_length'].append(self.sim.now,
-                                               self.length)
+#         
+#     def finalize(self):
+#         self.statistics['Queue_length'].append(self.sim.now,
+#                                                self.length)
 
     def add(self, item):
         """Add an item to the end of the queue.

@@ -159,7 +159,7 @@ class Simulation(NamedObject):
         
     def finalize(self):
         for cpt in self.model:
-            cpt.dp_finalize(self.now)
+            cpt.dp_finalize()
         self.gen.write_files()
         
     @property
@@ -464,6 +464,19 @@ class Simulation(NamedObject):
             self.teardown()
             
         self._run_stop_time = datetime.datetime.today()
+        
+    def irun(self, until = None):
+        self.initialize()
+        self.run(until = until)
+        
+    def irunf(self, until = None):
+        self.initialize()
+        self.run(until = until)
+        self.finalize()
+        
+    def runf(self, until = None):
+        self.run(until = until)
+        self.finalize()
         
     def dp_check_triggers(self):
         """Checks all simulation triggers, returning False ends rep.

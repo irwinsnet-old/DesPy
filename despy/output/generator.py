@@ -161,28 +161,28 @@ class Generator(object):
             for _, st in cpt.statistics.items():
                 f_name = cpt.slug + '-' + st.name + '.csv'
                 f_pname = self._full_path + '/' + f_name
-                print("Name: {}, Index List{}".format(st.name, st.index)) #DEBUG:
-                with open(f_pname, 'w', newline = '') as file:
-                    writer = csv.writer(file)
-                    writer.writerow(["Statistic: {}".format(f_name)])
-                    writer.writerow([])
-                    writer.writerow(["Max Rep Length",
-                                     st.max_rep_length])
-                    writer.writerow([])
-                    writer.writerow(["Rep-{}".format(i)
-                                     for i in range(st.reps)])
-                    vals = [st.rep_lengths]
-#                     vals = ([[st.get_val(r, i)
-#                                 for i in range(st.rep_lengths[r])]
-#                                 for r in range(st.reps)])
-                    print()
-                    print("!!!!!!{}!!!!!!".format(st.name))
-                    print("Num Reps: {}".format(st.reps))
-                    print("=====Flat Values=====")
-                    print(st.values)
-                    print("=====Rep Lengths")
-                    print(st.rep_lengths)
-                    print("======Original Matrix======")
+#                 print("Name: {}, Index List{}".format(st.name, st._index)) #DEBUG:
+#                 with open(f_pname, 'w', newline = '') as file:
+#                     writer = csv.writer(file)
+#                     writer.writerow(["Statistic: {}".format(f_name)])
+#                     writer.writerow([])
+#                     writer.writerow(["Max Rep Length",
+#                                      st.max_rep_length])
+#                     writer.writerow([])
+#                     writer.writerow(["Rep-{}".format(i)
+#                                      for i in range(st.reps)])
+#                     vals = [st.rep_lengths]
+# #                     vals = ([[st.get_val(r, i)
+# #                                 for i in range(st.rep_lengths[r])]
+# #                                 for r in range(st.reps)])
+#                     print()
+#                     print("!!!!!!{}!!!!!!".format(st.name))
+#                     print("Num Reps: {}".format(st.reps))
+#                     print("=====Flat Values=====")
+#                     print(st.values)
+#                     print("=====Rep Lengths")
+#                     print(st.rep_lengths)
+#                     print("======Original Matrix======")
 #                     print(vals) #DEBUG:
 #                     print("=====Transposed Matrix======")
 #                     t_vals = np.transpose(vals)

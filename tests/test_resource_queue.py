@@ -53,9 +53,8 @@ class testResource(unittest.TestCase):
             def __init__(self):
                 super().__init__("Customer")
              
-        def initialize(self):
+        def setup(self):
             self.customer_process.start(0, dp.Priority.EARLY)
-            super().initialize()
              
         class CustServiceResource(dp.ResourceQueue):
             def __init__(self, capacity):             
@@ -102,7 +101,7 @@ class testResource(unittest.TestCase):
         dp.Session().model = model
         simulation = dp.Simulation()
         simulation.gen.folder_basename = "C:/Projects/despy_output/resource_sim"
-        simulation.run(100)
+        simulation.irunf(100)
         
 if __name__ == '__main__':
     unittest.main()

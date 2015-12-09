@@ -32,7 +32,7 @@ class testTimer(unittest.TestCase):
         model1.add_component("timer",
                    dp.RandomTimer("TimerA", dist1, TimerCallback()))
         self.assertEqual(len(model1.components), 1)
-        sim.run(100)
+        sim.irunf(100)
          
         trace1 = model1.sim.gen.trace
         self.assertEqual(trace1[0]['time'], 7)
@@ -49,7 +49,7 @@ class testTimer(unittest.TestCase):
         dp.Session().model = model2
         sim = dp.Simulation()
         sim.seed = 704
-        sim.run(1000)
+        sim.irunf(1000)
         trace2 = model2.sim.gen.trace
         self.assertEqual(trace2[0]['time'], 142)
         self.assertEqual(trace2[1]['time'], 285)
@@ -67,7 +67,7 @@ class testTimer(unittest.TestCase):
         dp.Session().model = model3
         sim = dp.Simulation()
         model3.sim.seed = 731        
-        sim.run(100)
+        sim.irunf(100)
         trace3 = model3.sim.gen.trace
         self.assertEqual(trace3[0]['priority'], 1)
         self.assertEqual(trace3[1]['priority'], 1)
