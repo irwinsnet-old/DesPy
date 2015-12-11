@@ -55,7 +55,7 @@ class Test(unittest.TestCase):
         sim = dp.Simulation()
         sim.reps = 2
         sim.gen.folder_basename = "C:/Projects/despy_output/mult_reps"
-        sim.run(100)
+        sim.irunf(100)
 
 
 if __name__ == "__main__":

@@ -155,6 +155,7 @@ class testDespyb(unittest.TestCase):
                                         "append_callback1")
         sim_tc.initialize()
         sim_tc.run()
+        sim_tc.finalize()
         
         evtTrace = model.sim.gen.trace
         self.assertEqual(evtTrace.length, 2)
@@ -173,7 +174,7 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(evtTrace.length, 1)
           
         #Verify that simulation can be restarted from current point.
-        model.sim.run(20)
+        model.sim.runf(20)
         self.assertEqual(evtTrace.length, 2)
         
     def test_process(self):

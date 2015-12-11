@@ -80,7 +80,7 @@ class testQueue(unittest.TestCase):
         sim.gen.folder_basename = \
                 "C:/Projects/despy_output/queue_sim"
         
-        sim.run(100)
+        sim.irunf(100)
         self.assertGreater(len(model.components), 0)
         
 class QuModel(dp.Component):
