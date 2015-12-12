@@ -36,7 +36,6 @@ from collections import namedtuple, OrderedDict
 import numpy as np
 
 from despy.core.session import Session
-from despy.output.generator import Generator
 from despy.output.report import Datatype
 from despy.base.named_object import NamedObject
 from despy.base.utilities import Priority
@@ -107,11 +106,9 @@ class Simulation(NamedObject):
         self.session.sim = self  
         self.initial_time = initial_time
         self._seed = None
-        self._gen = Generator(self)
-        self.gen.console_trace = True
-        self.gen.folder_basename = None
         self._reps = 1
         self._rep = 0
+        self._results = self._session.out.get_results(self)
         
         self.reset()
         
@@ -121,7 +118,7 @@ class Simulation(NamedObject):
         self._evt = None
         self._run_start_time = None
         self._run_stop_time = None
-        self.gen.trace.clear()
+        self._results.trace.clear()
         self._now = self.initial_time * 10
         self._pri = 0
         self._futureEventList = []
@@ -160,7 +157,8 @@ class Simulation(NamedObject):
     def finalize(self):
         for cpt in self.model:
             cpt.dp_finalize()
-        self.gen.write_files()
+        return self._results
+#         self.gen.write_files()
         
     @property
     def reps(self):
@@ -472,11 +470,11 @@ class Simulation(NamedObject):
     def irunf(self, until = None):
         self.initialize()
         self.run(until = until)
-        self.finalize()
+        return self.finalize()
         
     def runf(self, until = None):
         self.run(until = until)
-        self.finalize()
+        return self.finalize()
         
     def dp_check_triggers(self):
         """Checks all simulation triggers, returning False ends rep.
@@ -506,7 +504,7 @@ class Simulation(NamedObject):
             
     def add_message(self, message, fields):
         if self.evt is None:
-            self.gen.trace.add_message(message, fields)
+            self._results.trace.add_message(message, fields)
         else:
             self.evt.add_message(message, fields)
     

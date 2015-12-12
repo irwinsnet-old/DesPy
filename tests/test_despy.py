@@ -150,14 +150,16 @@ class testDespyb(unittest.TestCase):
         model = self.AppendCallbackModel("AppendCallback Model")
         
         dp.Session().model = model
+        cfg = dp.Session().out
         sim_tc = dp.Simulation()
-        sim_tc.gen.folder_basename = ("C:/Projects/despy_output/"
+        cfg.folder_basename = ("C:/Projects/despy_output/"
                                         "append_callback1")
         sim_tc.initialize()
         sim_tc.run()
-        sim_tc.finalize()
+        results = sim_tc.finalize()
+        results.write_files()
         
-        evtTrace = model.sim.gen.trace
+        evtTrace = results.trace
         self.assertEqual(evtTrace.length, 2)
         self.assertEqual(evtTrace[0]['name'], "First Event")
         self.assertEqual(evtTrace[0]['time'], 5)
@@ -166,16 +168,17 @@ class testDespyb(unittest.TestCase):
          
         #Test initialize method and until parameter
         model.sim.reset()
-        model.sim.gen.folder_basename = \
+        cfg.folder_basename = \
                 "C:/Projects/despy_output/append_callback2"
         model.sim.initialize()
         model.sim.run(10)
-        evtTrace = model.sim.gen.trace
+        evtTrace = model.sim._results.trace
         self.assertEqual(evtTrace.length, 1)
           
         #Verify that simulation can be restarted from current point.
-        model.sim.runf(20)
+        results = model.sim.runf(20)
         self.assertEqual(evtTrace.length, 2)
+        results.write_files()
         
     def test_process(self):
         model = dp.Component("Process Model")
@@ -200,7 +203,7 @@ class testDespyb(unittest.TestCase):
         model.sim.seed = 42
         process.start()
         model.sim.initialize()
-        model.sim.run(20)
+        model.sim.runf(20)
         
     def test_simultaneous_events(self):
         #Test simultaneous, different events.
@@ -215,8 +218,8 @@ class testDespyb(unittest.TestCase):
         sim = dp.Simulation()
         sim.initialize()        
         sim.run()
-        sim.finalize()
-        self.assertEqual(model.sim.gen.trace.length, 2)
+        results = sim.finalize()
+        self.assertEqual(results.trace.length, 2)
         
         #Test simultaneous, identical events.
         model2 = dp.Component("Simultaneous Identical Events Model")
@@ -226,8 +229,8 @@ class testDespyb(unittest.TestCase):
         model2.sim.schedule(event, 1)
         model2.sim.schedule(event, 1)
         model2.initialize()
-        model2.sim.run()
-        self.assertEqual(model2.sim.gen.trace.length, 2)
+        results = model2.sim.runf()
+        self.assertEqual(results.trace.length, 2)
         
     def test_trace_control(self):
         model = dp.Component("Trace Control")
@@ -244,14 +247,17 @@ class testDespyb(unittest.TestCase):
         # Default settings limit trace to time < 500
         model.sim.initialize()
         model.sim.run(1000)
-        model.sim.finalize()
-        self.assertEqual(model.sim.gen.trace.length, 50)
+        results = model.sim.finalize()
+        self.assertEqual(results.trace.length, 50)
          
         # User can set trace start and stop times
         model.sim.reset()
         model.sim.schedule(event, 0)
-        model.sim.gen.trace.start = 200
-        model.sim.gen.trace.stop = 300
+        cfg = dp.Session().out
+        
+        results.trace.start = 200
+        results.trace.stop = 300
+        
         model.sim.console_output = False
         model.sim.initialize()
         model.sim.run(1000)
@@ -287,7 +293,8 @@ class testDespyb(unittest.TestCase):
         model.sim.gen.trace.stop = 2999
         model.sim.initialize()
         model.sim.run(3000)
-        model.sim.finalize()
+        results = model.sim.finalize()
+        results.write_files()
         self.assertEqual(model.sim.gen.trace.length, 2000)
         self.assertEqual(model.sim.gen.trace[0]['time'], 365)
         self.assertEqual(model.sim.gen.trace[1999]['time'], 2364)

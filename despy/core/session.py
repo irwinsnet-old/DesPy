@@ -13,11 +13,14 @@ despy.core.session
     Session   
 """
 
+from despy.output.results import Config
+
 class Session:
     class __Session:
         def __init__(self):
             self._sim = None
             self.model = None
+            self._ouput_config = Config()
             
         @property
         def sim(self):
@@ -34,6 +37,14 @@ class Session:
         @model.setter
         def model(self, model):
             self._model = model
+            
+        @property
+        def out(self):
+            return self._ouput_config
+        
+        @out.setter
+        def out(self, config):
+            self._output_config = config
     
     _instance = None
     

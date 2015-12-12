@@ -64,6 +64,7 @@ def Histogram(data, folder, filename, title = None, x_label = None,
     the file extension.
             
     """
+    min_bins = 8
     # Clear existing plots from the canvas.
     plt.clf()
     
@@ -84,8 +85,10 @@ def Histogram(data, folder, filename, title = None, x_label = None,
         else:
             bin_size = math.ceil((max_value - min_value) / 10)
         bins = []
-        bins.append(math.floor(min_value))
+        bins.append(math.floor(min_value) - bin_size)
         while bins[-1] < max_value:
+            bins.append(bins[-1] + bin_size)
+        while len(bins) < min_bins:
             bins.append(bins[-1] + bin_size)
 
     # Create Histogram
