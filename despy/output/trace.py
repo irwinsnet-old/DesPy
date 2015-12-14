@@ -39,6 +39,7 @@ from collections import OrderedDict
 import csv
 
 from despy.output.report import Datatype
+from despy.core.session import Session
         
 class TraceRecord(OrderedDict):
     """Single record in a trace report containing multiple data fields.
@@ -200,16 +201,23 @@ class Trace(object):
     """
     
     
-    def __init__(self, generator):
+    def __init__(self):
+        
         #Public attributes
-        self._start = 0
-        self._stop = 500
-        self._max_length = 1000
-        self._gen = generator #Associated despy.core.output.generator  
+        self._max_length = 1000  
         
         #Private attributes
         self._record_list = [] #List of TraceRecords
         self._number = 0
+        self._session = Session()
+        
+    @property
+    def config(self):
+        return self._session.config
+        
+    @property
+    def sim(self):
+        return self._session.sim
 
     @property
     def start(self):
@@ -219,11 +227,7 @@ class Trace(object):
         
         *Type:* Integer
         """
-        return self._start
-    
-    @start.setter
-    def start(self, start_time):
-        self._start = start_time
+        return self.config.trace_start
 
     @property
     def stop(self):
@@ -236,15 +240,8 @@ class Trace(object):
         
         *Type:* Integer
         """
-        return self._stop
-    
-    @stop.setter
-    def stop(self, stop):
-        try:
-            if stop > self.start:
-                self._stop = round(stop)
-        except:
-            pass
+        return self.config.trace_stop
+
         
     @property
     def max_length(self):
@@ -253,11 +250,7 @@ class Trace(object):
         Defaults to 500. The Trace object will stop recording once it
         reaches 500 TraceRecords.
         """
-        return self._max_length
-    
-    @max_length.setter
-    def max_length(self, max_length):
-        self._max_length = max_length
+        return self.config.trace_max_length
         
     @property
     def length(self):
@@ -266,12 +259,6 @@ class Trace(object):
         *Type:* Integer
         """
         return len(self._record_list)
-
-    @property
-    def gen(self):
-        """The corresponding Generator object.
-        """
-        return self._gen
     
     def __len__(self):
         """Built-in len() function will return number of records.
@@ -298,7 +285,7 @@ class Trace(object):
         
         *Returns:* Boolean
         """
-        now = self.gen.sim.now
+        now = self.sim.now
         return (now < self.stop) and (self._number < self.max_length) \
             and (now >= self.start)
         
@@ -324,7 +311,7 @@ class Trace(object):
                 self._number = self._number + 1
                 
                 #Write TraceRecord to the console.
-                if self.gen.console_trace:
+                if self.config.console_trace:
                     assert isinstance(rec, TraceRecord)
                     print(rec)
             
@@ -354,9 +341,9 @@ class Trace(object):
                 Custom fields that will be added to the TraceRecord.
                 Optional. Defaults to None.
         """
-        trace_record = TraceRecord(self.gen.sim.rep,
-                                   self.gen.sim.now,
-                                   self.gen.sim.pri, "Msg", message)
+        trace_record = TraceRecord(self.sim.rep,
+                                   self.sim.now,
+                                   self.sim.pri, "Msg", message)
         if fields is not None:
             trace_record.add_fields(fields)
         
@@ -449,7 +436,7 @@ class CSV_file(object):
             self._writer = csv.writer(file)
             
             # Write header rows
-            self.write_sim_header_data(self.trace.gen.sim.get_data())
+            self.write_sim_header_data(self.trace.sim.get_data())
             
             # Write trace table
             self._writer.writerow(['Record #', 'Rep', 'Time',

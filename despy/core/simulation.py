@@ -36,10 +36,12 @@ from collections import namedtuple, OrderedDict
 import numpy as np
 
 from despy.core.session import Session
+from despy.output.results import Results
 from despy.output.report import Datatype
 from despy.base.named_object import NamedObject
 from despy.base.utilities import Priority
 from despy.core.trigger import AbstractTrigger, TimeTrigger
+from despy.output.trace import Trace
 
 
 class NoEventsRemainingError(Exception):
@@ -103,12 +105,11 @@ class Simulation(NamedObject):
         """
         super().__init__(name, description)        
         self._session = Session()
-        self.session.sim = self  
         self.initial_time = initial_time
         self._seed = None
         self._reps = 1
         self._rep = 0
-        self._results = self._session.out.get_results(self)
+        self._trace = Trace()
         
         self.reset()
         
@@ -118,12 +119,12 @@ class Simulation(NamedObject):
         self._evt = None
         self._run_start_time = None
         self._run_stop_time = None
-        self._results.trace.clear()
         self._now = self.initial_time * 10
         self._pri = 0
         self._futureEventList = []
         self._counter = count()
-        
+        self._trace.clear()
+                
     def initialize(self):
         for cpt in self.model:
             cpt.dp_initialize()
@@ -138,7 +139,6 @@ class Simulation(NamedObject):
         
             * Clears the FEL
             * Erases the run_start_time and run_stop_time properties
-            * Clears the trace records
             * Resets the main simulation counter
         """
         if self.rep > 0:
@@ -157,8 +157,9 @@ class Simulation(NamedObject):
     def finalize(self):
         for cpt in self.model:
             cpt.dp_finalize()
+        self._results = Results(self, self._session.config)
+        self._results._trace = self._trace
         return self._results
-#         self.gen.write_files()
         
     @property
     def reps(self):
@@ -300,19 +301,6 @@ class Simulation(NamedObject):
         run.
         """
         return self._run_stop_time
-        
-    @property
-    def gen(self):
-        """ A :class:`despy.output.generator` object.
-        
-        A link to the generator object that contains the methods that
-        generate all output files.
-        """
-        return self._gen
-    
-    @gen.setter
-    def gen(self, generator):
-        self._gen = generator
 
     def schedule(self, event, delay=0, priority=Priority.STANDARD):
         """ Add an event to the FEL.
@@ -504,7 +492,7 @@ class Simulation(NamedObject):
             
     def add_message(self, message, fields):
         if self.evt is None:
-            self._results.trace.add_message(message, fields)
+            self._trace.add_message(message, fields)
         else:
             self.evt.add_message(message, fields)
     
@@ -528,7 +516,8 @@ class Simulation(NamedObject):
         output = [(Datatype.title, "Simulation: " + self.name),
                   (Datatype.paragraph, self.description),
                   (Datatype.param_list,
-                    [('Generator Folder', self.gen.folder_basename),
+                    [('Generator Folder',
+                        self._session.config.folder_basename),
                      ('Seed', self.seed),
                      ('Start Time', self.run_start_time),
                      ('Stop Time', self.run_stop_time),

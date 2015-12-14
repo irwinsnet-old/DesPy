@@ -96,10 +96,6 @@ class Component(NamedObject):
         self._session = Session()
     
     @property
-    def session(self):
-        return self._session
-    
-    @property
     def sim(self):
         """A link to the model's simulation attribute.
         
@@ -107,11 +103,11 @@ class Component(NamedObject):
         
         *Returns:* :class:`despy.core.simulation.Simulation`
         """
-        return self.session.sim
+        return self._session.sim
     
     @property
     def model(self):
-        return self.session.model
+        return self._session.model
 
     @property
     def components(self):
