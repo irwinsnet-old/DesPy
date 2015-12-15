@@ -188,127 +188,128 @@ class testDespyb(unittest.TestCase):
            
         #Verify that simulation can be restarted from current point.
         results = model.sim.runf(20)
-#         self.assertEqual(results.trace.length, 2)
+        self.assertEqual(results.trace.length, 2)
         results.write_files()
          
-#     def test_process(self):
-#         model = dp.Component("Process Model")
-#         
-#         def generator(self):
-#             while True:
-#                 delay = round(stats.expon.rvs(scale = 3))
-#                 yield self.schedule_timeout("Repeated Event", delay)
-#         
-#         process = dp.Process("Test Process", generator)
-#         
-#         #Invalid attributes raise ValueError
-#         self.assertRaises(ValueError, model.add_component,
-#                           "Test Process", process)
-#         self.assertRaises(ValueError, model.add_component,
-#                           "sim", process)
-#         
-#         model.add_component("Test_Process", process)
-#         self.assertEqual(len(model.components), 1)
-#         dp.Session().model = model
-#         _ = dp.Simulation()
-#         model.sim.seed = 42
-#         process.start()
-#         model.sim.initialize()
-#         model.sim.runf(20)
-#         
-#     def test_simultaneous_events(self):
-#         #Test simultaneous, different events.
-#         model = dp.Component("Simultaneous Events Model")
-#         
-#         def setup(self):
-#             self.sim.schedule(dp.Event("Event #1"), 3)
-#             self.sim.schedule(dp.Event("Event #2"), 3)
-#         model.setup = setup
-#         
-#         dp.Session().model = model
-#         sim = dp.Simulation()
-#         sim.initialize()        
-#         sim.run()
-#         results = sim.finalize()
-#         self.assertEqual(results.trace.length, 2)
-#         
-#         #Test simultaneous, identical events.
-#         model2 = dp.Component("Simultaneous Identical Events Model")
-#         dp.Session().model = model2
-#         _ = dp.Simulation()
-#         event = dp.Event("The Event")
-#         model2.sim.schedule(event, 1)
-#         model2.sim.schedule(event, 1)
-#         model2.initialize()
-#         results = model2.sim.runf()
-#         self.assertEqual(results.trace.length, 2)
-#         
-#     def test_trace_control(self):
-#         model = dp.Component("Trace Control")
-#         dp.Session().model = model
-#         _ = dp.Simulation()
-#         event = dp.Event("Trace Control Event")
-#         
-#         def event_callback(self):
-#             self.sim.schedule(self.owner, 10)
-#             
-#         event.append_callback(dp.Callback(event_callback))
-#         model.sim.schedule(event, 0)
-#         
-#         # Default settings limit trace to time < 500
-#         model.sim.initialize()
-#         model.sim.run(1000)
-#         results = model.sim.finalize()
-#         self.assertEqual(results.trace.length, 50)
-#          
-#         # User can set trace start and stop times
-#         model.sim.reset()
-#         model.sim.schedule(event, 0)
-#         cfg = dp.Session().config
-#         
-#         results.trace.start = 200
-#         results.trace.stop = 300
-#         
-#         model.sim.console_output = False
-#         model.sim.initialize()
-#         model.sim.run(1000)
-#         model.sim.finalize()
-#         self.assertEqual(model.sim.gen.trace.length, 10)
-#         self.assertEqual(model.sim.gen.trace[0]['time'], 200)
-#         self.assertEqual(model.sim.gen.trace[9]['time'], 290)
-#         
-#         # Default maximum trace length is 1000 lines.
-#         model.sim.reset()     
-#         evt2 = dp.Event("Trace Control Event Step=1")
-#          
-#         def event_callback2(self):
-#             self.sim.schedule(self.owner, 1)
-#          
-#         evt2.append_callback(dp.Callback(event_callback2))
-#         model.sim.schedule(evt2, 0)
-#         model.sim.gen.trace.start = 0
-#         model.sim.gen.trace.stop = 1000
-#         model.sim.initialize()
-#         model.sim.run(5000)
-#         model.sim.finalize()
-#         self.assertEqual(model.sim.gen.trace.length, 1000)
-#          
-#         # User can set maximum trace length
-#         model.sim.name = "bigTrace"
-#         model.sim.reset()
-#         model.sim.gen.folder_basename = \
-#                 "C:/Projects/despy_output/trace_control"
-#         model.sim.schedule(evt2, 0)
-#         model.sim.gen.trace.max_length = 2000
-#         model.sim.gen.trace.start = 365
-#         model.sim.gen.trace.stop = 2999
-#         model.sim.initialize()
-#         model.sim.run(3000)
-#         results = model.sim.finalize()
-#         results.write_files()
-#         self.assertEqual(model.sim.gen.trace.length, 2000)
-#         self.assertEqual(model.sim.gen.trace[0]['time'], 365)
-#         self.assertEqual(model.sim.gen.trace[1999]['time'], 2364)
+    def test_process(self):
+        model = dp.Component("Process Model")
+         
+        def generator(self):
+            while True:
+                delay = round(stats.expon.rvs(scale = 3))
+                yield self.schedule_timeout("Repeated Event", delay)
+         
+        process = dp.Process("Test Process", generator)
+         
+        #Invalid attributes raise ValueError
+        self.assertRaises(ValueError, model.add_component,
+                          "Test Process", process)
+        self.assertRaises(ValueError, model.add_component,
+                          "sim", process)
+         
+        model.add_component("Test_Process", process)
+        self.assertEqual(len(model.components), 1)
+        dp.Session().model = model
+        _ = dp.Simulation()
+        model.sim.seed = 42
+        process.start()
+        model.sim.initialize()
+        model.sim.runf(20)
+         
+    def test_simultaneous_events(self):
+        #Test simultaneous, different events.
+        model = dp.Component("Simultaneous Events Model")
+         
+        def setup(self):
+            self.sim.schedule(dp.Event("Event #1"), 3)
+            self.sim.schedule(dp.Event("Event #2"), 3)
+        model.setup = setup
+        
+        session = dp.Session() 
+        session.model = model
+        session.sim = sim = dp.Simulation()
+        sim.initialize()        
+        sim.run()
+        results = sim.finalize()
+        self.assertEqual(results.trace.length, 2)
+         
+        #Test simultaneous, identical events.
+        model2 = dp.Component("Simultaneous Identical Events Model")
+        session.model = model2
+        sim = session.sim = dp.Simulation()
+        event = dp.Event("The Event")
+        model2.sim.schedule(event, 1)
+        sim.schedule(event, 1)
+        sim.initialize()
+        results = sim.runf()
+        self.assertEqual(results.trace.length, 2)
+         
+    def test_trace_control(self):
+        model = dp.Component("Trace Control")
+        session = dp.Session()
+        session.model = model
+        session.sim = sim = dp.Simulation()
+        event = dp.Event("Trace Control Event")
+         
+        def event_callback(self):
+            self.sim.schedule(self.owner, 10)
+             
+        event.append_callback(dp.Callback(event_callback))
+        sim.schedule(event, 0)
+         
+        # Default settings limit trace to time < 500
+        sim.initialize()
+        sim.run(1000)
+        results = sim.finalize()
+        self.assertEqual(results.trace.length, 50)
+          
+        # User can set trace start and stop times
+        sim.reset()
+        sim.schedule(event, 0)
+         
+        session.config.trace_start = 200
+        session.config.trace_stop = 300
+         
+        sim.console_output = False
+        sim.initialize()
+        sim.run(1000)
+        results = sim.finalize()
+        self.assertEqual(results.trace.length, 10)
+        self.assertEqual(results.trace[0]['time'], 200)
+        self.assertEqual(results.trace[9]['time'], 290)
+         
+        # Default maximum trace length is 1000 lines.
+        sim.reset()     
+        evt2 = dp.Event("Trace Control Event Step=1")
+          
+        def event_callback2(self):
+            self.sim.schedule(self.owner, 1)
+          
+        evt2.append_callback(dp.Callback(event_callback2))
+        model.sim.schedule(evt2, 0)
+        session.config.trace_start = 0
+        session.config.trace_stop = 1000
+        model.sim.initialize()
+        model.sim.run(5000)
+        results = model.sim.finalize()
+        self.assertEqual(results.trace.length, 1000)
+          
+        # User can set maximum trace length
+        sim.name = "bigTrace"
+        sim.reset()
+        session.config.folder_basename = \
+                "C:/Projects/despy_output/trace_control"
+        sim.schedule(evt2, 0)
+        session.config.trace_max_length = 2000
+        session.config.trace_start = 365
+        session.config.trace_stop = 2999
+        sim.initialize()
+        sim.run(3000)
+        results = model.sim.finalize()
+        results.write_files()
+        self.assertEqual(results.trace.length, 2000)
+        self.assertEqual(results.trace[0]['time'], 365)
+        self.assertEqual(results.trace[1999]['time'], 2364)
 
 if __name__ == '__main__':
     unittest.main()

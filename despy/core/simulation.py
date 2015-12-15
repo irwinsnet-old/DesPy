@@ -26,6 +26,8 @@ despy.core.simulation
     Revise internal function names -- get rid of underscore prefix and
     replace with "dp_" prefix to indicate an internal framework
     method.
+    
+    Write test for resume_on_next_rep parameter.
 """
 
 from heapq import heappush, heappop
@@ -116,6 +118,7 @@ class Simulation(NamedObject):
     def reset(self):
         self._triggers = OrderedDict()
         self._rep = 0
+        self._setups = 0
         self._evt = None
         self._run_start_time = None
         self._run_stop_time = None
@@ -393,7 +396,7 @@ class Simulation(NamedObject):
         
         return fel_item
 
-    def run(self, until=None):
+    def run(self, until=None, resume_on_next_rep = False):
         """ Execute events on the FEL until reaching a stop condition.
         
         The ``run`` method will advance simulation time and execute events
@@ -433,9 +436,14 @@ class Simulation(NamedObject):
                                  "passed instead".format(until))
         self._run_start_time = datetime.datetime.today()
 
-        for rep in range(0, self.reps):
+        if resume_on_next_rep:
+            self._rep += 1
+        start_rep = self._rep            
+        for rep in range(start_rep, self.reps):
             self._rep = rep
-            self.setup()
+            if self._setups <= self._rep:
+                self.setup()
+                self._setups += 1
 
             # Step through events on FEL and check triggers.
             continue_rep = True
@@ -460,8 +468,8 @@ class Simulation(NamedObject):
         self.run(until = until)
         return self.finalize()
         
-    def runf(self, until = None):
-        self.run(until = until)
+    def runf(self, until = None, resume_on_next_rep = False):
+        self.run(until = until, resume_on_next_rep = resume_on_next_rep)
         return self.finalize()
         
     def dp_check_triggers(self):

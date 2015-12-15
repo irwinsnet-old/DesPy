@@ -210,10 +210,7 @@ class Trace(object):
         self._record_list = [] #List of TraceRecords
         self._number = 0
         self._session = Session()
-        
-    @property
-    def config(self):
-        return self._session.config
+        self._config = self._session.config
         
     @property
     def sim(self):
@@ -227,7 +224,7 @@ class Trace(object):
         
         *Type:* Integer
         """
-        return self.config.trace_start
+        return self._config.trace_start
 
     @property
     def stop(self):
@@ -240,7 +237,7 @@ class Trace(object):
         
         *Type:* Integer
         """
-        return self.config.trace_stop
+        return self._config.trace_stop
 
         
     @property
@@ -250,7 +247,7 @@ class Trace(object):
         Defaults to 500. The Trace object will stop recording once it
         reaches 500 TraceRecords.
         """
-        return self.config.trace_max_length
+        return self._config.trace_max_length
         
     @property
     def length(self):
@@ -311,7 +308,7 @@ class Trace(object):
                 self._number = self._number + 1
                 
                 #Write TraceRecord to the console.
-                if self.config.console_trace:
+                if self._config.console_trace:
                     assert isinstance(rec, TraceRecord)
                     print(rec)
             
