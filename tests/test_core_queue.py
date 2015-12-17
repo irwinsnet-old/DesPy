@@ -17,9 +17,9 @@ class testQueue(unittest.TestCase):
         #  works.
         print()
         print("=====Negative Time Test=====")
-        model = dp.Component("Negative Time Model")
-        dp.Session().model = model
-        sim = dp.Simulation()
+        session = dp.Session()      
+        session.model = model = dp.Component("Negative Time Model")
+        session.sim = sim = dp.Simulation()
         sim.schedule(dp.Event("Positive Time"),
                        priority = dp.Priority.LATE)        
         model.sim.schedule(dp.Event("Negative Time"),
@@ -36,29 +36,30 @@ class testQueue(unittest.TestCase):
         self.assertEqual(ent1.number, 1)
         ent2 = dp.Entity("Entity #2")
         self.assertEqual(ent2.number, 2)
-
+ 
     def test_queue(self):
         print()
         print("=====Test Queue=====")
         model = dp.Component("Q-test")
         qu = dp.Queue("TestQueue")
         model.add_component("q", qu)
-        dp.Session().model = model
-        _ = dp.Simulation()
+        session = dp.Session()
+        session.model = model
+        session.sim = dp.Simulation()
         self.assertEqual(qu.name, "TestQueue")
         customers = []
         dp.Entity.set_counter()
         for i in range(5):
             customers.append(dp.Entity("Customer #{0}".format(i)))
         self.assertEqual(len(customers), 5)
-        
+         
         qu.dp_setup()
         qu.add(customers[0])
         self.assertEqual(qu.length, 1)
         qu.add(customers[1])
         qu.add(customers[2])
         self.assertEqual(qu.length, 3)
-        
+         
         entity = qu.remove()
         self.assertEqual(entity.name, "Customer #0")
         self.assertEqual(qu.length, 2)
@@ -68,40 +69,41 @@ class testQueue(unittest.TestCase):
         entity = qu.remove()
         self.assertEqual(entity.name, "Customer #2")
         self.assertEqual(qu.length, 0)
-
+ 
     def test_queue_in_simulation(self):
         print()
         print("=====Test Queue In Simulation======")
         Customer.set_counter()
         model = QuModel("Queue Model")
-        dp.Session().model = model
+        session = dp.Session()
+        session.model = model
         self.assertIsInstance(dp.Session().model, QuModel)
-        sim = dp.Simulation()
-        sim.gen.folder_basename = \
+        session.sim = sim = dp.Simulation()
+        session.config.folder_basename = \
                 "C:/Projects/despy_output/queue_sim"
-        
+         
         sim.irunf(100)
         self.assertGreater(len(model.components), 0)
-        
+         
 class QuModel(dp.Component):
     def __init__(self, name):
         super().__init__(name, "Queue Model Test")
         self.add_component("c_qu", dp.Queue("Customer Queue"))
         self.add_component("customer_process", CustArrProcess())
         self.add_component("service_process", CustServiceProcess())
-        
+         
     def initialize(self):
         self.customer_process.start(0, dp.Priority.EARLY)
         self.service_process.start()
-
+ 
 class Customer(dp.Entity):
     def __init__(self):
         super().__init__("Customer")
-        
+         
 class CustArrProcess(dp.Process):
     def __init__(self):
         super().__init__("Customer Generator", self.generator)
-
+ 
     def generator(self):
         first_customer = Customer()
         self.model.c_qu.add(first_customer)                
@@ -115,11 +117,11 @@ class CustArrProcess(dp.Process):
                     delay)
             self.model.c_qu.add(customer)
             self.model.service_process.wake()
-
+ 
 class CustServiceProcess(dp.Process):
     def __init__(self):
         super().__init__("Customer Server", self.generator)
-        
+         
     def generator(self):
         while True:
             if self.model.c_qu.length > 0:

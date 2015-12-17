@@ -53,10 +53,11 @@ class testQueue(unittest.TestCase):
         self.assertEqual(len(q_model.components), 3)
         print(q_model.components)
         
-        dp.Session().model = q_model
-        sim = dp.Simulation()
-        sim.gen.folder_basename = "C:/Projects/despy_output/queue_sim"
-        sim.run(100)
+        session = dp.Session()
+        session.model = q_model
+        session.sim = sim = dp.Simulation()
+        session.config.folder_basename = "C:/Projects/despy_output/queue_sim"
+        sim.irunf(100)
         
         
 class QModel(dp.Component):

@@ -51,10 +51,11 @@ class RepModel(dp.Component):
 class Test(unittest.TestCase):
 
     def test_reps(self):
-        dp.Session().model = RepModel()
-        sim = dp.Simulation()
+        session = dp.Session()
+        session.model = RepModel()
+        session.sim = sim = dp.Simulation()
         sim.reps = 2
-        sim.gen.folder_basename = "C:/Projects/despy_output/mult_reps"
+        session.config.folder_basename = "C:/Projects/despy_output/mult_reps"
         sim.irunf(100)
 
 

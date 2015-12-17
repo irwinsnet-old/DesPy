@@ -134,7 +134,7 @@ class Config(object):
     def trace_stop(self, stop):
         try:
             if stop > self.trace_start:
-                self._stop = round(stop)
+                self._trace_stop = round(stop)
         except:
             pass
 

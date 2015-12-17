@@ -25,16 +25,17 @@ class testTimer(unittest.TestCase):
         print()
         print("=====Testing RandomTimer with immediate = False=======")
         model1 = dp.Component("Timer Test Model-A")
-        dp.Session().model = model1   
-        sim = dp.Simulation()
+        session = dp.Session()
+        session.model = model1   
+        session.sim = sim = dp.Simulation()
         sim.seed = 731                  
         dist1 = stats.poisson(10)
         model1.add_component("timer",
                    dp.RandomTimer("TimerA", dist1, TimerCallback()))
         self.assertEqual(len(model1.components), 1)
-        sim.irunf(100)
+        results = sim.irunf(100)
          
-        trace1 = model1.sim.gen.trace
+        trace1 = results.trace
         self.assertEqual(trace1[0]['time'], 7)
         self.assertEqual(trace1[1]['time'], 15)
         self.assertEqual(trace1[2]['time'], 23)
@@ -46,11 +47,11 @@ class testTimer(unittest.TestCase):
         dist2 = stats.poisson(150)
         model2.add_component("Timer",
                    dp.RandomTimer("Timer-B", dist2, TimerCallback()))
-        dp.Session().model = model2
-        sim = dp.Simulation()
+        session.model = model2
+        session.sim = sim = dp.Simulation()
         sim.seed = 704
-        sim.irunf(1000)
-        trace2 = model2.sim.gen.trace
+        results = sim.irunf(1000)
+        trace2 = results.trace
         self.assertEqual(trace2[0]['time'], 142)
         self.assertEqual(trace2[1]['time'], 285)
         self.assertEqual(len(trace2), 3)
@@ -64,11 +65,11 @@ class testTimer(unittest.TestCase):
         model3.add_component("timer", 
                    dp.RandomTimer("Timer-C", dist3, TimerCallback(),
                                 priority = dp.Priority.LATE))
-        dp.Session().model = model3
-        sim = dp.Simulation()
+        session.model = model3
+        session.sim = sim = dp.Simulation()
         model3.sim.seed = 731        
-        sim.irunf(100)
-        trace3 = model3.sim.gen.trace
+        results = sim.irunf(100)
+        trace3 = results.trace
         self.assertEqual(trace3[0]['priority'], 1)
         self.assertEqual(trace3[1]['priority'], 1)
         self.assertEqual(trace3[2]['interval'], 10)
