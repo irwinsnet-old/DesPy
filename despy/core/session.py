@@ -17,7 +17,9 @@ despy.core.session
 class Session:
     class __Session:
         def __init__(self):
-            self.reset()
+            self._sim = None
+            self.model = None
+            self._ouput_config = Config()
             
         @property
         def sim(self):
@@ -42,12 +44,6 @@ class Session:
         @config.setter
         def config(self, config):
             self._output_config = config
-            
-        def reset(self):
-            self._sim = None
-            self.model = None
-            self._ouput_config = Config()
-            return self
     
     _instance = None
     
@@ -60,6 +56,10 @@ class Session:
     
     def __setattr__(self, name, value):
         setattr(self._instance, name, value)
+        
+    def new(self):
+        Session._instance = Session.__Session()
+        return self
         
         
 class Config(object):
