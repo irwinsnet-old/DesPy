@@ -25,7 +25,7 @@ class testTimer(unittest.TestCase):
         print()
         print("=====Testing RandomTimer with immediate = False=======")
         model1 = dp.Component("Timer Test Model-A")
-        session = dp.Session()
+        session = dp.Session().reset()
         session.model = model1   
         session.sim = sim = dp.Simulation()
         sim.seed = 731                  
@@ -33,6 +33,7 @@ class testTimer(unittest.TestCase):
         model1.add_component("timer",
                    dp.RandomTimer("TimerA", dist1, TimerCallback()))
         self.assertEqual(len(model1.components), 1)
+        
         results = sim.irunf(100)
          
         trace1 = results.trace
@@ -76,7 +77,7 @@ class testTimer(unittest.TestCase):
         self.assertEqual(trace3[4]['interval'], 10)
         self.assertEqual(trace3[10]['interval'], 10)
         
-        
-        
+if __name__ == '__main__':
+    unittest.main()
         
     
