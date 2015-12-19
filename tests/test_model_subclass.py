@@ -57,7 +57,7 @@ class testQueue(unittest.TestCase):
         session.model = q_model
         session.sim = sim = dp.Simulation()
         session.config.folder_basename = "C:/Projects/despy_output/queue_sim"
-        sim.irunf(100)
+        sim.irunf(100).write_files()
         
         
 class QModel(dp.Component):

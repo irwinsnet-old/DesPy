@@ -24,6 +24,8 @@ despy.core.queue
     Remove reference to histogram folder from get_data method.
     
     Refactor time in queue to use Statistic class.
+    
+    Change getData so it doesn't need folder from session.
 """
 
 from collections import deque, namedtuple, OrderedDict
@@ -165,7 +167,7 @@ class Queue(Component):
     def clear(self):
         self._queue.clear()
     
-    def get_data(self):
+    def get_data(self, full_path):
         """Creates charts and adds data to final report.
         
         *Arguments*
@@ -179,8 +181,7 @@ class Queue(Component):
         # Create Time in Queue Histogram
         qtimes = np.array(self.times_in_queue, np.int32)
         qtime_filename = '{0}_time_in_q'.format(self.id)
-        folder = self.sim.gen._full_path
-        full_fname = plot.Histogram(self.times_in_queue, folder,
+        full_fname = plot.Histogram(self.times_in_queue, full_path,
                        qtime_filename,
                        title = self.name,
                        x_label = "Time in Queue",

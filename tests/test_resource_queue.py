@@ -84,8 +84,9 @@ class testResource(unittest.TestCase):
                     args2 = OrderedDict()
                     args2["Interarrival_Time"] = delay                    
                     args2["Customer"] = customer
-                    yield self.schedule_timeout("Customer Arrives", delay,
-                            trace_fields = args2)
+                    yield self.schedule_timeout("Customer Arrives",
+                                                delay,
+                                                trace_fields = args2)
                      
         def __init__(self, name):
             super().__init__(name)
@@ -102,8 +103,9 @@ class testResource(unittest.TestCase):
         session = dp.Session()
         session.model = model
         session.sim = simulation = dp.Simulation()
-        session.config.folder_basename = "C:/Projects/despy_output/resource_sim"
-        simulation.irunf(100)
+        session.config.folder_basename = \
+                        "C:/Projects/despy_output/resource_sim"
+        simulation.irunf(100).write_files()
         
 if __name__ == '__main__':
     unittest.main()

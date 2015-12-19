@@ -56,9 +56,9 @@ class Results(object):
         self.report.append_output(self._sim.get_data())
             
         for _, component in self._mod.components.items():
-            output = component.get_data()
+            output = component.get_data(self._full_path)
             if output is not None:
-                self._cfg.report.append_output(output)
+                self._report.append_output(output)
         
         self._report.write_report(self._full_path)
         

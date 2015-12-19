@@ -272,7 +272,7 @@ class Component(NamedObject):
     def finalize(self):
         pass
     
-    def get_data(self):
+    def get_data(self, full_path):
         """Subclasses should override this method to provide simulation
         output that will be included in the output report.
         

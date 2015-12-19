@@ -322,7 +322,7 @@ class Resource(Component):
     def finalize(self):
         self.clear_stations()
      
-    def get_data(self):
+    def get_data(self, full_path):
         st = self.get_stat("Service Time")
         output = [(Datatype.title, "Resource: " + self.name),
                   (Datatype.paragraph, self.description),
