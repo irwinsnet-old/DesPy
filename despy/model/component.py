@@ -4,7 +4,7 @@
 #   Copyright (c) 2015, Stacy Irwin
 """
 ********************
-despy.core.component
+despy.model.component
 ********************
 
 ..  autosummary::
@@ -22,11 +22,11 @@ despy.core.component
 
 from itertools import count
 import types
+import re
 
 from despy.session import Session
-from despy.base.named_object import NamedObject
 
-class Component(NamedObject):
+class Component(object):
     """A base class that provides object counters and other attributes.
 
     Models consist of several components, such as queues, processes, and
@@ -57,14 +57,14 @@ class Component(NamedObject):
         
     
     **Inherits**
-        * :class:`despy.base.named_object.NamedObject`
+        * :None
         
     **Superclass**
-        * :class:`despy.core.entity.Entity`
-        * :class:`despy.core.event.Event`
-        * :class:`despy.core.process.Process`
-        * :class:`despy.core.queue.Queue`
-        * :class:`despy.core.resource.Resource`
+        * :class:`despy.model.entity.Entity`
+        * :class:`despy.model.event.Event`
+        * :class:`despy.model.process.Process`
+        * :class:`despy.model.queue.Queue`
+        * :class:`despy.model.resource.Resource`
     """
     
     
@@ -72,7 +72,7 @@ class Component(NamedObject):
         """Creates an instance of a *Component* object.
         
         Except for the simulation and model classes, all members of the
-        despy.core package inherit from the *Component* class.
+        despy.model package inherit from the *Component* class.
         
         *Arguments*
             ``name`` (String)
@@ -81,7 +81,8 @@ class Component(NamedObject):
             ``description`` (String)
                 A descriptive paragraph. Optional.
         """
-        super().__init__(name, description)
+        self.name = name
+        self.description = description
         
         # Assigns an unused counter if this is the first component
         # instance.
@@ -94,6 +95,67 @@ class Component(NamedObject):
 
         self._owner = None
         self._session = Session()
+
+    @property
+    def name(self):
+        """The name of the object.
+        
+        A short phrase, such as "Customer" or "Server Queue" that
+        identifies the object.  Using title case and spaces will result
+        in pleasant formatting in output reports and trace files.
+        
+        *Returns:* String
+        
+        *Raises:*
+            ``TypeError`` if name is not a string.
+        
+        """
+        return self._name
+    
+    @name.setter
+    def name(self, name):
+        if isinstance(name, str):
+            self._name = name
+        else:
+            message = "{0} passed to name".format(name.__class__) + \
+                    " argument. Should be a string."
+            raise TypeError(message)    
+    
+    @property
+    def description(self):
+        """Gets a description of the model.
+        
+        One or more paragraphs that describes the purpose and behavior
+        of the object.  The description will be included in output
+        reports as html paragraphs (or equivalent for other output
+        formats).
+        
+        *Returns:* string
+
+        *Raises:* ``TypeError`` if description is not a string or type
+        ``None``.
+        """
+        return self._description
+
+    @description.setter
+    def description(self, description):
+        if isinstance(description, str) or description is None:
+            self._description = description
+        else:
+            message = "{0} passed to name".format(description.__class__) + \
+                    " argument. Should be a string or None."             
+            raise TypeError(message)
+    
+    @property
+    def slug(self):
+        """Returns a modified version of the name attribute.
+        
+        Spaces and all characters not allowed in Windows filenames
+        ([]<>\/\*?:\|#!") are replaced with underscores.
+        
+        *Returns:* str
+        """
+        return re.sub(r'[ <>/*?:|#!"\\]', '_', self._name)
         
     @property
     def session(self):
@@ -105,7 +167,7 @@ class Component(NamedObject):
         
         This read-only attribute is provided for convenience.
         
-        *Returns:* :class:`despy.core.simulation.Simulation`
+        *Returns:* :class:`despy.model.simulation.Simulation`
         """
         return self._session.sim
     
@@ -124,7 +186,7 @@ class Component(NamedObject):
             ``key`` (String)
                 The dictionary key that will be used to retrieve the
                 component.
-            ``item`` (:class:`despy.core.component.Component`)
+            ``item`` (:class:`despy.model.component.Component`)
                 An instance of ``Component`` or one of it's sub-classes.
         """
         if key.isidentifier() and (not hasattr(self, key)):
@@ -149,7 +211,7 @@ class Component(NamedObject):
     def owner(self):
         """A link to the component's owner.
         
-        *Returns* :class:`despy.core.component.Component
+        *Returns* :class:`despy.model.component.Component
         """
         return self._owner
     
@@ -174,7 +236,7 @@ class Component(NamedObject):
         The id attribute is of the format
         "<model.slug>.<component.slug>.<component._number>". The
         :meth:`.slug` attribute is inherited from
-        :class:`despy.base.named_object.NamedObject`. The slug is the
+        :class:`despy.base.named_object2.NamedObject`. The slug is the
         name attribute with spaces and characters that are not allowed
         in Windows replaced by underscores. The *id* attribute is
         suitable for creating file names.
@@ -310,7 +372,7 @@ class Component(NamedObject):
         The order of the datatypes in the output report will be the
         same as the order in the Python list that is returned from this
         method. Here is an example of the output from the
-        :class:`despy.core.queue.Queue` class: ::
+        :class:`despy.model.queue.Queue` class: ::
         
           output = [(Datatype.title, "Queue Results: {0}".format(self.name)),
                      (Datatype.paragraph, self.description.__str__()),

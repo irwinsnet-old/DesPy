@@ -4,7 +4,7 @@
 #   Copyright (c) 2015, Stacy Irwin
 """
 *********************
-despy.core.simulation
+despy.model.simulation
 *********************
 
 ..  autosummary::
@@ -40,14 +40,13 @@ import numpy as np
 from despy.session import Session
 from despy.output.results import Results
 from despy.output.report import Datatype
-from despy.base.named_object import NamedObject
-from despy.base.utilities import Priority
-from despy.core.trigger import AbstractTrigger, TimeTrigger
+from despy.define import Priority
+from despy.model.trigger import AbstractTrigger, TimeTrigger
 from despy.output.trace import Trace
 
 
 class NoEventsRemainingError(Exception):
-    """Raised by despy.core.simulation's step method when FEL is empty.
+    """Raised by despy.model.simulation's step method when FEL is empty.
     
     Raised by the ``Simulation.step`` method when no events remain on the
     FEL.
@@ -55,7 +54,7 @@ class NoEventsRemainingError(Exception):
     pass
 
 
-class Simulation(NamedObject):
+class Simulation():
     """Schedule events and manage the future event list (FEL).
     
     Every Despy simulation must have one instance of the
@@ -85,7 +84,7 @@ class Simulation(NamedObject):
         _initialize_model
         
     **Inherits**
-      * :class:`despy.core.base.NamedObject`
+      * None
     """
 
     def __init__(self, model = None, config = None):
@@ -284,7 +283,7 @@ class Simulation(NamedObject):
         """The event that is currently being executed by the simulation
         at time = ``self.now`` (read only).
         
-        *Returns:* :class: `despy.core.event.Event`
+        *Returns:* :class: `despy.model.event.Event`
         
         """
         return self._evt
@@ -324,14 +323,14 @@ class Simulation(NamedObject):
         """ Add an event to the FEL.
 
         *Arguments*
-            event (:class:`despy.core.event.Event`):
+            event (:class:`despy.model.event.Event`):
                 An instance or subclass of the ``Event`` class.
             delay (integer):
                 A non-negative integer that defaults to zero. If zero,
                 the event will be scheduled to occur immediately.
             priority (integer)
                 An attribute of the
-                :class:`despy.core.simulation.FutureEvent` enumeration, or
+                :class:`despy.model.simulation.FutureEvent` enumeration, or
                 an integer ranging from -5 to +5. The default is
                 ``Priority.STANDARD``, which is equivalent to
                 zero.
@@ -387,7 +386,7 @@ class Simulation(NamedObject):
                 Occurs if no more events are scheduled on the FEL.
                 
         *Returns*
-            :class:`despy.core.simulation.FutureEvent`
+            :class:`despy.model.simulation.FutureEvent`
         """
 
         # Get next event from FEL and advance current simulation time.
@@ -505,7 +504,7 @@ class Simulation(NamedObject):
     def add_trigger(self, key, trigger):
         err_msg = ("{0} object provided to Simulation.add_trigger() "
                 "method must be a subclass of "
-                "despy.core.trigger.Trigger or registered as a "
+                "despy.model.trigger.Trigger or registered as a "
                 "subclass using the Trigger.register() method")
         
         if issubclass(trigger.__class__, AbstractTrigger):
@@ -559,9 +558,9 @@ class FutureEvent(namedtuple('FutureEventTuple',
       * :attr:`time`: The time that the event is scheduled for
         execution. Type: a non-negative integer.
       * :attr:`event`: An instance of
-        :class:`despy.core.event.Event`.
+        :class:`despy.model.event.Event`.
       * :attr:`priority`: A priority constant from the 
-        :mod:`despy.base.named_object` module, or an integer between
+        :mod:`despy.base.named_object2` module, or an integer between
         -4 and +4, inclusive.
     
     """

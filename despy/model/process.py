@@ -4,7 +4,7 @@
 #   Copyright (c) 2015, Stacy Irwin
 """
 ******************
-despy.core.process
+despy.model.process
 ******************
    
 ..  autosummary::
@@ -31,9 +31,9 @@ despy.core.process
 from collections import namedtuple
 import types
 
-from despy.core.component import Component
-from despy.core.event import Event
-from despy.base.utilities import Priority
+from despy.model.component import Component
+from despy.model.event import Event
+from despy.define import Priority
 
 class Process(Component):
     """Portion of a real-world system, including events and parameters.
@@ -46,8 +46,8 @@ class Process(Component):
     of an entity or portion of the system.
     
     **Inherited Classes**
-      * :class:`despy.base.named_object.NamedObject`
-      * :class:`despy.core.component.Component`
+      * :class:`despy.base.named_object2.NamedObject`
+      * :class:`despy.model.component.Component`
     
     **Members**
     
@@ -216,9 +216,9 @@ class ProcessTimeOutEvent(Event):
     object's iterator method.
 
     **Inherited Classes**
-      * :class:`despy.base.named_object.NamedObject`
-      * :class:`despy.core.component.Component`
-      * :class:`despy.core.event.Event`
+      * :class:`despy.base.named_object2.NamedObject`
+      * :class:`despy.model.component.Component`
+      * :class:`despy.model.event.Event`
     
     **Attributes**
       * :attr:`ProcessTimeOutEvent.process`: The applicable Process
@@ -239,7 +239,7 @@ class ProcessTimeOutEvent(Event):
     def process(self):
         """The applicable Process object. Read only.
         
-        *Type*: :class:`despy.core.process.Process`
+        *Type*: :class:`despy.model.process.Process`
         """
         return self._process
     

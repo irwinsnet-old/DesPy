@@ -10,7 +10,7 @@ unit/core/test_timer
 
 import unittest
 
-import despy.core as dp
+import despy.model as dp
 import despy.stats.random as drand
 import scipy.stats as stats
 

@@ -5,7 +5,7 @@ from collections import OrderedDict
 
 import scipy.stats as stats
 
-import despy.core as dp
+import despy.model as dp
 
 class testResource(unittest.TestCase):
     

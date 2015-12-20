@@ -9,7 +9,7 @@ import types
 
 import scipy.stats as stats
 
-import despy.core as dp
+import despy.model as dp
 
 class SubClassModel(dp.Component):
     def initialize(self):

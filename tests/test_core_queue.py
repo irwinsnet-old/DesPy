@@ -8,7 +8,7 @@ import unittest
 
 import scipy.stats as stats
 
-import despy.core as dp
+import despy.model as dp
 
 class testQueue(unittest.TestCase):
     def test_negative_time(self):

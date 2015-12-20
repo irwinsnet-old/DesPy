@@ -4,7 +4,7 @@
 #   Copyright (c) 2015, Stacy Irwin
 """
 ****************
-despy.core.event
+despy.model.event
 ****************
 
 ..  autosummary::
@@ -25,7 +25,7 @@ import types
 import abc
 from collections import OrderedDict
 
-from despy.core.component import Component
+from despy.model.component import Component
 from despy.session import Session
 from despy.output.trace import TraceRecord
 
@@ -79,8 +79,7 @@ class Event(Component):
     removed from the FEL.
       
     **Inherited Classes**
-      * :class:`despy.base.named_object.NamedObject`
-      * :class:`despy.core.component.Component`
+      * :class:`despy.model.component.Component`
     
     **Members**
     
@@ -102,7 +101,7 @@ class Event(Component):
         """Initialize the Event object.
 
         *Arguments*
-            ``model`` (:class:`despy.core.model.Model`):
+            ``model`` (:class:`despy.model.model.Model`):
                 The Model that the event belongs to.
             ``name`` (string):
                 A short string describing the event. The name will be

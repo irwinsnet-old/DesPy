@@ -5,7 +5,7 @@
 
 """
 ******************
-despy.core.session
+despy.model.session
 ******************
 
 ..  autosummary::
@@ -85,7 +85,7 @@ class Config(object):
         """Construct a Config object.
         
         *Arguments*
-            ``simulation`` :class:`despy.core.simulation.Simulation`
+            ``simulation`` :class:`despy.model.simulation.Simulation`
                 Corresponding simulation object.
         """
         

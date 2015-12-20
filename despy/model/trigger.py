@@ -4,7 +4,7 @@
 #   Copyright (c) 2015, Stacy Irwin
 """
 ******************
-despy.core.trigger
+despy.model.trigger
 ******************
 
 ..  autosummary::
@@ -13,7 +13,6 @@ despy.core.trigger
     
 ..  todo
 
-    Remove description argument from NamedObject __init__().
     
 """
 from abc import ABCMeta, abstractmethod

@@ -4,7 +4,7 @@
 #   Copyright (c) 2015, Stacy Irwin
 
 """
-..  module:: despy.core.__init__
+..  module:: despy.model.__init__
     :noindex:
 
 The ``despy.core`` package includes classes that are essential for any
@@ -17,60 +17,60 @@ core modules under the ``dp`` namespace.::
     
     import despy.core as dp
 
-despy.core.simulation
+despy.model.simulation
 =====================
-..  automodule:: despy.core.simulation
+..  automodule:: despy.model.simulation
     :noindex:
 
-despy.core.event
+despy.model.event
 ================
-..  automodule:: despy.core.event
+..  automodule:: despy.model.event
     :noindex:
     
-despy.core.model
+despy.model.model
 ================
-..  automodule:: despy.core.model
+..  automodule:: despy.model.model
     :noindex:
     
-despy.core.component
+despy.model.component
 ====================
-..  automodule:: despy.core.component
+..  automodule:: despy.model.component
     :noindex:
     
-despy.core.entity
+despy.model.entity
 =================
-..  automodule:: despy.core.entity
+..  automodule:: despy.model.entity
     :noindex:
     
-despy.core.resource
+despy.model.resource
 ===================
-..  automodule:: despy.core.resource
+..  automodule:: despy.model.resource
     :noindex:
     
-despy.core.process
+despy.model.process
 ===================
-..  automodule:: despy.core.process
+..  automodule:: despy.model.process
     :noindex:
     
-despy.core.queue
+despy.model.queue
 ===================
-..  automodule:: despy.core.queue
+..  automodule:: despy.model.queue
     :noindex:
 
-despy.core.timer
+despy.model.timer
 ===================
-..  automodule:: despy.core.timer
+..  automodule:: despy.model.timer
     :noindex:
 """
 
-from despy.base.utilities import Priority
+from despy.define import Priority
 from despy.simulation import Simulation
 from despy.session import Session
-from despy.core.component import Component
-from despy.core.event import Event, AbstractCallback, Callback
-from despy.core.process import Process
-from despy.core.queue import Queue
-from despy.core.entity import Entity
-from despy.core.resource import ResourceQueue
-from despy.core.resource import Resource
-from despy.core.timer import RandomTimer
+from despy.model.component import Component
+from despy.model.event import Event, AbstractCallback, Callback
+from despy.model.process import Process
+from despy.model.queue import Queue
+from despy.model.entity import Entity
+from despy.model.resource import ResourceQueue
+from despy.model.resource import Resource
+from despy.model.timer import RandomTimer

@@ -320,7 +320,7 @@ class Trace(object):
                 Simulation time at which the event occurs.
             `priority` (Integer)
                 Priority at which the event was scheduled.
-            `event` (:class:`despy.core.event.Event)
+            `event` (:class:`despy.model.event.Event)
                 Event object that is being recorded.
         """
         if self.is_active():
@@ -388,7 +388,7 @@ class CSV_file(object):
         """Construct a CSV_file object.
         
         *Arguments*
-            ``trace`` :class:`despy.core.trace.Trace`
+            ``trace`` :class:`despy.model.trace.Trace`
                 The CSV_file will display this Trace object.
             ``directory``
                 The full path to the location of the CSV file. The CSV
@@ -417,7 +417,7 @@ class CSV_file(object):
     def trace(self):
         """The CSV_file will display this Trace object.
         
-        *Type:* :class:`despy.core.trace.Trace`
+        *Type:* :class:`despy.model.trace.Trace`
         """
         return self._trace
     

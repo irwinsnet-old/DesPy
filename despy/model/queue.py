@@ -4,7 +4,7 @@
 #   Copyright (c) 2015, Stacy Irwin
 """
 ****************
-despy.core.queue
+despy.model.queue
 ****************
    
 ..  autosummary::
@@ -32,7 +32,7 @@ from collections import deque, namedtuple, OrderedDict
 
 import numpy as np
 
-from despy.core.component import Component
+from despy.model.component import Component
 from despy.output.report import Datatype
 import despy.output.plot as plot
 from despy.output.statistic import DiscreteStatistic
@@ -46,8 +46,8 @@ class Queue(Component):
     machine.
     
     **Inherited Classes**
-      * :class:`despy.base.named_object.NamedObject`
-      * :class:`despy.core.component.Component`
+      * :class:`despy.base.named_object2.NamedObject`
+      * :class:`despy.model.component.Component`
       
     **Members**
     
@@ -67,7 +67,7 @@ class Queue(Component):
         """Create a Queue object.
         
         *Arguments*
-            ``model`` (:class:`despy.core.model.Model`)
+            ``model`` (:class:`despy.model.model.Model`)
                 The Queue must be assigned to a Model object.
             ``name`` (String)
                 A short descriptive name for the Queue object.
@@ -175,7 +175,7 @@ class Queue(Component):
                 All charts will be saved to the location denoted by
                 'folder'.
                 
-        *Returns:* A despy.core.output.Datatype formatted list
+        *Returns:* A despy.model.output.Datatype formatted list
         containing data for the final report.
         """
         # Create Time in Queue Histogram

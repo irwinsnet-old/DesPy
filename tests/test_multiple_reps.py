@@ -5,7 +5,7 @@ Created on Oct 25, 2015
 '''
 import unittest
 
-import despy.core as dp
+import despy.model as dp
 import despy.stats.random as dsr
 
 class RepModel(dp.Component):

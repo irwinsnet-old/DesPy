@@ -4,7 +4,7 @@
 #   Copyright (c) 2015, Stacy Irwin
 """
 *******************
-despy.core.resource
+despy.model.resource
 *******************
 
 ..  autosummary::
@@ -30,9 +30,9 @@ from collections import OrderedDict, namedtuple
 
 from scipy.stats import randint
 
-from despy.core.component import Component
-from despy.core.event import Event
-from despy.core.queue import Queue
+from despy.model.component import Component
+from despy.model.event import Event
+from despy.model.queue import Queue
 from despy.output.statistic import DiscreteStatistic
 from despy.output.statistic import TimeWeightedStatistic
 from despy.output.report import Datatype
@@ -44,8 +44,8 @@ class Resource(Component):
     kind of service.
     
     **Inherited Classes**
-      * :class:`despy.base.named_object.NamedObject`
-      * :class:`despy.core.component.Component`
+      * :class:`despy.base.named_object2.NamedObject`
+      * :class:`despy.model.component.Component`
       
     **Members**
     
@@ -73,7 +73,7 @@ class Resource(Component):
         """Create a Resource object.
         
         *Arguments*
-            ``model`` (:class:`despy.core.model.Model`)
+            ``model`` (:class:`despy.model.model.Model`)
                 The Resource must be assigned to a Model object.
             ``name`` (String)
                 A short descriptive name for the Resource object.
@@ -115,7 +115,7 @@ class Resource(Component):
     def res_queue(self):
         """The resourceQueue that contains the queue of incoming users.
         
-        *Type:* :class:`despy.core.resource.ResourceQueue`, read-only
+        *Type:* :class:`despy.model.resource.ResourceQueue`, read-only
         """
         return self._res_queue
     
@@ -339,9 +339,9 @@ class ResourceQueue(Queue):
     objects.
     
     **Inherited Classes**
-      * :class:`despy.base.named_object.NamedObject`
-      * :class:`despy.core.component.Component`
-      * :class:`despy.core.queue.Queue`
+      * :class:`despy.base.named_object2.NamedObject`
+      * :class:`despy.model.component.Component`
+      * :class:`despy.model.queue.Queue`
       
     **Attributes**
       * :attr:`num_resources`: The number of resources added to the
@@ -366,8 +366,8 @@ class ResourceQueue(Queue):
         
         *Arguments*
             ``model``
-                Every :class:`despy.core.component.Component` must be
-                assigned to a `despy.core.model.Model`.
+                Every :class:`despy.model.component.Component` must be
+                assigned to a `despy.model.model.Model`.
             ``name`` (String)
                 The name of the resourceQueue.
                 
@@ -396,7 +396,7 @@ class ResourceQueue(Queue):
         
         *Arguments*
             ``resource``
-                A :class:`despy.core.resource.Resource` object that will
+                A :class:`despy.model.resource.Resource` object that will
                 be appended to the ResourceQueue object.
         """
         index = self.num_resources
@@ -467,9 +467,9 @@ class ResourceFinishServiceEvent(Event):
     """Event that is called when the resource completes it's service.
     
     **Inherited Classes**
-      * :class:`despy.base.named_object.NamedObject`
-      * :class:`despy.core.component.Component`
-      * :class:`despy.core.event.Event`
+      * :class:`despy.base.named_object2.NamedObject`
+      * :class:`despy.model.component.Component`
+      * :class:`despy.model.event.Event`
       
     The ResourceFinishServiceEvent object occurs when the resource
     finishes servicing the assigned entity (after the designated
@@ -511,7 +511,7 @@ class ResourceFinishServiceEvent(Event):
     def resource(self):
         """The applicable Resource object.
         
-        *Type*: class:`despy.core.resource.Resource`, read-only
+        *Type*: class:`despy.model.resource.Resource`, read-only
         """
         return self._resource
     
@@ -535,7 +535,7 @@ class ResourceFinishServiceEvent(Event):
     def entity(self):
         """The entity that is the target of the activity.
         
-        *Type:* :class:`despy.core.entity.Entity`
+        *Type:* :class:`despy.model.entity.Entity`
         """
         return self._entity
     

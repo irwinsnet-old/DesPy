@@ -4,7 +4,7 @@
 #   Copyright (c) 2015, Stacy Irwin
 """
 *****************
-despy.core.entity
+despy.model.entity
 *****************
    
 ..  autosummary::
@@ -19,21 +19,20 @@ despy.core.entity
     without sub-classing.
 """
 
-from despy.core.component import Component
+from despy.model.component import Component
 
 class Entity(Component):
     """Represents a real world object that moves through a system.
     
     **Inherited Classes**
-      * :class:`despy.base.named_object.NamedObject`
-      * :class:`despy.core.component.Component`
+      * :class:`despy.model.component.Component`
     """
     
     def __init__(self, name, description = None):
         """Create an entity object.
         
         *Arguments*
-            ``model`` (:class:`despy.core.model.Model`)
+            ``model`` (:class:`despy.model.model.Model`)
                 The model that represents the system that the entity
                 belongs to.
             ``name`` (String)

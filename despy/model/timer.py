@@ -4,7 +4,7 @@
 #   Copyright (c) 2015, Stacy Irwin
 """
 ****************
-despy.core.timer
+despy.model.timer
 ****************
 
 ..  autosummary::
@@ -20,17 +20,17 @@ from collections import OrderedDict
 
 import scipy.stats as stats
 
-from despy.core.component import Component
-from despy.core.event import Event, AbstractCallback
-from despy.base.utilities import Priority
+from despy.model.component import Component
+from despy.model.event import Event, AbstractCallback
+from despy.define import Priority
 
 
 class RandomTimer(Component):
     """Schedules an event to occur repeatedly at a random interval.
     
     **Inherited Classes**
-      * :class:`despy.base.named_object.NamedObject`
-      * :class:`despy.core.component.Component`
+      * :class:`despy.base.named_object2.NamedObject`
+      * :class:`despy.model.component.Component`
       
       **Members**
       
@@ -49,7 +49,7 @@ class RandomTimer(Component):
         """ Instantiates a RandomTimer object.
         
         *Arguments*
-            ``model`` (:class:`despy.core.model.Model`)
+            ``model`` (:class:`despy.model.model.Model`)
                 The RandomTimer must be assigned to a Model object.
             ``name`` (String)
                 A short descriptive name for the RandomTimer object.
@@ -154,7 +154,7 @@ class TimerEvent(Event):
     """Event that schedules itself to recur after an interval.
     
     **Inherited Classes**
-      * :class:`despy.core.event.Event`
+      * :class:`despy.model.event.Event`
       
     **Members**
     

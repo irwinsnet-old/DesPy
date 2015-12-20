@@ -6,18 +6,16 @@ test_despy.py tests the methods in the despy.py module.
 
 import unittest
 import scipy.stats as stats
-import despy.core as dp
+import despy.model as dp
 
 class testDespyb(unittest.TestCase):
        
     ### Simulation Class Tests
     def test_now(self):
         # Verify that Simulation.now is set to 0 by default.
-        exp1 = dp.Simulation()
-        session = dp.Session()
-        session.sim = exp1
-        session.model = dp.Component("Test")
-        cfg = session.config
+        dp.Session.new()
+        exp1 = dp.Simulation(dp.Component("Test"))
+        cfg = exp1.config
          
         self.assertEqual(exp1.now, 0)
         self.assertTrue(cfg.console_trace)
@@ -26,19 +24,13 @@ class testDespyb(unittest.TestCase):
         cfg.console_trace = False
         self.assertFalse(cfg.console_trace)
         cfg.console_trace = True
-        self.assertTrue(session.config.console_trace)
+        self.assertTrue(cfg.console_trace)
          
         # Verify that Simulation.now can be set by the class constructor.
-        session.model = dp.Component("Test")
-        exp2 = dp.Simulation()
+        dp.Session.new()
+        exp2 = dp.Simulation(dp.Component("Test"))
         exp2.initial_time = 42
-        session.sim = exp2
         self.assertEqual(exp2.now, 42)
-         
-        # Verify that a name can be assigned to the simulation.
-        exp2.name = "Simulation Name!"
-        self.assertEqual(exp2.name, "Simulation Name!")
-        self.assertEqual(exp2.slug, "Simulation_Name_")
           
     ### Model Class Tests
     def test_name(self):
@@ -62,8 +54,6 @@ class testDespyb(unittest.TestCase):
         session.model = dp.Component("Test")
         exp = dp.Simulation()
         session.sim = exp
-        exp.name = "New Simulation C\\C/C|C*C?C"
-        self.assertEqual(exp.slug, "New_Simulation_C_C_C_C_C_C")
         self.assertIsInstance(session.sim, dp.Simulation)
           
         # Test description.
