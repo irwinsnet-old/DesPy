@@ -26,7 +26,7 @@ import abc
 from collections import OrderedDict
 
 from despy.core.component import Component
-from despy.core.session import Session
+from despy.session import Session
 from despy.output.trace import TraceRecord
 
 class AbstractCallback(metaclass = abc.ABCMeta):

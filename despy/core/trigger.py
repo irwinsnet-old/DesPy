@@ -18,7 +18,7 @@ despy.core.trigger
 """
 from abc import ABCMeta, abstractmethod
 
-from despy.core.simulation import Session
+from despy.session import Session
 
 class AbstractTrigger(metaclass = ABCMeta):
     def __init__(self):

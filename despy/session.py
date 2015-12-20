@@ -18,7 +18,7 @@ class Session:
     class __Session:
         def __init__(self):
             self._sim = None
-            self.model = None
+            self._model = None
             self._ouput_config = Config()
             
         @property
@@ -56,10 +56,11 @@ class Session:
     
     def __setattr__(self, name, value):
         setattr(self._instance, name, value)
-        
-    def new(self):
+    
+    @staticmethod    
+    def new():
         Session._instance = Session.__Session()
-        return self
+        return Session._instance
         
         
 class Config(object):

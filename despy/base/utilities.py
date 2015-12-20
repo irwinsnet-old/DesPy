@@ -12,6 +12,8 @@ despy.base.utilities
     Priority
 """
 
+from despy.core.trigger import AbstractTrigger
+
 class Priority():
     """Define priorities for ordering events scheduled at the same time.
     
@@ -51,7 +53,7 @@ class Priority():
     LATE = 1
     
 def check_trigger(trigger):
-    if isinstance(trigger, Trigger):
+    if isinstance(trigger, AbstractTrigger):
         return True
     else:
         return False

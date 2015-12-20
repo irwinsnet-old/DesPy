@@ -23,7 +23,7 @@ despy.core.component
 from itertools import count
 import types
 
-from despy.core.session import Session
+from despy.session import Session
 from despy.base.named_object import NamedObject
 
 class Component(NamedObject):
@@ -94,6 +94,10 @@ class Component(NamedObject):
 
         self._owner = None
         self._session = Session()
+        
+    @property
+    def session(self):
+        return self._session
     
     @property
     def sim(self):

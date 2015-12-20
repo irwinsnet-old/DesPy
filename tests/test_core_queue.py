@@ -17,16 +17,16 @@ class testQueue(unittest.TestCase):
         #  works.
         print()
         print("=====Negative Time Test=====")
-        session = dp.Session()      
+        session = dp.Session()
+        session.sim = sim = dp.Simulation()         
         session.model = model = dp.Component("Negative Time Model")
-        session.sim = sim = dp.Simulation()
         sim.schedule(dp.Event("Positive Time"),
                        priority = dp.Priority.LATE)        
         model.sim.schedule(dp.Event("Negative Time"),
                        priority = dp.Priority.EARLY)
         self.assertEqual(sim.peek(False), -0.1)
 
-        sim.run()
+        sim.irun()
         
     def test_entity_counter(self):
         print()

@@ -30,7 +30,8 @@ class testDespyb(unittest.TestCase):
          
         # Verify that Simulation.now can be set by the class constructor.
         session.model = dp.Component("Test")
-        exp2 = dp.Simulation(42)
+        exp2 = dp.Simulation()
+        exp2.initial_time = 42
         session.sim = exp2
         self.assertEqual(exp2.now, 42)
          
@@ -45,10 +46,8 @@ class testDespyb(unittest.TestCase):
         session = dp.Session()
         testModel = dp.Component("Test Model")
         session.model = testModel
-        session.sim = dp.Simulation(name = "Test Simulation")
+        session.sim = dp.Simulation()
         self.assertEqual(testModel.name, "Test Model")
-        self.assertEqual(testModel.sim.name, "Test Simulation")
-        self.assertEqual(session.sim.slug, "Test_Simulation")
         self.assertIsNotNone(testModel.sim.model)
         self.assertEqual(testModel.sim.model.name, "Test Model")
           

@@ -39,7 +39,7 @@ from collections import OrderedDict
 import csv
 
 from despy.output.report import Datatype
-from despy.core.session import Session
+from despy.session import Session
         
 class TraceRecord(OrderedDict):
     """Single record in a trace report containing multiple data fields.

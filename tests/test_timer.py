@@ -25,7 +25,7 @@ class testTimer(unittest.TestCase):
         print()
         print("=====Testing RandomTimer with immediate = False=======")
         model1 = dp.Component("Timer Test Model-A")
-        session = dp.Session().new()
+        session = dp.Session.new()
         session.model = model1   
         session.sim = sim = dp.Simulation()
         sim.seed = 731                  

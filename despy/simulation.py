@@ -37,7 +37,7 @@ from collections import namedtuple, OrderedDict
 
 import numpy as np
 
-from despy.core.session import Session
+from despy.session import Session
 from despy.output.results import Results
 from despy.output.report import Datatype
 from despy.base.named_object import NamedObject
@@ -88,8 +88,7 @@ class Simulation(NamedObject):
       * :class:`despy.core.base.NamedObject`
     """
 
-    def __init__(self, initial_time=0, name = "Simulation",
-                 description = None):
+    def __init__(self, model = None, config = None):
         """Creates and initializes the Simulation object.
         
         The Simulation object contains and manages the future event
@@ -104,10 +103,13 @@ class Simulation(NamedObject):
               that describes the simulation in more detail than the
               name attribute. Type: string or type None. Defaults to
               type None.
-        """
-        super().__init__(name, description)        
+        """    
         self._session = Session()
-        self.initial_time = initial_time
+        if model is not None:
+            self._session.model = model
+        if config is not None:
+            self._session.config = config
+        self.initial_time = 0
         self._seed = None
         self._reps = 1
         self._rep = 0
@@ -183,6 +185,7 @@ class Simulation(NamedObject):
     @initial_time.setter
     def initial_time(self, initial_time):
         self._initial_time = initial_time
+        self._now = self._initial_time * 10
 
     @property
     def model(self):
@@ -190,11 +193,23 @@ class Simulation(NamedObject):
         
         *Returns:* A list of despy.model.Model objects.
         """
-        return self.session.model
+        return self._session.model
+    
+    @model.setter
+    def model(self, model):
+        self._session.model = model
         
     @property
     def session(self):
         return self._session
+    
+    @property
+    def config(self):
+        return self._session.config
+    
+    @config.setter
+    def config(self, config):
+        self._session.config = config
          
     @property
     def seed(self):
@@ -521,8 +536,7 @@ class Simulation(NamedObject):
         """
         elapsed_time = self.run_stop_time - self.run_start_time
         
-        output = [(Datatype.title, "Simulation: " + self.name),
-                  (Datatype.paragraph, self.description),
+        output = [(Datatype.title, "Simulation"),
                   (Datatype.param_list,
                     [('Generator Folder',
                         self._session.config.folder_basename),
