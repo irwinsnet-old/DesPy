@@ -15,8 +15,9 @@ despy.model.simulation
     
 ..  todo
 
+    Move reps property to config object.
+    
     Modify run and resume methods to accept triggers as parameters.
-    Move trigger handling into a differnt internal method.
     
     Update documentation to state that seed can raise a TypeError.
     
@@ -47,9 +48,6 @@ from despy.output.trace import Trace
 
 class NoEventsRemainingError(Exception):
     """Raised by despy.model.simulation's step method when FEL is empty.
-    
-    Raised by the ``Simulation.step`` method when no events remain on the
-    FEL.
     """
     pass
 
@@ -88,20 +86,18 @@ class Simulation():
     """
 
     def __init__(self, model = None, config = None):
-        """Creates and initializes the Simulation object.
-        
-        The Simulation object contains and manages the future event
-        list (FEL).
+        """Creates a Simulation object.
         
         *Arguments*
-            * ``initial_time:`` Optional. A non-negative integer that
-              specifies the initial simulation time. Defaults to 0.
-            * ``name:`` Optional. A word or short phrase that describes
-              the simulation. Type: string. Defaults to "Simulation".
-            * ``description:`` Optional. A sentence or short paragraph
-              that describes the simulation in more detail than the
-              name attribute. Type: string or type None. Defaults to
-              type None.
+            * ``model:`` Optional. Assigns a
+            :class:`despy.model.component` to the simulation. If
+            omitted, designer must assign the model using the
+            'Simulation.model' property before running the simulation.
+            * ``config:`` Optional. A :class:`despy.session.config
+            object that contains numerous simulation parameters. If
+            omitted, a config object is created automatically.
+            Configuration options can be set or read via the
+            'Simulation.config' or 'Session.config' properties.
         """    
         self._session = Session()
         if model is not None:
@@ -117,6 +113,12 @@ class Simulation():
         self.reset()
         
     def reset(self):
+        """Resets the simulation to it's initial state.
+        
+        Clears triggers, sets current rep to 0, sets time to the
+        initial time, and clears the FEL and traces. Note that reset
+        does not reset the model to its initial condition. 
+        """
         self._triggers = OrderedDict()
         self._rep = 0
         self._setups = 0
@@ -128,6 +130,57 @@ class Simulation():
         self._futureEventList = []
         self._counter = count()
         self._trace.clear()
+        
+    @property
+    def session(self):
+        """Returns the current Session object. Read-only.
+        
+        *Type:* :class:`despy.session.Session`
+        """
+        return self._session
+    
+    @property
+    def model(self):
+        """The model that is assigned to the Simulation object.
+        
+        *Returns:* :class:`despy.model.component.Component`
+        """
+        return self._session.model
+    
+    @model.setter
+    def model(self, model):
+        self._session.model = model
+
+    @property
+    def config(self):
+        """The assigned :class:`despy.session.Config object.
+        """
+        return self._session.config
+    
+    @config.setter
+    def config(self, config):
+        self._session.config = config
+        
+    @property
+    def reps(self):
+        return self._reps
+    
+    @reps.setter
+    def reps(self, reps):
+        self._reps = reps
+        
+    @property
+    def rep(self):
+        return self._rep
+    
+    @property
+    def initial_time(self):
+        return self._initial_time
+    
+    @initial_time.setter
+    def initial_time(self, initial_time):
+        self._initial_time = initial_time
+        self._now = self._initial_time * 10
                 
     def initialize(self):
         for cpt in self.model:
@@ -157,58 +210,6 @@ class Simulation():
     def teardown(self):
         for cpt in self.model:
             cpt.dp_teardown(self.now)
-        
-    def finalize(self):
-        for cpt in self.model:
-            cpt.dp_finalize()
-        self._results = Results(self, self._session.config)
-        self._results._trace = self._trace
-        return self._results
-        
-    @property
-    def reps(self):
-        return self._reps
-    
-    @reps.setter
-    def reps(self, reps):
-        self._reps = reps
-        
-    @property
-    def rep(self):
-        return self._rep
-    
-    @property
-    def initial_time(self):
-        return self._initial_time
-    
-    @initial_time.setter
-    def initial_time(self, initial_time):
-        self._initial_time = initial_time
-        self._now = self._initial_time * 10
-
-    @property
-    def model(self):
-        """Get a list of all model attached to the simulation.
-        
-        *Returns:* A list of despy.model.Model objects.
-        """
-        return self._session.model
-    
-    @model.setter
-    def model(self, model):
-        self._session.model = model
-        
-    @property
-    def session(self):
-        return self._session
-    
-    @property
-    def config(self):
-        return self._session.config
-    
-    @config.setter
-    def config(self, config):
-        self._session.config = config
          
     @property
     def seed(self):
@@ -436,18 +437,7 @@ class Simulation():
                 101 or later will not.
                 
         """
-        # Add trigger for replication stop time
-        if until is None:
-            try:
-                del self.triggers["dp_untilTrigger"]
-            except KeyError:
-                pass            
-        elif (until > 0):
-            self.add_trigger("dp_untilTrigger", TimeTrigger(until))
-        else:
-            raise AttributeError("Simulation.run() until argument "
-                                 "should be None or integer > 0.  {} "
-                                 "passed instead".format(until))
+        self._set_triggers(until)
         self._run_start_time = datetime.datetime.today()
 
         if resume_on_next_rep:
@@ -472,6 +462,26 @@ class Simulation():
             self.teardown()
             
         self._run_stop_time = datetime.datetime.today()
+        
+    def finalize(self):
+        for cpt in self.model:
+            cpt.dp_finalize()
+        self._results = Results(self, self._session.config)
+        self._results._trace = self._trace
+        return self._results
+        
+    def _set_triggers(self, until):
+        if until is None:
+            try:
+                del self.triggers["dp_untilTrigger"]
+            except KeyError:
+                pass            
+        elif (until > 0):
+            self.add_trigger("dp_untilTrigger", TimeTrigger(until))
+        else:
+            raise AttributeError("Simulation.run() until argument "
+                                 "should be None or integer > 0.  {} "
+                                 "passed instead".format(until))
         
     def irun(self, until = None):
         self.initialize()

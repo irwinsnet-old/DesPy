@@ -360,6 +360,8 @@ class  TimeWeightedStatistic(AbstractStatistic):
         
     def teardown(self, time):
         # Method finalize() is only run once
+        if len(self._index) == 0:
+            return
         assert self._grt(-1) is None
         
         self._spans.append(time + 1 - self._times[-1])
