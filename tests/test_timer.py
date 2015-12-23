@@ -28,7 +28,7 @@ class testTimer(unittest.TestCase):
         session = dp.Session.new()
         session.model = model1   
         session.sim = sim = dp.Simulation()
-        sim.seed = 731                  
+        sim.config.seed = 731                  
         dist1 = stats.poisson(10)
         model1.add_component("timer",
                    dp.RandomTimer("TimerA", dist1, TimerCallback()))
@@ -50,7 +50,7 @@ class testTimer(unittest.TestCase):
                    dp.RandomTimer("Timer-B", dist2, TimerCallback()))
         session.model = model2
         session.sim = sim = dp.Simulation()
-        sim.seed = 704
+        sim.config.seed = 704
         results = sim.irunf(1000)
         trace2 = results.trace
         self.assertEqual(trace2[0]['time'], 142)
@@ -68,7 +68,7 @@ class testTimer(unittest.TestCase):
                                 priority = dp.Priority.LATE))
         session.model = model3
         session.sim = sim = dp.Simulation()
-        model3.sim.seed = 731        
+        model3.sim.config.seed = 731        
         results = sim.irunf(100)
         trace3 = results.trace
         self.assertEqual(trace3[0]['priority'], 1)

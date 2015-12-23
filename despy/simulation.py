@@ -100,13 +100,11 @@ class Simulation():
             'Simulation.config' or 'Session.config' properties.
         """    
         self._session = Session()
+        self._session.sim = self
         if model is not None:
             self._session.model = model
         if config is not None:
             self._session.config = config
-        self.initial_time = 0
-        self._seed = None
-        self._reps = 1
         self._rep = 0
         self._trace = Trace()
         
@@ -125,7 +123,7 @@ class Simulation():
         self._evt = None
         self._run_start_time = None
         self._run_stop_time = None
-        self._now = self.initial_time * 10
+        self._now = self._session.config.initial_time * 10
         self._pri = 0
         self._futureEventList = []
         self._counter = count()
@@ -162,27 +160,15 @@ class Simulation():
         self._session.config = config
         
     @property
-    def reps(self):
-        return self._reps
-    
-    @reps.setter
-    def reps(self, reps):
-        self._reps = reps
-        
-    @property
     def rep(self):
         return self._rep
-    
-    @property
-    def initial_time(self):
-        return self._initial_time
-    
-    @initial_time.setter
-    def initial_time(self, initial_time):
-        self._initial_time = initial_time
-        self._now = self._initial_time * 10
                 
     def initialize(self):
+        self._now = self._session.config.initial_time * 10
+        
+        np.random.seed(self._session.config.seed)
+        random.seed(self._session.config.seed)
+        
         for cpt in self.model:
             cpt.dp_initialize()
     
@@ -199,7 +185,7 @@ class Simulation():
             * Resets the main simulation counter
         """
         if self.rep > 0:
-            self._now = self.initial_time * 10
+            self._now = self._session.config.initial_time * 10
             self._pri = 0
             self._futureEventList = []
             self._counter = count()
@@ -210,37 +196,6 @@ class Simulation():
     def teardown(self):
         for cpt in self.model:
             cpt.dp_teardown(self.now)
-         
-    @property
-    def seed(self):
-        """Calls seed methods in both numpy and standard random modules. 
-        
-        Set seed to an integer, or to ``None`` (default).
-        
-        By default (i.e., when seed is set to None), Despy will use a
-        different seed, and hence a different random number sequence for
-        each run of the simulation. For troubleshooting or testing
-        purposes, it's often useful to repeatedly run the simulation
-        with the same sequence of random numbers. This can be
-        accomplished by setting the seed variable.
-        
-    
-        Designers should use this seed property when seeding the random
-        number generators. While despy will use the numpy random number
-        generator instead of the generator built into Python's random
-        module, we can't guarantee that Python random module functions
-        won't sneak into a custom subclass. The numpy and Python random
-        number generators use different random number sequences, so it's
-        necessary to seed both generators to ensure a consistent random
-        number sequence thoughout the simulation.
-        """
-        return self._seed
-    
-    @seed.setter
-    def seed(self, seed):
-        self._seed = seed
-        np.random.seed(seed)
-        random.seed(seed)
 
     @property
     def now(self):
@@ -443,7 +398,7 @@ class Simulation():
         if resume_on_next_rep:
             self._rep += 1
         start_rep = self._rep            
-        for rep in range(start_rep, self.reps):
+        for rep in range(start_rep, self._session.config.reps):
             self._rep = rep
             if self._setups <= self._rep:
                 self.setup()
@@ -549,7 +504,7 @@ class Simulation():
                   (Datatype.param_list,
                     [('Generator Folder',
                         self._session.config.folder_basename),
-                     ('Seed', self.seed),
+                     ('Seed', self.config.seed),
                      ('Start Time', self.run_start_time),
                      ('Stop Time', self.run_stop_time),
                      ('Elapsed Time', elapsed_time)])

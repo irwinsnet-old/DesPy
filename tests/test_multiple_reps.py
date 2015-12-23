@@ -54,7 +54,7 @@ class Test(unittest.TestCase):
         session = dp.Session()
         session.model = RepModel()
         session.sim = sim = dp.Simulation()
-        sim.reps = 2
+        sim.config.reps = 2
         session.config.folder_basename = "C:/Projects/despy_output/mult_reps"
         results = sim.irunf(100)
         results.write_files()

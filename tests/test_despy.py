@@ -29,12 +29,14 @@ class testDespyb(unittest.TestCase):
         # Verify that Simulation.now can be set by the class constructor.
         dp.Session.new()
         exp2 = dp.Simulation(dp.Component("Test"))
-        exp2.initial_time = 42
+        exp2.config.initial_time = 42
+        exp2.initialize()
         self.assertEqual(exp2.now, 42)
           
     ### Model Class Tests
     def test_name(self):
         #Create model with default simulation.
+        dp.Session.new()
         session = dp.Session()
         testModel = dp.Component("Test Model")
         session.model = testModel
@@ -68,6 +70,7 @@ class testDespyb(unittest.TestCase):
   
     ###Event Scheduling Tests
     def test_peek(self):
+        dp.Session.new()
         session = dp.Session()
         session.model = dp.Component("Test Model #1")
         sim = session.sim = dp.Simulation()
@@ -84,6 +87,7 @@ class testDespyb(unittest.TestCase):
           
     def test_step(self):
         #Create model and events.
+        dp.Session.new()
         session = dp.Session()
         model = dp.Component("Test Model #2")
         session.model = model
@@ -110,6 +114,7 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(exp.now, 5)
   
     def test_run(self):
+        dp.Session.new()
         session = dp.Session()
         model = dp.Component("RunTest Model")
         session.model = model
@@ -143,6 +148,7 @@ class testDespyb(unittest.TestCase):
             self.sim.schedule(evt2, 10)
   
     def test_appendCallback(self):
+        dp.Session.new()
         session = dp.Session()        
         model = self.AppendCallbackModel("AppendCallback Model")
         session.model = model
@@ -181,6 +187,7 @@ class testDespyb(unittest.TestCase):
         results.write_files()
           
     def test_process(self):
+        session = dp.Session.new()
         model = dp.Component("Process Model")
           
         def generator(self):
@@ -198,15 +205,16 @@ class testDespyb(unittest.TestCase):
           
         model.add_component("Test_Process", process)
         self.assertEqual(len(model.components), 1)
-        dp.Session().model = model
+        session.model = model
         _ = dp.Simulation()
-        model.sim.seed = 42
+        session.config.seed = 42
         process.start()
         model.sim.initialize()
         model.sim.runf(20)
           
     def test_simultaneous_events(self):
         #Test simultaneous, different events.
+        dp.Session.new()
         model = dp.Component("Simultaneous Events Model")
           
         def setup(self):
@@ -234,6 +242,7 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(results.trace.length, 2)
          
     def test_trace_control(self):
+        dp.Session.new()
         model = dp.Component("Trace Control")
         session = dp.Session()
         session.model = model
