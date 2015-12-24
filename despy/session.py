@@ -12,9 +12,6 @@ despy.model.session
 
     Session   
 """
-import random
-
-import numpy as np
 
 class Session:
     class __Session:

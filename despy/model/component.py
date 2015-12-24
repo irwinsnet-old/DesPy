@@ -18,6 +18,8 @@ despy.model.component
     
     Add static list of all components.
     
+    Add reset() method to model to reset model to initial condition.
+    
 """
 
 from itertools import count

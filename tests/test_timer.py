@@ -60,14 +60,15 @@ class testTimer(unittest.TestCase):
         #Test timer with Priority.LATE
         print()
         print("=====Testing Priority Attribute =======================")
+        session = dp.Session.new()
         model3 = dp.Component("Timer Test Model-C")
  
         dist3 = drand.get_empirical_pmf([5, 10], [0.3, 0.7])
         model3.add_component("timer", 
                    dp.RandomTimer("Timer-C", dist3, TimerCallback(),
                                 priority = dp.Priority.LATE))
-        sim3 = dp.Simulation(model3)
-        sim3.config.seed = 731        
+        session.sim = sim3 = dp.Simulation(model3)
+        session.config.seed = 731        
         results = sim3.irunf(100)
         trace3 = results.trace
         self.assertEqual(trace3[0]['priority'], 1)

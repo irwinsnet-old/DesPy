@@ -89,13 +89,13 @@ class RandomTimer(Component):
                             "type stats.rv_discrete")
             
     def setup(self):
-        evt = TimerEvent(self.name, self)
+        event = TimerEvent(self.name, self)
         
         if self.immediate:
-            self.sim.schedule(evt, priority = self.priority)
+            self.sim.schedule(event, priority = self.priority)
         else:
             self._current_interval = self.distribution.rvs()
-            self.sim.schedule(evt, self.current_interval,
+            self.sim.schedule(event, self.current_interval,
                                     priority = self.priority)
         
     @property

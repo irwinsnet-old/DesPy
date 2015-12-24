@@ -14,15 +14,10 @@ despy.model.simulation
     NoEventsRemainingError
     
 ..  todo
-
-    Move reps property to config object.
     
     Modify run and resume methods to accept triggers as parameters.
     
     Update documentation to state that seed can raise a TypeError.
-    
-    Change seed property to a method to be consistent with numpy and
-    random syntax
     
     Revise internal function names -- get rid of underscore prefix and
     replace with "dp_" prefix to indicate an internal framework
@@ -60,26 +55,33 @@ class Simulation():
     top-level model and its components, manages the simulation
     clock and FEL, and executes events.
     
-    **Members**
+    **Properties**
     
     ..  autosummary::
     
+        session
+        config
         model
-        seed
+        rep
         now
+        event
         pri
-        evt
+        triggers
         run_start_time
         run_stop_time
-        gen
-        append_model
-        schedule
-        peek
-        step
-        run
-        get_data
-        initialize_rep
-        _initialize_model
+        
+    **Methods**
+    
+    ..  autosummary::
+    
+        reset
+        initialize
+        _setup
+        _teardown
+        finalize
+        
+        
+    
         
     **Inherits**
       * None
@@ -111,7 +113,7 @@ class Simulation():
         self.reset()
         
     def reset(self):
-        """Resets the simulation to it's initial state.
+        """Resets the simulation to its initial state.
         
         Clears triggers, sets current rep to 0, sets time to the
         initial time, and clears the FEL and traces. Note that reset
@@ -136,18 +138,6 @@ class Simulation():
         *Type:* :class:`despy.session.Session`
         """
         return self._session
-    
-    @property
-    def model(self):
-        """The model that is assigned to the Simulation object.
-        
-        *Returns:* :class:`despy.model.component.Component`
-        """
-        return self._session.model
-    
-    @model.setter
-    def model(self, model):
-        self._session.model = model
 
     @property
     def config(self):
@@ -158,29 +148,144 @@ class Simulation():
     @config.setter
     def config(self, config):
         self._session.config = config
+
+    @property
+    def model(self):
+        """The model that is assigned to the Simulation object.
         
+        *Type:* :class:`despy.model.component.Component`
+        """
+        return self._session.model
+    
+    @model.setter
+    def model(self, model):
+        self._session.model = model
+
     @property
     def rep(self):
+        """Integer representing the current replication. Read-only.
+        
+        Starts at zero, i.e., rep = 0 for the first replication.
+        """
         return self._rep
                 
+    @property
+    def now(self):
+        """The current time for the current replication.
+        
+        *Type:* Integer
+        
+        By default, a simulation starts at time zero and continues until no
+        events remain on the FEL or until the simulation detects a stop
+        condition. The unit of time represented by this integer has no impact
+        on the simulation.
+        
+        Internally, Despy multiplies the time by a factor of ten and
+        each step in the simulation is a multiple of ten. This allows
+        assignment of priorities to each event. For example, for events
+        scheduled to run at time now = 4 (internal time = 40), 
+        ``Priority.EARLY`` events would be scheduled to run at time 39,
+        ``Priority.DEFAULT`` events at time 40, and ``Priority.LATE``
+        events at time 41. Despy would indicate that all of these events
+        occurred at time = 4 in standard reports and output. This
+        practice simplifies the run() method because
+        events are placed on the FEL in the order that they will
+        actually be run, taking priorities into account.
+        """
+        return int(self._now / 10)
+    
+    @now.setter
+    def now(self, time):
+        self._now = time * 10
+
+    @property
+    def event(self):
+        """The event that is currently being executed by the simulation.
+        
+        *Type:* :class:`despy.model.event.Event`
+        
+        The event property equals 'None' except when an event's do_event()
+        method is executing (see Simulation.step() method).
+        
+        """
+        return self._evt
+
+    @property
+    def pri(self):
+        """The priority of the current or most recently completed event.
+        
+        *Type:* Integer
+        """
+        return self._pri
+    
+    @property
+    def triggers(self):
+        """Ordered Dictionary containing simulation triggers.
+        
+        *Type:* {:class:`despy.model.trigger.AbstractTrigger`}
+        
+        A trigger is a method that will run whenever certain conditions are met.
+        The simulation checks triggers after every event to see if the
+        trigger conditions (runs AbstractTrigger.check())are met and if so,
+        executes the trigger (runs AbstractTrigger.pull().
+        """
+        return self._triggers
+
+    @property
+    def run_start_time(self):
+        """The real-world start time for the simulation. Read-only.
+        
+        *Type:* ``None`` or :class:`datetime.datetime`
+        
+        Despy uses the run_start_time attribute to calculate the simulation's
+        elapsed time. Elapsed time does not include initialization or
+        finalization of the simulation, only time that elapses within the
+        Simulation.run() method. The attribute will return 'None' if the
+        simulation has not yet entered the Simulation.run() method.
+        """
+        return self._run_start_time
+    
+    @property
+    def run_stop_time(self):
+        """The real-world stop time for the simulation. Read-only.
+        
+        *Type:* ``None`` or :class:`datetime.datetime`
+        
+        Despy uses the run_start_time attribute to calculate the simulation's
+        elapsed time. Elapsed time does not include initialization or
+        finalization of the simulation, only time that elapses within the
+        Simulation.run() method. The attribute will return 'None' if the
+        simulation is still running events.
+        """
+        return self._run_stop_time
+
     def initialize(self):
+        """Initializes all model components and seeds random number generators.
+        
+        The designer calls the initialize() method once, prior to running the
+        simulation, regardless of the number of simulation replications. Code
+        for setting up initial conditions for each replication should be placed
+        in the model or component's setup() method, which will be called
+        automatically by the Simulation.run() method.
+        
+        Designers may explicitly call initialize() method, or implicitly by
+        by calling Simulation.irun() or simulation.irunf().
+        """
         np.random.seed(self._session.config.seed)
         random.seed(self._session.config.seed)
         self._now = self._session.config.initial_time * 10
         for cpt in self.model:
             cpt.dp_initialize()
     
-    def setup(self):
-        """Setup for the next replication.
+    def _setup(self):
+        """Resets simulation for the next rep and calls model setup() methods.
         
-        Sets the simulation time to zero. Also sets the model's
-        initial_events_scheduled attribute to ``False``, which will cause
-        the model's initialize_rep methods to be executed the next time the
-        simulation is run. In addition:
-        
+        Called automatically by Simulation.run() method at the beginning of
+        each replication.
             * Clears the FEL
-            * Erases the run_start_time and run_stop_time properties
-            * Resets the main simulation counter
+            * Resets counters.
+            * Resets time to config.initial_time.
+            * Calls every model component's setup() method.
         """
         if self.rep > 0:
             self._now = self._session.config.initial_time * 10
@@ -191,88 +296,27 @@ class Simulation():
         for cpt in self.model:
             cpt.dp_setup()
     
-    def teardown(self):
+    def _teardown(self):
+        """Calls all Component.teardown() methods at the end of each rep.
+        """
         for cpt in self.model:
             cpt.dp_teardown(self.now)
 
-    @property
-    def now(self):
-        """The current time of the simulation. The time is an integer.
+    def finalize(self):
+        """Calls all Component.finalize() methods and returns a results object.
         
-        *Returns:* Integer
+        *Returns:* :class:`despy.output.results`
         
-        By default, a simulation starts at time zero and continues
-        until three are no events remaining on the FEL or until the
-        simulation detects a stop condition. The unit of time
-        represented by the integer value stored in the ``now`` property
-        is defined by the simulation.
-        
-        Internally, Despy multiplies the time by a factor of ten and
-        each step in the simulation is a multiple of ten. This allows
-        assignment of priorities to each event. For example,
-        ``Priority.EARLY`` events would be scheduled to run at time 39,
-        ``Priority.DEFAULT`` events at time 40, and ``Priority.LATE``
-        events at time 41. Despy would indicate that all of these events
-        occurred at time = 4 in standard reports and output. This
-        practice simplifies the routines that run the events because
-        events are placed on the FEL in the order that they will
-        actually be run, taking assigned priorities into account.
+        The designer can call finalize() explicitly following the run() method,
+        or the designer can call finalize implicitly by calling irunf() or
+        runf().
         """
-        return int(self._now / 10)
+        for cpt in self.model:
+            cpt.dp_finalize()
+        self._results = Results(self, self._session.config)
+        self._results._trace = self._trace
+        return self._results
     
-    @now.setter
-    def now(self, time):
-        self._now = time * 10
-        
-    @property
-    def pri(self):
-        """The priority of the current or most recently completed event.
-        
-        *Type:* Integer
-        """
-        return self._pri
-
-    @property
-    def evt(self):
-        """The event that is currently being executed by the simulation
-        at time = ``self.now`` (read only).
-        
-        *Returns:* :class: `despy.model.event.Event`
-        
-        """
-        return self._evt
-    
-    @property
-    def triggers(self):
-        return self._triggers
-        
-    @property
-    def run_start_time(self):
-        """The real-world time (i.e., date, hours, minutes, etc.) at
-        which the simulation starts (read only).
-        
-        *Returns:* ``None`` or :class: `datetime.datetime`
-        
-        Despy uses the run_start_time attribute to calculate the
-        simulation's elapsed time. The attribute will return ``None``
-        if the simulation has not yet been completed.
-        """
-        return self._run_start_time
-    
-    @property
-    def run_stop_time(self):
-        """The real-world stop time (i.e., date, hours, minutes, etc.)
-        for the simulation (read only).
-        
-        *Returns:* ``None`` or :class: `datetime.datetime`
-        
-        Despy uses the ``run_stop_time`` attribute to calculate elapsed
-        simulation time and to assign unique names to output files. The
-        attribute will return ``None`` if the simulation has not yet been
-        run.
-        """
-        return self._run_stop_time
-
     def schedule(self, event, delay=0, priority=Priority.STANDARD):
         """ Add an event to the FEL.
 
@@ -399,7 +443,7 @@ class Simulation():
         for rep in range(start_rep, self._session.config.reps):
             self._rep = rep
             if self._setups <= self._rep:
-                self.setup()
+                self._setup()
                 self._setups += 1
 
             # Step through events on FEL and check triggers.
@@ -412,16 +456,9 @@ class Simulation():
                 continue_rep = self.dp_check_triggers()
         
             # Finalize model and setup for next replication
-            self.teardown()
+            self._teardown()
             
         self._run_stop_time = datetime.datetime.today()
-        
-    def finalize(self):
-        for cpt in self.model:
-            cpt.dp_finalize()
-        self._results = Results(self, self._session.config)
-        self._results._trace = self._trace
-        return self._results
         
     def _set_triggers(self, until):
         if until is None:
@@ -476,10 +513,10 @@ class Simulation():
             raise TypeError(err_msg.format(repr(trigger)))
             
     def add_message(self, message, fields):
-        if self.evt is None:
+        if self.event is None:
             self._trace.add_message(message, fields)
         else:
-            self.evt.add_message(message, fields)
+            self.event.add_message(message, fields)
     
     def get_data(self):
         """ Get a Python list with simulation parameters and results.
