@@ -24,10 +24,11 @@ class testTimer(unittest.TestCase):
         #Test a basic timer
         print()
         print("=====Testing RandomTimer with immediate = False=======")
+        dp.Session.new()
+        sim = dp.Simulation()            
         model1 = dp.Component("Timer Test Model-A")
-        session = dp.Session.new()
-        session.model = model1   
-        session.sim = sim = dp.Simulation()
+        sim.model = model1   
+
         sim.config.seed = 731                  
         dist1 = stats.poisson(10)
         model1.add_component("timer",
@@ -48,10 +49,9 @@ class testTimer(unittest.TestCase):
         dist2 = stats.poisson(150)
         model2.add_component("Timer",
                    dp.RandomTimer("Timer-B", dist2, TimerCallback()))
-        session.model = model2
-        session.sim = sim = dp.Simulation()
-        sim.config.seed = 704
-        results = sim.irunf(1000)
+        sim2 = dp.Simulation(model2)
+        sim2.config.seed = 704
+        results = sim2.irunf(1000)
         trace2 = results.trace
         self.assertEqual(trace2[0]['time'], 142)
         self.assertEqual(trace2[1]['time'], 285)
@@ -66,10 +66,9 @@ class testTimer(unittest.TestCase):
         model3.add_component("timer", 
                    dp.RandomTimer("Timer-C", dist3, TimerCallback(),
                                 priority = dp.Priority.LATE))
-        session.model = model3
-        session.sim = sim = dp.Simulation()
-        model3.sim.config.seed = 731        
-        results = sim.irunf(100)
+        sim3 = dp.Simulation(model3)
+        sim3.config.seed = 731        
+        results = sim3.irunf(100)
         trace3 = results.trace
         self.assertEqual(trace3[0]['priority'], 1)
         self.assertEqual(trace3[1]['priority'], 1)

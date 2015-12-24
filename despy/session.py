@@ -12,6 +12,9 @@ despy.model.session
 
     Session   
 """
+import random
+
+import numpy as np
 
 class Session:
     class __Session:
@@ -220,6 +223,8 @@ class Config(object):
         number sequence thoughout the simulation.
         return self._seed
         """
+        
+        return self._seed
     
     @seed.setter
     def seed(self, seed):

@@ -164,11 +164,9 @@ class Simulation():
         return self._rep
                 
     def initialize(self):
-        self._now = self._session.config.initial_time * 10
-        
         np.random.seed(self._session.config.seed)
         random.seed(self._session.config.seed)
-        
+        self._now = self._session.config.initial_time * 10
         for cpt in self.model:
             cpt.dp_initialize()
     
