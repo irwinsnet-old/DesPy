@@ -44,11 +44,31 @@ from despy.output.trace import Trace
 
 
 class NoEventsRemainingError(Exception):
-    """Raised by despy.model.simulation's _step method when FEL is empty.
+    """Raised by despy.simulation._step() when FEL is empty.
     """
     pass
 
 
+class FutureEvent(namedtuple('FutureEventTuple',
+                         ['time', 'event', 'priority'])):
+    """A event that has been placed on the future event list (FEL).
+    
+    Every item on the FEL must be an instance of FutureEvent. A
+    FutureEvent consists of the event, the scheduled time, and priority.
+    
+    **Attributes**
+    
+      * :attr:`time`: The time that the event is scheduled for
+        execution. Type: a non-negative integer.
+      * :attr:`event`: An instance of
+        :class:`despy.model.event.Event`.
+      * :attr:`priority`: A priority constant from the 
+        :mod:`despy.base.named_object2` module, or an integer between
+        -4 and +4, inclusive.
+    
+    """
+    
+    
 class Simulation():
     """Schedule events and manage the future event list (FEL).
     
@@ -104,15 +124,15 @@ class Simulation():
         """Creates a Simulation object.
         
         *Arguments*
-            * ``model:`` Optional. Assigns a
-            :class:`despy.model.component` to the simulation. If
-            omitted, designer must assign the model using the
-            'Simulation.model' property before running the simulation.
-            * ``config:`` Optional. A :class:`despy.session.config
-            object that contains numerous simulation parameters. If
-            omitted, a config object is created automatically.
-            Configuration options can be set or read via the
-            'Simulation.config' or 'Session.config' properties.
+            ``model:`` (:class:`despy.model.component`)
+                Optional. Assigns a model to the simulation. If omitted,
+                designer must assign the model using the 'Simulation.model'
+                property before initializing the simulation.
+            ``config:`` (:class:`despy.session.config)
+                Optional. Config object contains numerous simulation parameters.
+                If omitted, a config object is created automatically with
+                default settings. Configuration options can be set or read via
+                either the 'Simulation.config' or 'Session.config' properties.
         """    
         self._session = Session()
         self._session.sim = self
@@ -584,22 +604,3 @@ class Simulation():
                      ('Elapsed Time', elapsed_time)])
                   ]
         return output
-            
-class FutureEvent(namedtuple('FutureEventTuple',
-                         ['time', 'event', 'priority'])):
-    """A event that has been placed on the future event list (FEL).
-    
-    Every item on the FEL must be an instance of FutureEvent. A
-    FutureEvent consists of the event, the scheduled time, and priority.
-    
-    **Attributes**
-    
-      * :attr:`time`: The time that the event is scheduled for
-        execution. Type: a non-negative integer.
-      * :attr:`event`: An instance of
-        :class:`despy.model.event.Event`.
-      * :attr:`priority`: A priority constant from the 
-        :mod:`despy.base.named_object2` module, or an integer between
-        -4 and +4, inclusive.
-    
-    """

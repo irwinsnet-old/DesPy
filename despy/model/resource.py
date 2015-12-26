@@ -91,8 +91,8 @@ class Resource(Component):
         self._capacity = capacity
         self._res_queue = None
         self._service_time = time_function
-        self.add_stat("Service Time", DiscreteStatistic("Service Time",
-                                                        'u4'))
+        self.statistics["Service Time"] = DiscreteStatistic("Service Time",
+                                                        'u4')
         
         self._Station_tuple = namedtuple('Station',
                                         ['entity', 'start_time'])

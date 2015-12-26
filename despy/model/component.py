@@ -16,9 +16,10 @@ despy.model.component
     Create a new class for transient objects (entities and events) to
     inherit from.
     
-    Add static list of all components.
-    
     Add reset() method to model to reset model to initial condition.
+    
+    Rewrite counter logic so subclasses automatically get their own number
+    sequence without calling set_counter().
     
 """
 
@@ -43,23 +44,51 @@ class Component(object):
     method in the subclass's ``__init__`` method.
     
     
-    **Members**
+    **Properties**
 
     ..  autosummary::
         
+        name
+        slug
+        description
+        session
         sim
+        model
+        owner
         number
         id
+        statistics
+        components
+        
+    **Public Methods**
+    
+    ..  autosummary
+    
+        add_component
+        set_counter
         initialize
+        setup
+        teardown
         finalize
         get_data
-        __str__
-        set_counter
-        _get_next_number
         
+    **Magic Methods**
     
-    **Inherits**
-        * :None
+    ..  autosummary
+    
+        __iter__
+        __str__
+        
+    **Private and Internal Methods**
+    
+    ..  autosummary
+    
+        _get_next_number
+        _call_phase
+        dp_initialize
+        dp_setup
+        dp_teardown
+        dp_finalize
         
     **Superclass**
         * :class:`despy.model.entity.Entity`
@@ -72,9 +101,6 @@ class Component(object):
     
     def __init__(self, name, description = None):
         """Creates an instance of a *Component* object.
-        
-        Except for the simulation and model classes, all members of the
-        despy.model package inherit from the *Component* class.
         
         *Arguments*
             ``name`` (String)
@@ -103,13 +129,12 @@ class Component(object):
         """The name of the object.
         
         A short phrase, such as "Customer" or "Server Queue" that
-        identifies the object.  Using title case and spaces will result
-        in pleasant formatting in output reports and trace files.
+        identifies the object.
         
-        *Returns:* String
+        *Type:* String
         
         *Raises:*
-            ``TypeError`` if name is not a string.
+            ``TypeError`` if set to a non-string.
         
         """
         return self._name
@@ -124,18 +149,27 @@ class Component(object):
             raise TypeError(message)    
     
     @property
+    def slug(self):
+        """Modified version of the name attribute suitable for file names.
+        
+        Spaces and all characters not allowed in Windows filenames
+        ([]<>\/\*?:\|#!") are replaced with underscores.
+        
+        *Type:* string
+        """
+        return re.sub(r'[ <>/*?:|#!"\\]', '_', self._name)
+        
+    @property
     def description(self):
         """Gets a description of the model.
         
         One or more paragraphs that describes the purpose and behavior
         of the object.  The description will be included in output
-        reports as html paragraphs (or equivalent for other output
-        formats).
+        reports.
         
-        *Returns:* string
+        *Type:* string
 
-        *Raises:* ``TypeError`` if description is not a string or type
-        ``None``.
+        *Raises:* ``TypeError`` if set to type other than string or None.
         """
         return self._description
 
@@ -147,42 +181,81 @@ class Component(object):
             message = "{0} passed to name".format(description.__class__) + \
                     " argument. Should be a string or None."             
             raise TypeError(message)
-    
-    @property
-    def slug(self):
-        """Returns a modified version of the name attribute.
-        
-        Spaces and all characters not allowed in Windows filenames
-        ([]<>\/\*?:\|#!") are replaced with underscores.
-        
-        *Returns:* str
-        """
-        return re.sub(r'[ <>/*?:|#!"\\]', '_', self._name)
-        
+
     @property
     def session(self):
+        """Returns the current Session object. Read-only.
+        
+        *Type:* :class:`despy.session.Session`
+        """
         return self._session
     
     @property
     def sim(self):
-        """A link to the model's simulation attribute.
+        """Simulation object that is linked to the current session. Read-only.
         
-        This read-only attribute is provided for convenience.
-        
-        *Returns:* :class:`despy.model.simulation.Simulation`
+        *Type:* :class:`despy.simulation.Simulation`
         """
         return self._session.sim
     
     @property
     def model(self):
-        return self._session.model
+        """Top component in model tree.
+        
+        *Type:* :class: `despy.model.component.Component`
+        """
+        cpt = self
+        while cpt.owner is not None:
+            cpt = self.owner
+        return cpt
 
     @property
+    def owner(self):
+        """Link to the component's owner (i.e., parent in model tree structure).
+        
+        *Type* :class:`despy.model.component.Component
+        """
+        return self._owner
+    
+    @owner.setter
+    def owner(self, owner):
+        self._owner = owner
+            
+    @property
+    def number(self):
+        """Integer that uniquely identifies the *Component* instance. Read-only.
+        
+        *Returns* integer
+        """
+        return self._number
+
+    @property
+    def id(self):
+        """String that uniquely identifies the component instance. Read-only.
+        
+        The id property contains "<component.slug>.<component._number>". The id
+        attribute is suitable for creating unique file names.
+        """
+        return "{0}.{1}".format(self.slug, self._number)
+    
+    @property
+    def statistics(self):
+        """Dictionary of component statistics.
+        
+        *Type:* {:class:`despy.output.statistic`}
+        """
+        return self._statistics
+    
+    @property
     def components(self):
+        """Dictionary of child components that comprise a model.
+        
+        *Type:* {:class:`despy.model.component.Component`}
+        """
         return self._components
     
     def add_component(self, key, item):
-        """ Assign a component to the model using dictionary notation.
+        """ Assign a component to the model.
         
         *Arguments*
             ``key`` (String)
@@ -190,6 +263,9 @@ class Component(object):
                 component.
             ``item`` (:class:`despy.model.component.Component`)
                 An instance of ``Component`` or one of it's sub-classes.
+                
+        *Raises:* ValueError if key already exists in self.components dictionary
+        or if key is not a valid Python dictionary key.
         """
         if key.isidentifier() and (not hasattr(self, key)):
             self._components[key] = item
@@ -202,59 +278,24 @@ class Component(object):
                              "reserved keyword.")
             
     def __iter__(self):
-        """Enable post-order depth-first iteration of Component tree.
+        """Enable post-order, depth-first iteration of Component tree.
         """
         for _, child in self.components.items():
             for component in child:
                 yield component
         yield self
-            
-    @property
-    def owner(self):
-        """A link to the component's owner.
+
+    def __str__(self):
+        """Returns a string that uniquely identifies every *Component*
+        instance.
         
-        *Returns* :class:`despy.model.component.Component
+        The format of the return value is
+        <component.name>#<component._number>
+        
+        *Returns* string
         """
-        return self._owner
-    
-    @owner.setter
-    def owner(self, owner):
-        self._owner = owner
-    
-    @property
-    def number(self):
-        """An integer that uniquely identifies the *Component* instance.
-        
-        This attribute is read only.
-        
-        *Returns* integer
-        """
-        return self._number
-    
-    @property
-    def id(self):
-        """A string that uniquely identifies the component instance.
-        
-        The id attribute is of the format
-        "<model.slug>.<component.slug>.<component._number>". The
-        :meth:`.slug` attribute is inherited from
-        :class:`despy.base.named_object2.NamedObject`. The slug is the
-        name attribute with spaces and characters that are not allowed
-        in Windows replaced by underscores. The *id* attribute is
-        suitable for creating file names.
-        """
-        return "{0}.{1}".format(self.slug, self._number)
-    
-    def add_stat(self, key, stat):
-        self._statistics[key] = stat
-        
-    def get_stat(self, key):
-        return self._statistics[key]
-    
-    @property
-    def statistics(self):
-        return self._statistics
-    
+        return "{0}:{1}".format(self.name, self._number)
+
     @classmethod
     def set_counter(cls):
         """A class method that resets the *Component's* or subclass's
@@ -277,51 +318,37 @@ class Component(object):
     
     @classmethod
     def _get_next_number(cls):
-        """A private method called from the *__init__()* method that
-        gets the next unused _number.
+        """Called by the *__init__()* method to get the next unused _number.
         
         *Returns* integer
         """
         return next(cls._count)
-    
-    def __str__(self):
-        """Returns a string that uniquely identifies every *Component*
-        instance.
-        
-        The format of the return value is
-        <model.name>:<component.name>#<component._number>
-        
-        *Returns* str
-        """
-        return "{0}:{1}".format(self.name, self._number)
-    
-    def _call_phase(self, phase):
-        if isinstance(phase, types.FunctionType):
-            phase(self)
-        else:
-            phase()
                 
     def dp_initialize(self):
+        """Internal despy method for initializing the model. Do not override.
+        """
         self._call_phase(self.initialize)
     
     def initialize(self):
+        """Initialization code that will run once, prior to any replications.
+        """
         pass
     
     def dp_setup(self):
+        """Internal despy method that sets up each replication. Do not override.
+        """
         for _, statistic in self.statistics.items():
             statistic.setup()
             
         self._call_phase(self.setup)
             
     def setup(self):
-        """Subclasses should override this method with initialization
-        code that will be executed prior to any events on the future
-        event list (FEL).
+        """Runs prior to every replication to set up initial conditions.
         """
         pass
 
     def dp_teardown(self, time):
-        """The Simulation calls teardown methods after final event.
+        """Internal despy method that runs after every rep. Do not override.
         """
         for _, statistic in self.statistics.items():
             statistic.teardown(time)
@@ -329,16 +356,30 @@ class Component(object):
         self._call_phase(self.teardown)
     
     def teardown(self):
+        """Runs after every replication to clean up.
+        """
         pass
     
     def dp_finalize(self):
+        """Internal depsy method for finalizing the model. Do not override.
+        """
         self._call_phase(self.finalize)
             
         for _, statistic in self.statistics.items():
             statistic.finalize()
         
     def finalize(self):
+        """Runs once, after all reps are complete, to finalize component.
+        """
         pass
+    
+    def _call_phase(self, phase):
+        """Allows using either method or function type objects as despy phases.
+        """
+        if isinstance(phase, types.FunctionType):
+            phase(self)
+        else:
+            phase()
     
     def get_data(self, full_path):
         """Subclasses should override this method to provide simulation

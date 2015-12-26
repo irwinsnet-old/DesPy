@@ -1,8 +1,8 @@
 ..  currentmodule:: despy.core.component
 
-##############################
-despy.core.component.Component
-##############################
+###############################
+despy.model.component.Component
+###############################
 
 *****************
 Class Description

@@ -1,8 +1,8 @@
 ..  currentmodule:: despy.simulation
 
-################################
-despy.core.simulation.Simulation
-################################
+###########################
+despy.simulation.Simulation
+###########################
 
 *****************
 Class Description

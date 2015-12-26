@@ -50,7 +50,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
    
-   simulation
+   classes
 
    todo
    
