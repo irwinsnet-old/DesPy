@@ -50,9 +50,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
    
-   packages
-   modules
-   classes
+   simulation
+
    todo
    
    

@@ -104,11 +104,11 @@ class testDespyb(unittest.TestCase):
           
         #Verify events run in correct order.
         print()
-        felItem = model.sim.step()
+        felItem = model.sim._step()
         self.assertEqual(felItem.event.name, "Early Event")
-        felItem = model.sim.step()
+        felItem = model.sim._step()
         self.assertEqual(felItem.event.name, "Standard Event")
-        felItem = model.sim.step()
+        felItem = model.sim._step()
         self.assertEqual(felItem.event.name, "Late Event")
         exp = model.sim
         self.assertEqual(exp.now, 5)

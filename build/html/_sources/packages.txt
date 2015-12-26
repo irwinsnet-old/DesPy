@@ -2,23 +2,9 @@
 Despy Packages
 ##############
 
-**********
-despy.base
-**********
+***********
+despy.model
+***********
 
-..  automodule:: despy.base.__init__
-    :noindex:
-
-**********
-despy.core
-**********
-
-..  automodule:: despy.core.__init__
-    :noindex:
-    
-************
-despy.output
-************
-    
-..  automodule:: despy.output.__init__
+..  automodule:: despy.model.__init__
     :noindex:

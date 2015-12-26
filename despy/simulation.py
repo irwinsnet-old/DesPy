@@ -16,7 +16,9 @@ despy.model.simulation
 ..  todo
     
     Modify run and resume methods to accept triggers as parameters.
-    
+
+    Have _set_triggers compare current time to until parameter.
+
     Update documentation to state that seed can raise a TypeError.
     
     Revise internal function names -- get rid of underscore prefix and
@@ -42,7 +44,7 @@ from despy.output.trace import Trace
 
 
 class NoEventsRemainingError(Exception):
-    """Raised by despy.model.simulation's step method when FEL is empty.
+    """Raised by despy.model.simulation's _step method when FEL is empty.
     """
     pass
 
@@ -70,21 +72,32 @@ class Simulation():
         run_start_time
         run_stop_time
         
-    **Methods**
+    **Public Methods**
     
     ..  autosummary::
     
         reset
+        add_trigger
         initialize
+        finalize
+        peek
+        schedule
+        run
+        irun
+        irunf
+        runf
+        add_message
+        get_data
+        
+    **Private Methods
+    
+    ..  autosummary::
+
         _setup
         _teardown
-        finalize
-        
-        
-    
-        
-    **Inherits**
-      * None
+        _set_triggers
+        _step
+        _check_triggers
     """
 
     def __init__(self, model = None, config = None):
@@ -181,7 +194,7 @@ class Simulation():
         on the simulation.
         
         Internally, Despy multiplies the time by a factor of ten and
-        each step in the simulation is a multiple of ten. This allows
+        each _step in the simulation is a multiple of ten. This allows
         assignment of priorities to each event. For example, for events
         scheduled to run at time now = 4 (internal time = 40), 
         ``Priority.EARLY`` events would be scheduled to run at time 39,
@@ -202,10 +215,10 @@ class Simulation():
     def event(self):
         """The event that is currently being executed by the simulation.
         
-        *Type:* :class:`despy.model.event.Event`
+        *Type:* :class:`despy.event.Event`
         
         The event property equals 'None' except when an event's do_event()
-        method is executing (see Simulation.step() method).
+        method is executing (see Simulation._step() method).
         
         """
         return self._evt
@@ -258,6 +271,17 @@ class Simulation():
         simulation is still running events.
         """
         return self._run_stop_time
+
+    def add_trigger(self, key, trigger):
+        err_msg = ("{0} object provided to Simulation.add_trigger() "
+                "method must be a subclass of "
+                "despy.model.trigger.Trigger or registered as a "
+                "subclass using the Trigger.register() method")
+        
+        if issubclass(trigger.__class__, AbstractTrigger):
+            self.triggers[key] = trigger
+        else:
+            raise TypeError(err_msg.format(repr(trigger)))
 
     def initialize(self):
         """Initializes all model components and seeds random number generators.
@@ -316,33 +340,6 @@ class Simulation():
         self._results = Results(self, self._session.config)
         self._results._trace = self._trace
         return self._results
-    
-    def schedule(self, event, delay=0, priority=Priority.STANDARD):
-        """ Add an event to the FEL.
-
-        *Arguments*
-            event (:class:`despy.model.event.Event`):
-                An instance or subclass of the ``Event`` class.
-            delay (integer):
-                A non-negative integer that defaults to zero. If zero,
-                the event will be scheduled to occur immediately.
-            priority (integer)
-                An attribute of the
-                :class:`despy.model.simulation.FutureEvent` enumeration, or
-                an integer ranging from -5 to +5. The default is
-                ``Priority.STANDARD``, which is equivalent to
-                zero.
-        """
-        # Ensures delay value is always an integer.
-        delay = round(delay)
-
-        # Places a tuple onto the FEL, consisting of the event time, ID,
-        # and event object.
-        scheduleTime = self._now + (delay * 10) + priority
-        
-        heappush(self._futureEventList,
-                 FutureEvent(time=scheduleTime, event=event,
-                         priority=priority))
 
     def peek(self, prioritized=True):
         """Return the time of the next scheduled event.
@@ -368,59 +365,40 @@ class Simulation():
                 return self._futureEventList[0].time / 10
         except IndexError:
             return float('Infinity')
-        
-    def step(self):
-        """Advance simulation time and execute the next event.
-        
-        The ``step`` method will only execute one event. Users might
-        call the ``step`` method for troubleshooting purposes or other
-        special cases. Users will generally run their simulation by
-        calling the :meth:`.run` method, which repeatedly calls the
-        ``step`` method until reaching a stop condition or there are no
-        remaining events on the FEL.
+    
+    def schedule(self, event, delay=0, priority=Priority.STANDARD):
+        """ Add an event to the FEL.
 
-        *Raises*
-            NoEventsRemaining:
-                Occurs if no more events are scheduled on the FEL.
-                
-        *Returns*
-            :class:`despy.model.simulation.FutureEvent`
+        *Arguments*
+            event (:class:`despy.event.Event`):
+                An instance or subclass of the ``Event`` class.
+            delay (integer):
+                A non-negative integer that defaults to zero. If zero,
+                the event will be scheduled to occur immediately.
+            priority (integer)
+                An attribute of the
+                :class:`despy.event.Priority` enumeration, or
+                an integer ranging from -5 to +5. The default is
+                ``Priority.STANDARD``, which is equivalent to
+                zero.
         """
+        # Ensures delay value is always an integer.
+        delay = round(delay)
 
-        # Get next event from FEL and advance current simulation time.
-        try:
-            fel_item = heappop(self._futureEventList)
-        except IndexError:
-            raise NoEventsRemainingError
-        else:
-            self.now = int((fel_item.time - \
-                    fel_item.priority) / 10)
-            self._pri = fel_item.priority
-
-        # Record event in trace report        
-#         self.gen.trace.add_event(self.rep, self.now, fel_item.priority,
-#                                  fel_item.event)
-
-        # Run event
-        self._evt = fel_item.event
-        fel_item.event.dp_do_event()
-        self._evt = None
+        # Places a tuple onto the FEL, consisting of the event time, ID,
+        # and event object.
+        scheduleTime = self._now + (delay * 10) + priority
         
-        return fel_item
+        heappush(self._futureEventList,
+                 FutureEvent(time=scheduleTime, event=event,
+                         priority=priority))
 
     def run(self, until=None, resume_on_next_rep = False):
         """ Execute events on the FEL until reaching a stop condition.
         
-        The ``run`` method will advance simulation time and execute events
-        until the FEL is empty or until the time specified in the
-        ``until`` parameter is reached.
-        
-        Before executing any events, ``run`` will ensure model are
-        initialized by calling ``_initialize_model``.
-        `_initialize_model` ensures model are only initialized one
-        time, so users can call ``run`` multiple times and Despy will only
-        initialize_rep the model on the first call to ``run`` (unless
-        :meth:`.initialize_rep` is called, of course).
+        The ``run`` method will advance simulation time and execute each
+        replication until the FEL is empty or until the time specified
+        in the ``until`` parameter is reached.
 
         *Arguments*
             until (integer):
@@ -432,7 +410,11 @@ class Simulation():
                 until = 100 and there are events scheduled at time
                 100, those events will be executed, but events at time
                 101 or later will not.
-                
+            resume_on_next_rep (Boolean):
+                Default is false. When resuming a simulation, if
+                resume_on_next_rep is 'True', the simulation will skip
+                any remaining events in the current rep and skip to the
+                next rep.                
         """
         self._set_triggers(until)
         self._run_start_time = datetime.datetime.today()
@@ -450,17 +432,25 @@ class Simulation():
             continue_rep = True
             while continue_rep:
                 try:
-                    self.step()
+                    self._step()
                 except NoEventsRemainingError:
                     break
-                continue_rep = self.dp_check_triggers()
+                continue_rep = self._check_triggers()
         
             # Finalize model and setup for next replication
             self._teardown()
             
-        self._run_stop_time = datetime.datetime.today()
-        
+        self._run_stop_time = datetime.datetime.today()    
+
     def _set_triggers(self, until):
+        """Sets a TimeTrigger that ends the simulation at time = until.
+        
+        *Arguments*
+            until (integer):
+                A non-negative integer specifying the simulation time
+                at which the simulation will stop. If 'None', deletes
+                any existing TimeTriggers.
+        """
         if until is None:
             try:
                 del self.triggers["dp_untilTrigger"]
@@ -472,21 +462,35 @@ class Simulation():
             raise AttributeError("Simulation.run() until argument "
                                  "should be None or integer > 0.  {} "
                                  "passed instead".format(until))
-        
-    def irun(self, until = None):
-        self.initialize()
-        self.run(until = until)
-        
-    def irunf(self, until = None):
-        self.initialize()
-        self.run(until = until)
-        return self.finalize()
-        
-    def runf(self, until = None, resume_on_next_rep = False):
-        self.run(until = until, resume_on_next_rep = resume_on_next_rep)
-        return self.finalize()
-        
-    def dp_check_triggers(self):
+
+    def _step(self):
+        """Advance simulation time and execute the next event.
+
+        *Raises*
+            NoEventsRemaining:
+                Occurs if no more events are scheduled on the FEL.
+                
+        *Returns*
+            :class:`despy.simulation.FutureEvent`
+        """
+
+        # Get next event from FEL and advance current simulation time.
+        try:
+            fel_item = heappop(self._futureEventList)
+        except IndexError:
+            raise NoEventsRemainingError
+        else:
+            self.now = int((fel_item.time - \
+                    fel_item.priority) / 10)
+            self._pri = fel_item.priority
+
+        # Run event
+        self._evt = fel_item.event
+        fel_item.event.dp_do_event()
+        self._evt = None
+        return fel_item
+
+    def _check_triggers(self):
         """Checks all simulation triggers, returning False ends rep.
         
         *Returns*
@@ -501,18 +505,53 @@ class Simulation():
                     break
         return continue_rep
     
-    def add_trigger(self, key, trigger):
-        err_msg = ("{0} object provided to Simulation.add_trigger() "
-                "method must be a subclass of "
-                "despy.model.trigger.Trigger or registered as a "
-                "subclass using the Trigger.register() method")
+    def irun(self, until = None):
+        """Initializes and runs the simulation, but does not finalize.
         
-        if issubclass(trigger.__class__, AbstractTrigger):
-            self.triggers[key] = trigger
-        else:
-            raise TypeError(err_msg.format(repr(trigger)))
-            
+        *Arguments*
+            until (integer):
+                A non-negative integer specifying the simulation time
+                at which the simulation will stop. Defaults to 'None'.
+                See Simulation.run() for additional information.
+        """
+        self.initialize()
+        self.run(until = until)
+        
+    def irunf(self, until = None):
+        """Initializes, runs, and finalizes the simulation.
+                
+        *Arguments*
+            until (integer):
+                A non-negative integer specifying the simulation time
+                at which the simulation will stop. Defaults to 'None'.
+                See Simulation.run() for additional information.
+        """
+        self.initialize()
+        self.run(until = until)
+        return self.finalize()
+        
+    def runf(self, until = None, resume_on_next_rep = False):
+        """Runs and finalizes the simulation.
+                
+        *Arguments*
+            until (integer):
+                A non-negative integer specifying the simulation time
+                at which the simulation will stop. Defaults to 'None'.
+                See Simulation.run() for additional information.
+        """
+        self.run(until = until, resume_on_next_rep = resume_on_next_rep)
+        return self.finalize()
+
     def add_message(self, message, fields):
+        """Add a message to the trace report.
+        
+        *Arguments:*
+            `message` (String)
+                A short message that will be saved to the Trace.
+            `fields` (Python dictionary)
+                Custom fields that will be added to the TraceRecord.
+                Optional. Defaults to None.
+        """
         if self.event is None:
             self._trace.add_message(message, fields)
         else:
@@ -521,10 +560,10 @@ class Simulation():
     def get_data(self):
         """ Get a Python list with simulation parameters and results.
         
-        The generator object calls the get_data method of the simulation
-        and model objects and places the data in the simulation report.
-        The generator object will also call the user-defined get_data
-        methods from all of the model components.
+        The despy.output.results.write_files() method calls the get_data
+        method of the simulation and model objects and places the data
+        in the simulation report. The method will also call the user-
+        defined get_data methods from all of the model components.
         
         *Returns*
             A Python list of tuples. The first item of each tuple is

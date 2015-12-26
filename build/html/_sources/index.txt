@@ -29,6 +29,16 @@ My goals for despy are to:
   <https://store.continuum.io/cshop/anaconda/>`_. Despy relies heavily on
   `Numpy <http://www.numpy.org/>`_ and `Matplotlib <http://matplotlib.org/>`_.
   
+Despy design principles:
+
+* Clarity over convenience: While convenience is important, it's not
+  worth breaking encapsulation of components and overly complicating
+  the simulation. For example, I'll try to use sensible defaults for
+  method parameters so no complicated multi-line statements are
+  necessary to complete simple tasks. But overall, Despy should only
+  do what the designer tells it to do, when the designer says to do it.
+  
+  
 Despy is released under the
 `MIT License <http://opensource.org/licenses/MIT>`_.
 
@@ -40,9 +50,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
    
-   packages
-   modules
-   classes
+   simulation
+
    todo
    
    

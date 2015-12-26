@@ -26,9 +26,6 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bizstyle.js"></script>
     <link rel="top" title="Despy 1 documentation" href="../index.html" />
-    <link rel="up" title="Despy Classes" href="../classes.html" />
-    <link rel="next" title="despy.output.report.HtmlReport" href="report.html" />
-    <link rel="prev" title="despy.output.trace.CSV_File" href="CSV_file.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -44,14 +41,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="report.html" title="despy.output.report.HtmlReport"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="CSV_file.html" title="despy.output.trace.CSV_File"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -67,12 +57,6 @@
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="CSV_file.html"
-                        title="previous chapter">despy.output.trace.CSV_File</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="report.html"
-                        title="next chapter">despy.output.report.HtmlReport</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -105,89 +89,15 @@
 <h1>despy.output.generator.Generator<a class="headerlink" href="#despy-output-generator-generator" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="class-description">
 <h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="despy.output.generator.Generator">
-<em class="property">class </em><code class="descclassname">despy.output.generator.</code><code class="descname">Generator</code><span class="sig-paren">(</span><em>simulation</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/output/generator.html#Generator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.generator.Generator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates the simulation&#8217;s output reports and graphs.</p>
-<p><strong>Members</strong></p>
-<dl class="docutils">
-<dt><strong>Python Library Dependencies</strong></dt>
-<dd><ul class="first last simple">
-<li><a class="reference external" href="https://docs.python.org/3.4/library/os.html#module-os" title="(in Python v3.4)"><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 <div class="section" id="init">
 <h2>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
-<dt id="despy.output.generator.Generator.__init__">
-<code class="descclassname">Generator.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>simulation</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/output/generator.html#Generator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.generator.Generator.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct a Generator object.</p>
-<dl class="docutils">
-<dt><em>Arguments</em></dt>
-<dd><dl class="first last docutils">
-<dt><code class="docutils literal"><span class="pre">simulation</span></code> <a class="reference internal" href="../core/simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a></dt>
-<dd>Corresponding simulation object.</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 <div class="section" id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
-<dl class="attribute">
-<dt id="despy.output.generator.Generator.console_trace">
-<code class="descclassname">Generator.</code><code class="descname">console_trace</code><a class="headerlink" href="#despy.output.generator.Generator.console_trace" title="Permalink to this definition">¶</a></dt>
-<dd><p>If True, send Trace object data to standard console output.</p>
-<p><em>Type:</em> Boolean
-<em>Default Value:</em> True</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="despy.output.generator.Generator.folder_basename">
-<code class="descclassname">Generator.</code><code class="descname">folder_basename</code><a class="headerlink" href="#despy.output.generator.Generator.folder_basename" title="Permalink to this definition">¶</a></dt>
-<dd><p>Folder where output reports and graphs will be placed.</p>
-<p>If <code class="docutils literal"><span class="pre">None</span></code> (the default value), the simulation will not
-generate any output or trace files. The value stored in
-<code class="docutils literal"><span class="pre">folder_basename</span></code> should be an absolute reference.
-For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">gen</span><span class="o">.</span><span class="n">folder_basename</span> <span class="o">=</span> <span class="s">&quot;C:/despy_output/resource_sim&quot;</span>
-</pre></div>
-</div>
-<p>The Generator object will add a time-stamp to the end of the
-folder name when generating the output files. This allows the
-use to run the simulation several times without overwriting
-data from previous simulations.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="despy.output.generator.Generator.sim">
-<code class="descclassname">Generator.</code><code class="descname">sim</code><a class="headerlink" href="#despy.output.generator.Generator.sim" title="Permalink to this definition">¶</a></dt>
-<dd><p>Link to Simulation object documented by the Generator.</p>
-<p><em>Type:</em> <a class="reference internal" href="../core/simulation.html#despy.core.simulation.Simulation" title="despy.core.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">despy.core.simulation.Simulation</span></code></a>
-Read Only</p>
-</dd></dl>
-
 </div>
 <div class="section" id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
-<dt id="despy.output.generator.Generator.write_files">
-<code class="descclassname">Generator.</code><code class="descname">write_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/output/generator.html#Generator.write_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.generator.Generator.write_files" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates trace and HTML reports in folder_basename location.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="despy.output.generator.Generator.set_full_path">
-<code class="descclassname">Generator.</code><code class="descname">set_full_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/despy/output/generator.html#Generator.set_full_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.output.generator.Generator.set_full_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds time-stamp to end of Generator.folder_basename.</p>
-<p>The time-stamp is the stop time for the simulation.</p>
-</dd></dl>
-
 </div>
 </div>
 
@@ -206,14 +116,7 @@ Read Only</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="report.html" title="despy.output.report.HtmlReport"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="CSV_file.html" title="despy.output.trace.CSV_File"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../classes.html" >Despy Classes</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

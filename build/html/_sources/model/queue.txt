@@ -1,0 +1,59 @@
+..  currentmodule:: despy.core.queue
+
+######################
+despy.core.queue.Queue
+######################
+
+*****************
+Class Description
+*****************
+..  autoclass:: Queue
+
+********
+__init__
+********
+..  automethod:: Queue.__init__
+
+**********
+Attributes
+**********
+..  autoattribute:: Queue.Item
+..  autoattribute:: Queue.length
+..  autoattribute:: Queue.times_in_queue
+
+********************
+Inherited Attributes
+********************
+..  autoattribute:: despy.base.named_object.NamedObject.name
+    :noindex:
+..  autoattribute:: despy.base.named_object.NamedObject.description
+    :noindex:
+..  autoattribute:: despy.base.named_object.NamedObject.slug
+    :noindex:
+..  autoattribute:: despy.core.component.Component.mod
+    :noindex:
+..  autoattribute:: despy.core.component.Component.sim
+    :noindex:
+..  autoattribute:: despy.core.component.Component.number
+    :noindex:
+..  autoattribute:: despy.core.component.Component.id
+    :noindex:
+
+*******
+Methods
+*******
+..  automethod:: Queue.add
+..  automethod:: Queue.remove
+..  automethod:: Queue.get_data
+
+*****************
+Inherited Methods
+*****************
+..  automethod:: despy.core.component.Component.initialize
+    :noindex:
+..  automethod:: despy.core.component.Component.finalize
+    :noindex:
+..  automethod:: despy.core.component.Component.get_data
+    :noindex:
+..  automethod:: despy.core.component.Component.set_counter
+    :noindex:

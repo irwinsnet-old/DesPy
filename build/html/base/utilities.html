@@ -26,9 +26,6 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bizstyle.js"></script>
     <link rel="top" title="Despy 1 documentation" href="../index.html" />
-    <link rel="up" title="Despy Classes" href="../classes.html" />
-    <link rel="next" title="despy.core.component.Component" href="../core/component.html" />
-    <link rel="prev" title="despy.base.namedobject.NamedObject" href="namedobject.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -44,14 +41,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../core/component.html" title="despy.core.component.Component"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="namedobject.html" title="despy.base.namedobject.NamedObject"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../classes.html" accesskey="U">Despy Classes</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -64,12 +54,6 @@
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="namedobject.html"
-                        title="previous chapter">despy.base.namedobject.NamedObject</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../core/component.html"
-                        title="next chapter">despy.core.component.Component</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -102,42 +86,6 @@
 <h1>despy.base.utilities.Priority<a class="headerlink" href="#despy-base-utilities-priority" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="class-description">
 <h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="despy.base.utilities.Priority">
-<em class="property">class </em><code class="descclassname">despy.base.utilities.</code><code class="descname">Priority</code><a class="reference internal" href="../_modules/despy/base/utilities.html#Priority"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#despy.base.utilities.Priority" title="Permalink to this definition">¶</a></dt>
-<dd><p>Define priorities for ordering events scheduled at the same time.</p>
-<dl class="docutils">
-<dt><strong>Priority Levels</strong></dt>
-<dd><p class="first">The Priority class defines three constants that are used to
-prioritize events that are scheduled to occur at the same time.
-Events assigned a higher priority will occur before events that
-are assigned lower priorities.</p>
-<dl class="docutils">
-<dt><em>Priority.STANDARD</em></dt>
-<dd>Despy uses Priority.STANDARD as the default priority when no
-other priority is specified.</dd>
-<dt><em>Priority.EARLY</em></dt>
-<dd>Events assigned Priority.EARLY will be executed before
-Priority.STANDARD and Priority.LATE events.</dd>
-<dt><em>Priority.LATE</em></dt>
-<dd>Events assigned Priority.LATE will be executed after
-Priority.EARLY and Priority.STANDARD events.</dd>
-</dl>
-<p>Events scheduled to occur at the same time with the same
-priority may be executed in any order.</p>
-<p class="last">The priority integer value is added to the scheduled event time.
-Internally, Despy multiplies the scheduled time by 10. This
-means that events scheduled to occur at time 1 are internally
-scheduled for time 10, time 12 events would occur at internal
-time 120, etc. This scheduling mechanism allows priorities as
-high as 4 and as low as -4. A model that requires more than
-three different priorities probably needs to be redesigned,
-therefore, Despy only provides named constants for priorities
-from -1 to 1.</p>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 </div>
 
@@ -156,14 +104,7 @@ from -1 to 1.</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../core/component.html" title="despy.core.component.Component"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="namedobject.html" title="despy.base.namedobject.NamedObject"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../classes.html" >Despy Classes</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Despy 1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

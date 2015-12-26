@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="top" title="Despy 1 documentation" href="#" />
-    <link rel="next" title="Despy Packages" href="packages.html" />
+    <link rel="next" title="despy.core.simulation.Simulation" href="simulation.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -43,7 +43,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="packages.html" title="Despy Packages"
+          <a href="simulation.html" title="despy.core.simulation.Simulation"
              accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">Despy 1 documentation</a> &raquo;</li> 
       </ul>
@@ -57,8 +57,8 @@
 </ul>
 
   <h4>Next topic</h4>
-  <p class="topless"><a href="packages.html"
-                        title="next chapter">Despy Packages</a></p>
+  <p class="topless"><a href="simulation.html"
+                        title="next chapter">despy.core.simulation.Simulation</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -113,59 +113,26 @@ simulation.</li>
 mainstream packages that are available in the <a class="reference external" href="https://store.continuum.io/cshop/anaconda/">Anaconda Python stack</a>. Despy relies heavily on
 <a class="reference external" href="http://www.numpy.org/">Numpy</a> and <a class="reference external" href="http://matplotlib.org/">Matplotlib</a>.</li>
 </ul>
+<p>Despy design principles:</p>
+<ul class="simple">
+<li>Clarity over convenience: While convenience is important, it&#8217;s not
+worth breaking encapsulation of components and overly complicating
+the simulation. For example, I&#8217;ll try to use sensible defaults for
+method parameters so no complicated multi-line statements are
+necessary to complete simple tasks. But overall, Despy should only
+do what the designer tells it to do, when the designer says to do it.</li>
+</ul>
 <p>Despy is released under the
 <a class="reference external" href="http://opensource.org/licenses/MIT">MIT License</a>.</p>
 <p>Copyright (c) 2015 Stacy Irwin</p>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="packages.html">Despy Packages</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="packages.html#despy-base">despy.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="packages.html#despy-core">despy.core</a></li>
-<li class="toctree-l2"><a class="reference internal" href="packages.html#despy-output">despy.output</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Despy Modules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#despy-base-named-object">despy.base.named_object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#despy-base-utilities">despy.base.utilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#despy-core-component">despy.core.component</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#despy-core-model">despy.core.model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#despy-core-simulation">despy.core.simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#despy-core-event">despy.core.event</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#despy-core-resource">despy.core.resource</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#despy-core-queue">despy.core.queue</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#despy-output-trace">despy.output.trace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#despy-output-report">despy.output.report</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#despy-output-generator">despy.output.generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules.html#despy-output-plot">despy.output.plot</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="classes.html">Despy Classes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="base/namedobject.html">despy.base.namedobject.NamedObject</a></li>
-<li class="toctree-l2"><a class="reference internal" href="base/utilities.html">despy.base.utilities.Priority</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/component.html">despy.core.component.Component</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/simulation.html">despy.core.simulation.Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/futureEvent.html">FutureEvent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/model.html">despy.core.model.Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/entity.html">despy.core.entity.Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/event.html">despy.core.event.Event</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/NoEventsRemainingError.html">despy.core.simulation.NoEventsRemaining</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/queue.html">despy.core.queue.Queue</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/process.html">despy.core.process.Process</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/processTimeOutEvent.html">despy.core.process.ProcessTimeOutEvent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/queue.html">despy.core.queue.Queue</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/resource.html">despy.core.resource.Resource</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/resourceQueue.html">despy.core.resource.ResourceQueue</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/resourceFinishServiceEvent.html">despy.core.resource.ResourceFinishServiceEvent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/timer.html">despy.core.timer.RandomTimer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="output/traceRecord.html">despy.output.trace.TraceRecord</a></li>
-<li class="toctree-l2"><a class="reference internal" href="output/trace.html">despy.output.trace.Trace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="output/CSV_file.html">despy.output.trace.CSV_File</a></li>
-<li class="toctree-l2"><a class="reference internal" href="output/generator.html">despy.output.generator.Generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="output/report.html">despy.output.report.HtmlReport</a></li>
-<li class="toctree-l2"><a class="reference internal" href="output/datatype.html">despy.output.report.Datatype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="output/plot.html">despy.output.plot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="stats/random.html">despy.stats.random</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulation.html">despy.core.simulation.Simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simulation.html#class-description">Class Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation.html#class-properties">Class Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation.html#class-public-methods">Class Public Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation.html#private-methods">Private Methods</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="todo.html">Todo Items</a></li>
@@ -204,7 +171,7 @@ how Despy works.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="packages.html" title="Despy Packages"
+          <a href="simulation.html" title="despy.core.simulation.Simulation"
              >next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">Despy 1 documentation</a> &raquo;</li> 
       </ul>

@@ -16,21 +16,6 @@ individually. For example, the following statement imports all
 core modules under the ``dp`` namespace.::
     
     import despy.core as dp
-
-despy.model.simulation
-=====================
-..  automodule:: despy.model.simulation
-    :noindex:
-
-despy.model.event
-================
-..  automodule:: despy.model.event
-    :noindex:
-    
-despy.model.model
-================
-..  automodule:: despy.model.model
-    :noindex:
     
 despy.model.component
 ====================
