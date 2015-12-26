@@ -31,7 +31,7 @@ from collections import OrderedDict, namedtuple
 from scipy.stats import randint
 
 from despy.model.component import Component
-from despy.model.event import Event
+from despy.event import Event
 from despy.model.queue import Queue
 from despy.output.statistic import DiscreteStatistic
 from despy.output.statistic import TimeWeightedStatistic

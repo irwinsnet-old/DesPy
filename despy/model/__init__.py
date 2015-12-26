@@ -63,11 +63,10 @@ despy.model.timer
     :noindex:
 """
 
-from despy.define import Priority
 from despy.simulation import Simulation
 from despy.session import Session
 from despy.model.component import Component
-from despy.model.event import Event, AbstractCallback, Callback
+from despy.event import Event, Priority, AbstractCallback, Callback
 from despy.model.process import Process
 from despy.model.queue import Queue
 from despy.model.entity import Entity

@@ -36,7 +36,7 @@ import numpy as np
 from despy.session import Session
 from despy.output.results import Results
 from despy.output.report import Datatype
-from despy.define import Priority
+from despy.event import Priority
 from despy.model.trigger import AbstractTrigger, TimeTrigger
 from despy.output.trace import Trace
 
