@@ -28,6 +28,8 @@ despy.output.plot
 
 """
 
-# from despy.output.trace import Trace
-# from despy.output.generator import Generator
-# from despy.output.report import Datatype
+from despy.output.report import HtmlReport
+from despy.output.results import Results
+from despy.output.statistic import AbstractStatistic, DiscreteStatistic
+from despy.output.statistic import TimeWeightedStatistic
+from despy.output.trace import Trace, TraceRecord

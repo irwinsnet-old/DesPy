@@ -10,7 +10,7 @@ unit/core/test_timer
 
 import unittest
 
-import despy.model as dp
+import despy as dp
 import despy.stats.random as drand
 import scipy.stats as stats
 
@@ -26,13 +26,13 @@ class testTimer(unittest.TestCase):
         print("=====Testing RandomTimer with immediate = False=======")
         dp.Session.new()
         sim = dp.Simulation()            
-        model1 = dp.Component("Timer Test Model-A")
+        model1 = dp.model.Component("Timer Test Model-A")
         sim.model = model1   
 
         sim.config.seed = 731                  
         dist1 = stats.poisson(10)
         model1.add_component("timer",
-                   dp.RandomTimer("TimerA", dist1, TimerCallback()))
+                   dp.model.RandomTimer("TimerA", dist1, TimerCallback()))
         self.assertEqual(len(model1.components), 1)
         
         results = sim.irunf(100)
@@ -45,10 +45,10 @@ class testTimer(unittest.TestCase):
         #Test timer with immediate = True
         print()
         print("=====Testing RandomTimer with immediate = True======")
-        model2 = dp.Component("Timer Test Model-B")
+        model2 = dp.model.Component("Timer Test Model-B")
         dist2 = stats.poisson(150)
         model2.add_component("Timer",
-                   dp.RandomTimer("Timer-B", dist2, TimerCallback()))
+                   dp.model.RandomTimer("Timer-B", dist2, TimerCallback()))
         sim2 = dp.Simulation(model2)
         sim2.config.seed = 704
         results = sim2.irunf(1000)
@@ -61,11 +61,11 @@ class testTimer(unittest.TestCase):
         print()
         print("=====Testing Priority Attribute =======================")
         session = dp.Session.new()
-        model3 = dp.Component("Timer Test Model-C")
+        model3 = dp.model.Component("Timer Test Model-C")
  
         dist3 = drand.get_empirical_pmf([5, 10], [0.3, 0.7])
         model3.add_component("timer", 
-                   dp.RandomTimer("Timer-C", dist3, TimerCallback(),
+                   dp.model.RandomTimer("Timer-C", dist3, TimerCallback(),
                                 priority = dp.Priority.LATE))
         session.sim = sim3 = dp.Simulation(model3)
         session.config.seed = 731        

@@ -9,9 +9,9 @@ import types
 
 import scipy.stats as stats
 
-import despy.model as dp
+import despy as dp
 
-class SubClassModel(dp.Component):
+class SubClassModel(dp.model.Component):
     def initialize(self):
         pass
 
@@ -22,7 +22,7 @@ class testQueue(unittest.TestCase):
         print("=====Testing Plain Model=====")
         pm_name = "Plain Model"
         pm_description = "Verifying plain model attributes."
-        p_model = dp.Component(pm_name, description = pm_description)
+        p_model = dp.model.Component(pm_name, description = pm_description)
         self.assertEqual(p_model.name, pm_name)
         self.assertEqual(p_model.description, pm_description)
         self.assertIsInstance(p_model.initialize,
@@ -60,10 +60,10 @@ class testQueue(unittest.TestCase):
         sim.irunf(100).write_files()
         
         
-class QModel(dp.Component):
+class QModel(dp.model.Component):
     def __init__(self, name, description):
         super().__init__(name, description)
-        self.add_component("c_q", dp.Queue("Customer Queue"))
+        self.add_component("c_q", dp.model.Queue("Customer Queue"))
         self.add_component("service_process", CustServiceProcess())
         self.add_component("customer_process", CustArrProcess())
         
@@ -72,12 +72,12 @@ class QModel(dp.Component):
         self.service_process.start()
        
         
-class Customer(dp.Entity):
+class Customer(dp.model.Entity):
     def __init__(self):
         super().__init__("Customer")
       
         
-class CustArrProcess(dp.Process):
+class CustArrProcess(dp.model.Process):
     def __init__(self):
         super().__init__("Customer Generator", self.generator)
 
@@ -96,7 +96,7 @@ class CustArrProcess(dp.Process):
             self.owner.service_process.wake()
 
 
-class CustServiceProcess(dp.Process):
+class CustServiceProcess(dp.model.Process):
     def __init__(self):
         super().__init__("Customer Server", self.generator)
         

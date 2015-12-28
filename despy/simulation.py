@@ -26,6 +26,10 @@ despy.model.simulation
     method.
     
     Write test for resume_on_next_rep parameter.
+    
+    Change name of despy.stats.random to avoid clash with library module.
+    
+    Move statistic module to stats package?
 """
 
 from heapq import heappush, heappop

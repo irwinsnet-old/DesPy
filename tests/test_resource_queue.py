@@ -5,16 +5,16 @@ from collections import OrderedDict
 
 import scipy.stats as stats
 
-import despy.model as dp
+import despy as dp
 
 class testResource(unittest.TestCase):
     
     def test_resource_init(self):
         print()
         print("TEST RESOURCE INIT OUTPUT")
-        model = dp.Component("Resource Test #1")
+        model = dp.model.Component("Resource Test #1")
 
-        server = dp.Resource("Server", 2, stats.expon(scale=4))
+        server = dp.model.Resource("Server", 2, stats.expon(scale=4))
         model.add_component("server", server)
         session = dp.Session()
         session.model = model
@@ -22,7 +22,7 @@ class testResource(unittest.TestCase):
         self.assertEqual(server.name, "Server")
         ents = []
         for _ in range(3):
-            ents.append(dp.Entity("Entity"))
+            ents.append(dp.model.Entity("Entity"))
 
         #   Verify resource has two positions with keys 1 and 2, and that both
         # are empty (i.e., contain None object).
@@ -49,22 +49,22 @@ class testResource(unittest.TestCase):
         self.assertTrue(server[position].start_time is not None)
         self.assertTrue(server[1].entity is None)
          
-    class ResModel(dp.Component):
-        class Customer(dp.Entity):
+    class ResModel(dp.model.Component):
+        class Customer(dp.model.Entity):
             def __init__(self):
                 super().__init__("Customer")
              
         def setup(self):
             self.customer_process.start(0, dp.Priority.EARLY)
              
-        class CustServiceResource(dp.ResourceQueue):
+        class CustServiceResource(dp.model.ResourceQueue):
             def __init__(self, capacity):             
                 super().__init__("ServerQueue")
-                self.assign_resource(dp.Resource("Server",
+                self.assign_resource(dp.model.Resource("Server",
                                               capacity,
                                               stats.expon(scale=4)))                
          
-        class CustArrProcess(dp.Process):
+        class CustArrProcess(dp.model.Process):
             def __init__(self, server_resource):
                 super().__init__("Customer Generator", self.generator)
                 self.server_resource = server_resource

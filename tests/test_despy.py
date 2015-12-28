@@ -5,21 +5,18 @@ test_despy.py tests the methods in the despy.py module.
 """
 
 import unittest
+
 import scipy.stats as stats
 
-from despy.session import Session
-from despy.simulation import Simulation
-from despy.model.component import Component
-from despy.event import Event, Priority, Callback
-from despy.model.process import Process
+import despy as dp
 
 class testDespyb(unittest.TestCase):
        
     ### Simulation Class Tests
     def test_now(self):
         # Verify that Simulation.now is set to 0 by default.
-        Session.new()
-        exp1 = Simulation(Component("Test"))
+        dp.Session.new()
+        exp1 = dp.Simulation(dp.model.Component("Test"))
         cfg = exp1.config
          
         self.assertEqual(exp1.now, 0)
@@ -32,8 +29,8 @@ class testDespyb(unittest.TestCase):
         self.assertTrue(cfg.console_trace)
          
         # Verify that Simulation.now can be set by the class constructor.
-        Session.new()
-        exp2 = Simulation(Component("Test"))
+        dp.Session.new()
+        exp2 = dp.Simulation(dp.model.Component("Test"))
         exp2.config.initial_time = 42
         exp2.initialize()
         self.assertEqual(exp2.now, 42)
@@ -41,27 +38,28 @@ class testDespyb(unittest.TestCase):
     ### Model Class Tests
     def test_name(self):
         #Create model with default simulation.
-        Session.new()
-        session = Session()
-        testModel = Component("Test Model")
+        dp.Session.new()
+        session = dp.Session()
+        testModel = dp.model.Component("Test Model")
         session.model = testModel
-        session.sim = Simulation()
+        session.sim = dp.Simulation()
         self.assertEqual(testModel.name, "Test Model")
         self.assertIsNotNone(testModel.sim.model)
         self.assertEqual(testModel.sim.model.name, "Test Model")
           
         # Verify Exception if name is not a string.
-        self.assertRaises(TypeError, Component, 1)
-        self.assertRaises(TypeError, Component, None)
+        self.assertRaises(TypeError, dp.model.Component, 1)
+        self.assertRaises(TypeError, dp.model.Component, None)
           
         # Verify Exception if description is not a string.
-        self.assertRaises(TypeError, Component, ("Model Name", None, 365))
+        self.assertRaises(TypeError, dp.model.Component,
+                          ("Model Name", None, 365))
           
         #Check simulation.
-        session.model = Component("Test")
-        exp = Simulation()
+        session.model = dp.model.Component("Test")
+        exp = dp.Simulation()
         session.sim = exp
-        self.assertIsInstance(session.sim, Simulation)
+        self.assertIsInstance(session.sim, dp.Simulation)
           
         # Test description.
         modelDescription = \
@@ -71,41 +69,41 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(testModel.description, modelDescription)
           
         # Test component argument type checking.
-        self.assertRaises(TypeError, Event, (29, "Event Name"))
+        self.assertRaises(TypeError, dp.Event, (29, "Event Name"))
   
     ###Event Scheduling Tests
     def test_peek(self):
-        Session.new()
-        session = Session()
-        session.model = Component("Test Model #1")
-        sim = session.sim = Simulation()
+        dp.Session.new()
+        session = dp.Session()
+        session.model = dp.model.Component("Test Model #1")
+        sim = session.sim = dp.Simulation()
           
         self.assertEqual(sim.peek(), float('Infinity'))
           
-        sim.schedule(Event("Event #1"),
+        sim.schedule(dp.Event("Event #1"),
                        20,
-                       Priority.EARLY)
+                       dp.Priority.EARLY)
         self.assertEqual(sim.peek(), 20)
           
-        sim.schedule(Event("Event #2"), 5)
+        sim.schedule(dp.Event("Event #2"), 5)
         self.assertEqual(sim.peek(), 5)
           
     def test_step(self):
         #Create model and events.
-        Session.new()
-        session = Session()
-        model = Component("Test Model #2")
+        dp.Session.new()
+        session = dp.Session()
+        model = dp.model.Component("Test Model #2")
         session.model = model
-        session.sim = sim_ts = Simulation()
+        session.sim = sim_ts = dp.Simulation()
         sim_ts.initialize()
-        ev_early = Event("Early Event")
-        ev_standard = Event("Standard Event")
-        ev_late = Event("Late Event")
+        ev_early = dp.Event("Early Event")
+        ev_standard = dp.Event("Standard Event")
+        ev_late = dp.Event("Late Event")
           
         #Schedule Events
-        sim_ts.schedule(ev_late, 5, Priority.LATE)
-        model.sim.schedule(ev_early, 5, Priority.EARLY)
-        model.sim.schedule(ev_standard, 5, Priority.STANDARD)
+        sim_ts.schedule(ev_late, 5, dp.Priority.LATE)
+        model.sim.schedule(ev_early, 5, dp.Priority.EARLY)
+        model.sim.schedule(ev_standard, 5, dp.Priority.STANDARD)
           
         #Verify events run in correct order.
         print()
@@ -119,14 +117,14 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(exp.now, 5)
   
     def test_run(self):
-        Session.new()
-        session = Session()
-        model = Component("RunTest Model")
+        dp.Session.new()
+        session = dp.Session()
+        model = dp.model.Component("RunTest Model")
         session.model = model
-        session.sim = sim = Simulation()
-        model.sim.schedule(Event("First Event"), 0)
-        sim.schedule(Event("Second Event"), 4)
-        sim.schedule(Event("Third Event"), 8)
+        session.sim = sim = dp.Simulation()
+        model.sim.schedule(dp.Event("First Event"), 0)
+        sim.schedule(dp.Event("Second Event"), 4)
+        sim.schedule(dp.Event("Third Event"), 8)
         model.sim.initialize()
         model.sim.run()
         results = model.sim.finalize()
@@ -139,27 +137,27 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(evtTrace[2]['name'], "Third Event")
         self.assertEqual(evtTrace[2]['time'], 8)
           
-    class AppendCallbackModel(Component):
+    class AppendCallbackModel(dp.model.Component):
         def __init__(self, name):
             super().__init__(name)
-            self.evt1 = Event("First Event")
-            self.evt1.append_callback(Callback(self.evt1_callback))
+            self.evt1 = dp.Event("First Event")
+            self.evt1.append_callback(dp.Callback(self.evt1_callback))
           
         def setup(self):
             self.sim.schedule(self.evt1, 5)
               
         def evt1_callback(self):
-            evt2 = Event("Callback Event")
+            evt2 = dp.Event("Callback Event")
             self.sim.schedule(evt2, 10)
   
     def test_appendCallback(self):
-        Session.new()
-        session = Session()        
+        dp.Session.new()
+        session = dp.Session()        
         model = self.AppendCallbackModel("AppendCallback Model")
         session.model = model
  
         cfg = session.config
-        session.sim = sim_tc = Simulation()
+        session.sim = sim_tc = dp.Simulation()
         cfg.folder_basename = ("C:/Projects/despy_output/"
                                         "append_callback1")
         sim_tc.initialize()
@@ -192,15 +190,15 @@ class testDespyb(unittest.TestCase):
         results.write_files()
           
     def test_process(self):
-        session = Session.new()
-        model = Component("Process Model")
+        session = dp.Session.new()
+        model = dp.model.Component("Process Model")
           
         def generator(self):
             while True:
                 delay = round(stats.expon.rvs(scale = 3))
                 yield self.schedule_timeout("Repeated Event", delay)
           
-        process = Process("Test Process", generator)
+        process = dp.model.Process("Test Process", generator)
           
         #Invalid attributes raise ValueError
         self.assertRaises(ValueError, model.add_component,
@@ -211,7 +209,7 @@ class testDespyb(unittest.TestCase):
         model.add_component("Test_Process", process)
         self.assertEqual(len(model.components), 1)
         session.model = model
-        _ = Simulation()
+        _ = dp.Simulation()
         session.config.seed = 42
         process.start()
         model.sim.initialize()
@@ -219,27 +217,27 @@ class testDespyb(unittest.TestCase):
           
     def test_simultaneous_events(self):
         #Test simultaneous, different events.
-        Session.new()
-        model = Component("Simultaneous Events Model")
+        dp.Session.new()
+        model = dp.model.Component("Simultaneous Events Model")
           
         def setup(self):
-            self.sim.schedule(Event("Event #1"), 3)
-            self.sim.schedule(Event("Event #2"), 3)
+            self.sim.schedule(dp.Event("Event #1"), 3)
+            self.sim.schedule(dp.Event("Event #2"), 3)
         model.setup = setup
          
-        session = Session() 
+        session = dp.Session() 
         session.model = model
-        session.sim = sim = Simulation()
+        session.sim = sim = dp.Simulation()
         sim.initialize()        
         sim.run()
         results = sim.finalize()
         self.assertEqual(results.trace.length, 2)
           
         #Test simultaneous, identical events.
-        model2 = Component("Simultaneous Identical Events Model")
+        model2 = dp.model.Component("Simultaneous Identical Events Model")
         session.model = model2
-        sim = session.sim = Simulation()
-        event = Event("The Event")
+        sim = session.sim = dp.Simulation()
+        event = dp.Event("The Event")
         model2.sim.schedule(event, 1)
         sim.schedule(event, 1)
         sim.initialize()
@@ -247,17 +245,17 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(results.trace.length, 2)
          
     def test_trace_control(self):
-        Session.new()
-        model = Component("Trace Control")
-        session = Session()
+        dp.Session.new()
+        model = dp.model.Component("Trace Control")
+        session = dp.Session()
         session.model = model
-        session.sim = sim = Simulation()
-        event = Event("Trace Control Event")
+        session.sim = sim = dp.Simulation()
+        event = dp.Event("Trace Control Event")
          
         def event_callback(self):
             self.sim.schedule(self.owner, 10)
              
-        event.append_callback(Callback(event_callback))
+        event.append_callback(dp.Callback(event_callback))
         sim.schedule(event, 0)
          
         # Default settings limit trace to time < 500
@@ -283,12 +281,12 @@ class testDespyb(unittest.TestCase):
          
         # Default maximum trace length is 1000 lines.
         sim.reset()     
-        evt2 = Event("Trace Control Event Step=1")
+        evt2 = dp.Event("Trace Control Event Step=1")
           
         def event_callback2(self):
             self.sim.schedule(self.owner, 1)
           
-        evt2.append_callback(Callback(event_callback2))
+        evt2.append_callback(dp.Callback(event_callback2))
         model.sim.schedule(evt2, 0)
         session.config.trace_start = 0
         session.config.trace_stop = 1000
