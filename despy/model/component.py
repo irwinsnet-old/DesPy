@@ -213,7 +213,7 @@ class Component(object):
     def owner(self):
         """Link to the component's owner (i.e., parent in model tree structure).
         
-        *Type* :class:`despy.model.component.Component
+        *Type* :class:`despy.model.component.Component`
         """
         return self._owner
     

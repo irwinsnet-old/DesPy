@@ -109,7 +109,7 @@ class Simulation():
         add_message
         get_data
         
-    **Private Methods
+    **Private Methods**
     
     ..  autosummary::
 
@@ -128,7 +128,7 @@ class Simulation():
                 Optional. Assigns a model to the simulation. If omitted,
                 designer must assign the model using the 'Simulation.model'
                 property before initializing the simulation.
-            ``config:`` (:class:`despy.session.config)
+            ``config:`` (:class:`despy.session.config`)
                 Optional. Config object contains numerous simulation parameters.
                 If omitted, a config object is created automatically with
                 default settings. Configuration options can be set or read via
@@ -174,7 +174,7 @@ class Simulation():
 
     @property
     def config(self):
-        """The assigned :class:`despy.session.Config object.
+        """The assigned :class:`despy.session.Config` object.
         """
         return self._session.config
     
@@ -326,10 +326,10 @@ class Simulation():
         
         Called automatically by Simulation.run() method at the beginning of
         each replication.
-            * Clears the FEL
-            * Resets counters.
-            * Resets time to config.initial_time.
-            * Calls every model component's setup() method.
+        * Clears the FEL
+        * Resets counters.
+        * Resets time to config.initial_time.
+        * Calls every model component's setup() method.
         """
         if self.rep > 0:
             self._now = self._session.config.initial_time * 10
