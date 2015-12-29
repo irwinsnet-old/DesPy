@@ -53,7 +53,7 @@ class testQueue(unittest.TestCase):
         self.assertEqual(len(q_model.components), 3)
         print(q_model.components)
         
-        session = dp.Session()
+        session = dp.Session.new()
         session.model = q_model
         session.sim = sim = dp.Simulation()
         session.config.folder_basename = "C:/Projects/despy_output/queue_sim"
@@ -68,7 +68,7 @@ class QModel(dp.model.Component):
         self.add_component("customer_process", CustArrProcess())
         
     def initialize(self):
-        self.customer_process.start(0, dp.Priority.EARLY)
+        self.customer_process.start(0, dp.fel.Priority.EARLY)
         self.service_process.start()
        
         

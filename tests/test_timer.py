@@ -15,7 +15,7 @@ import despy.stats.random as drand
 import scipy.stats as stats
 
 
-class TimerCallback(dp.AbstractCallback):
+class TimerCallback(dp.fel.AbstractCallback):
     def call(self, **args):
         pass
 
@@ -66,7 +66,7 @@ class testTimer(unittest.TestCase):
         dist3 = drand.get_empirical_pmf([5, 10], [0.3, 0.7])
         model3.add_component("timer", 
                    dp.model.RandomTimer("Timer-C", dist3, TimerCallback(),
-                                priority = dp.Priority.LATE))
+                                priority = dp.fel.Priority.LATE))
         session.sim = sim3 = dp.Simulation(model3)
         session.config.seed = 731        
         results = sim3.irunf(100)

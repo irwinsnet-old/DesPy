@@ -17,13 +17,13 @@ class testQueue(unittest.TestCase):
         #  works.
         print()
         print("=====Negative Time Test=====")
-        session = dp.Session()
+        session = dp.Session.new()
         session.sim = sim = dp.Simulation()         
         session.model = model = dp.model.Component("Negative Time Model")
-        sim.schedule(dp.Event("Positive Time"),
-                       priority = dp.Priority.LATE)        
-        model.sim.schedule(dp.Event("Negative Time"),
-                       priority = dp.Priority.EARLY)
+        sim.schedule(dp.fel.Event("Positive Time"),
+                       priority = dp.fel.Priority.LATE)        
+        model.sim.schedule(dp.fel.Event("Negative Time"),
+                       priority = dp.fel.Priority.EARLY)
         self.assertEqual(sim.peek(False), -0.1)
 
         sim.irun()
@@ -43,7 +43,7 @@ class testQueue(unittest.TestCase):
         model = dp.model.Component("Q-test")
         qu = dp.model.Queue("TestQueue")
         model.add_component("q", qu)
-        session = dp.Session()
+        session = dp.Session.new()
         session.model = model
         session.sim = dp.Simulation()
         self.assertEqual(qu.name, "TestQueue")
@@ -73,16 +73,17 @@ class testQueue(unittest.TestCase):
     def test_queue_in_simulation(self):
         print()
         print("=====Test Queue In Simulation======")
+        session = dp.Session.new()        
         Customer.set_counter()
         model = QuModel("Queue Model")
-        session = dp.Session()
         session.model = model
         self.assertIsInstance(dp.Session().model, QuModel)
-        session.sim = sim = dp.Simulation()
+        sim = dp.Simulation()
         session.config.folder_basename = \
                 "C:/Projects/despy_output/queue_sim"
          
-        sim.irunf(100)
+        results = sim.irunf(100)
+        results.write_files()
         self.assertGreater(len(model.components), 0)
          
 class QuModel(dp.model.Component):
@@ -92,8 +93,8 @@ class QuModel(dp.model.Component):
         self.add_component("customer_process", CustArrProcess())
         self.add_component("service_process", CustServiceProcess())
          
-    def initialize(self):
-        self.customer_process.start(0, dp.Priority.EARLY)
+    def setup(self):
+        self.customer_process.start(0, dp.fel.Priority.EARLY)
         self.service_process.start()
  
 class Customer(dp.model.Entity):

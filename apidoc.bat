@@ -1,0 +1,1 @@
+sphinx-apidoc -F -f -d 3 -H Despy -A "Stacy Irwin" -V 0.9 -o api despy

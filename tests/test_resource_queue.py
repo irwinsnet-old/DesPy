@@ -55,7 +55,7 @@ class testResource(unittest.TestCase):
                 super().__init__("Customer")
              
         def setup(self):
-            self.customer_process.start(0, dp.Priority.EARLY)
+            self.customer_process.start(0, dp.fel.Priority.EARLY)
              
         class CustServiceResource(dp.model.ResourceQueue):
             def __init__(self, capacity):             

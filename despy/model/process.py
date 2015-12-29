@@ -32,7 +32,7 @@ from collections import namedtuple
 import types
 
 from despy.model.component import Component
-from despy.event import Event, Priority
+from despy.fel.event import Event, Priority
 
 class Process(Component):
     """Portion of a real-world system, including events and parameters.

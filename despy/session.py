@@ -13,6 +13,8 @@ despy.model.session
     Session   
 """
 
+from despy.model.abstract import AbstractModel
+
 class Session:
     class __Session:
         def __init__(self):
@@ -34,7 +36,12 @@ class Session:
         
         @model.setter
         def model(self, model):
-            self._model = model
+            if isinstance(model, AbstractModel):
+                self._model = model
+            else:
+                raise TypeError("Session.model must be set to "
+                    "instance of despy.model.abstract.AbstractModel. "
+                    "{} was provided instead.".format(type(model)))
             
         @property
         def config(self):

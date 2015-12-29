@@ -38,7 +38,7 @@ class RepModel(dp.model.Component):
         
         dp.model.Entity.set_counter()
                            
-    class CustomerArrivalCallback(dp.AbstractCallback):
+    class CustomerArrivalCallback(dp.fel.AbstractCallback):
         def call(self, **args):
             new_customer = dp.model.Entity("Customer")
             timer_evt = args["timer_evt"]
@@ -50,7 +50,7 @@ class RepModel(dp.model.Component):
 class Test(unittest.TestCase):
 
     def test_reps(self):
-        session = dp.Session()
+        session = dp.Session.new()
         session.model = RepModel()
         session.sim = sim = dp.Simulation()
         sim.config.reps = 2

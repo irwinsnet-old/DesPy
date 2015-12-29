@@ -42,7 +42,7 @@ import numpy as np
 from despy.session import Session
 from despy.output.results import Results
 from despy.output.report import Datatype
-from despy.event import Priority
+from despy.fel.event import Priority
 from despy.model.trigger import AbstractTrigger, TimeTrigger
 from despy.output.trace import Trace
 
@@ -322,8 +322,7 @@ class Simulation():
         np.random.seed(self._session.config.seed)
         random.seed(self._session.config.seed)
         self._now = self._session.config.initial_time * 10
-        for cpt in self.model:
-            cpt.dp_initialize()
+        self.model.dp_initialize()
     
     def _setup(self):
         """Resets simulation for the next rep and calls model setup() methods.

@@ -3,13 +3,13 @@
 #   Released under the MIT License (MIT)
 #   Copyright (c) 2015, Stacy Irwin
 """
-********************
+*********************
 despy.model.component
-********************
+*********************
 
 ..  autosummary::
 
-    Trigger
+    Component
     
 ..  todo
 
@@ -28,8 +28,9 @@ import types
 import re
 
 from despy.session import Session
+from despy.model.abstract import AbstractModel
 
-class Component(object):
+class Component(AbstractModel):
     """A base class that provides object counters and other attributes.
 
     Models consist of several components, such as queues, processes, and
@@ -327,7 +328,8 @@ class Component(object):
     def dp_initialize(self):
         """Internal despy method for initializing the model. Do not override.
         """
-        self._call_phase(self.initialize)
+        for cpt in self:
+            self._call_phase(cpt.initialize)
     
     def initialize(self):
         """Initialization code that will run once, prior to any replications.
