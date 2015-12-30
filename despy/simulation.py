@@ -322,7 +322,7 @@ class Simulation():
         np.random.seed(self._session.config.seed)
         random.seed(self._session.config.seed)
         self._now = self._session.config.initial_time * 10
-        self.model.dp_initialize()
+        self._session.model.dp_initialize()
     
     def _setup(self):
         """Resets simulation for the next rep and calls model setup() methods.
@@ -340,14 +340,12 @@ class Simulation():
             self._futureEventList = []
             self._counter = count()
         
-        for cpt in self.model:
-            cpt.dp_setup()
+        self._session.model.dp_setup()
     
     def _teardown(self):
         """Calls all Component.teardown() methods at the end of each rep.
         """
-        for cpt in self.model:
-            cpt.dp_teardown(self.now)
+        self._session.model.dp_teardown(self.now)
 
     def finalize(self):
         """Calls all Component.finalize() methods and returns a results object.
@@ -358,8 +356,7 @@ class Simulation():
         or the designer can call finalize implicitly by calling irunf() or
         runf().
         """
-        for cpt in self.model:
-            cpt.dp_finalize()
+        self._session.model.dp_finalize()
         self._results = Results(self, self._session.config)
         self._results._trace = self._trace
         return self._results

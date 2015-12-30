@@ -329,7 +329,7 @@ class Component(AbstractModel):
         """Internal despy method for initializing the model. Do not override.
         """
         for cpt in self:
-            self._call_phase(cpt.initialize)
+            cpt._call_phase(cpt.initialize)
     
     def initialize(self):
         """Initialization code that will run once, prior to any replications.
@@ -339,10 +339,10 @@ class Component(AbstractModel):
     def dp_setup(self):
         """Internal despy method that sets up each replication. Do not override.
         """
-        for _, statistic in self.statistics.items():
-            statistic.setup()
-            
-        self._call_phase(self.setup)
+        for cpt in self:
+            for _, stat in cpt.statistics.items():
+                stat.setup()
+            cpt._call_phase(cpt.setup)
             
     def setup(self):
         """Runs prior to every replication to set up initial conditions.
@@ -352,10 +352,10 @@ class Component(AbstractModel):
     def dp_teardown(self, time):
         """Internal despy method that runs after every rep. Do not override.
         """
-        for _, statistic in self.statistics.items():
-            statistic.teardown(time)
-            
-        self._call_phase(self.teardown)
+        for cpt in self:
+            for _, stat in cpt.statistics.items():
+                stat.teardown(time)
+            cpt._call_phase(cpt.teardown)
     
     def teardown(self):
         """Runs after every replication to clean up.
@@ -365,10 +365,10 @@ class Component(AbstractModel):
     def dp_finalize(self):
         """Internal depsy method for finalizing the model. Do not override.
         """
-        self._call_phase(self.finalize)
-            
-        for _, statistic in self.statistics.items():
-            statistic.finalize()
+        for cpt in self:
+            cpt._call_phase(cpt.finalize)
+            for _, stat in cpt.statistics.items():
+                stat.finalize()
         
     def finalize(self):
         """Runs once, after all reps are complete, to finalize component.
