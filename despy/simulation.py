@@ -60,7 +60,7 @@ class FutureEvent(namedtuple('FutureEventTuple',
     Every item on the FEL must be an instance of FutureEvent. A
     FutureEvent consists of the event, the scheduled time, and priority.
     
-    **Attributes**
+    **Properties**
     
       * :attr:`time`: The time that the event is scheduled for
         execution. Type: a non-negative integer.

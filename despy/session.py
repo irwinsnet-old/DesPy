@@ -10,12 +10,43 @@ despy.model.session
 
 ..  autosummary::
 
-    Session   
+    Session
+    Config
 """
 
 from despy.model.abstract import AbstractModel
 
 class Session:
+    """Singleton class connecting Simulation, Model, and Config objects.
+    
+    No matter how many times a user instantiates a Session object,
+    ``Session()`` will always return the same object. The Simulation
+    and Model objects access each other and the Config object via
+    Session properties.
+    
+    The designer can obtain a brand new Session object by calling the
+    static method, Session.new(). This is useful if the designer is
+    commencing a new simulation, ensuring that no old configuration or
+    session data is inadvertently brought forward into the new session.
+    
+    **Properties**
+    
+    ..  autosummary::
+    
+        __Session.sim
+        __Session.model
+        __Session.config
+        
+    **Methods**
+    
+    ..  autosummary::
+    
+        new
+        
+    **Raises**
+    * :class:`TypeError` if object other than AbstractModel is passed
+      to Session.model property.
+    """
     class __Session:
         def __init__(self):
             self._sim = None
@@ -24,6 +55,10 @@ class Session:
             
         @property
         def sim(self):
+            """Current assigned Simulation object.
+            
+            *Type:* :class:`despy.simulation.Simulation` object.
+            """
             return self._sim
         
         @sim.setter
@@ -32,6 +67,10 @@ class Session:
             
         @property
         def model(self):
+            """Currently assigned model (top-level component) object.
+            
+            *Type:* :class:`despy.model.abstract.AbstractModel`
+            """
             return self._model
         
         @model.setter
@@ -45,6 +84,10 @@ class Session:
             
         @property
         def config(self):
+            """Current configuration object.
+            
+            *Type:* :class:`despy.session.Config`
+            """
             return self._ouput_config
         
         @config.setter
@@ -54,17 +97,28 @@ class Session:
     _instance = None
     
     def __init__(self):
+        """Always returns the same Session instance.
+        
+        If the designer creates a new session by calling Session.new(),
+        subsequent calls to Session() will return the new session.
+        """
         if Session._instance is None:          
             Session._instance = Session.__Session()
     
     def __getattr__(self, name):
+        """Allows easy retrieval of Session._instance properties.
+        """
         return getattr(self._instance, name)
     
     def __setattr__(self, name, value):
+        """Allows easy setting of Session._instance properties.
+        """
         setattr(self._instance, name, value)
     
     @staticmethod    
     def new():
+        """Creates and returns a new Session instance.
+        """
         Session._instance = Session.__Session()
         return Session()
         

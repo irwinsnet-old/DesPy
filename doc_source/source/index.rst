@@ -52,6 +52,7 @@ Contents:
 
    simulation
    model/component
+   session
 	
    
    
