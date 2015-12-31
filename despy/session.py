@@ -33,68 +33,20 @@ class Session:
     
     ..  autosummary::
     
-        __Session.sim
-        __Session.model
-        __Session.config
+        sim
+        model
+        config
         
     **Methods**
     
-    ..  autosummary::
+    ..  autosummary
     
         new
         
     **Raises**
     * :class:`TypeError` if object other than AbstractModel is passed
-      to Session.model property.
+    to Session.model property.
     """
-    class __Session:
-        def __init__(self):
-            self._sim = None
-            self._model = None
-            self._ouput_config = Config()
-            
-        @property
-        def sim(self):
-            """Current assigned Simulation object.
-            
-            *Type:* :class:`despy.simulation.Simulation` object.
-            """
-            return self._sim
-        
-        @sim.setter
-        def sim(self, sim):
-            self._sim = sim
-            
-        @property
-        def model(self):
-            """Currently assigned model (top-level component) object.
-            
-            *Type:* :class:`despy.model.abstract.AbstractModel`
-            """
-            return self._model
-        
-        @model.setter
-        def model(self, model):
-            if isinstance(model, AbstractModel):
-                self._model = model
-            else:
-                raise TypeError("Session.model must be set to "
-                    "instance of despy.model.abstract.AbstractModel. "
-                    "{} was provided instead.".format(type(model)))
-            
-        @property
-        def config(self):
-            """Current configuration object.
-            
-            *Type:* :class:`despy.session.Config`
-            """
-            return self._ouput_config
-        
-        @config.setter
-        def config(self, config):
-            self._output_config = config
-    
-    _instance = None
     
     def __init__(self):
         """Always returns the same Session instance.
@@ -105,42 +57,81 @@ class Session:
         if Session._instance is None:          
             Session._instance = Session.__Session()
     
-    def __getattr__(self, name):
-        """Allows easy retrieval of Session._instance properties.
-        """
-        return getattr(self._instance, name)
+    #Static Session instance.
+    _instance = None
     
-    def __setattr__(self, name, value):
-        """Allows easy setting of Session._instance properties.
+    @property
+    def sim(self):
+        """Current assigned Simulation object.
+        
+        *Type:* :class:`despy.simulation.Simulation` object.
         """
-        setattr(self._instance, name, value)
+        return self._instance._sim
     
+    @sim.setter
+    def sim(self, sim):
+        self._instance._sim = sim
+        
+    @property
+    def model(self):
+        """Currently assigned model (top-level component) object.
+        
+        *Type:* :class:`despy.model.abstract.AbstractModel`
+        """
+        return self._instance._model
+    
+    @model.setter
+    def model(self, model):
+        if isinstance(model, AbstractModel):
+            self._instance._model = model
+        else:
+            raise TypeError("Session.model must be set to "
+                "instance of despy.model.abstract.AbstractModel. "
+                "{} was provided instead.".format(type(model)))
+
+    @property
+    def config(self):
+        """Current configuration object.
+        
+        *Type:* :class:`despy.session.Config`
+        """
+        return self._instance._ouput_config
+    
+    @config.setter
+    def config(self, config):
+        self._instance._output_config = config
+            
     @staticmethod    
     def new():
         """Creates and returns a new Session instance.
         """
         Session._instance = Session.__Session()
         return Session()
-        
+    
+    class __Session:
+        def __init__(self):
+            self._sim = None
+            self._model = None
+            self._ouput_config = Config()
+            
         
 class Config(object):
     """Generates the simulation's output reports and graphs.
     
     **Members**
     
-    ..  autosummary
+    ..  autosummary::
     
+        trace_start
+        trace_stop
+        trace_max_length
         console_trace
         folder_basename
-        sim
-        set_full_path
-            
-    **Python Library Dependencies**
-        * :mod:`os`
-    
+        reps
+        initial_time
+        seed    
     """
     
-            
     def __init__(self):
         """Construct a Config object.
         
@@ -165,9 +156,7 @@ class Config(object):
 
     @property
     def trace_start(self):
-        """Trace will start recording events at this simulation time.
-        
-        Defaults to simulation time 0.
+        """Trace starts recording at this simulation time. Default = 0.
         
         *Type:* Integer
         """
@@ -179,10 +168,9 @@ class Config(object):
     
     @property
     def trace_max_length(self):
-        """Maximum number of TraceRecords in Trace object.
+        """Max number of TraceRecords in Trace object. Default = 1000.
         
-        Defaults to 500. The Trace object will stop recording once it
-        reaches 500 TraceRecords.
+        *Type:* Integer
         """
         return self._trace_max_length
     
@@ -192,7 +180,7 @@ class Config(object):
     
     @property
     def trace_stop(self):
-        """Trace will stop recording events at this simulation time.
+        """Trace stops recording at this simulation time. Default = 500.
         
         *Type:* Integer
         """
@@ -208,10 +196,9 @@ class Config(object):
 
     @property
     def console_trace(self):
-        """If True, send Trace object data to standard console output.
+        """If True, send Trace data to console output. Default = True.
         
         *Type:* Boolean
-        *Default Value:* True
         """
         return self._console_trace
 
@@ -243,6 +230,10 @@ class Config(object):
         
     @property
     def reps(self):
+        """Number of replications in simulation. Default = 1.
+        
+        *Type:* Integer
+        """
         return self._reps
     
     @reps.setter
@@ -251,6 +242,10 @@ class Config(object):
         
     @property
     def initial_time(self):
+        """Earliest time in simulation. Default = 0.
+        
+        *Type:* Integer
+        """
         return self._initial_time
     
     @initial_time.setter
@@ -269,7 +264,6 @@ class Config(object):
         purposes, it's often useful to repeatedly run the simulation
         with the same sequence of random numbers. This can be
         accomplished by setting the seed variable.
-        
     
         Designers should use this seed property when seeding the random
         number generators. While despy will use the numpy random number

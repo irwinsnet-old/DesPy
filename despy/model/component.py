@@ -63,7 +63,7 @@ class Component(AbstractModel):
         
     **Public Methods**
     
-    ..  autosummary
+    ..  autosummary::
     
         add_component
         set_counter
@@ -75,14 +75,14 @@ class Component(AbstractModel):
         
     **Magic Methods**
     
-    ..  autosummary
+    ..  autosummary::
     
         __iter__
         __str__
         
     **Private and Internal Methods**
     
-    ..  autosummary
+    ..  autosummary::
     
         _get_next_number
         _call_phase

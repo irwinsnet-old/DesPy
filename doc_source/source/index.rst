@@ -53,6 +53,7 @@ Contents:
    simulation
    model/component
    session
+   config
 	
    
    

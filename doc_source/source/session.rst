@@ -13,18 +13,12 @@ Class Description
 **********
 Properties
 **********
-..  autoattribute:: Session.__Session.sim
-..  autoattribute:: Session.__Session.model
-..  autoattribute:: Session.__Session.config
+..  autoattribute:: Session.sim
+..  autoattribute:: Session.model
+..  autoattribute:: Session.config
 
 **************
 Public Methods
 **************
 ..  automethod:: Session.__init__
 ..  automethod:: Session.new
-
-***************
-Private Methods
-***************
-..  automethod:: Session.__getattr__
-..  automethod:: Session.__hasattr__
