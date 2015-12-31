@@ -30,6 +30,20 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 
+class Histo():
+    def __init__(self, data):
+        self._data = data        
+        self._figure = plt.figure()
+        self._ax = self._figure.add_subplot(111)
+        
+    @property
+    def figure(self):
+        return self._figure
+    
+    @property
+    def data(self):
+        return self._data
+
 def Histogram(data, folder, filename, title = None, x_label = None,
               y_label = None, bins = None):
     """Create a histogram and save it to the output folder.
