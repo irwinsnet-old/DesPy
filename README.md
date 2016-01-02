@@ -1,14 +1,14 @@
 # DESPY
 ## Discrete Event Simulation in Python
 
-Despy is hobby a project. I'm not a computer programmer. My goals with
-this project are to improve my programming skills, learn about discrete
-event simulation, and give myself something to do on Sunday mornings
-besides read the comics. If someday this turns into a functional
-framework for discrete event simulation, that's just icing.
+Full disclosure: I'm not a computer programmer. Despy is a hobby
+project.My goals with this project are to improve my programming skills,
+learn about discrete event simulation, and give myself something to do
+on Sunday mornings besides read the comics. If someday this turns into
+a functional framework for discrete event simulation, that's just icing.
 
 Despy is a discrete event simulation framework that is written in
-Python 3.4 and is heavily influenced by
+Python 3.5 and is heavily influenced by
 `DESMO-J <http://desmoj.sourceforge.net/>`_ and
 `SimPy <https://simpy.readthedocs.org/en/latest/>`_.  Eventually, Despy
 will support working through the examples in the *Discrete Event

@@ -1,21 +1,39 @@
-Despy
-=====
+#######################################################
+Despy - A Discrete Event Simulation Framework in Python
+#######################################################
 
-**A Discrete Event Simulation Framework for Python**
+Full disclosure: I'm not a computer programmer. Despy is a hobby
+project. My goals with this project are to improve my programming skills,
+learn about discrete event simulation, and give myself something to do
+on Sunday mornings besides read the comics. If someday this turns into
+a functional framework for discrete event simulation, that's just icing.
 
-Despy is a discrete event simulation framework that is written in Python 3.4
+*********
+Resources
+*********
+
+Here are some resources for learning more about this framework:
+* :ref:`tutorial-toc`
+* :ref:`reference-toc`
+
+**********
+Background
+**********
+
+Despy is a discrete event simulation framework that is written in Python 3.5
 and is heavily influenced by `DESMO-J <http://desmoj.sourceforge.net/>`_ and
 `SimPy <https://simpy.readthedocs.org/en/latest/>`_. I wrote Despy primarily to
 teach myself Python and to work through examples in the *Discrete Event
 Simulation* text by Banks, Carson, Nelson, and Nicol.
 
-I am concerned that as a scripted language, Python may be slow for complex
-simulations, but so far I haven't had any speed issues. Furthermore, for a
-hobby project like Despy, the benefits of the math, statistics, and plotting
-packages that are available for Python outweigh my speed concerns. If I run
-into problems in the future with more complex simulations, I'll reprogram parts
-of the framework in C++.
-
+I am concerned that as a scripted language, Python may be slow for
+complex simulations, but so far I haven't had any speed issues.
+Furthermore, for a hobby project like Despy, the benefits of the math,
+statistics, and plotting packages that are available for Python
+outweigh my speed concerns. If I run into problems in the future with
+more complex simulations, then I'll have a follow-on hobby project:
+teaching myself how to reprogram parts of the framework in C++.
+ 
 My goals for despy are to:
 
 * Support both event and process world views.
@@ -28,34 +46,17 @@ My goals for despy are to:
   mainstream packages that are available in the `Anaconda Python stack
   <https://store.continuum.io/cshop/anaconda/>`_. Despy relies heavily on
   `Numpy <http://www.numpy.org/>`_ and `Matplotlib <http://matplotlib.org/>`_.
-  
-Despy design principles:
-
-* Clarity over convenience: While convenience is important, it's not
-  worth breaking encapsulation of components and overly complicating
-  the simulation. For example, I'll try to use sensible defaults for
-  method parameters so no complicated multi-line statements are
-  necessary to complete simple tasks. But overall, Despy should only
-  do what the designer tells it to do, when the designer says to do it.
+* Eventually I would like to use Jinja or another template framework
+  to give simulation designers the ability to generate custom reports.
+  I also intend to set up the framework to allow Despy simulations to
+  run within iPython. It will take a while (I have a day job) -- check
+  back next year.
   
   
 Despy is released under the
 `MIT License <http://opensource.org/licenses/MIT>`_.
 
-Copyright (c) 2015 Stacy Irwin
-
-
-Contents:
-
-.. toctree::
-   :maxdepth: 2
-
-   simulation
-   model/component
-   session
-   config
-	
-   
+Copyright (c) 2015 Stacy Irwin  
    
 **Conventions**
 # Methods and attributes that begin with an underscore (_) are internal
@@ -65,9 +66,16 @@ included documentation for internal methods for developers who are
 extending or revising this framework, and to help users understand
 how Despy works.
 
-Indices and tables
-==================
+*****************
+Table of Contents
+*****************
+.. toctree::
+   :maxdepth: 1
 
+   toc
+
+Links
+=====
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
