@@ -500,7 +500,7 @@ class ResourceFinishServiceEvent(Event):
             ``service_time`` (Integer)
                 The time required to complete the service.
         """
-        super().__init__("Finished Service")
+        super().__init__("Finished_Service")
         
         self._resource = resource
         self._station_index = station_index

@@ -127,27 +127,31 @@ class Component(AbstractModel):
 
     @property
     def name(self):
-        """The name of the object.
+        """The name of the object. Must be valid Python identifier.
         
-        A short phrase, such as "Customer" or "Server Queue" that
+        A short phrase, such as "Customer" or "Server_Queue" that
         identifies the object.
         
         *Type:* String
         
         *Raises:*
             ``TypeError`` if set to a non-string.
+            ``ValueError`` if string is not a valid Python identifier.
         
         """
         return self._name
     
     @name.setter
     def name(self, name):
-        if isinstance(name, str):
-            self._name = name
+        if not isinstance(name, str):
+            raise TypeError("{} passed to name property. Component.name "
+                            "requires a string that is a valid Python "
+                            "identifier.".format(name.__class__))
+        if not name.isidentifier():
+            raise ValueError("'{}' passed to Component.name property is not "
+                             "a valid Python identifier.".format(name))
         else:
-            message = "{0} passed to name".format(name.__class__) + \
-                    " argument. Should be a string."
-            raise TypeError(message)    
+            self._name = name
     
     @property
     def slug(self):

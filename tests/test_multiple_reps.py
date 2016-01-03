@@ -9,7 +9,7 @@ import despy as dp
 
 class RepModel(dp.model.Component):
     def __init__(self):
-        super().__init__("Multiple Rep Test")
+        super().__init__("Multiple_Rep_Test")
         
         # Customer Arrival Timer
         arrival_dist = dp.stats_random.get_empirical_pmf([1, 2, 3, 4],
@@ -17,7 +17,7 @@ class RepModel(dp.model.Component):
                                     "Customer Arrival Distribution")
 
         self.add_component("arr_timer", 
-                    dp.model.RandomTimer("Arrival Timer",
+                    dp.model.RandomTimer("Arrival_Timer",
                     arrival_dist,
                     RepModel.CustomerArrivalCallback(rep_model = self),
                     True,
@@ -32,7 +32,7 @@ class RepModel(dp.model.Component):
                                            "Baker Service Distribution")
         
         self.add_component("res_q",
-                           dp.model.ResourceQueue("Customer Servers"))
+                           dp.model.ResourceQueue("Customer_Servers"))
         self.res_q.assign_resource(dp.model.Resource("Abel", 1, abel_dist))
         self.res_q.assign_resource(dp.model.Resource("Baker", 1, baker_dist))
         

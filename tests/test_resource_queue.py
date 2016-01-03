@@ -12,7 +12,7 @@ class testResource(unittest.TestCase):
     def test_resource_init(self):
         print()
         print("TEST RESOURCE INIT OUTPUT")
-        model = dp.model.Component("Resource Test #1")
+        model = dp.model.Component("Resource_Test_1")
 
         server = dp.model.Resource("Server", 2, stats.expon(scale=4))
         model.add_component("server", server)
@@ -66,7 +66,7 @@ class testResource(unittest.TestCase):
          
         class CustArrProcess(dp.model.Process):
             def __init__(self, server_resource):
-                super().__init__("Customer Generator", self.generator)
+                super().__init__("Customer_Generator", self.generator)
                 self.server_resource = server_resource
              
             def generator(self):
@@ -74,7 +74,7 @@ class testResource(unittest.TestCase):
                 args1 = OrderedDict()
                 args1["Interarrival_Time"] = None
                 args1["Customer"] = customer
-                yield self.schedule_timeout("Customer Arrives", 0,
+                yield self.schedule_timeout("Customer_Arrives", 0,
                                             trace_fields = args1)
 
                 while True:
@@ -84,7 +84,7 @@ class testResource(unittest.TestCase):
                     args2 = OrderedDict()
                     args2["Interarrival_Time"] = delay                    
                     args2["Customer"] = customer
-                    yield self.schedule_timeout("Customer Arrives",
+                    yield self.schedule_timeout("Customer_Arrives",
                                                 delay,
                                                 trace_fields = args2)
                      
@@ -99,7 +99,7 @@ class testResource(unittest.TestCase):
         print()
         print("TEST RESOURCE IN SIMULATION OUTPUT")
         self.ResModel.Customer.set_counter()
-        model = self.ResModel("Resource Model")
+        model = self.ResModel("Resource_Model")
         session = dp.Session()
         session.model = model
         session.sim = simulation = dp.Simulation()

@@ -20,7 +20,7 @@ class testQueue(unittest.TestCase):
     def test_simple_model_subclass(self):
         print()
         print("=====Testing Plain Model=====")
-        pm_name = "Plain Model"
+        pm_name = "Plain_Model"
         pm_description = "Verifying plain model attributes."
         p_model = dp.model.Component(pm_name, description = pm_description)
         self.assertEqual(p_model.name, pm_name)
@@ -32,7 +32,7 @@ class testQueue(unittest.TestCase):
         
         print()
         print("=====Testing Subclassed Model=====")
-        scm_name = "Subclassed Model"
+        scm_name = "Subclassed_Model"
         scm_description = "Verifying subclassed model attributes."
         sc_model = SubClassModel(scm_name,
                                           description = scm_description)
@@ -44,7 +44,7 @@ class testQueue(unittest.TestCase):
 
         print()
         print("=====Testing Queue Model=====")
-        q_name = "Queued Model"
+        q_name = "Queued_Model"
         q_description = "Verifying Complex Queued Model attributes"
         q_model = QModel(q_name, q_description)
         self.assertEqual(q_model.name, q_name)
@@ -63,7 +63,7 @@ class testQueue(unittest.TestCase):
 class QModel(dp.model.Component):
     def __init__(self, name, description):
         super().__init__(name, description)
-        self.add_component("c_q", dp.model.Queue("Customer Queue"))
+        self.add_component("c_q", dp.model.Queue("Customer_Queue"))
         self.add_component("service_process", CustServiceProcess())
         self.add_component("customer_process", CustArrProcess())
         
@@ -79,18 +79,18 @@ class Customer(dp.model.Entity):
         
 class CustArrProcess(dp.model.Process):
     def __init__(self):
-        super().__init__("Customer Generator", self.generator)
+        super().__init__("Customer_Generator", self.generator)
 
     def generator(self):
         first_customer = Customer()
         self.owner.c_q.add(first_customer)                
         yield self.schedule_timeout(\
-                "Customer #{0} arrives.".format(first_customer.number))
+                "Customer_{0}__arrives".format(first_customer.number))
         while True:
             delay = round(stats.expon.rvs(scale = 3))
             customer = Customer()                    
             yield self.schedule_timeout(\
-                    "Customer #{0} arrives.".format(customer.number),
+                    "Customer_{0}__arrives".format(customer.number),
                     delay)
             self.owner.c_q.add(customer)
             self.owner.service_process.wake()
@@ -98,7 +98,7 @@ class CustArrProcess(dp.model.Process):
 
 class CustServiceProcess(dp.model.Process):
     def __init__(self):
-        super().__init__("Customer Server", self.generator)
+        super().__init__("Customer_Server", self.generator)
         
     def generator(self):
         while True:
@@ -106,8 +106,8 @@ class CustServiceProcess(dp.model.Process):
                 customer = self.owner.c_q.remove()
                 delay = round(stats.expon.rvs(scale = 4))
                 yield self.schedule_timeout(\
-                        "Finished serving customer #{0}, "
-                        "Service time: {1}".format(customer.number,
+                        "Finished_serving_customer_{0}__"
+                        "Service_time_is{1}".format(customer.number,
                                                    delay),
                         delay)
             else:

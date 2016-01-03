@@ -141,7 +141,7 @@ class Process(Component):
                 Priority.STANDARD.
         """
         self.sim.schedule(ProcessTimeOutEvent(self,
-                            "Start " + self.name), delay, priority)
+                            "Start_" + self.name), delay, priority)
         self._awake = True
 
     def call(self):
@@ -200,7 +200,7 @@ class Process(Component):
         """
         if not self.awake:
             self.sim.schedule(ProcessTimeOutEvent(self,
-                                "Wake " + self.name), delay, priority)
+                                "Wake_" + self.name), delay, priority)
             self._awake = True
 
     def reset_process(self):

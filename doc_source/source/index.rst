@@ -13,8 +13,8 @@ Resources
 *********
 
 Here are some resources for learning more about this framework:
-* :ref:`tutorial-toc`
-* :ref:`reference-toc`
+  * :ref:`tutorial-toc`
+  * :ref:`reference-toc`
 
 **********
 Background
