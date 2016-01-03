@@ -19,6 +19,8 @@ despy.model.event
     Add remove_trace_field method.
     
     Consider getting rid of trace_record history.
+    
+    Use custom event CB object that receives event class as argument.
 """
 
 import types

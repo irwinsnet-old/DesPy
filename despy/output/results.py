@@ -15,15 +15,28 @@ despy.output.results
 
 """
 import os
+from collections import OrderedDict
 
 
 class Results(object):
     def __init__(self, sim, config):
-        self._sim = sim
-        self._cfg = config
+        self._simulation = sim
+        self._sim = OrderedDict()
+        self._sim["run_start_time"] = sim.run_start_time
+        self.sim["run_stop_time"] = sim.run_stop_time
+        self.sim["elapsed_time"] = sim.run_stop_time - sim.run_start_time
+        self._config = config
         self._mod = sim.model
         self._report = None
-        self._trace = None     
+        self._trace = sim._trace
+        
+    @property
+    def config(self):
+        return self._config
+    
+    @property
+    def sim(self):
+        return self._sim
     
     @property
     def trace(self):
@@ -43,7 +56,7 @@ class Results(object):
         self._report = HtmlReport()
         
         # Take no action if no output folder specified.
-        if self._cfg.folder_basename is None:
+        if self._config.folder_basename is None:
             return None
         
         # Finalize model and components.
@@ -53,7 +66,7 @@ class Results(object):
         self._trace.write_csv(self._full_path)
         
         #Get data for all components and create HTML report.
-        self.report.append_output(self._sim.get_data())
+        self.report.append_output(self._simulation.get_data())
             
         for _, component in self._mod.components.items():
             output = component.get_data(self._full_path)
@@ -68,8 +81,8 @@ class Results(object):
         The time-stamp is the stop time for the simulation.
         """
         timestamp = \
-                self._sim.run_stop_time.strftime('_%y_%j_%H_%M_%S')
-        self._full_path = self._cfg.folder_basename + '/Run' + timestamp
+                self._sim["run_stop_time"].strftime('_%y_%j_%H_%M_%S')
+        self._full_path = self._config.folder_basename + '/Run' + timestamp
                 
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path) 

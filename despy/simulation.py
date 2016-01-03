@@ -357,9 +357,7 @@ class Simulation():
         runf().
         """
         self._session.model.dp_finalize()
-        self._results = Results(self, self._session.config)
-        self._results._trace = self._trace
-        return self._results
+        return Results(self, self._session.config)
 
     def peek(self, prioritized=True):
         """Return the time of the next scheduled event.
