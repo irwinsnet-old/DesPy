@@ -250,14 +250,8 @@ class Component(AbstractModel):
         """ Assign a component to the model.
         
         *Arguments*
-            ``key`` (String)
-                The dictionary key that will be used to retrieve the
-                component.
             ``item`` (:class:`despy.model.component.Component`)
                 An instance of ``Component`` or one of it's sub-classes.
-                
-        *Raises:* ValueError if key already exists in self.components dictionary
-        or if key is not a valid Python dictionary key.
         """
         if not hasattr(self, item.name):
             self._components[item.name] = item
