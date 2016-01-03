@@ -14,12 +14,12 @@ class testResource(unittest.TestCase):
         print("TEST RESOURCE INIT OUTPUT")
         model = dp.model.Component("Resource_Test_1")
 
-        server = dp.model.Resource("Server", 2, stats.expon(scale=4))
-        model.add_component("server", server)
+        server = dp.model.Resource("server", 2, stats.expon(scale=4))
+        model.add_component(server)
         session = dp.Session()
         session.model = model
         self.assertEqual(len(model.components), 1)
-        self.assertEqual(server.name, "Server")
+        self.assertEqual(server.name, "server")
         ents = []
         for _ in range(3):
             ents.append(dp.model.Entity("Entity"))
@@ -59,14 +59,14 @@ class testResource(unittest.TestCase):
              
         class CustServiceResource(dp.model.ResourceQueue):
             def __init__(self, capacity):             
-                super().__init__("ServerQueue")
+                super().__init__("server_resource")
                 self.assign_resource(dp.model.Resource("Server",
                                               capacity,
                                               stats.expon(scale=4)))                
          
         class CustArrProcess(dp.model.Process):
             def __init__(self, server_resource):
-                super().__init__("Customer_Generator", self.generator)
+                super().__init__("customer_process", self.generator)
                 self.server_resource = server_resource
              
             def generator(self):
@@ -90,10 +90,8 @@ class testResource(unittest.TestCase):
                      
         def __init__(self, name):
             super().__init__(name)
-            self.add_component("server_resource",
-                               self.CustServiceResource(2))
-            self.add_component("customer_process", 
-                            self.CustArrProcess(self.server_resource))
+            self.add_component(self.CustServiceResource(2))
+            self.add_component(self.CustArrProcess(self.server_resource))
      
     def test_resource_in_simulation(self):
         print()

@@ -246,7 +246,7 @@ class Component(AbstractModel):
         """
         return self._components
     
-    def add_component(self, key, item):
+    def add_component(self, item):
         """ Assign a component to the model.
         
         *Arguments*
@@ -259,10 +259,10 @@ class Component(AbstractModel):
         *Raises:* ValueError if key already exists in self.components dictionary
         or if key is not a valid Python dictionary key.
         """
-        if key.isidentifier() and (not hasattr(self, key)):
-            self._components[key] = item
+        if not hasattr(self, item.name):
+            self._components[item.name] = item
             item.owner = self
-            setattr(self, key, item)
+            setattr(self, item.name, item)
         else:
             raise ValueError("Invalid key. Key must be a valid "
                              "Python identifier and cannot be the "

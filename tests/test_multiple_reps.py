@@ -16,8 +16,8 @@ class RepModel(dp.model.Component):
                                     [0.25, 0.4, 0.2, 0.15],
                                     "Customer Arrival Distribution")
 
-        self.add_component("arr_timer", 
-                    dp.model.RandomTimer("Arrival_Timer",
+        self.add_component(
+                    dp.model.RandomTimer("arr_timer",
                     arrival_dist,
                     RepModel.CustomerArrivalCallback(rep_model = self),
                     True,
@@ -31,8 +31,7 @@ class RepModel(dp.model.Component):
                                            [0.35 ,0.25, 0.2, 0.2],
                                            "Baker Service Distribution")
         
-        self.add_component("res_q",
-                           dp.model.ResourceQueue("Customer_Servers"))
+        self.add_component(dp.model.ResourceQueue("res_q"))
         self.res_q.assign_resource(dp.model.Resource("Abel", 1, abel_dist))
         self.res_q.assign_resource(dp.model.Resource("Baker", 1, baker_dist))
         

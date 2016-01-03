@@ -41,12 +41,12 @@ class testQueue(unittest.TestCase):
         print()
         print("=====Test Queue=====")
         model = dp.model.Component("Q_test")
-        qu = dp.model.Queue("TestQueue")
-        model.add_component("q", qu)
+        qu = dp.model.Queue("test_q")
+        model.add_component(qu)
         session = dp.Session.new()
         session.model = model
         session.sim = dp.Simulation()
-        self.assertEqual(qu.name, "TestQueue")
+        self.assertEqual(qu.name, "test_q")
         customers = []
         dp.model.Entity.set_counter()
         for i in range(5):
@@ -89,9 +89,9 @@ class testQueue(unittest.TestCase):
 class QuModel(dp.model.Component):
     def __init__(self, name):
         super().__init__(name, "Queue_Model Test")
-        self.add_component("c_qu", dp.model.Queue("Customer_Queue"))
-        self.add_component("customer_process", CustArrProcess())
-        self.add_component("service_process", CustServiceProcess())
+        self.add_component(dp.model.Queue("c_qu"))
+        self.add_component(CustArrProcess())
+        self.add_component(CustServiceProcess())
          
     def setup(self):
         self.customer_process.start(0, dp.fel.Priority.EARLY)
@@ -103,7 +103,7 @@ class Customer(dp.model.Entity):
          
 class CustArrProcess(dp.model.Process):
     def __init__(self):
-        super().__init__("Customer_Generator", self.generator)
+        super().__init__("customer_process", self.generator)
  
     def generator(self):
         first_customer = Customer()
@@ -121,7 +121,7 @@ class CustArrProcess(dp.model.Process):
  
 class CustServiceProcess(dp.model.Process):
     def __init__(self):
-        super().__init__("Customer_Server", self.generator)
+        super().__init__("service_process", self.generator)
          
     def generator(self):
         while True:

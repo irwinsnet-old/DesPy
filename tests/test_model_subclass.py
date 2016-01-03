@@ -63,9 +63,9 @@ class testQueue(unittest.TestCase):
 class QModel(dp.model.Component):
     def __init__(self, name, description):
         super().__init__(name, description)
-        self.add_component("c_q", dp.model.Queue("Customer_Queue"))
-        self.add_component("service_process", CustServiceProcess())
-        self.add_component("customer_process", CustArrProcess())
+        self.add_component(dp.model.Queue("c_q"))
+        self.add_component(CustServiceProcess())
+        self.add_component(CustArrProcess())
         
     def initialize(self):
         self.customer_process.start(0, dp.fel.Priority.EARLY)
@@ -79,7 +79,7 @@ class Customer(dp.model.Entity):
         
 class CustArrProcess(dp.model.Process):
     def __init__(self):
-        super().__init__("Customer_Generator", self.generator)
+        super().__init__("customer_process", self.generator)
 
     def generator(self):
         first_customer = Customer()
@@ -98,7 +98,7 @@ class CustArrProcess(dp.model.Process):
 
 class CustServiceProcess(dp.model.Process):
     def __init__(self):
-        super().__init__("Customer_Server", self.generator)
+        super().__init__("service_process", self.generator)
         
     def generator(self):
         while True:

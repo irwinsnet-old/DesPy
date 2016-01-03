@@ -401,7 +401,7 @@ class ResourceQueue(Queue):
         """
         index = self.num_resources
         self[index] = resource
-        self.add_component("Res_{}".format(index), resource)
+        self.add_component(resource)
         resource._res_queue = self
     
     def get_available_resource(self, random = False):

@@ -199,14 +199,8 @@ class testDespyb(unittest.TestCase):
                 yield self.schedule_timeout("Repeated_Event", delay)
           
         process = dp.model.Process("Test_Process", generator)
-          
-        #Invalid attributes raise ValueError
-        self.assertRaises(ValueError, model.add_component,
-                          "Test Process", process)
-        self.assertRaises(ValueError, model.add_component,
-                          "sim", process)
-          
-        model.add_component("Test_Process", process)
+                   
+        model.add_component(process)
         self.assertEqual(len(model.components), 1)
         session.model = model
         _ = dp.Simulation()
