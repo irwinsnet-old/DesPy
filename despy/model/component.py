@@ -25,7 +25,6 @@ despy.model.component
 
 from itertools import count
 import types
-import re
 
 from despy.session import Session
 from despy.model.abstract import AbstractModel
@@ -50,7 +49,6 @@ class Component(AbstractModel):
     ..  autosummary::
         
         name
-        slug
         description
         session
         sim
@@ -152,18 +150,7 @@ class Component(AbstractModel):
                              "a valid Python identifier.".format(name))
         else:
             self._name = name
-    
-    @property
-    def slug(self):
-        """Modified version of the name attribute suitable for file names.
-        
-        Spaces and all characters not allowed in Windows filenames
-        ([]<>\/\*?:\|#!") are replaced with underscores.
-        
-        *Type:* string
-        """
-        return re.sub(r'[ <>/*?:|#!"\\]', '_', self._name)
-        
+
     @property
     def description(self):
         """Gets a description of the model.
@@ -238,10 +225,10 @@ class Component(AbstractModel):
     def id(self):
         """String that uniquely identifies the component instance. Read-only.
         
-        The id property contains "<component.slug>.<component._number>". The id
+        The id property contains "<component.name>.<component._number>". The id
         attribute is suitable for creating unique file names.
         """
-        return "{0}.{1}".format(self.slug, self._number)
+        return "{0}.{1}".format(self.name, self._number)
     
     @property
     def statistics(self):

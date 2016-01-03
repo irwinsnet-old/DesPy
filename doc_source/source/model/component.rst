@@ -10,7 +10,6 @@ despy.model.component.Component
 Properties
 **********
 ..  autoattribute:: Component.name
-..  autoattribute:: Component.slug
 ..  autoattribute:: Component.description
 ..  autoattribute:: Component.session
 ..  autoattribute:: Component.sim
