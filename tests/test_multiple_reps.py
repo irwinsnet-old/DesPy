@@ -37,13 +37,12 @@ class RepModel(dp.model.Component):
         
         dp.model.Entity.set_counter()
                            
-    class CustomerArrivalCallback(dp.fel.AbstractCallback):
-        def call(self, **args):
+    class CustomerArrivalCallback(dp.fel.AbstractEventCallback):
+        def call(self, event, **args):
             new_customer = dp.model.Entity("Customer")
-            timer_evt = args["timer_evt"]
-            timer_evt.trace_fields["Customer"] = str(new_customer)
+            event.trace_fields["Customer"] = str(new_customer)
           
-            self.args["rep_model"].res_q.request(new_customer)
+            self.mod.res_q.request(new_customer)
 
 
 class Test(unittest.TestCase):

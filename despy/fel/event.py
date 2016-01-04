@@ -31,7 +31,7 @@ from despy.model.component import Component
 from despy.session import Session
 from despy.output.trace import TraceRecord
 
-class AbstractCallback(metaclass = abc.ABCMeta):
+class AbstractEventCallback(metaclass = abc.ABCMeta):
     def __init__(self, **args):
         self._session = Session()
         self.args = args
@@ -49,10 +49,10 @@ class AbstractCallback(metaclass = abc.ABCMeta):
         return self._session.sim
         
     @abc.abstractmethod
-    def call(self, **args):
+    def call(self, event, **args):
         pass
 
-class Callback(AbstractCallback):
+class EventCallback(AbstractEventCallback):
     def __init__(self, callback_function, **args):
         super().__init__()
         self.args = args
@@ -67,7 +67,7 @@ class Callback(AbstractCallback):
                     "or method\n"
                     "Argument: {}".format(repr(callback_function)))
         
-    def call(self, **args):
+    def call(self, event, **args):
         pass        
 
 class Priority():
@@ -193,7 +193,7 @@ class Event(Component):
                 A variable that represents a class method or function.
         
         """
-        if isinstance(callback, AbstractCallback):
+        if isinstance(callback, AbstractEventCallback):
             self._callbacks.append(callback)
             callback.owner = self
     
@@ -238,7 +238,7 @@ class Event(Component):
         
         self.do_event()
         for callback in self._callbacks:
-            callback.call()
+            callback.call(self)
             
         # Modify record with info generated during event.
         self.trace_records[0] = self.dp_update_trace_record(evt_record)

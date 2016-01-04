@@ -15,8 +15,8 @@ import despy.stats.random as drand
 import scipy.stats as stats
 
 
-class TimerCallback(dp.fel.AbstractCallback):
-    def call(self, **args):
+class TimerCallback(dp.fel.AbstractEventCallback):
+    def call(self, event, **args):
         pass
 
 class testTimer(unittest.TestCase):

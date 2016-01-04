@@ -33,3 +33,4 @@ from despy.output.results import Results
 from despy.output.statistic import AbstractStatistic, DiscreteStatistic
 from despy.output.statistic import TimeWeightedStatistic
 from despy.output.trace import Trace, TraceRecord
+import despy.output.plot

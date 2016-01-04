@@ -21,7 +21,7 @@ from collections import OrderedDict
 import scipy.stats as stats
 
 from despy.model.component import Component
-from despy.fel.event import Event, Priority, AbstractCallback
+from despy.fel.event import Event, Priority, AbstractEventCallback
 
 
 class RandomTimer(Component):
@@ -115,7 +115,7 @@ class RandomTimer(Component):
     
     @callback.setter
     def callback(self, callback):
-        if isinstance(callback, AbstractCallback):
+        if isinstance(callback, AbstractEventCallback):
             self._callback = callback
         else:
             raise TypeError()
@@ -178,7 +178,7 @@ class TimerEvent(Event):
         
     def do_event(self):
         self.reschedule()
-        self.timer.callback.call(timer_evt = self)
+        self.timer.callback.call(self)
 
     def reschedule(self):
         """Reschedules event based on the RandomTimer's distribution.

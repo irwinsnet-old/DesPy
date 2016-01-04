@@ -37,10 +37,8 @@ class SingleChannelQueue(dp.model.Component):
         
         dp.model.Entity.set_counter()
                            
-    class CustomerArrivalCB(dp.fel.AbstractCallback):
-        def call(self, **args):
+    class CustomerArrivalCB(dp.fel.AbstractEventCallback):
+        def call(self, event, **args):
             new_customer = dp.model.Entity("Customer")
-            timer_evt = args["timer_evt"]
-            timer_evt.trace_fields["Customer"] = str(new_customer)
-          
-            self.args["mod"].server_q.request(new_customer)
+            event.trace_fields["Customer"] = str(new_customer)
+            self.mod.server_q.request(new_customer)
