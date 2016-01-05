@@ -141,12 +141,12 @@ class testDespyb(unittest.TestCase):
         def __init__(self, name):
             super().__init__(name)
             self.evt1 = dp.fel.Event("First_Event")
-            self.evt1.append_callback(dp.fel.EventCallback(self.evt1_callback))
+            self.evt1.append_callback(self.evt1_callback)
           
         def setup(self):
             self.sim.schedule(self.evt1, 5)
               
-        def evt1_callback(self, event):
+        def evt1_callback(self):
             evt2 = dp.fel.Event("Callback_Event")
             self.sim.schedule(evt2, 10)
   
@@ -246,10 +246,10 @@ class testDespyb(unittest.TestCase):
         session.sim = sim = dp.Simulation()
         event = dp.fel.Event("Trace_Control_Event")
          
-        def event_callback(self, event):
-            self.sim.schedule(self.owner, 10)
+        def event_callback(self):
+            self.sim.schedule(event, 10)
              
-        event.append_callback(dp.fel.EventCallback(event_callback))
+        event.append_callback(event_callback)
         sim.schedule(event, 0)
          
         # Default settings limit trace to time < 500
@@ -277,10 +277,10 @@ class testDespyb(unittest.TestCase):
         sim.reset()     
         evt2 = dp.fel.Event("Trace_Control_Event_Step_is1")
           
-        def event_callback2(self, event):
-            self.sim.schedule(self.owner, 1)
+        def event_callback2(self):
+            self.sim.schedule(evt2, 1)
           
-        evt2.append_callback(dp.fel.EventCallback(event_callback2))
+        evt2.append_callback(event_callback2)
         model.sim.schedule(evt2, 0)
         session.config.trace_start = 0
         session.config.trace_stop = 1000

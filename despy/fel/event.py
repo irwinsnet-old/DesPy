@@ -31,44 +31,44 @@ from despy.model.component import Component
 from despy.session import Session
 from despy.output.trace import TraceRecord
 
-class AbstractEventCallback(metaclass = abc.ABCMeta):
-    def __init__(self, **args):
-        self._session = Session()
-        self.args = args
-        
-    @property
-    def session(self):
-        return self._session
-        
-    @property
-    def mod(self):
-        return self._session.model
-    
-    @property
-    def sim(self):
-        return self._session.sim
-        
-    @abc.abstractmethod
-    def call(self, event, **args):
-        pass
-
-class EventCallback(AbstractEventCallback):
-    def __init__(self, callback_function, **args):
-        super().__init__()
-        self.args = args
-        
-        if isinstance(callback_function, types.FunctionType):
-            self.call = types.MethodType(callback_function, self)
-        elif isinstance(callback_function, types.MethodType):
-            self.call = callback_function
-        else:
-            raise TypeError("Argument to Callback.__init__() "
-                    "via callback_function argument is not a function "
-                    "or method\n"
-                    "Argument: {}".format(repr(callback_function)))
-        
-    def call(self, event, **args):
-        pass        
+# class AbstractEventCallback(metaclass = abc.ABCMeta):
+#     def __init__(self, **args):
+#         self._session = Session()
+#         self.args = args
+#         
+#     @property
+#     def session(self):
+#         return self._session
+#         
+#     @property
+#     def mod(self):
+#         return self._session.model
+#     
+#     @property
+#     def sim(self):
+#         return self._session.sim
+#         
+#     @abc.abstractmethod
+#     def call(self, event, **args):
+#         pass
+# 
+# class EventCallback(AbstractEventCallback):
+#     def __init__(self, callback_function, **args):
+#         super().__init__()
+#         self.args = args
+#         
+#         if isinstance(callback_function, types.FunctionType):
+#             self.call = types.MethodType(callback_function, self)
+#         elif isinstance(callback_function, types.MethodType):
+#             self.call = callback_function
+#         else:
+#             raise TypeError("Argument to Callback.__init__() "
+#                     "via callback_function argument is not a function "
+#                     "or method\n"
+#                     "Argument: {}".format(repr(callback_function)))
+#         
+#     def call(self, event, **args):
+#         pass        
 
 class Priority():
     """Define priorities for ordering events scheduled at the same time.
@@ -193,9 +193,15 @@ class Event(Component):
                 A variable that represents a class method or function.
         
         """
-        if isinstance(callback, AbstractEventCallback):
+#         if isinstance(callback, AbstractEventCallback):
+#             self._callbacks.append(callback)
+#             callback.owner = self
+        if isinstance(callback, types.FunctionType) or isinstance(callback, types.MethodType):
             self._callbacks.append(callback)
-            callback.owner = self
+        else:
+            raise TypeError("Object passed to Event.append_callback() was a "
+                            "{} object. Nust be a function or method "
+                            "object.".format(callback.__class__))
     
     def add_trace_field(self, key, value):
         """Add custom fields to the event's trace record.
@@ -238,7 +244,11 @@ class Event(Component):
         
         self.do_event()
         for callback in self._callbacks:
-            callback.call(self)
+            if isinstance(callback, types.FunctionType):
+                callback(self)
+            if isinstance(callback, types.MethodType):
+                callback()
+#             callback.call(self)
             
         # Modify record with info generated during event.
         self.trace_records[0] = self.dp_update_trace_record(evt_record)

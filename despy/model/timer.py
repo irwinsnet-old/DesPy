@@ -21,7 +21,7 @@ from collections import OrderedDict
 import scipy.stats as stats
 
 from despy.model.component import Component
-from despy.fel.event import Event, Priority, AbstractEventCallback
+from despy.fel.event import Event, Priority
 
 
 class RandomTimer(Component):
