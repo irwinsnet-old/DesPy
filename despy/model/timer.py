@@ -17,6 +17,7 @@ despy.model.timer
     Add ability to add custom trace fields from callback funtion.
 """
 from collections import OrderedDict
+import types
 
 import scipy.stats as stats
 
@@ -115,10 +116,19 @@ class RandomTimer(Component):
     
     @callback.setter
     def callback(self, callback):
-        if isinstance(callback, AbstractEventCallback):
+        if isinstance(callback, types.FunctionType) or \
+                isinstance(callback, types.MethodType):
             self._callback = callback
         else:
-            raise TypeError()
+            raise TypeError("Object passed to Timer.callback was a "
+                            "{} object. Must be a function or method "
+                            "object.".format(callback.__class__))
+        
+    def dp_callback(self, event):
+        if isinstance(self._callback, types.MethodType):
+            self._callback()
+        else:
+            self._callback(self)
 
     @property
     def immediate(self):
@@ -178,7 +188,7 @@ class TimerEvent(Event):
         
     def do_event(self):
         self.reschedule()
-        self.timer.callback.call(self)
+        self.timer.dp_callback(self)
 
     def reschedule(self):
         """Reschedules event based on the RandomTimer's distribution.

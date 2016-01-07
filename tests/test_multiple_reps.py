@@ -19,7 +19,7 @@ class RepModel(dp.model.Component):
         self.add_component(
                     dp.model.RandomTimer("arr_timer",
                     arrival_dist,
-                    RepModel.CustomerArrivalCallback(rep_model = self),
+                    RepModel.CustomerArrivalCB,
                     True,
                     -1))
         
@@ -37,12 +37,12 @@ class RepModel(dp.model.Component):
         
         dp.model.Entity.set_counter()
                            
-    class CustomerArrivalCallback(dp.fel.AbstractEventCallback):
-        def call(self, event, **args):
-            new_customer = dp.model.Entity("Customer")
-            event.trace_fields["Customer"] = str(new_customer)
-          
-            self.mod.res_q.request(new_customer)
+    def CustomerArrivalCB(self):
+        new_customer = dp.model.Entity("Customer")
+        self.sim.event.trace_fields["Customer"] = str(new_customer)
+        self.model.res_q.request(new_customer)
+        # Even though Customer ArrivalCB defined as method, converted
+        # to function when passed to timer.__init__(). Why is that?
 
 
 class Test(unittest.TestCase):

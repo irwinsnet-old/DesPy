@@ -196,7 +196,8 @@ class Event(Component):
 #         if isinstance(callback, AbstractEventCallback):
 #             self._callbacks.append(callback)
 #             callback.owner = self
-        if isinstance(callback, types.FunctionType) or isinstance(callback, types.MethodType):
+        if isinstance(callback, types.FunctionType) or isinstance(callback,
+                                                            types.MethodType):
             self._callbacks.append(callback)
         else:
             raise TypeError("Object passed to Event.append_callback() was a "
