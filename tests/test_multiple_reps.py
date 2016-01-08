@@ -19,7 +19,7 @@ class RepModel(dp.model.Component):
         self.add_component(
                     dp.model.RandomTimer("arr_timer",
                     arrival_dist,
-                    RepModel.CustomerArrivalCB,
+                    self.CustomerArrivalCB,
                     True,
                     -1))
         
@@ -41,8 +41,6 @@ class RepModel(dp.model.Component):
         new_customer = dp.model.Entity("Customer")
         self.sim.event.trace_fields["Customer"] = str(new_customer)
         self.model.res_q.request(new_customer)
-        # Even though Customer ArrivalCB defined as method, converted
-        # to function when passed to timer.__init__(). Why is that?
 
 
 class Test(unittest.TestCase):

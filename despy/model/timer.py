@@ -87,7 +87,7 @@ class RandomTimer(Component):
         else:
             raise TypeError("distribution parameter must be "
                             "type stats.rv_discrete")
-            
+    
     def setup(self):
         event = TimerEvent(self.name, self)
         
