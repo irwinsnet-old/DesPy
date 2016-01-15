@@ -14,106 +14,13 @@ despy.model.session
     Config
 """
 
+import enum
+
 from despy.model.abstract import AbstractModel
 
-class Session:
-    """Singleton class connecting Simulation, Model, and Config objects.
-    
-    No matter how many times a user instantiates a Session object,
-    ``Session()`` will always return the same object. The Simulation
-    and Model objects access each other and the Config object via
-    Session properties.
-    
-    The designer can obtain a brand new Session object by calling the
-    static method, Session.new(). This is useful if the designer is
-    commencing a new simulation, ensuring that no old configuration or
-    session data is inadvertently brought forward into the new session.
-    
-    **Properties**
-    
-    ..  autosummary::
-    
-        sim
-        model
-        config
-        
-    **Methods**
-    
-    ..  autosummary
-    
-        new
-        
-    **Raises**
-    * :class:`TypeError` if object other than AbstractModel is passed
-    to Session.model property.
-    """
-    
-    def __init__(self):
-        """Always returns the same Session instance.
-        
-        If the designer creates a new session by calling Session.new(),
-        subsequent calls to Session() will return the new session.
-        """
-        if Session._instance is None:          
-            Session._instance = Session.__Session()
-    
-    #Static Session instance.
-    _instance = None
-    
-    @property
-    def sim(self):
-        """Current assigned Simulation object.
-        
-        *Type:* :class:`despy.simulation.Simulation` object.
-        """
-        return self._instance._sim
-    
-    @sim.setter
-    def sim(self, sim):
-        self._instance._sim = sim
-        
-    @property
-    def model(self):
-        """Currently assigned model (top-level component) object.
-        
-        *Type:* :class:`despy.model.abstract.AbstractModel`
-        """
-        return self._instance._model
-    
-    @model.setter
-    def model(self, model):
-        if isinstance(model, AbstractModel):
-            self._instance._model = model
-        else:
-            raise TypeError("Session.model must be set to "
-                "instance of despy.model.abstract.AbstractModel. "
-                "{} was provided instead.".format(type(model)))
-
-    @property
-    def config(self):
-        """Current configuration object.
-        
-        *Type:* :class:`despy.session.Config`
-        """
-        return self._instance._ouput_config
-    
-    @config.setter
-    def config(self, config):
-        self._instance._output_config = config
-            
-    @staticmethod    
-    def new():
-        """Creates and returns a new Session instance.
-        """
-        Session._instance = Session.__Session()
-        return Session()
-    
-    class __Session:
-        def __init__(self):
-            self._sim = None
-            self._model = None
-            self._ouput_config = Config()
-            
+class Format(enum.Enum):
+    text = 1
+    html = 2        
         
 class Config(object):
     """Generates the simulation's output reports and graphs.
@@ -143,6 +50,7 @@ class Config(object):
         #Public Attributes
         self.folder_basename = None
         self.console_trace = True
+        self.console_format = Format.text
         self._trace_start = 0
         self._trace_stop = 500
         self._trace_max_length = 1000
@@ -281,3 +189,101 @@ class Config(object):
     @seed.setter
     def seed(self, seed):
         self._seed = seed
+
+class Session:
+    """Singleton class connecting Simulation, Model, and Config objects.
+    
+    No matter how many times a user instantiates a Session object,
+    ``Session()`` will always return the same object. The Simulation
+    and Model objects access each other and the Config object via
+    Session properties.
+    
+    The designer can obtain a brand new Session object by calling the
+    static method, Session.new(). This is useful if the designer is
+    commencing a new simulation, ensuring that no old configuration or
+    session data is inadvertently brought forward into the new session.
+    
+    **Properties**
+    
+    ..  autosummary::
+    
+        sim
+        model
+        config
+        
+    **Methods**
+    
+    ..  autosummary
+    
+        new
+        
+    **Raises**
+    * :class:`TypeError` if object other than AbstractModel is passed
+    to Session.model property.
+    """
+    
+    def __init__(self):
+        """Always returns the same Session instance.
+        
+        If the designer creates a new session by calling Session.new(),
+        subsequent calls to Session() will return the new session.
+        """
+        if Session._instance is None:          
+            Session._instance = Session.__Session()
+    
+    #Static Session instance.
+    _instance = None
+    
+    @property
+    def sim(self):
+        """Current assigned Simulation object.
+        
+        *Type:* :class:`despy.simulation.Simulation` object.
+        """
+        return self._instance._sim
+    
+    @sim.setter
+    def sim(self, sim):
+        self._instance._sim = sim
+        
+    @property
+    def model(self):
+        """Currently assigned model (top-level component) object.
+        
+        *Type:* :class:`despy.model.abstract.AbstractModel`
+        """
+        return self._instance._model
+    
+    @model.setter
+    def model(self, model):
+        if isinstance(model, AbstractModel):
+            self._instance._model = model
+        else:
+            raise TypeError("Session.model must be set to "
+                "instance of despy.model.abstract.AbstractModel. "
+                "{} was provided instead.".format(type(model)))
+
+    @property
+    def config(self):
+        """Current configuration object.
+        
+        *Type:* :class:`despy.session.Config`
+        """
+        return self._instance._ouput_config
+    
+    @config.setter
+    def config(self, config):
+        self._instance._output_config = config
+            
+    @staticmethod    
+    def new():
+        """Creates and returns a new Session instance.
+        """
+        Session._instance = Session.__Session()
+        return Session()
+    
+    class __Session:
+        def __init__(self):
+            self._sim = None
+            self._model = None
+            self._ouput_config = Config()
