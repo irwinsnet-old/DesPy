@@ -13,17 +13,16 @@ despy.output.console
 ..  todo::
 
 """
-from IPython.display import display_html
+from IPython.display import display_html, HTML, display
 
 from despy.session import Config
 
 def test_table():
-    raw_html = """<table>
-                    <tr><td>Cell 1</td><td>Cell 2</td></tr>
-                    <tr><td>Cell 3</td><td>Cell 4</td></tr>
-                </table"""
+    ht = HTML("""<tr><td>Cell 1</td><td>Cell 2</td></tr>
+                <tr><td colspan='2'>Cell B</tr>
+                """)
                 
-    display_html(raw_html, raw = True)
+    display(ht)
     
 class Console():
     def init(self, config):
@@ -40,3 +39,10 @@ class Console():
     
     def print_trace_table(self):
         pass
+
+def if_iPython():
+    try:
+        ipy = __IPYTHON__
+        return ipy
+    except NameError:
+        return False
