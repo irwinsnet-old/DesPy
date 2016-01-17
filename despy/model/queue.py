@@ -139,7 +139,7 @@ class Queue(Component):
         fields = OrderedDict()
         fields["Length"] = self.length
         fields["Entity"] = str(item)
-        self.sim._trace.add_message(message, fields)
+        self.sim.results.trace.add_message(message, fields)
     
     def remove(self):
         """Remove an item from the beginning of the queue.
@@ -160,7 +160,7 @@ class Queue(Component):
         fields["Length"] = self.length
         fields["Entity"] = str(item.item_fld)
         fields["Time_in_Q"] = q_time
-        self.sim._trace.add_message(message, fields)        
+        self.sim.results.trace.add_message(message, fields)        
         
         return item.item_fld
     

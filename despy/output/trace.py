@@ -38,6 +38,8 @@ despy.output.trace
 from collections import OrderedDict
 import csv
 
+from IPython.display import HTML
+
 from despy.output.report import Datatype
 from despy.session import Session
         
@@ -239,7 +241,6 @@ class Trace(object):
         """
         return self._config.trace_stop
 
-        
     @property
     def max_length(self):
         """Maximum number of TraceRecords in Trace object.
@@ -310,7 +311,7 @@ class Trace(object):
                 #Write TraceRecord to the console.
                 if self._config.console_trace:
                     assert isinstance(rec, TraceRecord)
-                    print(rec)
+                    self.sim.con.display_trace(rec)
             
     def add_event(self, rep, time, priority, event):
         """Record an event on the Trace report.

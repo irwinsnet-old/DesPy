@@ -22,7 +22,7 @@ class SingleChannelQueue(dp.model.Component):
         arrival_dist = stats.randint(1, 9)
         self.add_component(dp.model.RandomTimer("arrival_timer",
                     arrival_dist,
-                    SingleChannelQueue.CustomerArrivalCB(mod = self),
+                    self.cust_arrival_CB,
                     True,
                     dp.fel.Priority.EARLY))        
         
@@ -36,9 +36,8 @@ class SingleChannelQueue(dp.model.Component):
         self.server_q.assign_resource(dp.model.Resource("server", 1, service_dist))
         
         dp.model.Entity.set_counter()
-                           
-    class CustomerArrivalCB(dp.fel.AbstractEventCallback):
-        def call(self, event, **args):
-            new_customer = dp.model.Entity("Customer")
-            event.trace_fields["Customer"] = str(new_customer)
-            self.mod.server_q.request(new_customer)
+        
+    def cust_arrival_CB(self):
+        new_customer = dp.model.Entity("Customer")
+        self.sim.event.trace_fields["Customer"] = str(new_customer)
+        self.server_q.request(new_customer)

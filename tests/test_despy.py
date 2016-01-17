@@ -9,6 +9,7 @@ import unittest
 import scipy.stats as stats
 
 import despy as dp
+from default_config import get_config
 
 class testDespyb(unittest.TestCase):
        
@@ -16,11 +17,12 @@ class testDespyb(unittest.TestCase):
     def test_now(self):
         # Verify that Simulation.now is set to 0 by default.
         dp.Session.new()
-        exp1 = dp.Simulation(dp.model.Component("Test"))
+        config = get_config()
+        exp1 = dp.Simulation(dp.model.Component("Test"), config)
         cfg = exp1.config
          
         self.assertEqual(exp1.now, 0)
-        self.assertTrue(cfg.console_trace)
+        self.assertFalse(cfg.console_trace)
          
         # Test console_output property.
         cfg.console_trace = False
@@ -30,7 +32,8 @@ class testDespyb(unittest.TestCase):
          
         # Verify that Simulation.now can be set by the class constructor.
         dp.Session.new()
-        exp2 = dp.Simulation(dp.model.Component("Test"))
+        config = get_config()
+        exp2 = dp.Simulation(dp.model.Component("Test"), config)
         exp2.config.initial_time = 42
         exp2.initialize()
         self.assertEqual(exp2.now, 42)
@@ -39,10 +42,11 @@ class testDespyb(unittest.TestCase):
     def test_name(self):
         #Create model with default simulation.
         dp.Session.new()
+        config1 = get_config()
         session = dp.Session()
         testModel = dp.model.Component("Test_Model")
         session.model = testModel
-        session.sim = dp.Simulation()
+        session.sim = dp.Simulation(config = config1)
         self.assertEqual(testModel.name, "Test_Model")
         self.assertIsNotNone(testModel.sim.model)
         self.assertEqual(testModel.sim.model.name, "Test_Model")
@@ -74,9 +78,10 @@ class testDespyb(unittest.TestCase):
     ###Event Scheduling Tests
     def test_peek(self):
         dp.Session.new()
+        config1 = get_config()
         session = dp.Session()
         session.model = dp.model.Component("Test_Model_1")
-        sim = session.sim = dp.Simulation()
+        sim = session.sim = dp.Simulation(config = config1)
           
         self.assertEqual(sim.peek(), float('Infinity'))
           
@@ -91,10 +96,11 @@ class testDespyb(unittest.TestCase):
     def test_step(self):
         #Create model and events.
         dp.Session.new()
+        config1 = get_config()
         session = dp.Session()
         model = dp.model.Component("Test_Model_2")
         session.model = model
-        session.sim = sim_ts = dp.Simulation()
+        session.sim = sim_ts = dp.Simulation(config = config1)
         sim_ts.initialize()
         ev_early = dp.fel.Event("Early_Event")
         ev_standard = dp.fel.Event("Standard_Event")
@@ -118,7 +124,9 @@ class testDespyb(unittest.TestCase):
   
     def test_run(self):
         dp.Session.new()
+        config1 = get_config()
         session = dp.Session()
+        session.config = config1
         model = dp.model.Component("RunTest_Model")
         session.model = model
         session.sim = sim = dp.Simulation()
@@ -151,15 +159,19 @@ class testDespyb(unittest.TestCase):
             self.sim.schedule(evt2, 10)
   
     def test_appendCallback(self):
-        dp.Session.new()
-        session = dp.Session()        
+        session = dp.Session.new()
+        config1 = get_config()
+        session.config = config1     
         model = self.AppendCallbackModel("AppendCallback_Model")
         session.model = model
  
         cfg = session.config
+        self.assertEqual(cfg, config1)
         session.sim = sim_tc = dp.Simulation()
         cfg.folder_basename = ("C:/Projects/despy_output/"
                                         "append_callback1")
+        self.assertEqual(cfg.write_files,
+                         get_config().write_files)
         sim_tc.initialize()
         sim_tc.run()
         results = sim_tc.finalize()
@@ -174,14 +186,14 @@ class testDespyb(unittest.TestCase):
            
         #Test initialize method and until parameter
         model.sim.reset()
-        self.assertEqual(sim_tc._trace.length, 0)
+        self.assertEqual(sim_tc.results.trace.length, 0)
         cfg.folder_basename = \
                 "C:/Projects/despy_output/append_callback2"
         self.assertEqual(session.config.folder_basename,
                          "C:/Projects/despy_output/append_callback2")
         model.sim.initialize()
         model.sim.run(10)
-        evtTrace = model.sim._trace
+        evtTrace = model.sim.results.trace
         self.assertEqual(evtTrace.length, 1)
             
         #Verify that simulation can be restarted from current point.
@@ -191,6 +203,8 @@ class testDespyb(unittest.TestCase):
           
     def test_process(self):
         session = dp.Session.new()
+        config1 = get_config()
+        session.config = config1
         model = dp.model.Component("Process_Model")
           
         def generator(self):
@@ -211,7 +225,8 @@ class testDespyb(unittest.TestCase):
           
     def test_simultaneous_events(self):
         #Test simultaneous, different events.
-        dp.Session.new()
+        config1 = get_config()
+        dp.Session.new(config1)
         model = dp.model.Component("Simultaneous_Events_Model")
           
         def setup(self):
@@ -239,7 +254,8 @@ class testDespyb(unittest.TestCase):
         self.assertEqual(results.trace.length, 2)
          
     def test_trace_control(self):
-        dp.Session.new()
+        config1 = get_config()
+        dp.Session.new(config1)
         model = dp.model.Component("Trace_Control")
         session = dp.Session()
         session.model = model

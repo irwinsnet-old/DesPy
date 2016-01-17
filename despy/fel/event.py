@@ -208,7 +208,7 @@ class Event(Component):
             
         # Modify record with info generated during event.
         self.trace_records[0] = self.dp_update_trace_record(evt_record)
-        self.sim._trace.add(self.trace_records)
+        self.sim.results.trace.add(self.trace_records)
         
         # Clean up in case event is re-used.
         self.trace_records.clear()  

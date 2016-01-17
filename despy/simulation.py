@@ -42,9 +42,9 @@ import numpy as np
 from despy.session import Session
 from despy.output.results import Results
 from despy.output.report import Datatype
+from despy.output.console import Con
 from despy.fel.event import Priority
 from despy.model.trigger import AbstractTrigger, TimeTrigger
-from despy.output.trace import Trace
 
 
 class NoEventsRemainingError(Exception):
@@ -145,7 +145,7 @@ class Simulation():
         if config is not None:
             self._session.config = config
         self._rep = 0
-        self._trace = Trace()
+        self.con = Con()
         
         self.reset()
         
@@ -156,17 +156,16 @@ class Simulation():
         initial time, and clears the FEL and traces. Note that reset
         does not reset the model to its initial condition. 
         """
+
         self._triggers = OrderedDict()
         self._rep = 0
         self._setups = 0
         self._evt = None
-        self._run_start_time = None
-        self._run_stop_time = None
         self._now = self._session.config.initial_time * 10
         self._pri = 0
         self._futureEventList = []
         self._counter = count()
-        self._trace.clear()
+        self._session.results = Results(self)
         
     @property
     def session(self):
@@ -197,6 +196,10 @@ class Simulation():
     @model.setter
     def model(self, model):
         self._session.model = model
+        
+    @property
+    def results(self):
+        return self._session.results
 
     @property
     def rep(self):
@@ -267,34 +270,9 @@ class Simulation():
         executes the trigger (runs AbstractTrigger.pull().
         """
         return self._triggers
-
-    @property
-    def run_start_time(self):
-        """The real-world start time for the simulation. Read-only.
-        
-        *Type:* ``None`` or :class:`datetime.datetime`
-        
-        Despy uses the run_start_time attribute to calculate the simulation's
-        elapsed time. Elapsed time does not include initialization or
-        finalization of the simulation, only time that elapses within the
-        Simulation.run() method. The attribute will return 'None' if the
-        simulation has not yet entered the Simulation.run() method.
-        """
-        return self._run_start_time
     
-    @property
-    def run_stop_time(self):
-        """The real-world stop time for the simulation. Read-only.
-        
-        *Type:* ``None`` or :class:`datetime.datetime`
-        
-        Despy uses the run_start_time attribute to calculate the simulation's
-        elapsed time. Elapsed time does not include initialization or
-        finalization of the simulation, only time that elapses within the
-        Simulation.run() method. The attribute will return 'None' if the
-        simulation is still running events.
-        """
-        return self._run_stop_time
+    def display(self, data):
+        self._con.display(data)
 
     def add_trigger(self, key, trigger):
         err_msg = ("{0} object provided to Simulation.add_trigger() "
@@ -320,9 +298,15 @@ class Simulation():
         by calling Simulation.irun() or simulation.irunf().
         """
         np.random.seed(self._session.config.seed)
+
         random.seed(self._session.config.seed)
         self._now = self._session.config.initial_time * 10
-        self._session.model.dp_initialize()
+        init_cpts = self.model.dp_initialize()
+        
+        self.con.display_header("Initializing")
+        self.con.display_value("Seed", self.config.seed)     
+        self.con.display_list("Components Initialized", init_cpts)
+        self.con.display_value("Initial Time", self._now)
     
     def _setup(self):
         """Resets simulation for the next rep and calls model setup() methods.
@@ -357,7 +341,7 @@ class Simulation():
         runf().
         """
         self._session.model.dp_finalize()
-        return Results(self, self._session.config)
+        return self.results
 
     def peek(self, prioritized=True):
         """Return the time of the next scheduled event.
@@ -434,8 +418,11 @@ class Simulation():
                 any remaining events in the current rep and skip to the
                 next rep.                
         """
+        self.con.display_header("Running")
         self._set_triggers(until)
-        self._run_start_time = datetime.datetime.today()
+        self.results.run_start_time = datetime.datetime.today()
+        self.con.display_value("Run Start Time",
+                               self.results.run_start_time)
 
         if resume_on_next_rep:
             self._rep += 1
@@ -456,9 +443,14 @@ class Simulation():
                 continue_rep = self._check_triggers()
         
             # Finalize model and setup for next replication
+            self.con.display_value("Completed Rep", self._rep)
             self._teardown()
             
-        self._run_stop_time = datetime.datetime.today()    
+        self.results.run_stop_time = datetime.datetime.today()
+        self.con.display_value("Run Stop Time",
+                               self.results.run_stop_time)
+        self.con.display_value("Elapsed Time",
+                               self.results.elapsed_time)
 
     def _set_triggers(self, until):
         """Sets a TimeTrigger that ends the simulation at time = until.
@@ -571,7 +563,7 @@ class Simulation():
                 Optional. Defaults to None.
         """
         if self.event is None:
-            self._trace.add_message(message, fields)
+            self.results.trace.add_message(message, fields)
         else:
             self.event.add_message(message, fields)
     
@@ -589,16 +581,14 @@ class Simulation():
             enumeration, which describes the structure of the data
             item (e.g., paragraph, list, etc.).
             
-        """
-        elapsed_time = self.run_stop_time - self.run_start_time
-        
+        """      
         output = [(Datatype.title, "Simulation"),
                   (Datatype.param_list,
                     [('Generator Folder',
                         self._session.config.folder_basename),
-                     ('Seed', self.config.seed),
-                     ('Start Time', self.run_start_time),
-                     ('Stop Time', self.run_stop_time),
-                     ('Elapsed Time', elapsed_time)])
+                     ('Seed', self.results.seed),
+                     ('Start Time', self.results.run_start_time),
+                     ('Stop Time', self.results.run_stop_time),
+                     ('Elapsed Time', self.results.elapsed_time)])
                   ]
         return output

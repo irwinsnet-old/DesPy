@@ -49,7 +49,8 @@ class Config(object):
         
         #Public Attributes
         self.folder_basename = None
-        self.console_trace = True
+        self.write_files = True
+        self.console_trace = False
         self.console_format = Format.text
         self._trace_start = 0
         self._trace_stop = 500
@@ -58,8 +59,6 @@ class Config(object):
         self._reps = 1
         self.initial_time = 0
         self._seed = None
-        
-        #Read-only Public Attributes
         self._full_path = None
 
     @property
@@ -113,7 +112,20 @@ class Config(object):
     @console_trace.setter
     def console_trace(self, console_trace):
         self._console_trace = console_trace
+
+    @property
+    def write_files(self):
+        """Disables writing of output files if False.
         
+        *Type:* Boolean
+        """
+        
+        return self._write_files
+    
+    @write_files.setter
+    def write_files(self, write):
+        self._write_files = write
+
     @property
     def folder_basename(self):
         """Folder where output reports and graphs will be placed.
@@ -269,21 +281,37 @@ class Session:
         
         *Type:* :class:`despy.session.Config`
         """
-        return self._instance._ouput_config
+        return self._instance._config
     
     @config.setter
     def config(self, config):
-        self._instance._output_config = config
+        self._instance._config = config
+        
+    @property
+    def results(self):
+        """Provides access to simulation output.
+        
+        *Type:* :class:`despy.output.results.Results`
+        """
+        return self._instance._results
+    
+    @results.setter
+    def results(self, results):
+        self._instance._results = results
             
     @staticmethod    
-    def new():
+    def new(config = None):
         """Creates and returns a new Session instance.
         """
         Session._instance = Session.__Session()
+        if config is not None:
+            Session._instance._config = config
         return Session()
     
     class __Session:
         def __init__(self):
             self._sim = None
             self._model = None
-            self._ouput_config = Config()
+            self._config = Config()
+            self._results = None
+            

@@ -313,8 +313,11 @@ class Component(AbstractModel):
     def dp_initialize(self):
         """Internal despy method for initializing the model. Do not override.
         """
+        init_cpts = []
         for cpt in self:
             cpt._call_phase(cpt.initialize)
+            init_cpts.append(cpt.name)
+        return init_cpts
     
     def initialize(self):
         """Initialization code that will run once, prior to any replications.
