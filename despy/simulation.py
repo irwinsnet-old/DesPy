@@ -73,6 +73,25 @@ class FutureEvent(namedtuple('FutureEventTuple',
     """
     
     
+class Dispatcher():
+    def __init(self):
+        self._results = self.Session().results
+        self._con = Con()
+        
+    def announce_phase(self, phase):
+        self._con.display_header(phase)
+    
+    def send_value(self, key, value, label = None):
+        self._results.values[key] = (label, value)
+        if label is not None:
+            self._con.display_value(label, value)
+            
+    def send_list(self, key, value, label = None):
+        self._results.values[key] = (label, value)
+        if label is not None:
+            self._con.display_list(label, value)
+        
+        
 class Simulation():
     """Schedule events and manage the future event list (FEL).
     
@@ -145,7 +164,7 @@ class Simulation():
         if config is not None:
             self._session.config = config
         self._rep = 0
-        self.con = Con()
+        self.dispatcher = Dispatcher()
         
         self.reset()
         
@@ -297,20 +316,23 @@ class Simulation():
         Designers may explicitly call initialize() method, or implicitly by
         by calling Simulation.irun() or simulation.irunf().
         """
+        self.dispatcher.announce_phase("Initializing")    
+            
         np.random.seed(self._session.config.seed)
-
         random.seed(self._session.config.seed)
+        self.dispatcher.send_value("seed", self.config.seed, "Seed")
+                
         self._now = self._session.config.initial_time * 10
-        init_cpts = self.model.dp_initialize()
+        self.dispatcher.send_value("initial_time", self._now,
+                                   "Initial Time")      
         
-        self.con.display_header("Initializing")
-        self.con.display_value("Seed", self.config.seed)     
-        self.con.display_list("Components Initialized", init_cpts)
-        self.con.display_value("Initial Time", self._now)
-    
+        init_cpts = self.model.dp_initialize()
+        self.dispatcher.send_list("components_initialized", init_cpts,
+                       "Components Initialized")          
+
     def _setup(self):
         """Resets simulation for the next rep and calls model setup() methods.
-        
+
         Called automatically by Simulation.run() method at the beginning of
         each replication.
         * Clears the FEL
@@ -332,7 +354,7 @@ class Simulation():
         self._session.model.dp_teardown(self.now)
 
     def finalize(self):
-        """Calls all Component.finalize() methods and returns a results object.
+        """Calls Component.finalize() methods, returns a results object.
         
         *Returns:* :class:`despy.output.results`
         

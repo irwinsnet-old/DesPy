@@ -19,18 +19,23 @@ import os
 from despy.session import Session
 from despy.output.trace import Trace
 
-
 class Results(object):
     def __init__(self, sim):
         self._session = Session()
         self._sim = sim
         self._mod = sim.model
+        self._trace = Trace()      
         self._report = None
         self._run_start_time = None
         self._run_stop_time = None
         self._seed = None
-        self._trace = Trace()
-
+        
+        self._values = dict()
+            
+    @property
+    def values(self):
+        return self._values
+        
     @property
     def seed(self):
         """Random number generator seed used for simulation. Read-only
