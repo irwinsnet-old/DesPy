@@ -105,6 +105,14 @@ class Results(object):
     def report(self):
         return self._report
     
+    def __str__(self):
+        output = "\n=====Simulation Results==========\n"
+        
+        for key, value in self._values.items():
+            output += "{0}: {1}\n".format(key, value)
+
+        return output
+    
     def write_files(self):
         """Creates trace and HTML reports in folder_basename location.
         """

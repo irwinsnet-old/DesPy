@@ -30,6 +30,9 @@ despy.model.simulation
     Change name of despy.stats.random to avoid clash with library module.
     
     Move statistic module to stats package?
+    
+    Add Simulation log that records time of initialization, setup,
+    errors, etc.
 """
 
 from heapq import heappush, heappop
