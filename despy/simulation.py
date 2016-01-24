@@ -86,6 +86,9 @@ class Dispatcher():
     def announce_phase(self, phase):
         self._con.display_header(phase)
         
+    def announce(self, message):
+        self._con.display_message(message)
+        
         
 class Simulation():
     """Schedule events and manage the future event list (FEL).
@@ -321,9 +324,8 @@ class Simulation():
         self.dispatcher.send_data("initial_time", self._now,
                                    "Initial Time")      
         
-        init_cpts = self.model.dp_initialize()
-        self.dispatcher.send_data("components_initialized", init_cpts,
-                       "Components Initialized")          
+        self.model.dp_initialize()
+        self.dispatcher.announce("All Components Initialized.")          
 
     def _setup(self):
         """Resets simulation for the next rep and calls model setup() methods.
@@ -335,6 +337,7 @@ class Simulation():
         * Resets time to config.initial_time.
         * Calls every model component's setup() method.
         """
+        self.dispatcher.announce_phase("Setup Rep #{} ".format(self.rep))
         if self.rep > 0:
             self._now = self._session.config.initial_time * 10
             self._pri = 0
@@ -346,6 +349,7 @@ class Simulation():
     def _teardown(self):
         """Calls all Component.teardown() methods at the end of each rep.
         """
+        self.dispatcher.announce_phase("Teardown Rep #{} ".format(self.rep))
         self._session.model.dp_teardown(self.now)
 
     def finalize(self):
@@ -357,6 +361,7 @@ class Simulation():
         or the designer can call finalize implicitly by calling irunf() or
         runf().
         """
+        self.dispatcher.announce_phase("Finalizing")
         self._session.model.dp_finalize()
         return self.results
 

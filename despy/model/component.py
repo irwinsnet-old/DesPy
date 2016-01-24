@@ -313,11 +313,9 @@ class Component(AbstractModel):
     def dp_initialize(self):
         """Internal despy method for initializing the model. Do not override.
         """
-        init_cpts = []
         for cpt in self:
             cpt._call_phase(cpt.initialize)
-            init_cpts.append(cpt.name)
-        return init_cpts
+            self.sim.dispatcher.announce("Initialized {}".format(cpt.name))
     
     def initialize(self):
         """Initialization code that will run once, prior to any replications.
@@ -331,6 +329,7 @@ class Component(AbstractModel):
             for _, stat in cpt.statistics.items():
                 stat.setup()
             cpt._call_phase(cpt.setup)
+            self.sim.dispatcher.announce("Setup {}".format(cpt.name))
             
     def setup(self):
         """Runs prior to every replication to set up initial conditions.
@@ -344,6 +343,7 @@ class Component(AbstractModel):
             for _, stat in cpt.statistics.items():
                 stat.teardown(time)
             cpt._call_phase(cpt.teardown)
+            self.sim.dispatcher.announce("Teardown {}".format(cpt.name))
     
     def teardown(self):
         """Runs after every replication to clean up.
@@ -357,6 +357,7 @@ class Component(AbstractModel):
             cpt._call_phase(cpt.finalize)
             for _, stat in cpt.statistics.items():
                 stat.finalize()
+            self.sim.dispatcher.announce("Finalized {}".format(cpt.name))
         
     def finalize(self):
         """Runs once, after all reps are complete, to finalize component.

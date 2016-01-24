@@ -12,6 +12,8 @@ despy.output.console
     
 ..  todo::
 
+    Add option to control level of output (i.e., verbose, quiet, etc.).
+
 """
 from IPython.display import display_html, HTML, display
 #from colorama import Fore, Style, Back, init
@@ -31,6 +33,9 @@ class Console():
             self.display_dict(label, data)
         else:
             self.display_value(label, data)
+            
+    def display_message(self, message):
+        print(message)
 
     def display_list(self, label, list_data):
         output = "{}: ".format(label)
