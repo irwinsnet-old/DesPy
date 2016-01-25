@@ -13,8 +13,12 @@ despy.output.results
     
 ..  todo::
 
+    Pull title-ize feature (replace().title() out to static helper
+    function.
+
 """
 import os
+from collections import OrderedDict
 
 from despy.session import Session
 from despy.output.trace import Trace
@@ -30,11 +34,17 @@ class Results(object):
         self._run_stop_time = None
         self._seed = None
         
-        self._values = dict()
+        self._values = OrderedDict()
             
     @property
     def values(self):
         return self._values
+    
+    def set_value(self, key, value, label = None):
+        if label is None:
+            label = key.replace('_', ' ').title()
+        self._values[key] = (label, value)
+        return label
         
     @property
     def seed(self):
@@ -108,8 +118,8 @@ class Results(object):
     def __str__(self):
         output = "\n=====Simulation Results==========\n"
         
-        for key, value in self._values.items():
-            output += "{0}: {1}\n".format(key, value)
+        for _, value in self._values.items():
+            output += "{0}: {1}\n".format(value[0], value[1])
 
         return output
     
@@ -146,8 +156,9 @@ class Results(object):
         The time-stamp is the stop time for the simulation.
         """
         timestamp = \
-                self.run_stop_time.strftime('_%y_%j_%H_%M_%S')
-        self._full_path = self._session.config.folder_basename + '/Run' + timestamp
+                self._values["run_stop_time"][1].strftime('_%y_%j_%H_%M_%S')
+        self._full_path = (self._session.config.folder_basename +
+                           '/Run' + timestamp)
                 
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path) 

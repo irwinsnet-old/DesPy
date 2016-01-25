@@ -13,6 +13,9 @@ despy.output.console
 ..  todo::
 
     Add option to control level of output (i.e., verbose, quiet, etc.).
+    
+    Pull title-ize feature (replace().title() out to static helper
+    function.
 
 """
 from IPython.display import display_html, HTML, display
@@ -23,7 +26,7 @@ from despy.session import Session
 #init()
 
 class Console():
-    def init(self):
+    def __init__(self):
         self._session = Session()
     
     def display(self, label, data):

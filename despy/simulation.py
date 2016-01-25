@@ -82,9 +82,8 @@ class Dispatcher():
         self._con = Console()
         
     def send_data(self, key, data, label = None):
-        self._session.results.values[key] = (label, data)
-        if label is not None:
-            self._con.display(label, data) 
+        processed_label = self._session.results.set_value(key, data, label)
+        self._con.display(processed_label, data) 
         
     def announce_phase(self, phase):
         self._con.display_header(phase)
@@ -321,11 +320,10 @@ class Simulation():
             
         np.random.seed(self._session.config.seed)
         random.seed(self._session.config.seed)
-        self.dispatcher.send_data("seed", self.config.seed, "Seed")
+        self.dispatcher.send_data("seed", self.config.seed)
                 
         self._now = self._session.config.initial_time * 10
-        self.dispatcher.send_data("initial_time", self._now,
-                                   "Initial Time")      
+        self.dispatcher.send_data("initial_time", self._now)      
         
         self.model.dp_initialize()
         self.dispatcher.announce("All Components Initialized.")          
@@ -443,11 +441,10 @@ class Simulation():
                 any remaining events in the current rep and skip to the
                 next rep.                
         """
-#         self.con.display_header("Running")
+        self.dispatcher.announce_phase("Running")
         self._set_triggers(until)
-        self.results.run_start_time = datetime.datetime.today()
-#         self.con.display_value("Run Start Time",
-#                                self.results.run_start_time)
+        run_start_time = datetime.datetime.today()
+        self.dispatcher.send_data("run_start_time", run_start_time)
 
         if resume_on_next_rep:
             self._rep += 1
@@ -468,14 +465,13 @@ class Simulation():
                 continue_rep = self._check_triggers()
         
             # Finalize model and setup for next replication
-#             self.con.display_value("Completed Rep", self._rep)
             self._teardown()
-            
-        self.results.run_stop_time = datetime.datetime.today()
-#         self.con.display_value("Run Stop Time",
-#                                self.results.run_stop_time)
-#         self.con.display_value("Elapsed Time",
-#                                self.results.elapsed_time)
+        
+        self.dispatcher.announce_phase("Simulation Completed")
+        run_stop_time = datetime.datetime.today()
+        self.dispatcher.send_data("run_stop_time", run_stop_time)
+        self.dispatcher.send_data("elapsed_time",
+                                  run_stop_time - run_start_time)
 
     def _set_triggers(self, until):
         """Sets a TimeTrigger that ends the simulation at time = until.
