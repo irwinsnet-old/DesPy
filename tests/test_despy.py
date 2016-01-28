@@ -102,6 +102,7 @@ class testDespyb(unittest.TestCase):
         session.model = model
         session.sim = sim_ts = dp.Simulation(config = config1)
         sim_ts.initialize()
+        sim_ts._setup()
         ev_early = dp.fel.Event("Early_Event")
         ev_standard = dp.fel.Event("Standard_Event")
         ev_late = dp.fel.Event("Late_Event")

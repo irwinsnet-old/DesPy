@@ -2,8 +2,6 @@
 #   Version 0.1
 #   Released under the MIT License (MIT)
 #   Copyright (c) 2015, Stacy Irwin
-from abc import abstractmethod
-
 """
 **********************
 despy.output.statistic
@@ -110,7 +108,7 @@ class AbstractStatistic(metaclass = abc.ABCMeta):
         """
         return self._properties
 
-    @abstractmethod
+    @abc.abstractmethod
     def append(self, value, time = None):
         """Append a data point to the statistic.
 
@@ -128,13 +126,13 @@ class AbstractStatistic(metaclass = abc.ABCMeta):
         """
         pass
 
-    @abstractmethod
+    @abc.abstractmethod
     def setup(self):
         """Called by sim to notify Statistic that new rep is starting.
         """
         pass
 
-    @abstractmethod
+    @abc.abstractmethod
     def teardown(self, time = None):
         """Called by sim to notify Statistic that rep has concluded.
         
@@ -143,7 +141,7 @@ class AbstractStatistic(metaclass = abc.ABCMeta):
         """
         pass
     
-    @abstractmethod
+    @abc.abstractmethod
     def finalize(self):
         """Sim callback to notify statistic that simulation is ending.
         """

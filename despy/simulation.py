@@ -48,6 +48,7 @@ from despy.output.report import Datatype
 from despy.output.console import Console
 from despy.fel.event import Priority
 from despy.model.trigger import AbstractTrigger, TimeTrigger
+from despy.output.counter import Counter
 
 
 class NoEventsRemainingError(Exception):
@@ -165,6 +166,8 @@ class Simulation():
             self._session.config = config
         self._rep = 0
         self.dispatcher = Dispatcher()
+        self._statistics = {}
+        self._statistics["event_counter"] = Counter("event_counter")
         
         self.reset()
         
@@ -219,6 +222,10 @@ class Simulation():
     @property
     def results(self):
         return self._session.results
+    
+    @property
+    def statistics(self):
+        return self._statistics
 
     @property
     def rep(self):
@@ -344,14 +351,18 @@ class Simulation():
             self._pri = 0
             self._futureEventList = []
             self._counter = count()
-        
-        self._session.model.dp_setup()
+            
+        self._session.model.dp_setup()        
+        for _, stat in self._statistics.items():
+            stat.setup()
     
     def _teardown(self):
         """Calls all Component.teardown() methods at the end of each rep.
         """
         self.dispatcher.announce_phase("Teardown Rep #{} ".format(self.rep))
         self._session.model.dp_teardown(self.now)
+        for _, stat in self._statistics.items():
+            stat.teardown()
 
     def finalize(self):
         """Calls Component.finalize() methods, returns a results object.
@@ -364,6 +375,8 @@ class Simulation():
         """
         self.dispatcher.announce_phase("Finalizing")
         self._session.model.dp_finalize()
+        for _, stat in self._statistics.items():
+            stat.finalize()
         return self.results
 
     def peek(self, prioritized=True):
@@ -519,6 +532,7 @@ class Simulation():
         self._evt = fel_item.event
         fel_item.event.dp_do_event()
         self._evt = None
+        self._statistics["event_counter"].increment()
         return fel_item
 
     def _check_triggers(self):
