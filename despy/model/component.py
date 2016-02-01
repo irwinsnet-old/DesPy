@@ -28,6 +28,7 @@ import types
 
 from despy.session import Session
 from despy.model.abstract import AbstractModel
+from despy.output.results import Results
 
 class Component(AbstractModel):
     """A base class that provides object counters and other attributes.
@@ -118,7 +119,7 @@ class Component(AbstractModel):
         self._number = self._get_next_number()
 
         self._components = {}
-        self._statistics = {}
+        self._results = Results(self)
 
         self._owner = None
         self._session = Session()
@@ -231,12 +232,12 @@ class Component(AbstractModel):
         return "{0}.{1}".format(self.name, self._number)
     
     @property
-    def statistics(self):
-        """Dictionary of component statistics.
+    def results(self):
+        """Results object containing simulation results.
         
-        *Type:* {:class:`despy.output.statistic`}
+        *Type:* {:class:`despy.output.results.Results`}
         """
-        return self._statistics
+        return self._results
     
     @property
     def components(self):
@@ -318,7 +319,7 @@ class Component(AbstractModel):
             self.sim.dispatcher.announce("Initialized {}".format(cpt.name))
     
     def initialize(self):
-        """Initialization code that will run once, prior to any replications.
+        """Initialization code that runs once, prior to replications.
         """
         pass
     
@@ -326,7 +327,7 @@ class Component(AbstractModel):
         """Internal despy method that sets up each replication. Do not override.
         """
         for cpt in self:
-            for _, stat in cpt.statistics.items():
+            for _, stat in cpt.results.stats.items():
                 stat.setup()
             cpt._call_phase(cpt.setup)
             self.sim.dispatcher.announce("Setup {}".format(cpt.name))
@@ -340,7 +341,7 @@ class Component(AbstractModel):
         """Internal despy method that runs after every rep. Do not override.
         """
         for cpt in self:
-            for _, stat in cpt.statistics.items():
+            for _, stat in cpt.results.stats.items():
                 stat.teardown(time)
             cpt._call_phase(cpt.teardown)
             self.sim.dispatcher.announce("Teardown {}".format(cpt.name))
@@ -355,7 +356,7 @@ class Component(AbstractModel):
         """
         for cpt in self:
             cpt._call_phase(cpt.finalize)
-            for _, stat in cpt.statistics.items():
+            for _, stat in cpt.results.stats.items():
                 stat.finalize()
             self.sim.dispatcher.announce("Finalized {}".format(cpt.name))
         
@@ -372,48 +373,4 @@ class Component(AbstractModel):
         else:
             phase()
     
-    def get_data(self, full_path):
-        """Subclasses should override this method to provide simulation
-        output that will be included in the output report.
-        
-        The output is a Python list of two-element tuples. The first
-        element of each tuple is a :class:`despy.output.report.DataType`
-        enumeration that determines how the rest of the tuple will be
-        presented in the output report:
 
-          * *Datatype.title:* The first element is the *Datatype.title
-            enumeration* value and the second element is a string that
-            will be displayed as a heading element in the html output
-            report, or equivalent formatting for other output report
-            formats.
-          * *Datatype.paragraph:* The first element is the
-            *Datatype.paragraph* enumaration value and the second
-            element is a string that will be displayed as a paragraph
-            element in the html output report, or equivalent formatting
-            for other output report formats.
-          * *Datatype.param_list:* The first element is the
-            *Datatype.param_list enumeration value and the second
-            element is a list with one or more two-element sub-tuples.
-            The first element of the sub-tuples is a string caption
-            describing the parameter, and the second element is the
-            parameter. The *Datatype.param_list* will be displayed in
-            the output report as a list of parameters with descriptive
-            captions.
-          * *Datatype.image:* The first element is the *Datatype.image*
-            enumeration value and the second element is the image
-            filename. The image will be displayed in the output report.
-            
-        The order of the datatypes in the output report will be the
-        same as the order in the Python list that is returned from this
-        method. Here is an example of the output from the
-        :class:`despy.model.queue.Queue` class: ::
-        
-          output = [(Datatype.title, "Queue Results: {0}".format(self.name)),
-                     (Datatype.paragraph, self.description.__str__()),
-                     (Datatype.param_list,
-                        [('Maximum Time in Queue', np.amax(qtimes)),
-                         ('Minimum Time in Queue', np.amin(qtimes)),
-                         ('Mean Time in Queue', np.mean(qtimes))]),
-                     (Datatype.image, qtime_filename)]
-        """
-        return None

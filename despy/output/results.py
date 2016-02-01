@@ -18,29 +18,66 @@ despy.output.results
 
 """
 import os
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 
 from despy.session import Session
-from despy.output.trace import Trace
+from despy.model.abstract import AbstractModel
+# from despy.output.trace import Trace
+
+class Values(namedtuple('Result', ['value', 'label', 'description'])):
+    """Tuple containing a simulation result."""
 
 class Results(object):
-    def __init__(self, sim):
+    def __init__(self, owner):
+        if isinstance(owner, AbstractModel):
+            self._owner = owner.name
+            self._top = False
+        elif hasattr(owner, "irunf"):
+            self._owner = "Simulation"
+            self._top = True
+        else:
+            raise TypeError("Owner argument must be type despy.simulation."
+                            "Simulation or despy.model.component.Component. "
+                            "Type {} was passed instead.".format(type(owner)))
+             
         self._session = Session()
-        self._sim = sim
-        self._mod = sim.model
-        self._trace = Trace()      
-        self._report = None
-        self._run_start_time = None
-        self._run_stop_time = None
-        self._seed = None
+        self._vals = OrderedDict()
+        self.stats = OrderedDict()
+        self.res = OrderedDict()
+
+    def __iter__(self):
+        for results in self.results:
+            for res in results:
+                yield res
+        yield self
         
-        self._values = OrderedDict()
+    def __getattr__(self, key):
+        if key in self._vals.keys():
+            return self._vals[key]
+        elif key in self.res.keys():
+            return self.res[key]
+        elif key in self.stats.keys():
+            return self.stats[key]
+        else:
+            raise AttributeError("{0} is not a property of {1} Results "
+                                 "object.".format(key, self._owner))
             
+    def __getitem__(self, key):
+        if key in self._vals.keys():
+            return self._vals[key]
+        elif key in self.res.keys():
+            return self.res[key]
+        elif key in self.stats.keys():
+            return self.stats[key]
+        else:
+            raise AttributeError("{0} is not a property of {1} Results "
+                                 "object.".format(key, self._owner))
+
     @property
-    def values(self):
-        return self._values
+    def vals(self):
+        return self._vals
     
-    def set_value(self, key, value, label = None):
+    def set_val(self, key, value, label = None):
         if label is None:
             label = key.replace('_', ' ').title()
         self._values[key] = (label, value)
@@ -61,55 +98,6 @@ class Results(object):
         *Type:* :class:`despy.output.trace.Trace`
         """
         return self._trace
-    
-    @property
-    def run_start_time(self):
-        """The real-world start time for the simulation. Read-only.
-        
-        *Type:* ``None`` or :class:`datetime.datetime`
-        
-        Despy uses the run_start_time attribute to calculate the simulation's
-        elapsed time. Elapsed time does not include initialization or
-        finalization of the simulation, only time that elapses within the
-        Simulation.run() method. The attribute will return 'None' if the
-        simulation has not yet entered the Simulation.run() method.
-        """
-        return self._run_start_time
-    
-    @run_start_time.setter
-    def run_start_time(self, time):
-        self._run_start_time = time
-    
-    @property
-    def run_stop_time(self):
-        """The real-world stop time for the simulation. Read-only.
-        
-        *Type:* ``None`` or :class:`datetime.datetime`
-        
-        Despy uses the run_start_time attribute to calculate the simulation's
-        elapsed time. Elapsed time does not include initialization or
-        finalization of the simulation, only time that elapses within the
-        Simulation.run() method. The attribute will return 'None' if the
-        simulation is still running events.
-        """
-        return self._run_stop_time
-    
-    @run_stop_time.setter
-    def run_stop_time(self, time):
-        self._run_stop_time = time
-    
-    @property
-    def elapsed_time(self):
-        """Real world duration of simulation..
-        
-        Read-only. Elapsed time between initialization and finalization
-        of simulation.
-        
-        *Type:* ``None`` or :class:`datetime.datetime`
-        """
-        if self._run_stop_time is not None:
-            if self._run_start_time is not None:
-                return self._run_stop_time - self._run_start_time
         
     @property
     def report(self):
@@ -162,4 +150,50 @@ class Results(object):
                 
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path) 
+            
+    def get_data(self, full_path):
+        """Subclasses should override this method to provide simulation
+        output that will be included in the output report.
+        
+        The output is a Python list of two-element tuples. The first
+        element of each tuple is a :class:`despy.output.report.DataType`
+        enumeration that determines how the rest of the tuple will be
+        presented in the output report:
+
+          * *Datatype.title:* The first element is the *Datatype.title
+            enumeration* value and the second element is a string that
+            will be displayed as a heading element in the html output
+            report, or equivalent formatting for other output report
+            formats.
+          * *Datatype.paragraph:* The first element is the
+            *Datatype.paragraph* enumaration value and the second
+            element is a string that will be displayed as a paragraph
+            element in the html output report, or equivalent formatting
+            for other output report formats.
+          * *Datatype.param_list:* The first element is the
+            *Datatype.param_list enumeration value and the second
+            element is a list with one or more two-element sub-tuples.
+            The first element of the sub-tuples is a string caption
+            describing the parameter, and the second element is the
+            parameter. The *Datatype.param_list* will be displayed in
+            the output report as a list of parameters with descriptive
+            captions.
+          * *Datatype.image:* The first element is the *Datatype.image*
+            enumeration value and the second element is the image
+            filename. The image will be displayed in the output report.
+            
+        The order of the datatypes in the output report will be the
+        same as the order in the Python list that is returned from this
+        method. Here is an example of the output from the
+        :class:`despy.model.queue.Queue` class: ::
+        
+          output = [(Datatype.title, "Queue Results: {0}".format(self.name)),
+                     (Datatype.paragraph, self.description.__str__()),
+                     (Datatype.param_list,
+                        [('Maximum Time in Queue', np.amax(qtimes)),
+                         ('Minimum Time in Queue', np.amin(qtimes)),
+                         ('Mean Time in Queue', np.mean(qtimes))]),
+                     (Datatype.image, qtime_filename)]
+        """
+        return None
 

@@ -166,8 +166,6 @@ class Simulation():
             self._session.config = config
         self._rep = 0
         self.dispatcher = Dispatcher()
-        self._statistics = {}
-        self._statistics["event_counter"] = Counter("event_counter")
         
         self.reset()
         
@@ -187,7 +185,8 @@ class Simulation():
         self._pri = 0
         self._futureEventList = []
         self._counter = count()
-        self._session.results = Results(self)
+        self.results = Results(self)
+        self.results.stats["event_counter"] = Counter("event_counter")
         
     @property
     def session(self):
@@ -218,14 +217,6 @@ class Simulation():
     @model.setter
     def model(self, model):
         self._session.model = model
-        
-    @property
-    def results(self):
-        return self._session.results
-    
-    @property
-    def statistics(self):
-        return self._statistics
 
     @property
     def rep(self):
@@ -296,9 +287,9 @@ class Simulation():
         executes the trigger (runs AbstractTrigger.pull().
         """
         return self._triggers
-    
-    def display(self, data):
-        self._con.display(data)
+#     
+#     def display(self, data):
+#         self._con.display(data)
 
     def add_trigger(self, key, trigger):
         err_msg = ("{0} object provided to Simulation.add_trigger() "
