@@ -29,6 +29,7 @@ import types
 from despy.session import Session
 from despy.model.abstract import AbstractModel
 from despy.output.results import Results
+import despy.output.console as console
 
 class Component(AbstractModel):
     """A base class that provides object counters and other attributes.
@@ -316,7 +317,7 @@ class Component(AbstractModel):
         """
         for cpt in self:
             cpt._call_phase(cpt.initialize)
-            self.sim.dispatcher.announce("Initialized {}".format(cpt.name))
+            console.display_message("Initialized {}".format(cpt.name))
     
     def initialize(self):
         """Initialization code that runs once, prior to replications.
@@ -330,7 +331,7 @@ class Component(AbstractModel):
             for _, stat in cpt.results.stats.items():
                 stat.setup()
             cpt._call_phase(cpt.setup)
-            self.sim.dispatcher.announce("Setup {}".format(cpt.name))
+            console.display_message("Setup {}".format(cpt.name))
             
     def setup(self):
         """Runs prior to every replication to set up initial conditions.
@@ -344,7 +345,7 @@ class Component(AbstractModel):
             for _, stat in cpt.results.stats.items():
                 stat.teardown(time)
             cpt._call_phase(cpt.teardown)
-            self.sim.dispatcher.announce("Teardown {}".format(cpt.name))
+            console.display_message("Teardown {}".format(cpt.name))
     
     def teardown(self):
         """Runs after every replication to clean up.
@@ -358,7 +359,7 @@ class Component(AbstractModel):
             cpt._call_phase(cpt.finalize)
             for _, stat in cpt.results.stats.items():
                 stat.finalize()
-            self.sim.dispatcher.announce("Finalized {}".format(cpt.name))
+            console.display_message("Finalized {}".format(cpt.name))
         
     def finalize(self):
         """Runs once, after all reps are complete, to finalize component.

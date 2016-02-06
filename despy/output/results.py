@@ -22,6 +22,7 @@ from collections import OrderedDict, namedtuple
 
 from despy.session import Session
 from despy.model.abstract import AbstractModel
+from despy.output.trace import Trace
 # from despy.output.trace import Trace
 
 class Values(namedtuple('Result', ['value', 'label', 'description'])):
@@ -35,6 +36,7 @@ class Results(object):
         elif hasattr(owner, "irunf"):
             self._owner = "Simulation"
             self._top = True
+            self.trace = Trace()
         else:
             raise TypeError("Owner argument must be type despy.simulation."
                             "Simulation or despy.model.component.Component. "
@@ -77,10 +79,14 @@ class Results(object):
     def vals(self):
         return self._vals
     
-    def set_val(self, key, value, label = None):
+    def set_value(self, key, value, label = None, overwrite = False):
+        if not overwrite and ((key in self.res.keys()) or
+                (key in self.stats.keys()) or (key in self._vals.keys())):
+            raise KeyError("'{}' already exists in Results object"
+                           ".".format(key))
         if label is None:
             label = key.replace('_', ' ').title()
-        self._values[key] = (label, value)
+        self._vals[key] = (label, value)
         return label
         
     @property
@@ -90,14 +96,6 @@ class Results(object):
         *Type:* ``None`` or Integer
         """
         return self._seed
-    
-    @property
-    def trace(self):
-        """Events and messages will be recorded in this Trace object.
-        
-        *Type:* :class:`despy.output.trace.Trace`
-        """
-        return self._trace
         
     @property
     def report(self):

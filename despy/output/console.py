@@ -16,14 +16,20 @@ despy.output.console
     
     Pull title-ize feature (replace().title() out to static helper
     function.
+    
+    Consider using colorama module for colored text.
 
 """
 from IPython.display import display_html, HTML, display
-#from colorama import Fore, Style, Back, init
 
 from despy.session import Session
 
-#init()
+def display_header(header):
+    print()
+    print('=====', header.ljust(45, '='))
+    
+def display_message(message):
+    print(message)
 
 class Console():
     def __init__(self):
@@ -36,9 +42,7 @@ class Console():
             self.display_dict(label, data)
         else:
             self.display_value(label, data)
-            
-    def display_message(self, message):
-        print(message)
+
 
     def display_list(self, label, list_data):
         output = "{}: ".format(label)

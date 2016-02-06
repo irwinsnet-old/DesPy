@@ -45,10 +45,10 @@ import numpy as np
 from despy.session import Session
 from despy.output.results import Results
 from despy.output.report import Datatype
-from despy.output.console import Console
 from despy.fel.event import Priority
 from despy.model.trigger import AbstractTrigger, TimeTrigger
 from despy.output.counter import Counter
+import despy.output.console as console
 
 
 class NoEventsRemainingError(Exception):
@@ -75,22 +75,22 @@ class FutureEvent(namedtuple('FutureEventTuple',
         -4 and +4, inclusive.
     
     """
-    
-    
-class Dispatcher():
-    def __init__(self):
-        self._session = Session()
-        self._con = Console()
-        
-    def send_data(self, key, data, label = None):
-        processed_label = self._session.results.set_value(key, data, label)
-        self._con.display(processed_label, data) 
-        
-    def announce_phase(self, phase):
-        self._con.display_header(phase)
-        
-    def announce(self, message):
-        self._con.display_message(message)
+#     
+#     
+# class Dispatcher():
+#     def __init__(self):
+#         self._session = Session()
+#         self._con = Console()
+#         
+#     def send_data(self, key, data, label = None):
+#         processed_label = self._session.results.set_value(key, data, label)
+#         self._con.display(processed_label, data) 
+#         
+#     def announce_phase(self, phase):
+#         self._con.display_header(phase)
+#         
+#     def announce(self, message):
+#         self._con.display_message(message)
         
         
 class Simulation():
@@ -165,7 +165,7 @@ class Simulation():
         if config is not None:
             self._session.config = config
         self._rep = 0
-        self.dispatcher = Dispatcher()
+#         self.dispatcher = Dispatcher()
         
         self.reset()
         
@@ -314,17 +314,17 @@ class Simulation():
         Designers may explicitly call initialize() method, or implicitly by
         by calling Simulation.irun() or simulation.irunf().
         """
-        self.dispatcher.announce_phase("Initializing")    
+        console.display_header("Initializing")    
             
         np.random.seed(self._session.config.seed)
         random.seed(self._session.config.seed)
-        self.dispatcher.send_data("seed", self.config.seed)
+        self.results.set_value('seed', self.config.seed)
                 
         self._now = self._session.config.initial_time * 10
-        self.dispatcher.send_data("initial_time", self._now)      
+        self.results.set_value('initial_time', self.now)    
         
         self.model.dp_initialize()
-        self.dispatcher.announce("All Components Initialized.")          
+        console.display_message("All Components Initialized.")
 
     def _setup(self):
         """Resets simulation for the next rep and calls model setup() methods.
@@ -336,7 +336,7 @@ class Simulation():
         * Resets time to config.initial_time.
         * Calls every model component's setup() method.
         """
-        self.dispatcher.announce_phase("Setup Rep #{} ".format(self.rep))
+        console.display_header("Setup Rep #{} ".format(self.rep))
         if self.rep > 0:
             self._now = self._session.config.initial_time * 10
             self._pri = 0
@@ -344,15 +344,15 @@ class Simulation():
             self._counter = count()
             
         self._session.model.dp_setup()        
-        for _, stat in self._statistics.items():
+        for _, stat in self.results.stats.items():
             stat.setup()
     
     def _teardown(self):
         """Calls all Component.teardown() methods at the end of each rep.
         """
-        self.dispatcher.announce_phase("Teardown Rep #{} ".format(self.rep))
+        console.display_header("Teardown Rep #{} ".format(self.rep))
         self._session.model.dp_teardown(self.now)
-        for _, stat in self._statistics.items():
+        for _, stat in self.results.stats.items():
             stat.teardown()
 
     def finalize(self):
@@ -364,9 +364,9 @@ class Simulation():
         or the designer can call finalize implicitly by calling irunf() or
         runf().
         """
-        self.dispatcher.announce_phase("Finalizing")
+        console.display_header("Finalizing")
         self._session.model.dp_finalize()
-        for _, stat in self._statistics.items():
+        for _, stat in self.results.stats.items():
             stat.finalize()
         return self.results
 
@@ -445,10 +445,11 @@ class Simulation():
                 any remaining events in the current rep and skip to the
                 next rep.                
         """
-        self.dispatcher.announce_phase("Running")
+        console.display_header("Running")
         self._set_triggers(until)
         run_start_time = datetime.datetime.today()
-        self.dispatcher.send_data("run_start_time", run_start_time)
+        self.results.set_value('run_start_time', run_start_time,
+                               overwrite = True)
 
         if resume_on_next_rep:
             self._rep += 1
@@ -471,11 +472,12 @@ class Simulation():
             # Finalize model and setup for next replication
             self._teardown()
         
-        self.dispatcher.announce_phase("Simulation Completed")
+        console.display_header("Simulation Completed")
         run_stop_time = datetime.datetime.today()
-        self.dispatcher.send_data("run_stop_time", run_stop_time)
-        self.dispatcher.send_data("elapsed_time",
-                                  run_stop_time - run_start_time)
+        self.results.set_value('run_stop_time', run_stop_time,
+                               overwrite = True)
+        self.results.set_value('elapsed_time', run_stop_time - run_start_time,
+                               overwrite = True)
 
     def _set_triggers(self, until):
         """Sets a TimeTrigger that ends the simulation at time = until.
@@ -523,7 +525,7 @@ class Simulation():
         self._evt = fel_item.event
         fel_item.event.dp_do_event()
         self._evt = None
-        self._statistics["event_counter"].increment()
+        self.results.stats["event_counter"].increment()
         return fel_item
 
     def _check_triggers(self):

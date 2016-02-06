@@ -49,7 +49,3 @@ class AbstractModel(metaclass = ABCMeta):
     @abstractmethod
     def dp_finalize(self):
         pass
-    
-    @abstractmethod
-    def get_data(self, full_path):
-        pass
