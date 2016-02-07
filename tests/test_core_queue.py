@@ -83,7 +83,7 @@ class testQueue(unittest.TestCase):
                 "C:/Projects/despy_output/queue_sim"
          
         results = sim.irunf(100)
-        results.write_files()
+#         results.write_files()
         self.assertGreater(len(model.components), 0)
          
 class QuModel(dp.model.Component):

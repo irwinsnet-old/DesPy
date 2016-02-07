@@ -85,8 +85,8 @@ class Queue(Component):
         else:
             self._queue = deque()
         self._times_in_queue = []
-        self.statistics['Queue_time'] = DiscreteStatistic('w_q', 'u4')
-        self.statistics['Queue_length'] = TimeWeightedStatistic('L_q', 'u4')
+        self.results.stats['Queue_time'] = DiscreteStatistic('w_q', 'u4')
+        self.results.stats['Queue_length'] = TimeWeightedStatistic('L_q', 'u4')
         
     Item = namedtuple('Item', ['item_fld', 'time_in_fld'])
     """(Class) A named tuple that contains an item added to the queue.
@@ -119,7 +119,7 @@ class Queue(Component):
         return self._times_in_queue
     
     def setup(self):
-        self.statistics['Queue_length'].append(self.sim.now,
+        self.results.stats['Queue_length'].append(self.sim.now,
                                                self.length)
 #         
 #     def finalize(self):
@@ -153,7 +153,7 @@ class Queue(Component):
         item = self._queue.popleft()
         q_time = self.sim.now - item.time_in_fld
         self.times_in_queue.append(q_time)
-        self.statistics['Queue_time'].append(self.sim.now, q_time)
+        self.results.stats['Queue_time'].append(self.sim.now, q_time)
         
         message = "Leaving Queue"
         fields = OrderedDict()

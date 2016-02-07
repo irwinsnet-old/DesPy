@@ -434,7 +434,7 @@ class CSV_file(object):
             self._writer = csv.writer(file)
             
             # Write header rows
-            self.write_sim_header_data(self.trace.sim.get_data())
+#             self.write_sim_header_data(self.trace.sim.get_data())
             
             # Write trace table
             self._writer.writerow(['Record #', 'Rep', 'Time',

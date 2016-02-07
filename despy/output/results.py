@@ -112,29 +112,29 @@ class Results(object):
     def write_files(self):
         """Creates trace and HTML reports in folder_basename location.
         """
-        self._report = HtmlReport()
-        
-        # Take no action if no output folder specified.
-        if not self._session.config.write_files:
-            return None
-        if self._session.config.folder_basename is None:
-            return None
-        
-        # Finalize model and components.
-        
-        # Write trace csv file.
-        self.set_full_path()
-        self._trace.write_csv(self._full_path)
-        
-        #Get data for all components and create HTML report.
-        self.report.append_output(self._sim.get_data())
-            
-        for _, component in self._mod.components.items():
-            output = component.get_data(self._full_path)
-            if output is not None:
-                self._report.append_output(output)
-        
-        self._report.write_report(self._full_path)
+#         self._report = HtmlReport()
+#         
+#         # Take no action if no output folder specified.
+#         if not self._session.config.write_files:
+#             return None
+#         if self._session.config.folder_basename is None:
+#             return None
+#         
+#         # Finalize model and components.
+#         
+#         # Write trace csv file.
+#         self.set_full_path()
+#         self.trace.write_csv(self._full_path)
+#         
+#         #Get data for all components and create HTML report.
+# #         self.report.append_output(self._sim.get_data())
+#             
+#         for _, component in self._mod.components.items():
+#             output = component.get_data(self._full_path)
+#             if output is not None:
+#                 self._report.append_output(output)
+#         
+#         self._report.write_report(self._full_path)
         
     def set_full_path(self):
         """Adds time-stamp to end of Generator.folder_basename.
@@ -142,7 +142,7 @@ class Results(object):
         The time-stamp is the stop time for the simulation.
         """
         timestamp = \
-                self._values["run_stop_time"][1].strftime('_%y_%j_%H_%M_%S')
+                self.run_stop_time[1].strftime('_%y_%j_%H_%M_%S')
         self._full_path = (self._session.config.folder_basename +
                            '/Run' + timestamp)
                 

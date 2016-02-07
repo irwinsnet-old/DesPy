@@ -91,7 +91,7 @@ class Resource(Component):
         self._capacity = capacity
         self._res_queue = None
         self._service_time = time_function
-        self.statistics["Service Time"] = DiscreteStatistic("Service Time",
+        self.results.stats["Service Time"] = DiscreteStatistic("Service Time",
                                                         'u4')
         
         self._Station_tuple = namedtuple('Station',
@@ -294,7 +294,7 @@ class Resource(Component):
                 The index number of the resource station.
         """
         # Record service time and remove entity from resource station.
-        self.statistics["Service Time"].append(self.sim.now,
+        self.results.stats["Service Time"].append(self.sim.now,
                                               service_time)  
         self.stations[index] = self.Station_tuple(None, None)
         

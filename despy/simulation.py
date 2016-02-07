@@ -594,29 +594,29 @@ class Simulation():
             self.results.trace.add_message(message, fields)
         else:
             self.event.add_message(message, fields)
-    
-    def get_data(self):
-        """ Get a Python list with simulation parameters and results.
-        
-        The despy.output.results.write_files() method calls the get_data
-        method of the simulation and model objects and places the data
-        in the simulation report. The method will also call the user-
-        defined get_data methods from all of the model components.
-        
-        *Returns*
-            A Python list of tuples. The first item of each tuple is
-            a member of the :class:`despy.output.datatype.Datatype`
-            enumeration, which describes the structure of the data
-            item (e.g., paragraph, list, etc.).
-            
-        """      
-        output = [(Datatype.title, "Simulation"),
-                  (Datatype.param_list,
-                    [('Generator Folder',
-                        self._session.config.folder_basename),
-                     ('Seed', self.results.seed),
-                     ('Start Time', self.results.run_start_time),
-                     ('Stop Time', self.results.run_stop_time),
-                     ('Elapsed Time', self.results.elapsed_time)])
-                  ]
-        return output
+#     
+#     def get_data(self):
+#         """ Get a Python list with simulation parameters and results.
+#         
+#         The despy.output.results.write_files() method calls the get_data
+#         method of the simulation and model objects and places the data
+#         in the simulation report. The method will also call the user-
+#         defined get_data methods from all of the model components.
+#         
+#         *Returns*
+#             A Python list of tuples. The first item of each tuple is
+#             a member of the :class:`despy.output.datatype.Datatype`
+#             enumeration, which describes the structure of the data
+#             item (e.g., paragraph, list, etc.).
+#             
+#         """      
+#         output = [(Datatype.title, "Simulation"),
+#                   (Datatype.param_list,
+#                     [('Generator Folder',
+#                         self._session.config.folder_basename),
+#                      ('Seed', self.results.seed),
+#                      ('Start Time', self.results.run_start_time),
+#                      ('Stop Time', self.results.run_stop_time),
+#                      ('Elapsed Time', self.results.elapsed_time)])
+#                   ]
+#         return output
