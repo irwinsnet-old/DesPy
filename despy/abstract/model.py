@@ -4,7 +4,7 @@
 #   Copyright (c) 2015, Stacy Irwin
 """
 ********************
-despy.model.abstract
+despy.abstract.model
 ********************
 
 The Despy framework uses the abstract classes in this module for typ
@@ -13,6 +13,11 @@ checking.
 ..  autosummary::
 
     AbstractModel
+    
+..  todo
+    
+    Rename AbstractModel to AbstractComponent.
+    
     
 """
 

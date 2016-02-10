@@ -21,9 +21,8 @@ import os
 from collections import OrderedDict, namedtuple
 
 from despy.session import Session
-from despy.model.abstract import AbstractModel
+from despy.abstract.model import AbstractModel
 from despy.output.trace import Trace
-# from despy.output.trace import Trace
 
 class Values(namedtuple('Result', ['value', 'label', 'description'])):
     """Tuple containing a simulation result."""

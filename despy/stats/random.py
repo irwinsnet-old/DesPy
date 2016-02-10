@@ -3,6 +3,10 @@
 #   Released under the MIT License (MIT)
 #   Copyright (c) 2015, Stacy Irwin
 """
+..  todo
+    
+    Rename to rand_dist or something like that.
+
 Provides a random number seed function and statistical helper functions.
 
 ..  autosummary::

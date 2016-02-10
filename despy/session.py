@@ -16,7 +16,7 @@ despy.model.session
 
 import enum
 
-from despy.model.abstract import AbstractModel
+from despy.abstract.model import AbstractModel
 
 class Format(enum.Enum):
     text = 1

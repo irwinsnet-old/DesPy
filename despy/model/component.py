@@ -27,7 +27,7 @@ from itertools import count
 import types
 
 from despy.session import Session
-from despy.model.abstract import AbstractModel
+from despy.abstract.model import AbstractModel
 from despy.output.results import Results
 import despy.output.console as console
 
