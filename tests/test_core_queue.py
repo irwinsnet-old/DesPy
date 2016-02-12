@@ -8,7 +8,7 @@ import unittest
 
 import scipy.stats as stats
 
-import despy as dp
+import despy.dp as dp
 
 class testQueue(unittest.TestCase):
     def test_negative_time(self):
@@ -21,9 +21,9 @@ class testQueue(unittest.TestCase):
         session.sim = sim = dp.Simulation()         
         session.model = model = dp.model.Component("Negative_Time_Model")
         sim.schedule(dp.fel.Event("Positive_Time"),
-                       priority = dp.fel.Priority.LATE)        
+                       priority = dp.LATE)        
         model.sim.schedule(dp.fel.Event("Negative_Time"),
-                       priority = dp.fel.Priority.EARLY)
+                       priority = dp.EARLY)
         self.assertEqual(sim.peek(False), -0.1)
 
         sim.irun()
@@ -94,7 +94,7 @@ class QuModel(dp.model.Component):
         self.add_component(CustServiceProcess())
          
     def setup(self):
-        self.customer_process.start(0, dp.fel.Priority.EARLY)
+        self.customer_process.start(0, dp.EARLY)
         self.service_process.start()
  
 class Customer(dp.model.Entity):

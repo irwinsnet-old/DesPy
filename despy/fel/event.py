@@ -27,7 +27,11 @@ import types
 from collections import OrderedDict
 
 from despy.model.component import Component
-from despy.output.trace import TraceRecord     
+from despy.output.trace import TraceRecord
+
+EARLY = -1
+STANDARD = 0
+LATE = 1 
 
 class Priority():
     """Define priorities for ordering events scheduled at the same time.

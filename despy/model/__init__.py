@@ -47,10 +47,3 @@ despy.model.timer
 ..  automodule:: despy.model.timer
     :noindex:
 """
-from despy.model.trigger import AbstractTrigger, TimeTrigger
-from despy.model.process import Process
-from despy.model.queue import Queue
-from despy.model.entity import Entity
-from despy.model.resource import ResourceQueue, Resource
-from despy.model.timer import RandomTimer
-from despy.model.component import Component

@@ -23,6 +23,7 @@ from collections import OrderedDict, namedtuple
 from despy.session import Session
 from despy.abstract.model import AbstractModel
 from despy.output.trace import Trace
+import despy.output.console as console
 
 class Values(namedtuple('Result', ['value', 'label', 'description'])):
     """Tuple containing a simulation result."""
@@ -87,6 +88,10 @@ class Results(object):
             label = key.replace('_', ' ').title()
         self._vals[key] = (label, value)
         return label
+    
+    def list_values(self):
+        console.display_dict(self._vals)
+            
         
     @property
     def seed(self):

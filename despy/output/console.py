@@ -30,6 +30,10 @@ def display_header(header):
     
 def display_message(message):
     print(message)
+    
+def display_dict(data):
+    for _, value in data.items():
+        print("{0}: {1}".format(value[0], value[1]))
 
 class Console():
     def __init__(self):
@@ -50,10 +54,6 @@ class Console():
             output += "{}, ".format(value)
         output += list_data[-1]
         print(output)
-
-    def display_dict(self, label, data):
-        for key, value in data:
-            print(key, ": ".format(value))
         
     def display_value(self, label, data):
         print("{0}: {1}".format(label, data))

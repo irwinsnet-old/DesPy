@@ -5,14 +5,14 @@ Created on Oct 25, 2015
 '''
 import unittest
 
-import despy as dp
+import despy.dp as dp
 
 class RepModel(dp.model.Component):
     def __init__(self):
         super().__init__("Multiple_Rep_Test")
         
         # Customer Arrival Timer
-        arrival_dist = dp.stats_random.get_empirical_pmf([1, 2, 3, 4],
+        arrival_dist = dp.stats.get_empirical_pmf([1, 2, 3, 4],
                                     [0.25, 0.4, 0.2, 0.15],
                                     "Customer Arrival Distribution")
 
@@ -24,10 +24,10 @@ class RepModel(dp.model.Component):
                     -1))
         
         # Servers and Resource Queue
-        abel_dist = dp.stats_random.get_empirical_pmf([2, 3, 4, 5],
+        abel_dist = dp.stats.get_empirical_pmf([2, 3, 4, 5],
                                           [0.3, 0.28, 0.25, 0.17],
                                           "Abel Service Distribution")
-        baker_dist = dp.stats_random.get_empirical_pmf([3, 4, 5, 6],
+        baker_dist = dp.stats.get_empirical_pmf([3, 4, 5, 6],
                                            [0.35 ,0.25, 0.2, 0.2],
                                            "Baker Service Distribution")
         

@@ -5,7 +5,7 @@ from collections import OrderedDict
 
 import scipy.stats as stats
 
-import despy as dp
+import despy.dp as dp
 
 class testResource(unittest.TestCase):
     
@@ -55,7 +55,7 @@ class testResource(unittest.TestCase):
                 super().__init__("Customer")
              
         def setup(self):
-            self.customer_process.start(0, dp.fel.Priority.EARLY)
+            self.customer_process.start(0, dp.EARLY)
              
         class CustServiceResource(dp.model.ResourceQueue):
             def __init__(self, capacity):             

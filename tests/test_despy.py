@@ -8,7 +8,7 @@ import unittest
 
 import scipy.stats as stats
 
-import despy as dp
+import despy.dp as dp
 from default_config import get_config
 
 class testDespyb(unittest.TestCase):
@@ -87,7 +87,7 @@ class testDespyb(unittest.TestCase):
           
         sim.schedule(dp.fel.Event("Event_1"),
                        20,
-                       dp.fel.Priority.EARLY)
+                       dp.EARLY)
         self.assertEqual(sim.peek(), 20)
           
         sim.schedule(dp.fel.Event("Event_2"), 5)
@@ -108,9 +108,9 @@ class testDespyb(unittest.TestCase):
         ev_late = dp.fel.Event("Late_Event")
           
         #Schedule Events
-        sim_ts.schedule(ev_late, 5, dp.fel.Priority.LATE)
-        model.sim.schedule(ev_early, 5, dp.fel.Priority.EARLY)
-        model.sim.schedule(ev_standard, 5, dp.fel.Priority.STANDARD)
+        sim_ts.schedule(ev_late, 5, dp.LATE)  
+        model.sim.schedule(ev_early, 5, dp.EARLY)  
+        model.sim.schedule(ev_standard, 5, dp.STANDARD)
           
         #Verify events run in correct order.
         print()

@@ -8,7 +8,7 @@ From 'Discrete Event System Simulation, 4th ed.; Banks, Carson, Nelson,
 and Nicole
 """
 
-import despy as dp
+import despy.dp as dp
 import scipy.stats as stats
 
 
@@ -24,12 +24,12 @@ class SingleChannelQueue(dp.model.Component):
                     arrival_dist,
                     self.cust_arrival_CB,
                     True,
-                    dp.fel.Priority.EARLY))        
+                    dp.EARLY))        
         
         
         # Service time distribution
         # Empirical distribution varying from 1 to 6 minutes.
-        service_dist = dp.stats_random.get_empirical_pmf([1, 2, 3, 4, 5, 6],
+        service_dist = dp.stats.get_empirical_pmf([1, 2, 3, 4, 5, 6],
                                           [0.1, 0.2, 0.3, 0.25, .1, .05],
                                           "service_time_dist")       
         self.add_component(dp.model.ResourceQueue("server_q"))

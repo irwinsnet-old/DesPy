@@ -9,7 +9,7 @@ import types
 
 import scipy.stats as stats
 
-import despy as dp
+import despy.dp as dp
 
 class SubClassModel(dp.model.Component):
     def initialize(self):
@@ -68,7 +68,7 @@ class QModel(dp.model.Component):
         self.add_component(CustArrProcess())
         
     def initialize(self):
-        self.customer_process.start(0, dp.fel.Priority.EARLY)
+        self.customer_process.start(0, dp.EARLY)
         self.service_process.start()
        
         

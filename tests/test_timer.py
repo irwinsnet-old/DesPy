@@ -10,7 +10,7 @@ unit/core/test_timer
 
 import unittest
 
-import despy as dp
+import despy.dp as dp
 import despy.stats.random as drand
 import scipy.stats as stats
 
@@ -71,7 +71,7 @@ class testTimer(unittest.TestCase):
         dist3 = drand.get_empirical_pmf([5, 10], [0.3, 0.7])
         model3.add_component(
                    dp.model.RandomTimer("timer", dist3, timerCB_function,
-                                priority = dp.fel.Priority.LATE))
+                                priority = dp.LATE))
         session.sim = sim3 = dp.Simulation(model3)
         session.config.seed = 731        
         results = sim3.irunf(100)
