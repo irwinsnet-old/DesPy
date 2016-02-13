@@ -24,6 +24,15 @@ class AbstractPackage():
 abstract = AbstractPackage()
 del AbstractPackage
 
+class StatsPackage():
+    def __init__(self):
+        from despy.stats.random import get_empirical_pmf, get_poisson_pmf
+        self.get_empirical_pmf = get_empirical_pmf
+        self.get_poisson_pmf = get_poisson_pmf
+        
+stats = StatsPackage()
+del StatsPackage
+
 from despy.session import Session, Config  # @UnusedImport
 
 class OutputPackage():
@@ -97,14 +106,5 @@ class FelPackage():
         
 fel = FelPackage()
 del FelPackage
-
-class StatsPackage():
-    def __init__(self):
-        from despy.stats.random import get_empirical_pmf, get_poisson_pmf
-        self.get_empirical_pmf = get_empirical_pmf
-        self.get_poisson_pmf = get_poisson_pmf
-        
-stats = StatsPackage()
-del StatsPackage
 
 from despy.simulation import Simulation  # @UnusedImport

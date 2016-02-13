@@ -17,6 +17,7 @@ despy.output.counter
 """
 
 from despy.output.statistic import AbstractStatistic
+import despy.output.plot as plot
 
 class Counter(AbstractStatistic):
     def __init__(self, name):
@@ -64,6 +65,11 @@ class Counter(AbstractStatistic):
     @property
     def min_rep_count(self):
         return min(self._rep_counts)
+    
+    def show_plot(self):
+        plot.BarPlot(self.rep_counts, "Reps", "Total", title = self.name)
+    
+    
     
     
         

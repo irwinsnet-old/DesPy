@@ -30,6 +30,18 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 
+def BarPlot(data, xlabel, ylabel, title='Counts', width=0.2, color='g'):
+    plt.clf()
+    x_vals = range(len(data))
+    plt.bar(x_vals, data, width, color=color, align='center')
+    plt.xticks(x_vals, ["{}".format(x) for x in x_vals])
+    plt.title
+    plt.ylabel(ylabel)
+    plt.xlabel(xlabel)
+    plt.title(title)
+    plt.show()
+    return plt.gcf()
+
 class Histo():
     def __init__(self, data):
         self._data = data        
