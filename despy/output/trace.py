@@ -119,17 +119,20 @@ class TraceRecord(OrderedDict):
         """
         #Format data from default fields
         template = "{number:4}|{rep:4}|{time:5}{priority:+2}|" \
-            "{record_type:8}|{name}"
+            "{record_type:8}|{name:17}"
         default_fields = template.format(**self)
         
         #Format data from custom fields
         custom_field_list = []
         for label in self.custom_labels:
-            custom_field_list.append("| {}: {}".format(label,
+            custom_field_list.append("|{:17}:{!s:<5}".format(label,
                                                    self[label]))
         custom_fields = "".join(custom_field_list)
                                
         return default_fields + custom_fields
+    
+    def show(self):
+        print(self)
     
     @property
     def standard_labels(self):
@@ -275,6 +278,9 @@ class Trace(object):
         """
         return self._record_list[index]
     
+    def __iter__(self):
+        return self._record_list
+    
     def is_active(self):
         """True if Trace object is currently recording.
         
@@ -348,11 +354,17 @@ class Trace(object):
         #Record message in event trace records.
         self.add(trace_record)
             
-    def print_trace_records(self):
-        for trace_record in self._record_list:
-            print(trace_record)
+    def show(self, start=None, stop=None):
+        if start is None:
+            start = self.start
+        if stop is None:
+            stop = self.stop
+        if stop > len(self):
+            stop = len(self)
+        for idx in range(start, stop):
+            self[idx].show()
             
-    def write_csv(self, directory):
+    def write_csv(self, directory = None):
         """Create a CSV file_name containing all trace data.
         
         *Arguments:*
@@ -360,6 +372,12 @@ class Trace(object):
                 The full path to the folder that will contain the csv
                 file_name.
         """
+        if ((directory is None) and
+                (self._session.config.folder_basename is not None)):
+            directory = self._session.results._full_path
+        else:
+            return
+        
         file = CSV_file(self, directory)
         file.write()
         return file
@@ -424,7 +442,7 @@ class CSV_file(object):
     
     @trace.setter
     def trace(self, trace):
-        self._trace = trace
+        self._trace = trace     
         
     def write(self):
         """Writes self.trace to CSV file at location self.file_name.

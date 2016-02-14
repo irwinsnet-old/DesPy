@@ -368,6 +368,8 @@ class Simulation():
         self._session.model.dp_finalize()
         for _, stat in self.results.stats.items():
             stat.finalize()
+        self.results.set_full_path()
+        self._session.results = self.results
         return self.results
 
     def peek(self, prioritized=True):

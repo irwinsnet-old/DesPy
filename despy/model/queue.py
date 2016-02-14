@@ -126,6 +126,9 @@ class Queue(Component):
 #         self.statistics['Queue_length'].append(self.sim.now,
 #                                                self.length)
 
+    def teardown(self):
+        self.clear()
+
     def add(self, item):
         """Add an item to the end of the queue.
         
