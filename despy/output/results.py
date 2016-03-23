@@ -145,10 +145,13 @@ class Results(object):
         
         The time-stamp is the stop time for the simulation.
         """
+        config = self._session.config
+        if (config.folder_basename is None) or (config.write_files is None):
+            return
+
         timestamp = \
                 self.run_stop_time[1].strftime('_%y_%j_%H_%M_%S')
-        self._full_path = (self._session.config.folder_basename +
-                           '/Run' + timestamp)
+        self._full_path = (config.folder_basename + '/Run' + timestamp)
                 
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path) 
